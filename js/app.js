@@ -440,6 +440,16 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('ranking')?.scrollIntoView({ behavior: 'smooth' });
     });
 
+    // 병원 카드 클릭 (상세 페이지 이동)
+    document.addEventListener('click', (e) => {
+      const card = e.target.closest('.hospital-card');
+      if (!card) return;
+      const hospitalId = card.dataset.hospitalId;
+      if (hospitalId) {
+        window.location.href = `detail.html?id=${hospitalId}`;
+      }
+    });
+
     // 필터 변경
     regionFilter?.addEventListener('change', () => {
       currentFilters.region = regionFilter.value;

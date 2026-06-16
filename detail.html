@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO & AdSense Setup -->
+  <title>병원랭킹 - 병원 상세정보</title>
+  <meta name="description" content="전국 우수 병의원 정보, 후기, 상세 리뷰, 진료시간, 위치 안내">
+  <link rel="canonical" href="https://hospital-ranking.kr/detail.html">
+  
+  <!-- Schema.org for Hospital Detail -->
+  <script type="application/ld+json" id="schema-hospital"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/theme.css">
+  
+  <!-- 구글 웹폰트 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="detail-page">
+
+  <!-- 사이드 플로팅 광고 공간 (PC) -->
+  <aside class="ad-slot ad-floating-left">
+    <!-- AdSense Placeholder -->
+  </aside>
+  
+  <aside class="ad-slot ad-floating-right">
+    <!-- AdSense Placeholder -->
+  </aside>
+
+  <!-- ===== Header ===== -->
+  <header id="header" class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🏥</span>
+        <span class="logo-text">병원랭킹</span>
+      </a>
+      <nav class="nav-links" id="nav-links">
+        <a href="index.html">홈</a>
+        <a href="guide.html">건강가이드</a>
+      </nav>
+      <div class="header-actions">
+        <button id="theme-toggle" class="icon-btn" aria-label="다크모드 토글">🌙</button>
+        <button id="mobile-menu-btn" class="icon-btn mobile-only" aria-label="메뉴 열기">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Main Content ===== -->
+  <main class="main-content">
+    <div class="container">
+      <div class="breadcrumb" style="margin-top:20px; color:var(--text-muted); font-size:var(--fs-sm);">
+        <a href="index.html" style="color:var(--text-muted);text-decoration:none;">홈</a> &gt; <span>상세정보</span>
+      </div>
+
+      <div class="detail-header fade-up" style="margin-top: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border-default);">
+        <div id="detail-badges" style="margin-bottom:10px;"></div>
+        <h1 id="detail-name" style="font-size: 2rem; margin-bottom: 10px;">병원 로딩 중...</h1>
+        <p id="detail-address" style="color: var(--text-muted); font-size: 1.1rem;"></p>
+      </div>
+
+      <div class="detail-body" style="display: flex; flex-wrap: wrap; gap: 40px; margin-top: 30px;">
+        <!-- Left: Info -->
+        <div class="detail-info fade-up" style="flex: 1; min-width: 300px;">
+          <h3>📋 진료 정보</h3>
+          <ul style="list-style: none; padding: 0; line-height: 2;">
+            <li><strong>진료과목:</strong> <span id="detail-department"></span></li>
+            <li><strong>설립구분:</strong> <span id="detail-type"></span></li>
+            <li><strong>평점:</strong> <span id="detail-score" style="color:#f59e0b; font-weight:bold;"></span></li>
+            <li><strong>리뷰수:</strong> <span id="detail-reviews"></span> 건</li>
+            <li><strong>개원일:</strong> <span id="detail-date"></span></li>
+          </ul>
+
+          <h3 style="margin-top: 30px;">💬 최신 리뷰</h3>
+          <div id="detail-review-list" style="background: var(--bg-card); padding: 20px; border-radius: 8px; border: 1px solid var(--border-default);">
+             로딩 중...
+          </div>
+        </div>
+
+        <!-- Right: Map -->
+        <div class="detail-map fade-up" style="flex: 1; min-width: 300px;">
+          <h3>📍 위치 안내</h3>
+          <div id="map-container" class="map-canvas-container" style="height: 350px;"></div>
+        </div>
+      </div>
+
+      <!-- 본문 하단 텍스트 추가 (애드센스 크롤러 최적화용) -->
+      <div class="seo-text-block fade-up" style="margin-top: 50px; padding: 20px; background: var(--bg-body); border-radius: 8px; font-size: 0.95rem; color: var(--text-muted); line-height: 1.6;">
+        <h3 style="color: var(--text-heading);">💡 병원 방문 가이드 및 예약 안내</h3>
+        <p>본 정보는 건강보험심사평가원의 공공데이터를 기반으로 제공되며, 실제 병원의 진료시간 및 예약 가능 여부와 차이가 있을 수 있습니다. 방문 전 반드시 전화 예약 및 확인을 권장합니다. 특히 토요일 및 공휴일 야간 진료의 경우 변동 사항이 발생할 수 있습니다.</p>
+        <p>환자분들의 솔직한 후기는 다른 분들의 병원 선택에 큰 도움이 됩니다. 안전하고 검증된 의료 서비스를 위해 항상 최선을 다해 정보를 업데이트하겠습니다.</p>
+      </div>
+      
+      <!-- 하단 인피드 광고 공간 -->
+      <div class="ad-slot ad-infeed" style="margin-top:30px; text-align:center;">
+        <!-- AdSense In-feed Placeholder -->
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-col">
+        <h3>병원랭킹</h3>
+        <p>공공데이터를 활용한 전국 병의원 평점 및 후기 서비스</p>
+      </div>
+      <div class="footer-col">
+        <h4>바로가기</h4>
+        <ul>
+          <li><a href="index.html">홈으로</a></li>
+          <li><a href="guide.html">건강가이드</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>약관 및 정책</h4>
+        <ul>
+          <li><a href="terms.html">이용약관</a></li>
+          <li><a href="privacy.html">개인정보처리방침</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>문의</h4>
+        <ul>
+          <li><a href="contact.html">제휴 및 문의</a></li>
+          <li><a href="about.html">서비스 소개</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 병원랭킹. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/detail.js?v=1"></script>
+  <!-- 네이버 지도 API -->
+  <script>
+    window.__naverMapLoaded = function() {
+      if(window.initDetailMap) window.initDetailMap();
+    };
+  </script>
+  <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=rgd9ajy97r&submodules=geocoder&callback=__naverMapLoaded"></script>
+</body>
+</html>
