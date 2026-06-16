@@ -23,7 +23,8 @@ const MapModule = (() => {
    * 지도 초기화 진입점
    */
   async function init() {
-    const savedKey = localStorage.getItem(KEY_STORAGE) || DEFAULT_KEY;
+    // 하드코딩된 DEFAULT_KEY를 최우선으로 사용하고, 없을 경우에만 localStorage를 조회합니다.
+    const savedKey = DEFAULT_KEY || localStorage.getItem(KEY_STORAGE);
     const container = document.getElementById('map-container');
     if (!container) return;
 
