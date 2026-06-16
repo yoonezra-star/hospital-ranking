@@ -824,7 +824,7 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   width: 100%;
   max-width: 400px;
 }
-#kakao-key-input {
+#naver-key-input {
   flex: 1;
   padding: var(--sp-2) var(--sp-3);
   border: 1px solid var(--border-default);
@@ -834,11 +834,11 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   font-size: var(--fs-sm);
   outline: none;
 }
-#kakao-key-input:focus {
+#naver-key-input:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.15);
 }
-#kakao-key-save-btn {
+#naver-key-save-btn {
   padding: var(--sp-2) var(--sp-4);
   background: var(--primary);
   color: white;
@@ -849,7 +849,7 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   cursor: pointer;
   transition: background var(--t-fast);
 }
-#kakao-key-save-btn:hover {
+#naver-key-save-btn:hover {
   background: var(--primary-dark);
 }
 .map-error-text {
@@ -912,7 +912,7 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   border-color: var(--primary);
 }
 
-/* 카카오맵 인포윈도우 디자인 개선 */
+/* 네이버 지도 인포윈도우 디자인 */
 .map-info-window {
   padding: var(--sp-2);
   min-width: 220px;
