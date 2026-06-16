@@ -269,11 +269,11 @@ const MapModule = (() => {
           <div class="win-body">
             <div class="win-item"><strong>⭐ 평점:</strong> ${h.score} (${h.reviewCount}개 후기)</div>
             <div class="win-item"><strong>📍 주소:</strong> ${h.address}</div>
-            \${h.phone ? `<div class="win-item"><strong>📞 전화:</strong> \${h.phone}</div>` : ''}
-            <div class="win-item"><strong>👨‍⚕️ 의사:</strong> 전문의 \${h.specialistCount}명</div>
+            ${h.phone ? `<div class="win-item"><strong>📞 전화:</strong> ${h.phone}</div>` : ''}
+            <div class="win-item"><strong>👨‍⚕️ 의사:</strong> 전문의 ${h.specialistCount}명</div>
           </div>
           <div class="win-footer">
-            <a href="https://map.kakao.com/link/to/\${h.name},\${h.lat},\${h.lng}" target="_blank" rel="noopener" class="win-road-btn">📍 길찾기</a>
+            <a href="https://map.kakao.com/link/to/${h.name},${h.lat},${h.lng}" target="_blank" rel="noopener" class="win-road-btn">📍 길찾기</a>
           </div>
         </div>
       `;
