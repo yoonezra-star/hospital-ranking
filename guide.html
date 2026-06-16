@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>건강 정보 칼럼 - 병원랭킹</title>
-  <meta name="description" content="올바른 병원 선택 가이드, 진료과별 차이점, 건강 검진 상식 등 유익한 의료 정보 칼럼">
+  <title>질환 백과사전 및 건강 가이드 - 병원랭킹</title>
+  <meta name="description" content="임플란트, 수면내시경, 요로결석 등 주요 의료 테마별 질환 백과사전. 증상, 원인, 치료법 및 우수 병원 선택 가이드 완벽 제공.">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/theme.css">
 </head>
-<body>
+<body class="light-mode">
   <!-- Header -->
   <header class="header" id="header" style="position:static; border-bottom:1px solid var(--border-default);">
-    <div class="header-inner">
+    <div class="header-inner container">
       <a href="/" class="logo">
         <span class="logo-icon">🏥</span>
         <span class="gradient-text">병원랭킹</span>
@@ -22,83 +23,128 @@
   </header>
 
   <main class="container section-padding" style="max-width: 900px; padding-top: 60px;">
-    <h1 style="font-size: var(--fs-4xl); margin-bottom: var(--sp-2);">건강 정보 칼럼</h1>
-    <p style="color: var(--text-muted); margin-bottom: var(--sp-8);">올바른 병원을 선택하기 위한 가이드와 꼭 알아야 할 건강 정보를 제공합니다.</p>
+    <h1 style="font-size: var(--fs-4xl); margin-bottom: var(--sp-2);">질환 백과사전 및 병원 선택 가이드</h1>
+    <p style="color: var(--text-muted); margin-bottom: var(--sp-8); font-size: 1.1rem;">각종 질환의 원인과 증상, 최신 치료법부터 신뢰할 수 있는 우수 병원을 고르는 체크리스트까지. 병원랭킹이 제공하는 전문적인 의료 건강 가이드를 통해 현명한 의료 소비자가 되어보세요.</p>
     
     <div style="display: flex; flex-direction: column; gap: var(--sp-8);">
       
-      <!-- 광고 여백 -->
-      <div class="ad-slot ad-infeed" style="margin-bottom:20px; text-align:center;">
-        <!-- AdSense In-feed Placeholder -->
+      <!-- 광고 영역 -->
+      <div class="ad-slot ad-infeed" style="margin-bottom:10px; text-align:center;">
+        <ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout-key="-fb+5w+4e-db+86" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
       </div>
 
-      <!-- Blog Post 1 -->
-      <article id="guide-dentist" style="background: var(--bg-card); border: 1px solid var(--border-default); border-radius: var(--r-lg); padding: var(--sp-8);">
-        <h2 style="font-size: var(--fs-3xl); margin-bottom: var(--sp-3); color: var(--text-heading);">좋은 치과를 고르는 5가지 체크리스트</h2>
-        <div style="color: var(--text-muted); font-size: var(--fs-sm); margin-bottom: var(--sp-6); border-bottom: 1px solid var(--border-default); padding-bottom: 10px;">
-          작성일: 2026.06.17 | 카테고리: 치과 | 조회수: 1,423
-        </div>
+      <!-- 임플란트 -->
+      <article id="guide-implant" style="background: var(--bg-card); border: 1px solid var(--border-default); border-radius: var(--r-lg); padding: var(--sp-8);">
+        <h2 style="font-size: var(--fs-3xl); margin-bottom: var(--sp-3); color: var(--text-heading);">[치과] 임플란트(Implant) 완벽 가이드: 부작용 없는 성공적인 식립을 위하여</h2>
+        <div style="color: var(--text-muted); font-size: var(--fs-sm); margin-bottom: var(--sp-6); border-bottom: 1px solid var(--border-default); padding-bottom: 10px;">작성일: 2026.06.17 | 카테고리: 치과 | 조회수: 15,423</div>
         
         <div class="article-content" style="line-height: 1.8; color: var(--text-body); font-size: 1.05rem;">
-          <p style="margin-bottom: 1rem;">치과는 우리가 평생 관리해야 하는 구강 건강의 핵심을 담당하는 의료 기관입니다. 그러나 수많은 치과 중에서 내게 꼭 맞는, 양심적이고 실력 있는 병원을 찾기란 결코 쉬운 일이 아닙니다. 무조건 저렴한 이벤트 비용만을 앞세우는 치과를 찾기보다는, 평생 내 치아를 믿고 맡길 수 있는 확실한 기준을 세우는 것이 중요합니다. 이번 칼럼에서는 임플란트, 교정, 신경치료 등을 앞두고 치과를 선택할 때 반드시 고려해야 할 5가지 기준을 상세히 알아보겠습니다.</p>
+          <h3 style="font-size: 1.5rem; color: var(--primary); margin: 2rem 0 1rem;">1. 임플란트란 무엇인가?</h3>
+          <p style="margin-bottom: 1rem;">임플란트(Implant)는 충치, 잇몸 질환(치주염), 혹은 갑작스러운 사고로 인해 자연 치아를 상실했을 때 이를 대체하는 가장 효과적이고 현대적인 치과 보철 치료입니다. 인체에 거부 반응이 없는 티타늄 소재의 인공 치근(뿌리)을 턱뼈에 식립하고, 그 위에 자연 치아와 유사한 형태의 크라운(머리 부분)을 연결하여 본래 치아의 저작 기능과 심미성을 90% 이상 회복시켜 줍니다. 과거에 주로 사용되던 틀니나 브릿지에 비해 인접 치아를 깎지 않아도 되며, 관리만 잘한다면 반영구적으로 사용할 수 있다는 엄청난 장점이 있습니다.</p>
           
-          <h3 style="font-size: 1.5rem; color: var(--primary); margin: 2rem 0 1rem;">1. 전문의(보드) 자격을 갖춘 의료진인가?</h3>
-          <p style="margin-bottom: 1rem;">가장 먼저 확인해야 할 것은 진료를 담당하는 원장이 해당 분야의 '전문의'인지 여부입니다. 치의학 분야도 구강악안면외과, 치과교정과, 치과보철과, 치주과, 소아치과 등 다양하게 나뉘어져 있습니다. 예를 들어, 임플란트나 사랑니 발치와 같은 고난도의 외과적 수술이 필요하다면 구강악안면외과 전문의가 있는 곳을, 치아 교정이 필요하다면 치과교정과 전문의가 진료하는 곳을 선택하는 것이 안전합니다. 건강보험심사평가원의 데이터를 활용하여 해당 병원의 의료진 현황을 꼼꼼히 확인해 보세요.</p>
+          <h3 style="font-size: 1.5rem; color: var(--primary); margin: 2rem 0 1rem;">2. 주요 부작용 및 주의사항</h3>
+          <p style="margin-bottom: 1rem;">성공률이 95% 이상에 달하는 안전한 수술이지만, 부작용이 아예 없는 것은 아닙니다. 가장 대표적인 부작용은 '임플란트 주위염(Peri-implantitis)'입니다. 임플란트는 자연 치아와 달리 치주 인대가 없어 염증에 매우 취약합니다. 양치질을 소홀히 하거나 정기 검진을 건너뛸 경우, 인공 치근 주변에 잇몸 뼈가 녹아내려 결국 임플란트가 탈락하는 최악의 사태가 발생할 수 있습니다. 수술 전 당뇨나 고혈압과 같은 전신 질환이 있는 환자는 지혈이나 감염 회복이 더딜 수 있으므로 반드시 의료진과의 사전 상담이 필수적입니다.</p>
 
-          <h3 style="font-size: 1.5rem; color: var(--primary); margin: 2rem 0 1rem;">2. 대표 원장이 직접 진료하고 책임지는가?</h3>
-          <p style="margin-bottom: 1rem;">간혹 상담은 대표 원장이 하고, 실제 수술이나 진료는 다른 페이닥터가 진행하는 이른바 '유령 수술(대리 수술)' 논란이 제기되기도 합니다. 좋은 치과는 첫 상담부터 진단, 수술, 그리고 사후 관리까지 책임 원장이 직접 주도하는 곳입니다. 특히 임플란트나 교정 치료는 최소 수개월에서 수년이 걸리는 장기 프로젝트이므로, 중간에 담당 의사가 자주 바뀌지 않는 병원을 선택해야 일관된 치료 결과를 얻을 수 있습니다.</p>
-
-          <h3 style="font-size: 1.5rem; color: var(--primary); margin: 2rem 0 1rem;">3. 과잉 진료 없이 정직한 진단을 내리는가?</h3>
-          <p style="margin-bottom: 1rem;">환자들이 가장 두려워하는 것 중 하나가 바로 '과잉 진료'입니다. 충치가 아닌 단순한 착색을 충치로 진단하여 불필요한 치료를 권유하거나, 살릴 수 있는 자연 치아를 쉽게 발치하고 임플란트를 유도하는 경우가 종종 발생합니다. 이를 방지하기 위해서는 최소 2~3곳의 치과를 방문하여 교차 진단을 받아보는 것이 현명합니다. X-ray나 3D CT 사진을 환자에게 직접 보여주며 치료의 필요성과 대안을 논리적으로 설명해 주는 병원이 신뢰할 수 있는 병원입니다.</p>
-
-          <h3 style="font-size: 1.5rem; color: var(--primary); margin: 2rem 0 1rem;">4. 철저한 감염 관리 및 최신 장비를 보유하고 있는가?</h3>
-          <p style="margin-bottom: 1rem;">치과 치료는 타액과 혈액이 수반되는 수술이 많기 때문에 감염 관리가 매우 중요합니다. 1인 1기구 사용 원칙을 준수하는지, 핸드피스를 비롯한 모든 기구를 고압 증기 멸균기(오토클레이브) 등으로 철저히 소독하는지 병원 내부의 위생 상태를 점검해야 합니다. 더불어, 3D CT, 구강 스캐너, 미세 현미경 등 최신 진단 장비를 갖추고 있다면 육안으로 확인하기 어려운 미세한 병변까지 진단하여 보다 정밀한 치료가 가능합니다.</p>
-
-          <h3 style="font-size: 1.5rem; color: var(--primary); margin: 2rem 0 1rem;">5. 체계적인 사후 관리(A/S) 시스템이 구축되어 있는가?</h3>
-          <p style="margin-bottom: 1rem;">치료가 끝났다고 해서 모든 것이 완료되는 것은 아닙니다. 보철물의 파절, 염증 발생 등 예기치 못한 부작용이 생길 수 있습니다. 따라서 치료 보증 제도를 명확하게 문서화하여 제공하는지, 정기적인 스케일링과 검진을 통해 사후 관리를 철저히 해주는지 확인해야 합니다. 사후 관리가 잘 되는 치과야말로 환자의 구강 건강을 끝까지 책임지는 진정한 1차 의료기관입니다.</p>
-
-          <p style="margin-top: 2rem; padding: 1.5rem; background: var(--bg-body); border-radius: 8px; font-weight: 500;">
-            결론적으로, 환자 중심의 철학을 가지고 투명하게 진료하는 병원을 찾는 것이 구강 건강 수명을 늘리는 지름길입니다. '병원랭킹' 사이트에서 제공하는 다수의 실제 방문자 리뷰와 진료비 정보를 종합적으로 비교 분석하여 현명한 선택을 하시길 바랍니다.
-          </p>
+          <h3 style="font-size: 1.5rem; color: var(--primary); margin: 2rem 0 1rem;">3. 성공적인 임플란트를 위한 좋은 치과 선택 기준</h3>
+          <ul style="margin-bottom: 1rem; padding-left: 20px; list-style-type: disc;">
+            <li style="margin-bottom: 0.5rem;"><strong>구강악안면외과 또는 치주과 전문의 여부:</strong> 잇몸 뼈를 절개하고 뼈 이식을 동반하는 외과적 수술인 만큼, 수술 경험이 풍부한 전문의가 상주하는 곳을 선택해야 합니다.</li>
+            <li style="margin-bottom: 0.5rem;"><strong>첨단 진단 장비 보유:</strong> 신경의 위치와 잇몸 뼈의 두께를 3차원적으로 파악할 수 있는 3D CT 및 구강 스캐너를 갖춘 병원인지 확인하세요. 최근에는 네비게이션 임플란트 방식을 적용하여 오차를 줄이는 치과가 늘고 있습니다.</li>
+            <li style="margin-bottom: 0.5rem;"><strong>책임 진료 보증제:</strong> 수술 후 최소 5년 이상의 무상 보증 및 정기 검진 시스템을 서면으로 약속하는 병원을 선택하는 것이 중요합니다. 이른바 '먹튀 치과'를 피하기 위한 필수 확인 사항입니다.</li>
+          </ul>
         </div>
       </article>
 
-      <!-- 광고 여백 -->
-      <div class="ad-slot ad-infeed" style="margin-bottom:20px; text-align:center;">
-        <!-- AdSense In-feed Placeholder -->
-      </div>
-
-      <!-- Blog Post 2 -->
-      <article id="guide-internal" style="background: var(--bg-card); border: 1px solid var(--border-default); border-radius: var(--r-lg); padding: var(--sp-8);">
-        <h2 style="font-size: var(--fs-3xl); margin-bottom: var(--sp-3); color: var(--text-heading);">내과 vs 가정의학과, 어디로 가야 할까? 올바른 의료기관 선택 가이드</h2>
-        <div style="color: var(--text-muted); font-size: var(--fs-sm); margin-bottom: var(--sp-6); border-bottom: 1px solid var(--border-default); padding-bottom: 10px;">
-          작성일: 2026.06.10 | 카테고리: 일반건강 | 조회수: 2,109
-        </div>
+      <!-- 수면내시경 -->
+      <article id="guide-endoscopy" style="background: var(--bg-card); border: 1px solid var(--border-default); border-radius: var(--r-lg); padding: var(--sp-8);">
+        <h2 style="font-size: var(--fs-3xl); margin-bottom: var(--sp-3); color: var(--text-heading);">[내과] 수면 위/대장내시경: 암을 예방하는 가장 확실한 방법</h2>
+        <div style="color: var(--text-muted); font-size: var(--fs-sm); margin-bottom: var(--sp-6); border-bottom: 1px solid var(--border-default); padding-bottom: 10px;">작성일: 2026.06.16 | 카테고리: 소화기내과 | 조회수: 12,305</div>
         
         <div class="article-content" style="line-height: 1.8; color: var(--text-body); font-size: 1.05rem;">
-          <p style="margin-bottom: 1rem;">일상생활 중 감기 몸살, 원인을 알 수 없는 피로감, 경미한 복통 등 가벼운 질환이 발생했을 때 가장 먼저 떠오르는 병원은 동네 의원입니다. 하지만 간판을 보면 '내과'와 '가정의학과'가 혼재되어 있어 어디를 방문해야 할지 헷갈린 경험이 한 번쯤은 있으실 겁니다. 두 진료과 모두 우리 삶과 밀접한 1차 의료기관의 역할을 충실히 수행하고 있지만, 진료의 초점과 접근 방식에서 분명한 차이가 존재합니다.</p>
-          
-          <h3 style="font-size: 1.5rem; color: var(--primary); margin: 2rem 0 1rem;">내과(Internal Medicine)의 전문성과 깊이</h3>
-          <p style="margin-bottom: 1rem;">내과는 인체의 내부 장기에서 발생하는 질환을 비수술적 방법(약물 치료 등)으로 진단하고 치료하는 분야입니다. 내과학은 매우 방대하여 소화기내과, 순환기내과, 호흡기내과, 내분비내과, 신장내과, 혈액종양내과 등 세부 분과로 세분화되어 있습니다. 특정 장기에 국한된 질환, 예를 들어 심한 위장 장애, 만성 기침이나 천식, 갑상선 질환, 당뇨병 등 뚜렷한 만성/내부 장기 질환이 의심될 때는 해당 세부 전공을 수료한 내과 전문의를 찾는 것이 가장 효과적입니다.</p>
+          <h3 style="font-size: 1.5rem; color: var(--primary); margin: 2rem 0 1rem;">1. 내시경 검사의 중요성</h3>
+          <p style="margin-bottom: 1rem;">대한민국은 위암과 대장암 발병률이 세계적으로 매우 높은 국가입니다. 다행인 점은 두 암 모두 초기에 발견하면 완치율이 90% 이상이라는 것입니다. 내시경 검사는 카메라가 달린 긴 튜브를 삽입하여 식도, 위, 십이지장 및 대장의 점막을 직접 육안으로 관찰하는 검사로, 초음파나 CT로는 잡아내기 힘든 미세한 조기 암이나 용종을 발견하고 즉시 절제할 수 있는 가장 확실하고 독보적인 진단 및 치료 방법입니다.</p>
 
-          <h3 style="font-size: 1.5rem; color: var(--primary); margin: 2rem 0 1rem;">가정의학과(Family Medicine)의 포괄성과 지속성</h3>
-          <p style="margin-bottom: 1rem;">반면 가정의학과는 연령, 성별, 질병의 종류에 구애받지 않고 지속적이고 포괄적인 의료 서비스를 제공하는 진료과입니다. 특정한 장기나 시스템에 국한되지 않고 환자의 전반적인 건강 상태, 생활 습관, 가족력 등을 종합적으로 파악하여 진료합니다. 열이 나는데 원인을 모르겠거나, 스트레스로 인한 피로감, 금연 치료, 비만 관리, 예방 접종 및 포괄적인 건강 검진 등 질병의 초기 진단 및 평생 건강 관리를 목표로 할 때 가정의학과가 훌륭한 주치의 역할을 수행합니다. 필요한 경우 적절한 타 전문의에게 환자를 의뢰(Refer)하는 게이트키퍼 역할도 담당합니다.</p>
+          <h3 style="font-size: 1.5rem; color: var(--primary); margin: 2rem 0 1rem;">2. 수면 내시경 (의식하 진정 내시경)</h3>
+          <p style="margin-bottom: 1rem;">과거에는 맨정신으로 목구멍이나 항문에 내시경을 삽입하여 극심한 구역질과 통증을 호소하는 환자가 많았습니다. 하지만 최근에는 미다졸람이나 프로포폴 같은 진정제를 투여하여 환자가 수면에 빠진 것과 같은 편안한 상태(실제로는 얕은 의식이 있는 상태)에서 검사를 진행하는 '수면 내시경'이 보편화되었습니다. 환자의 고통을 줄여줄 뿐만 아니라, 환자의 움직임이 적어 의사가 점막을 훨씬 더 꼼꼼하고 정확하게 관찰할 수 있다는 의학적 장점이 있습니다.</p>
 
-          <h3 style="font-size: 1.5rem; color: var(--primary); margin: 2rem 0 1rem;">증상별 맞춤형 선택 팁</h3>
-          <p style="margin-bottom: 1rem;">그렇다면 구체적인 증상이 발생했을 때 어떻게 선택해야 할까요? 만약 가벼운 감기 증상, 예방접종, 혹은 명확한 증상 없이 몸이 전반적으로 안 좋다면 '가정의학과'를 방문하여 종합적인 진료를 받는 것이 좋습니다. 하지만 속쓰림과 위산 역류가 심해 위내시경이 필요하거나, 고혈압/당뇨 등 장기적이고 전문적인 약물 조절이 필요한 기저 질환을 가지고 있다면 '내과' 전문의를 찾아가는 것이 더 깊이 있는 치료를 받을 수 있는 방법입니다.</p>
-          
-          <p style="margin-top: 2rem; padding: 1.5rem; background: var(--bg-body); border-radius: 8px; font-weight: 500;">
-            가장 중요한 것은 환자 본인의 현재 건강 상태와 필요에 맞는 진료과를 선택하는 것입니다. 어떤 의사를 주치의로 삼든, 꾸준한 소통과 신뢰를 바탕으로 건강을 관리해 나가는 것이 핵심입니다. 병원랭킹의 필터 검색을 통해 거주지 인근의 우수한 내과 및 가정의학과를 확인해 보세요.
-          </p>
+          <h3 style="font-size: 1.5rem; color: var(--primary); margin: 2rem 0 1rem;">3. 안전한 내시경 병원을 고르는 체크리스트</h3>
+          <ul style="margin-bottom: 1rem; padding-left: 20px; list-style-type: disc;">
+            <li style="margin-bottom: 0.5rem;"><strong>소화기내과 세부전공의 검사 여부:</strong> 내시경은 의사의 숙련도가 검사 결과의 질을 좌우합니다. 대한소화기내시경학회에서 인증한 '소화기내시경 세부전문의'가 직접 검사하는 내과를 선택하십시오.</li>
+            <li style="margin-bottom: 0.5rem;"><strong>우수내시경실 인증 마크:</strong> 환자의 안전, 감염 관리, 내시경 기구 세척 및 소독 규정을 철저히 지키는 병원에만 부여되는 '우수내시경실 인증' 마크를 획득한 병원인지 확인하세요.</li>
+            <li style="margin-bottom: 0.5rem;"><strong>응급 장비 및 모니터링 시스템:</strong> 수면 유도 중 드물게 발생할 수 있는 호흡 억제나 심혈관계 응급 상황에 대처하기 위해 심박동 산소포화도 모니터와 심세동기 등 응급 카트가 구비된 곳이어야 합니다.</li>
+          </ul>
         </div>
       </article>
+
+      <!-- 요로결석 -->
+      <article id="guide-urology" style="background: var(--bg-card); border: 1px solid var(--border-default); border-radius: var(--r-lg); padding: var(--sp-8);">
+        <h2 style="font-size: var(--fs-3xl); margin-bottom: var(--sp-3); color: var(--text-heading);">[비뇨의학과] 요로결석: 출산의 고통에 맞먹는 극심한 통증 대처법</h2>
+        <div style="color: var(--text-muted); font-size: var(--fs-sm); margin-bottom: var(--sp-6); border-bottom: 1px solid var(--border-default); padding-bottom: 10px;">작성일: 2026.06.12 | 카테고리: 비뇨의학과 | 조회수: 9,842</div>
+        
+        <div class="article-content" style="line-height: 1.8; color: var(--text-body); font-size: 1.05rem;">
+          <h3 style="font-size: 1.5rem; color: var(--primary); margin: 2rem 0 1rem;">1. 요로결석이란? 증상과 원인</h3>
+          <p style="margin-bottom: 1rem;">요로결석은 소변이 만들어져 배출되는 길(신장, 요관, 방광, 요도)에 칼슘, 수산염, 인산염 등의 찌꺼기가 뭉쳐 돌(결석)이 생성되는 질환입니다. 이 돌이 요관을 막게 되면 소변이 내려가지 못해 신장이 붓고 엄청난 압력이 발생합니다. 환자들은 옆구리와 하복부에 칼로 찌르는 듯한, 산통에 비견되는 극심한 통증(Colic pain)을 호소하며 응급실을 찾게 됩니다. 육류 위주의 식습관, 수분 섭취 부족, 그리고 여름철 땀 배출로 인한 소변 농축이 주된 원인입니다.</p>
+
+          <h3 style="font-size: 1.5rem; color: var(--primary); margin: 2rem 0 1rem;">2. 최신 치료법: 체외충격파쇄석술(ESWL)</h3>
+          <p style="margin-bottom: 1rem;">결석의 크기가 4mm 이하로 작을 경우 수분을 대량 섭취하여 자연 배출을 유도합니다. 하지만 그 이상이거나 통증이 극심할 경우 '체외충격파쇄석술(ESWL)'을 시행합니다. 마취나 절개 없이 몸 밖에서 충격파를 발생시켜 결석을 모래알처럼 잘게 부순 후 소변으로 배출되게 하는 안전하고 효과적인 방법입니다. 만약 결석이 너무 크거나 단단하다면 요관 내시경을 직접 삽입하여 레이저로 부수는 수술적 치료가 필요할 수 있습니다.</p>
+
+          <h3 style="font-size: 1.5rem; color: var(--primary); margin: 2rem 0 1rem;">3. 야간 및 응급 진료 병원의 중요성</h3>
+          <p style="margin-bottom: 1rem;">요로결석 통증은 밤낮을 가리지 않고 돌발적으로 발생합니다. 통증이 너무 심각하여 아침까지 참을 수 없기 때문에, 거주지 근처에 **'24시간 요로결석 쇄석술'**을 운영하는 비뇨의학과 의원을 평소에 파악해 두는 것이 생명선과도 같습니다. 대학병원 응급실에 갈 경우 대기 시간이 길어 진통제만 맞으며 밤새 고통받는 경우가 많으므로, 충격파 쇄석기를 구비하고 전문의가 즉시 호출 가능한 지역 비뇨의학과 네트워크를 병원랭킹에서 꼭 검색해 보시길 권장합니다.</p>
+        </div>
+      </article>
+      
+      <!-- 도수치료 -->
+      <article id="guide-ortho" style="background: var(--bg-card); border: 1px solid var(--border-default); border-radius: var(--r-lg); padding: var(--sp-8);">
+        <h2 style="font-size: var(--fs-3xl); margin-bottom: var(--sp-3); color: var(--text-heading);">[정형/재활의학과] 도수치료: 거북목과 디스크를 바로잡는 비수술 교정 치료</h2>
+        <div style="color: var(--text-muted); font-size: var(--fs-sm); margin-bottom: var(--sp-6); border-bottom: 1px solid var(--border-default); padding-bottom: 10px;">작성일: 2026.06.05 | 카테고리: 정형외과 | 조회수: 18,910</div>
+        
+        <div class="article-content" style="line-height: 1.8; color: var(--text-body); font-size: 1.05rem;">
+          <h3 style="font-size: 1.5rem; color: var(--primary); margin: 2rem 0 1rem;">1. 도수치료(Manual Therapy)의 원리</h3>
+          <p style="margin-bottom: 1rem;">현대인의 고질병인 거북목 증후군, 척추관협착증, 허리 디스크, 오십견 등 근골격계 질환을 수술이나 약물 없이 전문 물리치료사의 '손(도수)'을 이용하여 치료하는 방법입니다. 틀어진 척추와 관절의 정렬을 맞추고, 굳어있는 근육과 근막을 이완시켜 통증의 근본적인 원인을 해소합니다. 단순한 마사지와는 달리 해부학적, 생리학적 지식을 바탕으로 의사의 정확한 처방 하에 이루어지는 의료 행위입니다.</p>
+
+          <h3 style="font-size: 1.5rem; color: var(--primary); margin: 2rem 0 1rem;">2. 올바른 정형외과 및 재활의학과 선택 가이드</h3>
+          <p style="margin-bottom: 1rem;">도수치료는 치료사의 역량과 의사의 정확한 진단이 100% 결합해야 효과를 볼 수 있습니다. 실비 보험이 적용된다는 이유로 무분별하게 치료를 권유하는 곳은 피해야 합니다. X-ray나 MRI 등의 영상 진단을 바탕으로 전문의가 환자의 척추 불균형 원인을 정확히 파악하고, 치료사에게 세밀한 오더를 내리는 시스템을 갖춘 곳을 선택하세요. 또한, 재발 방지를 위해 일상생활 자세 교정과 운동 치료(슬링, 필라테스 기구 등)를 병행하는 병원이 장기적인 치료 예후가 좋습니다.</p>
+        </div>
+      </article>
+
+      <!-- 광고 영역 -->
+      <div class="ad-slot ad-infeed" style="margin-top:20px; text-align:center;">
+        <ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout-key="-fb+5w+4e-db+86" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+      </div>
 
     </div>
   </main>
 
-  <footer class="footer" style="margin-top: 0;">
-    <div class="footer-inner" style="text-align: center; padding-top: 40px; padding-bottom: 40px;">
-      <p>© 2026 병원랭킹. All rights reserved.</p>
+  <!-- Footer -->
+  <footer class="footer" style="margin-top: 50px;">
+    <div class="container footer-inner">
+      <div class="footer-col">
+        <h3>병원랭킹</h3>
+        <p>공공데이터를 활용한 전국 병의원 평점 및 후기 서비스. 가장 정확한 의료 정보를 제공합니다.</p>
+      </div>
+      <div class="footer-col">
+        <h4>바로가기</h4>
+        <ul>
+          <li><a href="index.html">홈으로</a></li>
+          <li><a href="guide.html">질환 백과사전</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>약관 및 정책</h4>
+        <ul>
+          <li><a href="terms.html">이용약관</a></li>
+          <li><a href="privacy.html">개인정보처리방침</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>고객 지원</h4>
+        <ul>
+          <li><a href="contact.html">고객센터 및 제휴 문의</a></li>
+          <li><a href="about.html">회사 소개</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 병원랭킹. All rights reserved.</p>
     </div>
   </footer>
 </body>
