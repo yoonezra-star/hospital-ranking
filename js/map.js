@@ -45,9 +45,6 @@ const MapModule = (() => {
     }
   }
 
-  /**
-   * Naver Maps SDK 스크립트 동적 로드
-   */
   function loadScript(clientId) {
     return new Promise((resolve, reject) => {
       if (window.naver && window.naver.maps) {
@@ -59,18 +56,17 @@ const MapModule = (() => {
       const oldScripts = document.querySelectorAll('script[src*="openapi.map.naver.com"]');
       oldScripts.forEach(s => s.remove());
 
+      // 비동기 로딩 완료 후 호출될 콜백 함수 지정
+      window.__naverMapLoaded = () => {
+        resolve();
+        delete window.__naverMapLoaded;
+      };
+
       const script = document.createElement('script');
       script.type = 'text/javascript';
-      script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${clientId}&submodules=geocoder`;
+      // callback 파라미터 필수 추가 (비동기 로드 시)
+      script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${clientId}&submodules=geocoder&callback=__naverMapLoaded`;
       
-      script.onload = () => {
-        // 네이버 지도는 로드되면 naver.maps 객체가 즉시 준비됩니다.
-        if (window.naver && window.naver.maps) {
-          resolve();
-        } else {
-          reject(new Error('Naver maps object not found.'));
-        }
-      };
       script.onerror = () => {
         reject(new Error('Failed to load Naver Maps script.'));
       };
