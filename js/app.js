@@ -231,6 +231,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const sorted = SearchEngine.sortHospitals(allFetchedHospitals, currentSort);
     renderRankingCards(sorted);
     updateDataBadge(result.fromMock);
+    
+    // 지도 마커 갱신
+    if (typeof MapModule !== 'undefined') {
+      MapModule.updateMarkers(sorted);
+    }
+
     showLoading(false);
     updateLoadMore();
   }
@@ -368,6 +374,11 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       searchResultsList.innerHTML = hospitals.map((h, i) => buildHospitalCard(h, i + 1)).join('');
       observeNewElements(searchResultsList);
+      
+      // 검색 결과 지도 마커 갱신
+      if (typeof MapModule !== 'undefined') {
+        MapModule.updateMarkers(hospitals);
+      }
     }
 
     searchResults.scrollIntoView({ behavior: 'smooth', block: 'start' });

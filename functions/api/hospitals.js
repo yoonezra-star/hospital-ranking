@@ -8,7 +8,15 @@
  *   DATA_API_KEY = 발급받은 인증키
  */
 export async function onRequestGet(context) {
-  const API_KEY = context.env?.DATA_API_KEY || '6016d506ccaac7277d8a3492ca0cce1845c6cee2acf054d92ac5cf0ef3049d0d';
+  let API_KEY = context.env?.DATA_API_KEY || '6016d506ccaac7277d8a3492ca0cce1845c6cee2acf054d92ac5cf0ef3049d0d';
+  
+  // 공공데이터 API 키 이중 인코딩 문제 방지를 위해 디코딩 적용
+  try {
+    API_KEY = decodeURIComponent(API_KEY);
+  } catch (e) {
+    // 디코딩 에러 발생 시 원본 그대로 사용
+  }
+
   const BASE_URL = 'https://apis.data.go.kr/B551182/hospInfoServicev2/getHospBasisList';
 
   const url = new URL(context.request.url);
@@ -27,8 +35,15 @@ export async function onRequestGet(context) {
     if (val) apiUrl.searchParams.set(key, val);
   });
 
+  // 타임아웃 설정 (3.5초)
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 3500);
+
   try {
-    const response = await fetch(apiUrl.toString());
+    const response = await fetch(apiUrl.toString(), {
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       return new Response(JSON.stringify({ error: `Upstream API returned ${response.status}` }), {
@@ -54,8 +69,18 @@ export async function onRequestGet(context) {
       headers: corsHeaders('application/json', 'public, max-age=300'),
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
+    clearTimeout(timeoutId);
+    
+    let status = 500;
+    let message = error.message;
+
+    if (error.name === 'AbortError') {
+      status = 504;
+      message = 'Upstream API request timed out (3.5s limit)';
+    }
+
+    return new Response(JSON.stringify({ error: message }), {
+      status,
       headers: corsHeaders('application/json'),
     });
   }

@@ -107,26 +107,40 @@ const HospitalAPI = (() => {
     // 1) 프록시 시도
     if (proxyAvailable !== false) {
       try {
-        const res = await fetch(`${PROXY_PATH}?${queryParams}`, { signal: AbortSignal.timeout(8000) });
+        const res = await fetch(`${PROXY_PATH}?${queryParams}`, { signal: AbortSignal.timeout(3000) });
         if (res.ok) {
           proxyAvailable = true;
           const data = await res.json();
           if (data?.response) return data;
-          throw new Error('Invalid proxy response');
+          throw new Error('Invalid proxy response structure');
+        } else {
+          throw new Error(`Proxy status: ${res.status}`);
         }
       } catch (e) {
-        if (proxyAvailable === null) proxyAvailable = false;
-        console.warn('[HospitalAPI] 프록시 사용 불가, 직접 호출 시도');
+        proxyAvailable = false; // 한 번 실패하면 다음 호출부터는 프록시 대기 시간(3초)을 완전히 차단
+        console.warn('[HospitalAPI] 프록시 사용 불가 → 직접 호출/폴백 시도:', e.message);
       }
     }
 
     // 2) 직접 호출 시도 (CORS 허용 시에만 성공)
-    const directParams = new URLSearchParams(queryParams);
-    directParams.set('serviceKey', API_KEY);
-    directParams.set('_type', 'json');
-    const res = await fetch(`${DIRECT_URL}?${directParams}`, { signal: AbortSignal.timeout(8000) });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return await res.json();
+    try {
+      const directParams = new URLSearchParams(queryParams);
+      let decodedKey = API_KEY;
+      try {
+        decodedKey = decodeURIComponent(API_KEY);
+      } catch (e) {}
+      directParams.set('serviceKey', decodedKey);
+      directParams.set('_type', 'json');
+      
+      const res = await fetch(`${DIRECT_URL}?${directParams}`, { signal: AbortSignal.timeout(4000) });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      if (data?.response) return data;
+      throw new Error('Invalid direct response structure');
+    } catch (e) {
+      console.warn('[HospitalAPI] 직접 호출 실패:', e.message);
+      throw e; // 최종 Mock 데이터 폴백을 위해 에러 전파
+    }
   }
 
   /* ── 응답 정규화 ── */
