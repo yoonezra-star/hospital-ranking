@@ -12,6 +12,7 @@ const MapModule = (() => {
   let isSdkLoaded = false;
 
   const KEY_STORAGE = 'kakao_map_api_key';
+  const DEFAULT_KEY = '58f4148d7aca1e6535702c1807ac2c8e';
 
   // 기본 위치 (서울시청)
   const DEFAULT_LAT = 37.5665;
@@ -21,7 +22,7 @@ const MapModule = (() => {
    * 지도 초기화 진입점
    */
   async function init() {
-    const savedKey = localStorage.getItem(KEY_STORAGE);
+    const savedKey = localStorage.getItem(KEY_STORAGE) || DEFAULT_KEY;
     const container = document.getElementById('map-container');
     if (!container) return;
 
