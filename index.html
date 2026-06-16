@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>병원랭킹 - 전국 병의원 순위 정보</title>
+  <meta name="description" content="건강보험심사평가원 공공데이터 기반 전국 병의원 순위 정보. 진료과별 병원 검색, 랭킹, 후기, 토요일·야간 진료 병원 찾기.">
+  <meta property="og:title" content="병원랭킹 - 전국 병의원 순위 정보">
+  <meta property="og:description" content="공공데이터 기반 전국 병의원 순위, 후기, 진료 시간 정보를 한눈에 확인하세요.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏥</text></svg>">
+</head>
+<body>
+  <!-- ===== Header ===== -->
+  <header class="header" id="header">
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <span class="logo-icon">🏥</span>
+        <span class="gradient-text">병원랭킹</span>
+      </a>
+      <nav class="nav-links" id="nav-links">
+        <a href="#departments">진료과</a>
+        <a href="#ranking">랭킹</a>
+        <a href="#reviews">후기</a>
+        <a href="#new-hospitals">신규 개원</a>
+        <a href="#map-section">지도</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button class="theme-toggle" id="theme-toggle" aria-label="다크모드 전환">🌙</button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="메뉴 열기">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===== Hero ===== -->
+    <section class="hero" id="hero">
+      <div class="hero-orb hero-orb-1"></div>
+      <div class="hero-orb hero-orb-2"></div>
+      <div class="hero-orb hero-orb-3"></div>
+      <div class="hero-content">
+        <h1>전국 병의원<br><span class="gradient-text">순위 정보</span></h1>
+        <p class="subtitle">건강보험심사평가원 공공데이터 기반 병원 검색 · 랭킹 · 후기</p>
+
+        <div class="search-wrapper">
+          <div class="search-bar">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="hero-search" placeholder="병원명, 지역, 진료과를 검색하세요" autocomplete="off">
+            <button class="search-btn" id="search-btn">검색</button>
+          </div>
+        </div>
+
+        <div class="quick-filters">
+          <button class="quick-filter-btn" data-filter="sat">🕐 토요 진료</button>
+          <button class="quick-filter-btn" data-filter="night">🌙 야간 진료</button>
+          <button class="quick-filter-btn" data-filter="sun">📅 일요 진료</button>
+          <button class="quick-filter-btn" data-filter="new">✨ 신규 개원</button>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number" data-target="95247">0</span>
+            <span class="stat-label">등록 병원</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" data-target="17">0</span>
+            <span class="stat-label">광역시도</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" data-target="30">0</span>
+            <span class="stat-label">진료과</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Search Results (hidden by default) ===== -->
+    <section class="search-results-section container" id="search-results">
+      <div class="search-results-header">
+        <h2>검색 결과: <span id="search-query-display"></span></h2>
+        <button class="clear-search-btn" id="clear-search">✕ 초기화</button>
+      </div>
+      <p class="ranking-count" id="search-result-count"></p>
+      <div class="ranking-grid" id="search-results-list"></div>
+    </section>
+
+    <!-- ===== Departments ===== -->
+    <section id="departments" class="section-padding">
+      <div class="container">
+        <div class="section-header fade-up">
+          <div>
+            <h2>진료과별 찾기</h2>
+            <p class="section-desc">원하는 진료과를 선택하면 해당 분야 병원 랭킹을 확인할 수 있습니다</p>
+          </div>
+        </div>
+        <div class="dept-grid" id="department-grid"></div>
+      </div>
+    </section>
+
+    <!-- ===== Ranking ===== -->
+    <section id="ranking" class="section-padding" style="background:var(--bg-body);">
+      <div class="container">
+        <div class="section-header fade-up">
+          <div>
+            <h2>인기 병원 랭킹</h2>
+            <p class="section-desc">평점, 후기, 전문의 수 기반 종합 순위</p>
+          </div>
+          <div class="section-filters">
+            <select class="filter-select" id="region-filter">
+              <option value="all">전체 지역</option>
+            </select>
+            <select class="filter-select" id="type-filter">
+              <option value="all">전체 유형</option>
+              <option value="hospital">종합병원/병원</option>
+              <option value="clinic">의원</option>
+              <option value="dental">치과</option>
+              <option value="korean">한의원</option>
+            </select>
+            <select class="filter-select" id="sort-filter">
+              <option value="score">평점순</option>
+              <option value="reviews">후기순</option>
+              <option value="specialists">전문의순</option>
+              <option value="newest">최신순</option>
+              <option value="name">이름순</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;" class="fade-up">
+          <p class="ranking-count" id="ranking-count"></p>
+          <span class="data-badge mock" id="data-source-badge">📋 로딩 중...</span>
+        </div>
+        <div class="ranking-loader" id="ranking-loader">
+          <div class="spinner"></div>
+          <span>병원 데이터를 불러오는 중...</span>
+        </div>
+        <div class="ranking-grid" id="ranking-list"></div>
+        <button class="load-more-btn" id="load-more-btn">더보기</button>
+      </div>
+    </section>
+
+    <!-- ===== Reviews ===== -->
+    <section id="reviews" class="section-padding">
+      <div class="container">
+        <div class="section-header fade-up">
+          <div>
+            <h2>최근 후기</h2>
+            <p class="section-desc">실제 방문자들의 생생한 후기</p>
+          </div>
+        </div>
+        <div class="reviews-grid" id="reviews-list"></div>
+      </div>
+    </section>
+
+    <!-- ===== New Hospitals ===== -->
+    <section id="new-hospitals" class="section-padding" style="background:var(--bg-body);">
+      <div class="container">
+        <div class="section-header fade-up">
+          <div>
+            <h2>최근 개원 병원</h2>
+            <p class="section-desc">새로 문을 연 병의원 정보</p>
+          </div>
+        </div>
+        <div class="timeline" id="new-hospitals-list"></div>
+      </div>
+    </section>
+
+    <!-- ===== Map ===== -->
+    <section id="map-section" class="section-padding">
+      <div class="container">
+        <div class="section-header fade-up">
+          <div>
+            <h2>내 주변 병원</h2>
+            <p class="section-desc">지도에서 가까운 병원을 찾아보세요</p>
+          </div>
+        </div>
+        <div class="map-placeholder fade-up" id="map-container">
+          <span class="map-icon">🗺️</span>
+          <p>Kakao Maps API 키를 설정하면 내 주변 병원을 지도에서 확인할 수 있습니다</p>
+          <a href="https://developers.kakao.com" target="_blank" rel="noopener" class="map-setup-btn">API 키 발급받기 →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="logo">
+            <span class="logo-icon">🏥</span>
+            <span class="gradient-text">병원랭킹</span>
+          </div>
+          <p>건강보험심사평가원 공공데이터를 기반으로 전국 병의원의 순위, 후기, 진료 시간 정보를 제공합니다.</p>
+        </div>
+        <div class="footer-links-group">
+          <h4>바로가기</h4>
+          <a href="#departments">진료과별 찾기</a>
+          <a href="#ranking">병원 랭킹</a>
+          <a href="#reviews">후기</a>
+          <a href="#new-hospitals">신규 개원</a>
+        </div>
+        <div class="footer-links-group">
+          <h4>데이터 출처</h4>
+          <a href="https://data.go.kr" target="_blank" rel="noopener">공공데이터포털</a>
+          <a href="https://opendata.hira.or.kr" target="_blank" rel="noopener">보건의료빅데이터</a>
+        </div>
+        <div class="footer-links-group">
+          <h4>안내</h4>
+          <a href="#">이용약관</a>
+          <a href="#">개인정보처리방침</a>
+          <a href="#">문의하기</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 병원랭킹. 공공데이터 기반 병의원 정보 제공 서비스.</p>
+        <p>본 사이트의 정보는 참고용이며, 정확한 진료 정보는 해당 병원에 직접 확인하시기 바랍니다.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
