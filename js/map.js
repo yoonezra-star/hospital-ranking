@@ -12,8 +12,8 @@ const MapModule = (() => {
   let isSdkLoaded = false;
 
   const KEY_STORAGE = 'naver_map_client_id';
-  // 기본적으로 네이버 지도는 Client ID가 등록되지 않은 경우 플레이스홀더를 보여줍니다.
-  const DEFAULT_KEY = ''; 
+  // 네이버 클라우드 플랫폼에서 발급받은 Client ID (기본값)
+  const DEFAULT_KEY = 'rgd9ajy97r'; 
 
   // 기본 위치 (서울시청)
   const DEFAULT_LAT = 37.5665;
