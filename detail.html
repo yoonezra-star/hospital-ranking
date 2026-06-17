@@ -157,12 +157,6 @@
   <script src="js/data.js?v=5"></script>
   <script src="js/api.js?v=5"></script>
   <script src="js/detail.js?v=5"></script>
-  <!-- 네이버 지도 API -->
-  <script>
-    window.__naverMapLoaded = function() {
-      if(window.initDetailMap) window.initDetailMap();
-    };
-  </script>
-  <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=rgd9ajy97r&submodules=geocoder&callback=__naverMapLoaded"></script>
+  <!-- 네이버 지도 API는 js/detail.js에서 동적으로 로드합니다. -->
 </body>
 </html>

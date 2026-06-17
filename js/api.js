@@ -77,6 +77,9 @@ const HospitalAPI = (() => {
     q.set('numOfRows', String(params.limit || 20));
     q.set('pageNo', String(params.page || 1));
 
+    if (params.ykiho) {
+      q.set('ykiho', params.ykiho);
+    }
     if (params.region && REGION_CODES[params.region]) {
       q.set('sidoCd', REGION_CODES[params.region]);
     }

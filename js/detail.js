@@ -16,13 +16,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function loadHospitalDetail(id) {
   try {
-    // API 또는 모의 데이터에서 병원 정보를 가져옴
-    // api.js의 loadHospitalData()를 재사용
-    const data = await window.HospitalAPI.fetchHospitals(1, 1000); // 넉넉히 가져와서 찾음 (실제 API면 단건 조회 엔드포인트 사용 권장)
-    const allHospitals = data.items;
-    
-    // id와 매칭되는 병원 찾기
-    const hospital = allHospitals.find(h => h.id === id || h.id === parseInt(id));
+    let hospital = null;
+
+    if (id && typeof id === 'string' && id.startsWith('JD')) {
+      // 실시간 API 데이터인 경우 ykiho로 직접 단건 조회
+      const data = await window.HospitalAPI.fetchHospitals({ ykiho: id });
+      const allHospitals = data.hospitals;
+      if (allHospitals && allHospitals.length > 0) {
+        hospital = allHospitals[0];
+      }
+    } else {
+      // Mock 데이터인 경우 (id가 숫자인 경우 등)
+      if (typeof HOSPITALS !== 'undefined') {
+        hospital = HOSPITALS.find(h => String(h.id) === String(id));
+      }
+    }
 
     if (!hospital) {
       document.getElementById('detail-name').textContent = '병원을 찾을 수 없습니다.';
@@ -167,10 +175,31 @@ function renderDetail(hospital) {
   // 전역에 병원 정보 저장 (지도 초기화용)
   window.currentHospitalDetail = hospital;
 
-  // 네이버 지도가 이미 로드되었다면 즉시 초기화
-  if (window.naver && window.naver.maps) {
-    window.initDetailMap();
-  }
+  // 네이버 지도 API 동적 로드 및 초기화
+  const savedKey = localStorage.getItem(KEY_STORAGE) || DEFAULT_KEY;
+  loadMapScript(savedKey)
+    .then(() => {
+      window.initDetailMap();
+    })
+    .catch(err => {
+      console.error('[DetailMap] Naver Maps loading failed:', err.message);
+      const container = document.getElementById('map-container');
+      if (container) {
+        if (err.message === 'TIMEOUT' || err.message === 'AUTH_FAIL') {
+          container.innerHTML = `
+            <div class="map-setup-box" style="padding: 20px; text-align: center; border: 1px solid var(--border-default); border-radius: 8px; background: var(--bg-card); display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+              <span style="font-size: 2rem; display: block; margin-bottom: 10px;">⚠️</span>
+              <p style="color: var(--primary); font-weight: bold; margin-bottom: 10px;">네이버 지도 인증에 실패했습니다.</p>
+              <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; max-width: 350px; margin: 0 auto;">
+                네이버 클라우드 플랫폼 콘솔의 Application 설정에서 <b>허용 URL</b>에 현재 도메인(예: <b>hospital-ranking.pages.dev</b> 또는 <b>hospital-ranking.kr</b>)이 등록되어 있는지 확인해 주세요.
+              </p>
+            </div>
+          `;
+        } else {
+          container.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted);">지도를 불러올 수 없습니다. (${err.message})</div>`;
+        }
+      }
+    });
 }
 
 // ── 상세 API 호출 ──
@@ -246,19 +275,81 @@ async function fetchDetailAPIs(hospital) {
   }
 }
 
+// ── 네이버 지도 로딩 및 Geocoding 유틸리티 ──
+const KEY_STORAGE = 'naver_map_client_id';
+const DEFAULT_KEY = 'rgd9ajy97r';
+
+function loadMapScript(clientId) {
+  return new Promise((resolve, reject) => {
+    if (window.naver && window.naver.maps) {
+      resolve();
+      return;
+    }
+
+    // 기존 등록된 스크립트 삭제
+    const oldScripts = document.querySelectorAll('script[src*="openapi.map.naver.com"]');
+    oldScripts.forEach(s => s.remove());
+
+    const timeout = setTimeout(() => {
+      delete window.__naverMapLoaded;
+      reject(new Error('TIMEOUT'));
+    }, 5000);
+
+    window.__naverMapLoaded = () => {
+      clearTimeout(timeout);
+      resolve();
+      delete window.__naverMapLoaded;
+    };
+
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${clientId}&submodules=geocoder&callback=__naverMapLoaded`;
+    
+    script.onerror = () => {
+      clearTimeout(timeout);
+      delete window.__naverMapLoaded;
+      reject(new Error('AUTH_FAIL'));
+    };
+
+    document.head.appendChild(script);
+  });
+}
+
 // 네이버 지도 초기화 함수 (콜백에 의해 호출됨)
 window.initDetailMap = function() {
   if (!window.currentHospitalDetail) return; // 데이터가 아직 안불러와졌으면 대기
   const h = window.currentHospitalDetail;
-  
-  const mapOptions = {
-    center: new naver.maps.LatLng(h.lat, h.lng),
-    zoom: 16
-  };
-  const map = new naver.maps.Map('map-container', mapOptions);
+  const container = document.getElementById('map-container');
+  if (!container) return;
 
-  new naver.maps.Marker({
-    position: new naver.maps.LatLng(h.lat, h.lng),
-    map: map
-  });
+  function renderMap(lat, lng) {
+    const mapOptions = {
+      center: new naver.maps.LatLng(lat, lng),
+      zoom: 16
+    };
+    const map = new naver.maps.Map(container, mapOptions);
+
+    new naver.maps.Marker({
+      position: new naver.maps.LatLng(lat, lng),
+      map: map
+    });
+  }
+
+  // 좌표가 유효한 경우 바로 렌더링, 그렇지 않은 경우 주소 기반으로 지오코딩 수행
+  if (h.lat > 0 && h.lng > 0) {
+    renderMap(h.lat, h.lng);
+  } else if (h.address) {
+    naver.maps.Service.geocode({ query: h.address }, (status, response) => {
+      if (status === naver.maps.Service.Status.OK && response.v2.addresses.length > 0) {
+        const addrItem = response.v2.addresses[0];
+        const lat = parseFloat(addrItem.y);
+        const lng = parseFloat(addrItem.x);
+        renderMap(lat, lng);
+      } else {
+        container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted);">위치 정보를 찾을 수 없습니다 (좌표 변환 실패).</div>';
+      }
+    });
+  } else {
+    container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted);">위치 정보(주소/좌표)가 없습니다.</div>';
+  }
 };

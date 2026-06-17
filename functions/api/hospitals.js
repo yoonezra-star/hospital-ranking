@@ -29,7 +29,7 @@ export async function onRequestGet(context) {
   apiUrl.searchParams.set('pageNo', params.get('pageNo') || '1');
 
   // 선택적 필터 파라미터 전달
-  const optionalParams = ['sidoCd', 'sgguCd', 'emdongNm', 'yadmNm', 'clCd', 'dgsbjtCd', 'xPos', 'yPos', 'radius'];
+  const optionalParams = ['ykiho', 'sidoCd', 'sgguCd', 'emdongNm', 'yadmNm', 'clCd', 'dgsbjtCd', 'xPos', 'yPos', 'radius'];
   optionalParams.forEach(key => {
     const val = params.get(key);
     if (val) apiUrl.searchParams.set(key, val);
