@@ -35,9 +35,9 @@ export async function onRequestGet(context) {
     if (val) apiUrl.searchParams.set(key, val);
   });
 
-  // 타임아웃 설정 (3.5초)
+  // 타임아웃 설정 (8.5초)
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 3500);
+  const timeoutId = setTimeout(() => controller.abort(), 8500);
 
   try {
     const response = await fetch(apiUrl.toString(), {

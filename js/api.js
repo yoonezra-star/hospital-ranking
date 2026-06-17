@@ -107,7 +107,7 @@ const HospitalAPI = (() => {
     // 1) 프록시 시도
     if (proxyAvailable !== false) {
       try {
-        const res = await fetch(`${PROXY_PATH}?${queryParams}`, { signal: AbortSignal.timeout(3000) });
+        const res = await fetch(`${PROXY_PATH}?${queryParams}`, { signal: AbortSignal.timeout(9000) });
         if (res.ok) {
           proxyAvailable = true;
           const data = await res.json();
@@ -132,7 +132,7 @@ const HospitalAPI = (() => {
       directParams.set('serviceKey', decodedKey);
       directParams.set('_type', 'json');
       
-      const res = await fetch(`${DIRECT_URL}?${directParams}`, { signal: AbortSignal.timeout(4000) });
+      const res = await fetch(`${DIRECT_URL}?${directParams}`, { signal: AbortSignal.timeout(9000) });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       if (data?.response) return data;
