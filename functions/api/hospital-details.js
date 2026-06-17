@@ -48,15 +48,42 @@ export async function onRequestGet(context) {
 
     const item = Array.isArray(items) ? items[0] : items;
 
+    // 진료시간 포맷 헬퍼 (0830 → 08:30)
+    const fmtTime = (v) => {
+      if (!v) return null;
+      const s = String(v).padStart(4, '0');
+      return s.slice(0, 2) + ':' + s.slice(2, 4);
+    };
+    const fmtRange = (start, end) => {
+      const s = fmtTime(start);
+      const e = fmtTime(end);
+      return (s && e) ? `${s} ~ ${e}` : null;
+    };
+
     const result = {
       found: true,
-      ykiho: item.ykiho,
-      parkPosblYn: item.parkPosblYn,
+      // 주차 정보
+      parkXpnsYn: item.parkXpnsYn, // 주차비 유무 (Y/N)
       parkEtc: item.parkEtc,
-      plcNm: item.plcNm, // 주차장 이름 등
       parkQty: item.parkQty,
-      noTursFacYn: item.noTursFacYn, // 장애인 편의시설
-      area: item.area, // 면적
+      // 진료시간
+      hours: {
+        mon: fmtRange(item.trmtMonStart, item.trmtMonEnd),
+        tue: fmtRange(item.trmtTueStart, item.trmtTueEnd),
+        wed: fmtRange(item.trmtWedStart, item.trmtWedEnd),
+        thu: fmtRange(item.trmtThuStart, item.trmtThuEnd),
+        fri: fmtRange(item.trmtFriStart, item.trmtFriEnd),
+        sat: fmtRange(item.trmtSatStart, item.trmtSatEnd),
+        sun: item.noTrmtSun || '휴진',
+        holiday: item.noTrmtHoli || '휴진',
+      },
+      lunchWeek: item.lunchWeek || null,
+      rcvWeek: item.rcvWeek || null,
+      rcvSat: item.rcvSat || null,
+      // 응급실
+      emyDayYn: item.emyDayYn,
+      emyNgtYn: item.emyNgtYn,
+      emyDayTelNo1: item.emyDayTelNo1,
     };
 
     return new Response(JSON.stringify(result), { headers: corsHeaders('application/json', 'public, max-age=3600') });

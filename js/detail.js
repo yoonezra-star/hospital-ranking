@@ -204,14 +204,135 @@ function renderDetail(hospital) {
 
 // ── 상세 API 호출 ──
 async function fetchDetailAPIs(hospital) {
-  // 1. 국립중앙의료원 (진료시간, 교통편)
+  const isYkiho = hospital.id && typeof hospital.id === 'string' && hospital.id.startsWith('JD');
+
+  if (isYkiho) {
+    // ── ykiho 기반: 심평원 API 2개 동시 호출 ──
+    const detailPromise = fetch(`/api/hospital-details?ykiho=${encodeURIComponent(hospital.id)}`)
+      .then(res => res.json()).catch(() => null);
+    const equipPromise = fetch(`/api/hospital-equip?ykiho=${encodeURIComponent(hospital.id)}`)
+      .then(res => res.json()).catch(() => null);
+
+    const [detailData, equipData] = await Promise.all([detailPromise, equipPromise]);
+
+    // ── (A) 심평원 상세: 진료시간 + 주차 ──
+    if (detailData && detailData.found) {
+      // 진료시간 (hospital-details API에서 가져온 시간 우선)
+      const h = detailData.hours;
+      if (h && (h.mon || h.tue || h.wed)) {
+        const hoursHtml = `
+          <li><strong>월요일:</strong> ${h.mon || '휴진'}</li>
+          <li><strong>화요일:</strong> ${h.tue || '휴진'}</li>
+          <li><strong>수요일:</strong> ${h.wed || '휴진'}</li>
+          <li><strong>목요일:</strong> ${h.thu || '휴진'}</li>
+          <li><strong>금요일:</strong> ${h.fri || '휴진'}</li>
+          <li><strong>토요일:</strong> ${h.sat || '휴진'}</li>
+          <li style="color:var(--primary);"><strong>일요일:</strong> ${h.sun || '휴진'}</li>
+          <li style="color:var(--primary);"><strong>공휴일:</strong> ${h.holiday || '휴진'}</li>
+        `;
+        document.getElementById('detail-hours').innerHTML = hoursHtml;
+
+        // 점심시간 표시
+        if (detailData.lunchWeek) {
+          const lunchLi = document.createElement('li');
+          lunchLi.style.marginTop = '8px';
+          lunchLi.style.color = 'var(--text-muted)';
+          lunchLi.innerHTML = `<strong>🍽 점심시간:</strong> ${detailData.lunchWeek}`;
+          document.getElementById('detail-hours').appendChild(lunchLi);
+        }
+        // 접수시간 표시
+        if (detailData.rcvWeek) {
+          const rcvLi = document.createElement('li');
+          rcvLi.style.color = 'var(--text-muted)';
+          rcvLi.innerHTML = `<strong>📋 접수:</strong> 평일 ${detailData.rcvWeek}${detailData.rcvSat ? ` / 토 ${detailData.rcvSat}` : ''}`;
+          document.getElementById('detail-hours').appendChild(rcvLi);
+        }
+      } else if (!hospital.hours) {
+        // 심평원에 시간 없으면 국립중앙의료원 fallback
+        fetchHoursFallback(hospital);
+      }
+
+      // 주차 정보
+      let park = '';
+      if (detailData.parkXpnsYn === 'N') {
+        park = `무료 주차 가능`;
+        if (detailData.parkQty) park += ` (${detailData.parkQty}대)`;
+      } else if (detailData.parkQty && detailData.parkQty > 0) {
+        park = `주차 가능 (${detailData.parkQty}대, 유료)`;
+      } else if (detailData.parkXpnsYn === 'Y') {
+        park = '주차 가능 (유료)';
+      } else {
+        park = '주차 정보 없음';
+      }
+      if (detailData.parkEtc) park += ` - ${detailData.parkEtc}`;
+      document.getElementById('detail-parking').textContent = park;
+
+      // 응급실 정보 표시
+      if (detailData.emyDayYn === 'Y' || detailData.emyNgtYn === 'Y') {
+        const parkingEl = document.getElementById('detail-parking');
+        if (parkingEl && parkingEl.parentNode) {
+          const emyDiv = document.createElement('div');
+          emyDiv.style.cssText = 'margin-top:8px; padding:6px 10px; background:#fef2f2; border-radius:6px; font-size:0.9rem; color:#dc2626;';
+          let emyText = '🚑 응급실 운영';
+          if (detailData.emyDayYn === 'Y' && detailData.emyNgtYn === 'Y') emyText += ' (주간 + 야간)';
+          else if (detailData.emyDayYn === 'Y') emyText += ' (주간)';
+          else emyText += ' (야간)';
+          if (detailData.emyDayTelNo1) emyText += ` ☎ ${detailData.emyDayTelNo1}`;
+          emyDiv.textContent = emyText;
+          parkingEl.parentNode.insertBefore(emyDiv, parkingEl.nextSibling);
+        }
+      }
+    } else {
+      // 심평원 상세 실패 시 fallback
+      if (!hospital.hours) fetchHoursFallback(hospital);
+      document.getElementById('detail-parking').textContent = '정보 없음';
+    }
+
+    // ── (B) 심평원 장비/시설 ──
+    if (equipData && equipData.found) {
+      // 장비
+      if (equipData.equips && equipData.equips.length > 0) {
+        document.getElementById('detail-equipment').textContent = equipData.equips.join(', ');
+      } else {
+        document.getElementById('detail-equipment').textContent = '등록된 장비 정보 없음';
+      }
+      // 병상수
+      const fac = equipData.facility || {};
+      if (fac.stdSickbdCnt > 0 || fac.permSbdCnt > 0) {
+        const beds = fac.stdSickbdCnt || fac.permSbdCnt || 0;
+        document.getElementById('detail-room-bed').textContent = `병상 ${beds}개`;
+      } else {
+        document.getElementById('detail-room-bed').textContent = '병상 정보 없음';
+      }
+      // 면적
+      if (fac.totArea) {
+        document.getElementById('detail-area').textContent = `${fac.totArea}㎡`;
+      } else {
+        document.getElementById('detail-area').textContent = '면적 정보 없음';
+      }
+    } else {
+      document.getElementById('detail-equipment').textContent = '등록된 장비 정보 없음';
+      document.getElementById('detail-room-bed').textContent = '정보 없음';
+      document.getElementById('detail-area').textContent = '정보 없음';
+    }
+
+  } else {
+    // ── Mock 데이터인 경우 ──
+    document.getElementById('detail-area').textContent = hospital.area || '-';
+    document.getElementById('detail-parking').textContent = (hospital.parkingCapacity !== undefined) ? `${hospital.parkingCapacity}대 가능` : '-';
+    document.getElementById('detail-equipment').textContent = hospital.equipment || '-';
+    document.getElementById('detail-room-bed').textContent = '-';
+  }
+}
+
+// 국립중앙의료원 API fallback (이름 기반 조회)
+function fetchHoursFallback(hospital) {
   fetch(`/api/hospital-hours?name=${encodeURIComponent(hospital.name)}`)
     .then(res => res.json())
     .then(data => {
       if (data && data.found) {
-        // 진료시간
         const h = data.hours;
-        if (h.mon) {
+        if (h && (h.mon || h.tue)) {
           document.getElementById('detail-hours').innerHTML = `
             <li><strong>월요일:</strong> ${h.mon || '-'}</li>
             <li><strong>화요일:</strong> ${h.tue || '-'}</li>
@@ -223,56 +344,12 @@ async function fetchDetailAPIs(hospital) {
             <li style="color:var(--primary);"><strong>공휴일:</strong> ${h.holiday || '휴진'}</li>
           `;
         }
-      } else if (!hospital.hours) {
-         document.getElementById('detail-hours').innerHTML = '<li>진료시간 정보가 없습니다.</li>';
+      } else {
+        document.getElementById('detail-hours').innerHTML = '<li>진료시간 정보가 없습니다. 병원에 직접 문의해 주세요.</li>';
       }
-    }).catch(e => {
-      if(!hospital.hours) document.getElementById('detail-hours').innerHTML = '<li>정보를 불러올 수 없습니다.</li>';
+    }).catch(() => {
+      document.getElementById('detail-hours').innerHTML = '<li>정보를 불러올 수 없습니다.</li>';
     });
-
-  // 2. 심평원 상세 정보 (주차, 면적, 병상수)
-  if (hospital.id && typeof hospital.id === 'string' && hospital.id.startsWith('JD')) {
-    fetch(`/api/hospital-details?ykiho=${encodeURIComponent(hospital.id)}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.found) {
-          if (data.area) document.getElementById('detail-area').textContent = `${data.area}㎡`;
-          
-          let park = '';
-          if (data.parkPosblYn === 'Y') {
-            park = `주차 가능 (${data.parkQty || 0}대)`;
-            if (data.parkEtc) park += ` - ${data.parkEtc}`;
-          } else {
-            park = '주차 불가';
-          }
-          document.getElementById('detail-parking').textContent = park;
-        } else {
-          document.getElementById('detail-area').textContent = '정보 없음';
-          document.getElementById('detail-parking').textContent = '정보 없음';
-        }
-      }).catch(e => {
-        document.getElementById('detail-area').textContent = '-';
-        document.getElementById('detail-parking').textContent = '-';
-      });
-
-    // 3. 심평원 장비 정보
-    fetch(`/api/hospital-equip?ykiho=${encodeURIComponent(hospital.id)}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.found && data.equips && data.equips.length > 0) {
-          document.getElementById('detail-equipment').textContent = data.equips.join(', ');
-        } else {
-          document.getElementById('detail-equipment').textContent = '등록된 장비 정보 없음';
-        }
-      }).catch(e => {
-        document.getElementById('detail-equipment').textContent = '-';
-      });
-  } else {
-    // Mock 데이터인 경우 (id가 숫자인 경우)
-    document.getElementById('detail-area').textContent = hospital.area || '-';
-    document.getElementById('detail-parking').textContent = (hospital.parkingCapacity !== undefined) ? `${hospital.parkingCapacity}대 가능` : '-';
-    document.getElementById('detail-equipment').textContent = hospital.equipment || '-';
-  }
 }
 
 // ── 네이버 지도 로딩 및 Geocoding 유틸리티 ──
