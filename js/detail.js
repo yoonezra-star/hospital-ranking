@@ -37,6 +37,13 @@ async function loadHospitalDetail(id) {
 }
 
 function renderDetail(hospital) {
+  // 동적 SEO (Googlebot 색인 최적화)
+  document.title = `${hospital.name} 후기, 평점 및 진료 정보 - 병원랭킹`;
+  let metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) {
+    metaDesc.setAttribute('content', `${hospital.name}의 네이버 블로그 생생한 후기, 평점, 전화번호(${hospital.phone || ''}), 위치(${hospital.address}) 등 상세 진료 정보를 확인하세요.`);
+  }
+
   // 기본 정보
   document.getElementById('detail-name').textContent = hospital.name;
   document.getElementById('detail-address').textContent = hospital.address;
