@@ -65,14 +65,30 @@
 
       <div class="detail-body" style="display: flex; flex-wrap: wrap; gap: 40px; margin-top: 30px;">
         <!-- Left: Info -->
+        <!-- Left: Info -->
         <div class="detail-info fade-up" style="flex: 1; min-width: 300px;">
-          <h3>📋 진료 정보</h3>
+          <h3>📋 기본 진료 정보</h3>
           <ul style="list-style: none; padding: 0; line-height: 2;">
             <li><strong>진료과목:</strong> <span id="detail-department"></span></li>
             <li><strong>설립구분:</strong> <span id="detail-type"></span></li>
-            <li><strong>평점:</strong> <span id="detail-score" style="color:#f59e0b; font-weight:bold;"></span></li>
-            <li><strong>리뷰수:</strong> <span id="detail-reviews"></span> 건</li>
+            <li><strong>의사 정보:</strong> <span id="detail-doctor"></span></li>
+            <li><strong>평점:</strong> <span id="detail-score" style="color:#f59e0b; font-weight:bold;"></span> (리뷰 <span id="detail-reviews"></span>건)</li>
             <li><strong>개원일:</strong> <span id="detail-date"></span></li>
+            <li><strong>전화번호:</strong> <span id="detail-phone"></span></li>
+            <li id="detail-subway-wrapper" style="display:none;"><strong>인근 전철역:</strong> <span id="detail-subway"></span></li>
+          </ul>
+
+          <h3 style="margin-top: 20px;">🕒 진료 시간</h3>
+          <ul id="detail-hours" style="list-style: none; padding: 0; line-height: 1.8; background: var(--bg-body); padding: 15px; border-radius: 8px;">
+            <!-- JS dynamically injects this -->
+          </ul>
+
+          <h3 style="margin-top: 20px;">🏥 시설 및 장비 안내</h3>
+          <ul style="list-style: none; padding: 0; line-height: 2;">
+            <li><strong>총면적:</strong> <span id="detail-area">-</span></li>
+            <li><strong>입원실/병상:</strong> <span id="detail-room-bed">-</span></li>
+            <li><strong>의료 장비:</strong> <span id="detail-equipment">-</span></li>
+            <li><strong>주차 안내:</strong> <span id="detail-parking">-</span></li>
           </ul>
 
           <h3 style="margin-top: 30px;">💬 최신 리뷰</h3>

@@ -63,6 +63,22 @@ const REGIONS = [
 
 const HOSPITALS = [
   {
+    id: 101, name: '김흥진치과의원', type: '치과의원', department: '치과',
+    departmentId: 'dental', address: '대전광역시 동구 동대전로 81, 5층 (대동) 대동오거리 하나은행건물 5층',
+    region: '대전', regionCode: '30', phone: '042-635-2882',
+    score: 4.8, reviewCount: 120, specialistCount: 0, generalDoctorCount: 1,
+    openDate: '2005-05-27', saturdayOpen: true, sundayOpen: false, nightOpen: false,
+    lat: 36.3314, lng: 127.4439,
+    subway: '대전1호선 대동역 39M',
+    hours: {
+      mon: '09시 00분 ~ 13시 00분', tue: '09시 00분 ~ 13시 00분', wed: '09시 00분 ~ 13시 00분',
+      thu: '09시 00분 ~ 13시 00분', fri: '09시 00분 ~ 18시 00분', sat: '09시 00분 ~ 13시 00분',
+      sun: '휴진', holiday: '휴진'
+    },
+    area: '전용 170㎡', roomCount: 0, bedCount: 0, equipment: '콘빔CT 1대',
+    parkingCapacity: 10, parkingFee: '무료'
+  },
+  {
     id: 1, name: '서울대학교병원', type: '종합병원', department: '종합병원',
     departmentId: 'general', address: '서울특별시 종로구 대학로 101',
     region: '서울', regionCode: '11', phone: '02-2072-2114',

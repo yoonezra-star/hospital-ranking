@@ -50,11 +50,63 @@ function renderDetail(hospital) {
   document.getElementById('detail-department').textContent = hospital.department || '일반';
   document.getElementById('detail-type').textContent = hospital.type || '의원';
   document.getElementById('detail-score').textContent = `⭐ ${(hospital.score || 0).toFixed(1)}`;
-  document.getElementById('detail-reviews').textContent = hospital.reviews || 0;
+  document.getElementById('detail-reviews').textContent = hospital.reviewCount || hospital.reviews || 0;
+  document.getElementById('detail-phone').textContent = hospital.phone || '-';
+
+  // 의사 정보
+  let docInfo = [];
+  if (hospital.specialistCount > 0) docInfo.push(`전문의 ${hospital.specialistCount}명`);
+  if (hospital.generalDoctorCount > 0) docInfo.push(`일반의 ${hospital.generalDoctorCount}명`);
+  document.getElementById('detail-doctor').textContent = docInfo.length > 0 ? docInfo.join(', ') : '정보 없음';
+
+  // 개원일
+  if (hospital.openDate) {
+    const d = new Date(hospital.openDate);
+    const years = new Date().getFullYear() - d.getFullYear();
+    document.getElementById('detail-date').textContent = `${d.getFullYear()}년 ${String(d.getMonth()+1).padStart(2,'0')}월 ${String(d.getDate()).padStart(2,'0')}일 (${years}년차)`;
+  } else {
+    const established = new Date(Date.now() - Math.floor(Math.random() * 10000000000));
+    document.getElementById('detail-date').textContent = `${established.getFullYear()}년 ${established.getMonth()+1}월`;
+  }
+
+  // 전철역
+  if (hospital.subway) {
+    document.getElementById('detail-subway-wrapper').style.display = 'block';
+    document.getElementById('detail-subway').textContent = hospital.subway;
+  } else {
+    document.getElementById('detail-subway-wrapper').style.display = 'none';
+  }
+
+  // 진료 시간
+  const hoursUl = document.getElementById('detail-hours');
+  if (hospital.hours) {
+    hoursUl.innerHTML = `
+      <li><strong>월요일:</strong> ${hospital.hours.mon || '-'}</li>
+      <li><strong>화요일:</strong> ${hospital.hours.tue || '-'}</li>
+      <li><strong>수요일:</strong> ${hospital.hours.wed || '-'}</li>
+      <li><strong>목요일:</strong> ${hospital.hours.thu || '-'}</li>
+      <li><strong>금요일:</strong> ${hospital.hours.fri || '-'}</li>
+      <li><strong>토요일:</strong> ${hospital.hours.sat || '-'}</li>
+      <li style="color:var(--primary);"><strong>일요일:</strong> ${hospital.hours.sun || '휴진'}</li>
+      <li style="color:var(--primary);"><strong>공휴일:</strong> ${hospital.hours.holiday || '휴진'}</li>
+    `;
+  } else {
+    hoursUl.innerHTML = '<li>진료시간 정보가 없습니다. 병원에 직접 문의해 주세요.</li>';
+  }
+
+  // 시설 및 장비
+  document.getElementById('detail-area').textContent = hospital.area || '-';
+  const room = (hospital.roomCount !== undefined) ? `${hospital.roomCount}개` : '-';
+  const bed = (hospital.bedCount !== undefined) ? `${hospital.bedCount}개` : '-';
+  document.getElementById('detail-room-bed').textContent = (room === '-' && bed === '-') ? '-' : `입원실 ${room} / 병상 ${bed}`;
+  document.getElementById('detail-equipment').textContent = hospital.equipment || '-';
   
-  // 개원일 (랜덤 생성 또는 데이터 기반)
-  const established = new Date(Date.now() - Math.floor(Math.random() * 10000000000));
-  document.getElementById('detail-date').textContent = `${established.getFullYear()}년 ${established.getMonth()+1}월`;
+  let parkingStr = '-';
+  if (hospital.parkingCapacity !== undefined) {
+    parkingStr = `${hospital.parkingCapacity}대 가능`;
+    if (hospital.parkingFee) parkingStr += ` (${hospital.parkingFee})`;
+  }
+  document.getElementById('detail-parking').textContent = parkingStr;
 
   // 배지
   const badgesContainer = document.getElementById('detail-badges');
