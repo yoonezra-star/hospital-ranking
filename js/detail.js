@@ -185,21 +185,42 @@ function renderDetail(hospital) {
       console.error('[DetailMap] Naver Maps loading failed:', err.message);
       const container = document.getElementById('map-container');
       if (container) {
-        if (err.message === 'TIMEOUT' || err.message === 'AUTH_FAIL') {
-          container.innerHTML = `
-            <div class="map-setup-box" style="padding: 20px; text-align: center; border: 1px solid var(--border-default); border-radius: 8px; background: var(--bg-card); display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
-              <span style="font-size: 2rem; display: block; margin-bottom: 10px;">⚠️</span>
-              <p style="color: var(--primary); font-weight: bold; margin-bottom: 10px;">네이버 지도 인증에 실패했습니다.</p>
-              <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; max-width: 350px; margin: 0 auto;">
-                네이버 클라우드 플랫폼 콘솔의 Application 설정에서 <b>허용 URL</b>에 현재 도메인(예: <b>hospital-ranking.pages.dev</b> 또는 <b>hospital-ranking.kr</b>)이 등록되어 있는지 확인해 주세요.
-              </p>
-            </div>
-          `;
-        } else {
-          container.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted);">지도를 불러올 수 없습니다. (${err.message})</div>`;
-        }
+        showDetailSetupUI(container, err.message === 'TIMEOUT' || err.message === 'AUTH_FAIL' 
+          ? '네이버 지도 인증에 실패했습니다. (도메인 또는 Client ID 오류)' 
+          : '네이버 지도를 불러올 수 없습니다.');
       }
     });
+}
+
+function showDetailSetupUI(container, errorMsg) {
+  container.className = 'map-placeholder';
+  container.innerHTML = `
+    <div class="map-setup-box" style="padding: 20px; text-align: center; border: 1px solid var(--border-default); border-radius: 8px; background: var(--bg-card); display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+      <span style="font-size: 2rem; display: block; margin-bottom: 10px;">🗺️</span>
+      <h3 style="margin-bottom: 10px;">네이버 지도 연결</h3>
+      ${errorMsg ? `<p style="color: #dc2626; font-weight: bold; margin-bottom: 15px; font-size: 0.9rem;">${errorMsg}</p>` : ''}
+      <div style="display:flex; flex-direction:column; gap:10px; width:100%; max-width:300px;">
+        <input type="password" id="detail-naver-key-input" placeholder="Client ID 입력" style="padding:10px; border:1px solid var(--border-default); border-radius:6px; font-size:0.9rem;" />
+        <button id="detail-naver-key-save-btn" style="padding:10px; background:var(--primary); color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">저장 및 로드</button>
+      </div>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 15px;">
+        네이버 클라우드 콘솔에서 발급받은 Client ID가 필요합니다.
+      </p>
+    </div>
+  `;
+
+  document.getElementById('detail-naver-key-save-btn')?.addEventListener('click', () => {
+    const input = document.getElementById('detail-naver-key-input');
+    if (!input) return;
+    const key = input.value.trim();
+    if (!key) {
+      alert('올바른 네이버 Client ID를 입력해 주세요.');
+      return;
+    }
+    localStorage.setItem(KEY_STORAGE, key);
+    // Reload page to apply the new key
+    window.location.reload();
+  });
 }
 
 // ── 상세 API 호출 ──
