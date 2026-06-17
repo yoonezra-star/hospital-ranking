@@ -244,8 +244,30 @@ const HospitalAPI = (() => {
     };
   }
 
+  /**
+   * 네이버 블로그/카페 검색 (API 프록시 경유)
+   * @param {string} query 검색어
+   * @param {string} type 'blog' 또는 'cafearticle'
+   * @param {number} display 가져올 개수
+   */
+  async function fetchNaverSearch(query, type = 'blog', display = 3) {
+    try {
+      const url = `/api/search?query=${encodeURIComponent(query)}&type=${type}&display=${display}&sort=sim`;
+      const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error('검색 API 응답 에러');
+      }
+      const data = await res.json();
+      return data.items || [];
+    } catch (err) {
+      console.error('[NaverSearch]', err);
+      return [];
+    }
+  }
+
   return {
     fetchHospitals,
+    fetchNaverSearch,
     REGION_CODES,
     DEPT_CODES,
     TYPE_CODES,

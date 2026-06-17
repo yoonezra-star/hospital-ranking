@@ -264,18 +264,7 @@ const HOSPITALS = [
   },
 ];
 
-const REVIEWS = [
-  { id: 1, hospitalId: 3,  hospital: '서울아산병원',          content: '응급실에서 빠르게 처리해 주셨고, 의료진이 매우 친절했습니다. 시설도 깨끗하고 체계적이에요.',   rating: 5 },
-  { id: 2, hospitalId: 6,  hospital: '미소들치과',            content: '임플란트 상담을 받았는데 자세한 설명과 여러 옵션을 제시해 주셔서 신뢰가 갔습니다.',             rating: 5 },
-  { id: 3, hospitalId: 5,  hospital: '강남밝은세상안과',      content: '라식 수술 후 한 달 경과. 시력이 1.2로 회복되었고 야간 빛번짐도 거의 없습니다.',               rating: 4 },
-  { id: 4, hospitalId: 17, hospital: '더봄소아청소년과',      content: '아이가 병원을 무서워하지 않아요. 원장님이 아이 눈높이에서 설명해 주시고 간호사분들도 다정합니다.', rating: 5 },
-  { id: 5, hospitalId: 13, hospital: '함소아한의원 강남점',   content: '아이 비염 치료로 내원했는데, 한약 복용 후 확실히 콧물이 줄었어요. 꾸준히 다닐 예정입니다.',       rating: 4 },
-  { id: 6, hospitalId: 14, hospital: '맑은마음 정신건강의학과', content: '상담이 매우 세심하고 편안한 분위기에서 진행됩니다. 약 처방도 보수적으로 해주셔서 좋았습니다.',     rating: 5 },
-  { id: 7, hospitalId: 8,  hospital: '관절힐링정형외과',      content: '무릎 연골 문제로 방문했는데, MRI 촬영부터 치료까지 원스톱으로 빠르게 진행해 주셨습니다.',        rating: 4 },
-  { id: 8, hospitalId: 9,  hospital: '아름다운피부과',        content: '여드름 흉터 치료로 다니고 있는데, 시술 후 관리도 꼼꼼하게 해주시고 효과가 눈에 보여요.',        rating: 5 },
-  { id: 9, hospitalId: 1,  hospital: '서울대학교병원',        content: '진료 대기가 길지만 그만큼 정확한 진단과 치료를 받을 수 있었습니다. 대학병원의 장점이죠.',       rating: 4 },
-  { id: 10, hospitalId: 12, hospital: '서울좋은이비인후과',   content: '코 수술 후 호흡이 훨씬 편해졌습니다. 수술 전 CT 분석도 꼼꼼하게 해주셨어요.',                  rating: 5 },
-];
+
 
 const NEW_HOSPITALS = [
   { id: 101, name: '판교디지털내과의원',     address: '경기도 성남시 분당구 판교역로 230', openDate: '2026-06-15', department: '내과' },

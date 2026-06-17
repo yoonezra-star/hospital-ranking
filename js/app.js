@@ -307,24 +307,45 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ═══════════════════════════════════════
-  // 후기 렌더링
   // ═══════════════════════════════════════
-  function renderReviews() {
+  // 리얼 블로그/카페 후기 렌더링 (Naver Search API 연동)
+  // ═══════════════════════════════════════
+  async function renderReviews() {
     if (!reviewsList) return;
-    reviewsList.innerHTML = REVIEWS.map((r, i) => {
-      const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+    reviewsList.innerHTML = '<div class="map-loader"><div class="spinner"></div><p>네이버 블로그 실시간 후기를 불러오는 중입니다...</p></div>';
+    
+    // 메인 페이지에서는 랜덤한 주요 질환 키워드로 블로그 후기 검색
+    const keywords = ['임플란트 후기', '수면내시경 후기', '라식 수술 후기', '도수치료 후기', '백내장 수술 후기'];
+    const randomKeyword = keywords[Math.floor(Math.random() * keywords.length)];
+    
+    document.querySelector('#reviews h2').textContent = `실시간 ${randomKeyword.replace(' 후기', '')} 리얼 후기`;
+    
+    const items = await HospitalAPI.fetchNaverSearch(randomKeyword, 'blog', 6);
+    
+    if (items.length === 0) {
+      reviewsList.innerHTML = '<p style="text-align:center; padding: 20px; color: var(--text-muted);">후기를 불러올 수 없습니다. API 키 설정을 확인해 주세요.</p>';
+      return;
+    }
+
+    reviewsList.innerHTML = items.map((item, i) => {
+      // API 응답에는 title, description, bloggername, link, postdate 등이 포함됨 (HTML 태그가 섞여 있을 수 있음)
+      const title = item.title.replace(/<[^>]*>?/g, ''); // HTML 태그 제거
+      const desc = item.description.replace(/<[^>]*>?/g, '');
+      const date = item.postdate ? `${item.postdate.substring(0,4)}.${item.postdate.substring(4,6)}.${item.postdate.substring(6,8)}` : '';
+      
       return `
-        <div class="review-card fade-up delay-${i % 3}">
-          <span class="review-quote">"</span>
-          <div class="review-header">
-            <span class="review-badge">추천</span>
-            <span class="review-hospital">${escapeHtml(r.hospital)}</span>
+        <a href="${item.link}" target="_blank" rel="noopener" class="review-card fade-up delay-${i % 3}" style="text-decoration:none; display:flex; flex-direction:column; cursor:pointer;">
+          <div class="review-header" style="margin-bottom:10px;">
+            <span class="review-badge" style="background:#03C75A; color:white;">네이버 블로그</span>
+            <span class="review-hospital" style="font-size:0.85rem; color:var(--text-muted);">${escapeHtml(item.bloggername)}</span>
+            <span style="margin-left:auto; font-size:0.8rem; color:var(--text-muted);">${date}</span>
           </div>
-          <p class="review-content">${escapeHtml(r.content)}</p>
-          <div class="review-stars">${stars}</div>
-        </div>
+          <h3 style="font-size:1rem; margin-bottom:8px; color:var(--text-heading); font-weight:600; line-height:1.4;">${escapeHtml(title)}</h3>
+          <p class="review-content" style="flex-grow:1; -webkit-line-clamp:3;">${escapeHtml(desc)}</p>
+        </a>
       `;
     }).join('');
+    
     observeNewElements(reviewsList);
   }
 

@@ -67,20 +67,35 @@ function renderDetail(hospital) {
     "주차장이 조금 협소한 것 빼고는 전반적으로 훌륭한 병원입니다."
   ];
   
-  const reviewsCount = Math.floor(Math.random() * 3) + 1;
-  let reviewsHtml = '';
-  for(let i=0; i<reviewsCount; i++) {
-    const text = reviewTexts[Math.floor(Math.random() * reviewTexts.length)];
-    reviewsHtml += `
-      <div style="margin-bottom:15px; border-bottom:1px dashed #ccc; padding-bottom:10px;">
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-          <strong>익명 사용자</strong> <span style="color:#f59e0b;">⭐⭐⭐⭐⭐</span>
-        </div>
-        <p style="margin:0; font-size:0.95rem; color:#444;">${text}</p>
-      </div>
-    `;
-  }
-  document.getElementById('detail-review-list').innerHTML = reviewsHtml;
+  // 가짜 후기 생성 로직을 제거하고, 병원명 기반으로 네이버 블로그 후기를 호출합니다.
+  document.getElementById('detail-review-list').innerHTML = '<div class="map-loader"><div class="spinner"></div><p>네이버 블로그 실시간 후기를 불러오는 중입니다...</p></div>';
+  
+  HospitalAPI.fetchNaverSearch(`${hospital.name} 후기`, 'blog', 5).then(items => {
+    if (items.length === 0) {
+      document.getElementById('detail-review-list').innerHTML = '<p style="text-align:center; padding: 20px; color: var(--text-muted);">후기를 불러올 수 없습니다. API 키 설정을 확인해 주세요.</p>';
+      return;
+    }
+    
+    const reviewsHtml = items.map(item => {
+      const title = item.title.replace(/<[^>]*>?/g, '');
+      const desc = item.description.replace(/<[^>]*>?/g, '');
+      const date = item.postdate ? `${item.postdate.substring(0,4)}.${item.postdate.substring(4,6)}.${item.postdate.substring(6,8)}` : '';
+      
+      return `
+        <a href="${item.link}" target="_blank" rel="noopener" class="detail-review-item fade-up" style="text-decoration:none; display:flex; flex-direction:column; cursor:pointer;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+            <span style="font-size:0.85rem; color:var(--text-muted);">${escapeHtml(item.bloggername)}</span>
+            <span style="font-size:0.8rem; color:var(--text-muted);">${date}</span>
+          </div>
+          <h4 style="font-size:1.05rem; margin-bottom:5px; color:var(--text-heading); font-weight:600;">${escapeHtml(title)}</h4>
+          <p style="color:var(--text-body); font-size:0.95rem; line-height:1.5;">${escapeHtml(desc)}</p>
+          <div style="margin-top:10px;"><span class="review-badge" style="background:#03C75A; color:white;">네이버 블로그</span></div>
+        </a>
+      `;
+    }).join('');
+    
+    document.getElementById('detail-review-list').innerHTML = reviewsHtml;
+  });
 
   // SEO Schema.org 주입
   const schema = {
