@@ -35,8 +35,18 @@ const MapModule = (() => {
         isSdkLoaded = true;
         initMap(container);
       } catch (err) {
-        console.error(err);
-        showSetupUI(container, '네이버 지도 API 로드에 실패했습니다. Client ID를 다시 확인해 주세요.');
+        console.error('[MapModule]', err.message);
+        showMapLoading(false);
+        // 오류 유형에 따라 다른 안내 메시지 표시
+        if (err.message === 'TIMEOUT' || err.message === 'AUTH_FAIL') {
+          showSetupUI(container,
+            '⚠️ 네이버 지도 API 인증에 실패했습니다.<br>' +
+            '네이버 클라우드 플랫폼 콘솔 → Application → <b>허용 URL</b>에 <b>hospital-ranking.kr</b>을 추가해 주세요.'
+          );
+        } else {
+          showSetupUI(container, '네이버 지도 API 로드에 실패했습니다. Client ID를 다시 확인해 주세요.');
+        }
+        return;
       } finally {
         showMapLoading(false);
       }
@@ -56,8 +66,15 @@ const MapModule = (() => {
       const oldScripts = document.querySelectorAll('script[src*="openapi.map.naver.com"]');
       oldScripts.forEach(s => s.remove());
 
+      // 5초 타임아웃 (도메인 미등록 등으로 응답 없을 경우)
+      const timeout = setTimeout(() => {
+        delete window.__naverMapLoaded;
+        reject(new Error('TIMEOUT'));
+      }, 5000);
+
       // 비동기 로딩 완료 후 호출될 콜백 함수 지정
       window.__naverMapLoaded = () => {
+        clearTimeout(timeout);
         resolve();
         delete window.__naverMapLoaded;
       };
@@ -68,7 +85,9 @@ const MapModule = (() => {
       script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${clientId}&submodules=geocoder&callback=__naverMapLoaded`;
       
       script.onerror = () => {
-        reject(new Error('Failed to load Naver Maps script.'));
+        clearTimeout(timeout);
+        delete window.__naverMapLoaded;
+        reject(new Error('AUTH_FAIL'));
       };
 
       document.head.appendChild(script);
