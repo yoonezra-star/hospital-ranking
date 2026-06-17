@@ -176,7 +176,7 @@ function renderDetail(hospital) {
   window.currentHospitalDetail = hospital;
 
   // 네이버 지도 API 동적 로드 및 초기화
-  const savedKey = localStorage.getItem(KEY_STORAGE) || DEFAULT_KEY;
+  const savedKey = DEFAULT_KEY;
   loadMapScript(savedKey)
     .then(() => {
       window.initDetailMap();
@@ -185,9 +185,7 @@ function renderDetail(hospital) {
       console.error('[DetailMap] Naver Maps loading failed:', err.message);
       const container = document.getElementById('map-container');
       if (container) {
-        showDetailSetupUI(container, err.message === 'TIMEOUT' || err.message === 'AUTH_FAIL' 
-          ? '네이버 지도 인증에 실패했습니다. (도메인 또는 Client ID 오류)' 
-          : '네이버 지도를 불러올 수 없습니다.');
+        container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#666;text-align:center;">지도를 불러올 수 없습니다.<br>네이버 지도 서비스가 원활하지 않거나 도메인 미등록 상태일 수 있습니다.</div>';
       }
     });
 }
@@ -374,7 +372,6 @@ function fetchHoursFallback(hospital) {
 }
 
 // ── 네이버 지도 로딩 및 Geocoding 유틸리티 ──
-const KEY_STORAGE = 'naver_map_client_id';
 const DEFAULT_KEY = 'rgd9ajy97r';
 
 function loadMapScript(clientId) {

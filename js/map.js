@@ -11,7 +11,7 @@ const MapModule = (() => {
   let activeInfoWindow = null;
   let isSdkLoaded = false;
 
-  const KEY_STORAGE = 'naver_map_client_id';
+  const DEFAULT_KEY = 'rgd9ajy97r';
   // 네이버 클라우드 플랫폼에서 발급받은 Client ID (기본값)
   const DEFAULT_KEY = 'rgd9ajy97r'; 
 
@@ -24,7 +24,7 @@ const MapModule = (() => {
    */
   async function init() {
     // localStorage에 저장된 사용자 키를 최우선으로 사용하고, 없으면 기본 키(DEFAULT_KEY)를 사용합니다.
-    const savedKey = localStorage.getItem(KEY_STORAGE) || DEFAULT_KEY;
+    const savedKey = DEFAULT_KEY;
     const container = document.getElementById('map-container');
     if (!container) return;
 
@@ -39,19 +39,16 @@ const MapModule = (() => {
         showMapLoading(false);
         // 오류 유형에 따라 다른 안내 메시지 표시
         if (err.message === 'TIMEOUT' || err.message === 'AUTH_FAIL') {
-          showSetupUI(container,
-            '⚠️ 네이버 지도 API 인증에 실패했습니다.<br>' +
-            '네이버 클라우드 플랫폼 콘솔 → Application → <b>허용 URL</b>에 <b>hospital-ranking.kr</b>을 추가해 주세요.'
-          );
+          container.innerHTML = '<div style="padding:40px;text-align:center;color:#666;">지도를 불러올 수 없습니다.<br>네이버 지도 서비스가 일시적으로 원활하지 않거나, 아직 도메인 등록이 반영되지 않았습니다.</div>';
         } else {
-          showSetupUI(container, '네이버 지도 API 로드에 실패했습니다. Client ID를 다시 확인해 주세요.');
+          container.innerHTML = '<div style="padding:40px;text-align:center;color:#666;">네이버 지도 API 로드에 실패했습니다.</div>';
         }
         return;
       } finally {
         showMapLoading(false);
       }
     } else {
-      showSetupUI(container);
+      container.innerHTML = '<div style="padding:40px;text-align:center;color:#666;">지도를 불러올 수 없습니다.</div>';
     }
   }
 
@@ -114,7 +111,6 @@ const MapModule = (() => {
     const controlDiv = document.createElement('div');
     controlDiv.className = 'map-control-overlay';
     controlDiv.innerHTML = `
-      <button class="map-overlay-btn btn-reset-key" title="Client ID 재설정">⚙️ API 키 변경</button>
       <button class="map-overlay-btn btn-my-loc" title="내 위치로 이동">📍 내 위치</button>
     `;
     container.appendChild(controlDiv);
@@ -132,7 +128,6 @@ const MapModule = (() => {
     map = new naver.maps.Map(canvas, mapOptions);
 
     // 이벤트 리스너 바인딩
-    controlDiv.querySelector('.btn-reset-key').addEventListener('click', resetApiKey);
     controlDiv.querySelector('.btn-my-loc').addEventListener('click', moveToCurrentLocation);
 
     // 저장되어 있던 병원 목록이 있으면 즉시 마커 표시
@@ -176,62 +171,6 @@ const MapModule = (() => {
           <p>네이버 지도를 불러오는 중입니다...</p>
         </div>
       `;
-    }
-  }
-
-  /**
-   * API 키를 설정하는 UI 출력
-   */
-  function showSetupUI(container, errorMsg = '') {
-    container.className = 'map-placeholder';
-    container.innerHTML = `
-      <div class="map-setup-box">
-        <span class="map-icon">🗺️</span>
-        <h3>네이버 지도 API 연동</h3>
-        <p>내 주변 병원을 네이버 지도 상에서 확인하세요.</p>
-        ${errorMsg ? `<p class="map-error-text">${errorMsg}</p>` : ''}
-        
-        <div class="map-key-form">
-          <input type="password" id="naver-key-input" placeholder="네이버 Client ID를 입력하세요" />
-          <button id="naver-key-save-btn">저장 및 지도 로드</button>
-        </div>
-        <div class="map-guide-links">
-          <a href="https://www.ncloud.com" target="_blank" rel="noopener">네이버 클라우드 플랫폼에서 발급받기 →</a>
-          <span class="guide-tooltip" title="네이버 클라우드 콘솔 가입 -> AI-NAVER API 서비스 이용 신청 -> Web Dynamic Map 서비스 등록 -> Client ID 복사 및 등록 도메인에 현재 URL 추가">도움말 ℹ️</span>
-        </div>
-      </div>
-    `;
-
-    document.getElementById('naver-key-save-btn')?.addEventListener('click', saveApiKey);
-    document.getElementById('naver-key-input')?.addEventListener('keyup', (e) => {
-      if (e.key === 'Enter') saveApiKey();
-    });
-  }
-
-  /**
-   * 입력 폼에서 API 키 추출 및 저장
-   */
-  function saveApiKey() {
-    const input = document.getElementById('naver-key-input');
-    if (!input) return;
-    const key = input.value.trim();
-    if (!key) {
-      alert('올바른 네이버 Client ID를 입력해 주세요.');
-      return;
-    }
-    localStorage.setItem(KEY_STORAGE, key);
-    init();
-  }
-
-  /**
-   * 저장된 API 키를 삭제하고 설정 화면으로 리턴
-   */
-  function resetApiKey() {
-    if (confirm('네이버 지도 API 키 설정을 초기화하시겠습니까?')) {
-      localStorage.removeItem(KEY_STORAGE);
-      map = null;
-      clearMarkers();
-      init();
     }
   }
 
@@ -327,8 +266,7 @@ const MapModule = (() => {
 
   return {
     init,
-    updateMarkers,
-    resetApiKey
+    updateMarkers
   };
 })();
 
