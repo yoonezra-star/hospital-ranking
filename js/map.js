@@ -332,5 +332,10 @@ const MapModule = (() => {
   };
 })();
 
-// DOM 로딩 완료 시 지도 연동 실행
-document.addEventListener('DOMContentLoaded', MapModule.init);
+// DOM 로딩 완료 시 지도 연동 실행 (단, 상세 페이지 제외)
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.location.pathname.includes('detail.html') || window.location.search.includes('id=')) {
+    return; // 상세 페이지에서는 detail.js가 자체적으로 지도를 로드하므로 중복 로드 방지
+  }
+  MapModule.init();
+});
