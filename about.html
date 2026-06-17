@@ -22,40 +22,72 @@
   </header>
 
   <main class="container section-padding" style="max-width: 900px; padding-top: 60px;">
-    <h1 style="font-size: var(--fs-4xl); margin-bottom: var(--sp-6); text-align: center;">가장 투명한 의료 선택의 기준, 병원랭킹</h1>
+    <h1 style="font-size: var(--fs-4xl); margin-bottom: var(--sp-6); text-align: center; font-weight: 800;">
+      <span class="gradient-text">병원랭킹</span> 서비스 소개
+    </h1>
     
-    <div style="line-height: var(--lh-relaxed); color: var(--text-body); font-size: 1.05rem;">
-      <div style="background: var(--bg-card); padding: 2rem; border-radius: 12px; border: 1px solid var(--border-default); margin-bottom: 2rem;">
-        <h2 style="font-size: 1.8rem; margin-bottom: 1rem; color: var(--text-heading);">우리의 미션 (Our Mission)</h2>
-        <p style="margin-bottom: 1rem;">대한민국 의료 기술은 세계 최고 수준이지만, 정작 환자들은 "어느 병원이 나에게 가장 적합한가?"라는 질문 앞에서 심각한 정보의 비대칭성을 겪고 있습니다. 자본력에 의한 광고 도배, 무분별한 바이럴 마케팅 속에서 진짜 실력 있는 병원들은 가려지기 일쑤입니다.</p>
-        <p><strong>병원랭킹(Hospital Ranking)</strong>은 이러한 의료 시장의 불투명성을 해소하고자 설립되었습니다. 우리는 건강보험심사평가원의 방대한 국가 공공데이터를 기반으로, 가장 객관적이고 신뢰할 수 있는 병의원 순위와 평가 정보를 대중에게 무료로 개방합니다. 환자의 권리를 되찾고, 정직하게 진료하는 병원들이 정당한 평가를 받는 건강한 의료 생태계를 구축하는 것이 우리의 궁극적인 미션입니다.</p>
-      </div>
-
-      <div style="margin-bottom: 2rem;">
-        <h2 style="font-size: 1.8rem; margin-bottom: 1rem; color: var(--text-heading); border-bottom: 2px solid var(--primary); display: inline-block; padding-bottom: 5px;">독자적인 평가 알고리즘 및 데이터 출처</h2>
-        <p style="margin-bottom: 1rem; margin-top: 1rem;">본 서비스는 대한민국 공공데이터포털(data.go.kr) 및 보건복지부 산하 기관에서 실시간으로 제공하는 오픈 API를 100% 활용합니다. 단 한 줄의 인위적인 광고성 데이터 개입을 허용하지 않습니다.</p>
-        <ul style="padding-left: 20px; list-style-type: decimal; line-height: 1.8;">
-          <li><strong>전문의 보유 비율:</strong> 특정 진료과(예: 치과교정과, 소화기내과) 전문의가 1명 이상 상주하는지 여부에 가장 높은 가중치를 부여합니다.</li>
-          <li><strong>진료 편의성 점수:</strong> 맞벌이 부부 및 직장인을 위한 토요일, 일요일, 공휴일 및 야간 진료(오후 6시 이후) 운영 여부를 평가에 반영합니다.</li>
-          <li><strong>병원 규모 및 시설 장비:</strong> 병상 수, 입원실 유무, 그리고 3D CT 및 MRI 등 고가/필수 의료 장비의 보유 현황을 기반으로 의료 인프라 점수를 산출합니다.</li>
-          <li><strong>사용자 리뷰 및 평점 (AI 필터링):</strong> 실제 방문 인증이 완료된 사용자의 리뷰만을 취합하며, 자체 개발한 어뷰징 탐지 AI를 통해 매크로 및 조작된 평점을 실시간으로 차단합니다.</li>
+    <div style="line-height: var(--lh-relaxed); color: var(--text-body); font-size: 1.05rem; display: flex; flex-direction: column; gap: 2.5rem;">
+      
+      <!-- 병원랭킹 소개 -->
+      <section style="background: var(--bg-card); padding: 2.5rem; border-radius: 16px; border: 1px solid var(--border-default); box-shadow: var(--shadow-sm);">
+        <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--text-heading); display: flex; align-items: center; gap: 8px;">
+          <span>🏥</span> 병원랭킹 소개
+        </h2>
+        <ul style="padding-left: 20px; list-style-type: disc; display: flex; flex-direction: column; gap: 12px;">
+          <li>전국 병의원의 <strong>진료시간, 전화번호, 주소 등 기본 정보</strong>를 빠르고 정확하게 제공합니다.</li>
+          <li><strong>토요일, 일요일, 공휴일 및 야간</strong> 등 요일/시간별로 현재 진료 중인 병원 정보를 손쉽게 확인할 수 있습니다.</li>
+          <li>'현재 진료중 병원' 메뉴를 통해 <strong>지금 당장 방문 가능한 병원 목록</strong>만 필터링하여 확인이 가능합니다.</li>
+          <li>병원 상세 페이지에서 해당 진료과목의 <strong>전문의 진료 여부와 상주 인원</strong>을 투명하게 공개합니다.</li>
+          <li>실제 방문자들의 <strong>다양한 병원 후기</strong>를 확인하고, 직접 후기를 작성하여 경험을 공유할 수 있습니다.</li>
+          <li>내과, 피부과, 성형외과, 산부인과, 소아과, 비뇨기과, 정신과, 치과, 한의원 등 <strong>전국 7만여 개 이상의 방대한 병의원 정보</strong>를 취급합니다.</li>
         </ul>
-      </div>
+      </section>
 
-      <div style="background: var(--bg-card); padding: 2rem; border-radius: 12px; border: 1px solid var(--border-default); margin-bottom: 2rem;">
-        <h2 style="font-size: 1.8rem; margin-bottom: 1rem; color: var(--text-heading);">투명성 및 독립성 선언</h2>
-        <p style="margin-bottom: 1rem;">병원랭킹은 특정 의료 기관이나 제약 회사로부터 어떠한 재정적 후원이나 대가성 자금을 받지 않는 <strong>100% 독립적인 플랫폼</strong>입니다. 사이트 내에 노출되는 상업성 배너 광고(구글 애드센스 등)는 알고리즘에 의해 자동 송출되는 시스템이며, 병원의 랭킹 순위나 별점 평가 결과에 단 0.1%의 영향도 미치지 않음을 엄숙히 선언합니다.</p>
-      </div>
+      <!-- 순위 정렬방법 -->
+      <section style="padding: 1rem 2.5rem;">
+        <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--text-heading); border-bottom: 2px solid var(--primary); display: inline-block; padding-bottom: 5px;">
+          📈 순위 정렬방법
+        </h2>
+        <p style="margin-bottom: 12px;">병원랭킹은 공정하고 투명한 기준에 따라 병원 순위를 산정합니다.</p>
+        <ul style="padding-left: 20px; list-style-type: decimal; display: flex; flex-direction: column; gap: 12px;">
+          <li>
+            <strong>조회수 기반 기본 정렬:</strong> 기본 정렬 방식은 <strong>최근 2주간의 조회수</strong>입니다. 
+            정확한 선호도 측정을 위해 중복 접속은 카운트하지 않으며, 오직 <strong>순조회수(Unique Views)</strong>만을 기준으로 측정합니다.
+          </li>
+          <li>
+            <strong>맞춤형 필터링:</strong> 사용자의 필요에 따라 <strong>'추천후기많은순', '의사많은순(전문의순)'</strong> 등 다양한 필터를 변경하여 원하는 기준의 병원 랭킹을 확인할 수 있습니다.
+          </li>
+        </ul>
+      </section>
 
-      <div>
-        <h2 style="font-size: 1.8rem; margin-bottom: 1rem; color: var(--text-heading); border-bottom: 2px solid var(--primary); display: inline-block; padding-bottom: 5px;">회사 정보 (Company Info)</h2>
-        <ul style="list-style: none; padding: 0; line-height: 2;">
+      <!-- 데이터 출처 -->
+      <section style="background: var(--bg-card); padding: 2.5rem; border-radius: 16px; border: 1px solid var(--border-default); box-shadow: var(--shadow-sm);">
+        <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--text-heading); display: flex; align-items: center; gap: 8px;">
+          <span>📊</span> 데이터 출처 및 정보 수정
+        </h2>
+        <ul style="padding-left: 20px; list-style-type: disc; display: flex; flex-direction: column; gap: 12px;">
+          <li>
+            본 서비스는 <strong>국립중앙의료원</strong>과 <strong>건강보험심사평가원</strong>에서 제공하는 공식 공공데이터 API를 연동하여 정보를 실시간 업데이트하고 있습니다.
+          </li>
+          <li>
+            병원 정보에 오류나 변경 사항이 있을 경우, <strong>국립중앙의료원 및 건강보험심사평가원 측에 수정 요청</strong>을 접수하시면 공공데이터가 변경됨과 동시에 병원랭킹 사이트에도 <strong>자동으로 업데이트 처리</strong>됩니다.
+          </li>
+          <li>
+            보다 <strong>빠른 수정 및 정보 갱신</strong>을 원하실 경우, 하단에 기재된 고객센터 이메일로 요청 내역을 보내주시면 <strong>평일 기준 1일 이내</strong>에 신속하게 반영해 드리고 있습니다.
+          </li>
+        </ul>
+      </section>
+
+      <!-- 회사 정보 -->
+      <section style="padding: 1rem 2.5rem;">
+        <h2 style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--text-heading);">📞 문의 및 제휴</h2>
+        <ul style="list-style: none; padding: 0; line-height: 2; color: var(--text-muted);">
           <li><strong>운영:</strong> 리플리더스</li>
           <li><strong>소재지:</strong> 경기도 파주시 책향기로 183 1504동 5층</li>
-          <li><strong>이메일:</strong> <a href="mailto:replyleaders@naver.com" style="color: var(--primary); text-decoration: underline;">replyleaders@naver.com</a></li>
-          <li><strong>제휴 및 데이터 문의:</strong> <a href="contact.html" style="color: var(--primary); text-decoration: underline;">고객센터 바로가기</a></li>
+          <li><strong>정보 수정 및 제휴 문의:</strong> <a href="mailto:replyleaders@naver.com" style="color: var(--primary); font-weight: 500;">replyleaders@naver.com</a></li>
         </ul>
-      </div>
+      </section>
+
     </div>
   </main>
 
