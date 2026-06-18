@@ -513,6 +513,50 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
   gap: var(--sp-5);
 }
+.ranking-group-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+.ranking-group {
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-xl);
+  padding: var(--sp-6);
+  box-shadow: var(--shadow-sm);
+}
+.ranking-group-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-5);
+}
+.ranking-group-header h3 {
+  font-size: var(--fs-xl);
+  margin-bottom: var(--sp-1);
+}
+.ranking-group-header p {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+.ranking-group-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-full);
+  background: var(--primary-50);
+  color: var(--primary-dark);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+}
+.ranking-group-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--sp-5);
+}
 .hospital-card {
   background: var(--bg-card);
   border: 1px solid var(--border-default);

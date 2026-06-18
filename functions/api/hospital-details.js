@@ -6,7 +6,13 @@
  * /getDtlInfo2.8
  */
 export async function onRequestGet(context) {
-  let API_KEY = context.env?.HIRA_DTL_API_KEY || '6016d506ccaac7277d8a3492ca0cce1845c6cee2acf054d92ac5cf0ef3049d0d';
+  let API_KEY = context.env?.HIRA_DTL_API_KEY;
+  if (!API_KEY) {
+    return new Response(JSON.stringify({ error: 'Missing HIRA_DTL_API_KEY environment variable' }), {
+      status: 500,
+      headers: corsHeaders('application/json'),
+    });
+  }
   try { API_KEY = decodeURIComponent(API_KEY); } catch (e) {}
 
   const url = new URL(context.request.url);

@@ -1,304 +1,362 @@
-/**
- * 병원랭킹 - 메인 앱 로직
- * 공공데이터 API 연동 버전
- */
 document.addEventListener('DOMContentLoaded', () => {
-  // ===== 상태 =====
-  let currentFilters = { region: 'all', department: 'all', type: 'all' };
-  let currentSort = 'score';
-  let isSearchActive = false;
-  let currentPage = 1;
-  let totalCount = 0;
-  let allFetchedHospitals = [];
-  let isApiAvailable = false;
+  const state = {
+    currentFilters: { region: 'all', department: 'all', type: 'all' },
+    currentSort: 'score',
+    currentPage: 1,
+    totalCount: 0,
+    allFetchedHospitals: [],
+    isApiAvailable: false,
+    isSearchActive: false,
+  };
 
-  // ===== DOM 참조 =====
-  const $ = (sel) => document.querySelector(sel);
-  const $$ = (sel) => document.querySelectorAll(sel);
+  const $ = (selector) => document.querySelector(selector);
+  const $$ = (selector) => document.querySelectorAll(selector);
 
-  const header          = $('#header');
-  const themeToggle     = $('#theme-toggle');
-  const mobileMenuBtn   = $('#mobile-menu-btn');
-  const navLinks        = $('#nav-links');
-  const heroSearch      = $('#hero-search');
-  const searchBtn       = $('#search-btn');
-  const clearSearchBtn  = $('#clear-search');
-  const searchResults   = $('#search-results');
-  const searchResultsList = $('#search-results-list');
-  const searchQueryDisplay = $('#search-query-display');
-  const searchResultCount  = $('#search-result-count');
-  const departmentGrid  = $('#department-grid');
-  const regionFilter    = $('#region-filter');
-  const typeFilter      = $('#type-filter');
-  const sortFilter      = $('#sort-filter');
-  const rankingList     = $('#ranking-list');
-  const rankingCount    = $('#ranking-count');
-  const reviewsList     = $('#reviews-list');
-  const newHospitalsList = $('#new-hospitals-list');
-  const rankingLoader   = $('#ranking-loader');
-  const loadMoreBtn     = $('#load-more-btn');
-  const dataSourceBadge = $('#data-source-badge');
+  const ui = {
+    header: $('#header'),
+    themeToggle: $('#theme-toggle'),
+    mobileMenuBtn: $('#mobile-menu-btn'),
+    navLinks: $('#nav-links'),
+    heroSearch: $('#hero-search'),
+    searchBtn: $('#search-btn'),
+    clearSearchBtn: $('#clear-search'),
+    searchResults: $('#search-results'),
+    searchResultsList: $('#search-results-list'),
+    searchQueryDisplay: $('#search-query-display'),
+    searchResultCount: $('#search-result-count'),
+    departmentGrid: $('#department-grid'),
+    regionFilter: $('#region-filter'),
+    typeFilter: $('#type-filter'),
+    sortFilter: $('#sort-filter'),
+    rankingList: $('#ranking-list'),
+    rankingCount: $('#ranking-count'),
+    rankingLoader: $('#ranking-loader'),
+    reviewsList: $('#reviews-list'),
+    newHospitalsList: $('#new-hospitals-list'),
+    loadMoreBtn: $('#load-more-btn'),
+    dataSourceBadge: $('#data-source-badge'),
+    reviewsTitle: $('#reviews h2'),
+  };
 
-  // ===== 초기화 =====
   initTheme();
   initHeader();
   initCounters();
   initScrollAnimations();
   renderDepartments();
   populateRegionFilter();
-  loadRankingData();      // 비동기 API 호출
-  renderReviews();
+  void loadRankingData();
+  void renderReviews();
   renderNewHospitals();
   bindEvents();
 
-  // ═══════════════════════════════════════
-  // 테마 (다크모드)
-  // ═══════════════════════════════════════
   function initTheme() {
-    const saved = localStorage.getItem('theme');
+    const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const theme = saved || (prefersDark ? 'dark' : 'light');
+    const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+
     document.documentElement.setAttribute('data-theme', theme);
     updateThemeIcon(theme);
   }
 
   function toggleTheme() {
-    const current = document.documentElement.getAttribute('data-theme');
-    const next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-    updateThemeIcon(next);
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', nextTheme);
+    localStorage.setItem('theme', nextTheme);
+    updateThemeIcon(nextTheme);
   }
 
   function updateThemeIcon(theme) {
-    if (themeToggle) themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+    if (ui.themeToggle) {
+      ui.themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+    }
   }
 
-  // ═══════════════════════════════════════
-  // 헤더 스크롤 효과
-  // ═══════════════════════════════════════
   function initHeader() {
+    if (!ui.header) return;
+
     let ticking = false;
     window.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          header.classList.toggle('scrolled', window.scrollY > 50);
-          ticking = false;
-        });
-        ticking = true;
-      }
+      if (ticking) return;
+
+      requestAnimationFrame(() => {
+        ui.header.classList.toggle('scrolled', window.scrollY > 50);
+        ticking = false;
+      });
+
+      ticking = true;
     });
   }
 
-  // ═══════════════════════════════════════
-  // 숫자 카운터 애니메이션
-  // ═══════════════════════════════════════
   function initCounters() {
     const counters = $$('.stat-number[data-target]');
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          animateCounter(entry.target);
-          observer.unobserve(entry.target);
-        }
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        animateCounter(entry.target);
+        observer.unobserve(entry.target);
       });
     }, { threshold: 0.5 });
-    counters.forEach(c => observer.observe(c));
+
+    counters.forEach((counter) => observer.observe(counter));
   }
 
-  function animateCounter(el) {
-    const target = parseInt(el.dataset.target);
-    const duration = 2000;
-    const startTime = performance.now();
-    function update(currentTime) {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
+  function animateCounter(element) {
+    const target = parseInt(element.dataset.target || '0', 10);
+    const duration = 1600;
+    const startedAt = performance.now();
+
+    function step(now) {
+      const progress = Math.min((now - startedAt) / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 4);
-      const current = Math.floor(eased * target);
-      el.textContent = current.toLocaleString();
-      if (progress < 1) requestAnimationFrame(update);
-      else el.textContent = target.toLocaleString() + (target > 100 ? '+' : '');
+      const current = Math.floor(target * eased);
+
+      element.textContent = current.toLocaleString();
+      if (progress < 1) {
+        requestAnimationFrame(step);
+        return;
+      }
+
+      element.textContent = `${target.toLocaleString()}${target > 100 ? '+' : ''}`;
     }
-    requestAnimationFrame(update);
+
+    requestAnimationFrame(step);
   }
 
-  // ═══════════════════════════════════════
-  // 스크롤 페이드인 애니메이션
-  // ═══════════════════════════════════════
   function initScrollAnimations() {
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-    $$('.fade-up').forEach(el => observer.observe(el));
+
+    $$('.fade-up').forEach((element) => observer.observe(element));
   }
 
   function observeNewElements(container) {
     if (!container) return;
+
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
       });
     }, { threshold: 0.1 });
-    container.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    container.querySelectorAll('.fade-up').forEach((element) => observer.observe(element));
   }
 
-  // ═══════════════════════════════════════
-  // 진료과 카드 렌더링
-  // ═══════════════════════════════════════
   function renderDepartments() {
-    if (!departmentGrid) return;
-    departmentGrid.innerHTML = DEPARTMENTS.map((dept, i) => `
-      <div class="dept-card fade-up delay-${i % 4}" data-dept-id="${dept.id}" tabindex="0" role="button" aria-label="${dept.name} 병원 찾기">
-        <div class="dept-icon" style="background:${dept.color}15; color:${dept.color};">
-          ${dept.icon}
+    if (!ui.departmentGrid || typeof DEPARTMENTS === 'undefined') return;
+
+    ui.departmentGrid.innerHTML = DEPARTMENTS.map((department, index) => `
+      <div class="dept-card fade-up delay-${index % 4}" data-dept-id="${department.id}" tabindex="0" role="button" aria-label="${escapeHtml(department.name)} 병원 찾기">
+        <div class="dept-icon" style="background:${department.color}15; color:${department.color};">
+          ${department.icon}
         </div>
-        <span class="dept-name">${dept.name}</span>
+        <span class="dept-name">${escapeHtml(department.name)}</span>
       </div>
     `).join('');
-    observeNewElements(departmentGrid);
+
+    observeNewElements(ui.departmentGrid);
   }
 
-  // ═══════════════════════════════════════
-  // 지역 필터 채우기
-  // ═══════════════════════════════════════
   function populateRegionFilter() {
-    if (!regionFilter) return;
-    REGIONS.forEach(r => {
-      const opt = document.createElement('option');
-      opt.value = r.name;
-      opt.textContent = r.name;
-      regionFilter.appendChild(opt);
+    if (!ui.regionFilter || typeof REGIONS === 'undefined') return;
+
+    REGIONS.forEach((region) => {
+      const option = document.createElement('option');
+      option.value = region.name;
+      option.textContent = region.name;
+      ui.regionFilter.appendChild(option);
     });
   }
 
-  // ═══════════════════════════════════════
-  // 로딩 / UI 상태 관리
-  // ═══════════════════════════════════════
   function showLoading(show) {
-    if (rankingLoader) rankingLoader.style.display = show ? 'flex' : 'none';
+    if (!ui.rankingLoader) return;
+    ui.rankingLoader.style.display = show ? 'flex' : 'none';
   }
 
   function updateLoadMore() {
-    if (!loadMoreBtn) return;
-    const hasMore = isApiAvailable && (currentPage * 20 < totalCount);
-    loadMoreBtn.style.display = hasMore ? 'block' : 'none';
-    loadMoreBtn.textContent = `더보기 (${allFetchedHospitals.length} / ${totalCount.toLocaleString()})`;
+    if (!ui.loadMoreBtn) return;
+
+    const hasMore = state.isApiAvailable && (state.currentPage * 20 < state.totalCount);
+    ui.loadMoreBtn.style.display = hasMore ? 'block' : 'none';
+    ui.loadMoreBtn.textContent = `더보기 (${state.allFetchedHospitals.length} / ${state.totalCount.toLocaleString()})`;
   }
 
   function updateDataBadge(fromMock) {
-    if (!dataSourceBadge) return;
+    if (!ui.dataSourceBadge) return;
+
     if (fromMock) {
-      dataSourceBadge.textContent = '📋 샘플 데이터';
-      dataSourceBadge.className = 'data-badge mock';
-    } else {
-      dataSourceBadge.textContent = '✅ 공공데이터 API 연동';
-      dataSourceBadge.className = 'data-badge live';
+      ui.dataSourceBadge.textContent = '샘플 데이터';
+      ui.dataSourceBadge.className = 'data-badge mock';
+      return;
     }
+
+    ui.dataSourceBadge.textContent = '공공데이터 API 연동';
+    ui.dataSourceBadge.className = 'data-badge live';
   }
 
-  // ═══════════════════════════════════════
-  // 병원 랭킹 데이터 로드 (API)
-  // ═══════════════════════════════════════
   async function loadRankingData(append = false) {
     showLoading(true);
 
-    const params = { page: currentPage, limit: 20 };
+    const params = {
+      page: state.currentPage,
+      limit: 20,
+      preferMock: true,
+    };
 
-    // 필터 적용
-    if (currentFilters.region && currentFilters.region !== 'all') {
-      params.region = currentFilters.region;
+    if (state.currentFilters.region !== 'all') {
+      params.region = state.currentFilters.region;
     }
-    if (currentFilters.department && currentFilters.department !== 'all') {
-      params.department = currentFilters.department;
+    if (state.currentFilters.department !== 'all') {
+      params.department = state.currentFilters.department;
     }
-    if (currentFilters.type && currentFilters.type !== 'all') {
-      params.type = currentFilters.type;
+    if (state.currentFilters.type !== 'all') {
+      params.type = state.currentFilters.type;
     }
 
     const result = await HospitalAPI.fetchHospitals(params);
-    isApiAvailable = !result.fromMock;
-    totalCount = result.totalCount;
 
-    if (append) {
-      allFetchedHospitals = [...allFetchedHospitals, ...result.hospitals];
-    } else {
-      allFetchedHospitals = result.hospitals;
-    }
+    state.isApiAvailable = !result.fromMock;
+    state.totalCount = result.totalCount;
+    state.allFetchedHospitals = append
+      ? [...state.allFetchedHospitals, ...result.hospitals]
+      : result.hospitals;
 
-    // 클라이언트 정렬
-    const sorted = SearchEngine.sortHospitals(allFetchedHospitals, currentSort);
-    renderRankingCards(sorted);
+    const sortedHospitals = SearchEngine.sortHospitals(state.allFetchedHospitals, state.currentSort);
+    renderRankingCards(sortedHospitals);
     updateDataBadge(result.fromMock);
-    
-    // 지도 마커 갱신
-    if (typeof MapModule !== 'undefined') {
-      MapModule.updateMarkers(sorted);
-    }
-
+    updateMapHospitals(sortedHospitals);
     showLoading(false);
     updateLoadMore();
   }
 
-  // ═══════════════════════════════════════
-  // 병원 카드 렌더링
-  // ═══════════════════════════════════════
   function renderRankingCards(hospitals) {
-    if (!rankingList || !rankingCount) return;
-
-    rankingCount.innerHTML = isApiAvailable
-      ? `전국 <strong>${totalCount.toLocaleString()}</strong>개 병원 중 <strong>${hospitals.length}</strong>개 표시`
-      : `총 <strong>${hospitals.length}</strong>개 병원 (샘플 데이터)`;
+    if (!ui.rankingList || !ui.rankingCount) return;
 
     if (hospitals.length === 0) {
-      rankingList.innerHTML = `
-        <div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-muted);">
-          <p style="font-size:2rem;margin-bottom:12px;">🔍</p>
-          <p>조건에 맞는 병원이 없습니다.</p>
-          <p style="font-size:var(--fs-sm);">필터를 변경하거나 다른 키워드로 검색해 보세요.</p>
-        </div>`;
+      ui.rankingCount.innerHTML = '조건에 맞는 병원을 찾지 못했습니다.';
+      ui.rankingList.classList.remove('ranking-group-list');
+      ui.rankingList.innerHTML = buildEmptyState('조건에 맞는 병원이 없습니다.', '필터를 바꾸거나 다른 키워드로 다시 검색해보세요.');
       return;
     }
 
-    rankingList.innerHTML = hospitals.map((h, i) => buildHospitalCard(h, i + 1)).join('');
-    observeNewElements(rankingList);
+    if (shouldRenderGroupedRanking()) {
+      renderGroupedRankingCards(hospitals);
+      return;
+    }
+
+    ui.rankingList.classList.remove('ranking-group-list');
+    ui.rankingCount.innerHTML = state.isApiAvailable
+      ? `전국 <strong>${state.totalCount.toLocaleString()}</strong>개 병원 중 <strong>${hospitals.length}</strong>개 표시`
+      : `총 <strong>${hospitals.length}</strong>개 병원 (샘플 데이터)`;
+    ui.rankingList.innerHTML = hospitals.map((hospital, index) => buildHospitalCard(hospital, index + 1)).join('');
+    observeNewElements(ui.rankingList);
   }
 
-  function buildHospitalCard(h, rank) {
+  function shouldRenderGroupedRanking() {
+    return state.currentSort === 'score' && state.currentFilters.type === 'all';
+  }
+
+  function renderGroupedRankingCards(hospitals) {
+    const groups = [
+      {
+        key: 'hospital',
+        title: '종합병원·병원',
+        description: '병원급 이상 의료기관 중심 정렬',
+        items: hospitals.filter((hospital) => getRankingGroup(hospital) === 'hospital').slice(0, 8),
+      },
+      {
+        key: 'clinic',
+        title: '의원',
+        description: '동네의원과 전문 클리닉',
+        items: hospitals.filter((hospital) => getRankingGroup(hospital) === 'clinic').slice(0, 8),
+      },
+      {
+        key: 'dental',
+        title: '치과',
+        description: '치과의원 및 치과병원',
+        items: hospitals.filter((hospital) => getRankingGroup(hospital) === 'dental').slice(0, 8),
+      },
+      {
+        key: 'korean',
+        title: '한의원·한방병원',
+        description: '한방 진료 기관',
+        items: hospitals.filter((hospital) => getRankingGroup(hospital) === 'korean').slice(0, 8),
+      },
+    ].filter((group) => group.items.length > 0);
+
+    ui.rankingList.classList.add('ranking-group-list');
+    ui.rankingCount.innerHTML = `병원급별 섹션 <strong>${groups.length}</strong>개 / 전체 <strong>${hospitals.length}</strong>곳`;
+    ui.rankingList.innerHTML = groups.map((group) => `
+      <section class="ranking-group fade-up" data-ranking-group="${group.key}">
+        <div class="ranking-group-header">
+          <div>
+            <h3>${group.title}</h3>
+            <p>${group.description}</p>
+          </div>
+          <span class="ranking-group-count">${group.items.length}곳</span>
+        </div>
+        <div class="ranking-group-grid">
+          ${group.items.map((hospital, index) => buildHospitalCard(hospital, index + 1)).join('')}
+        </div>
+      </section>
+    `).join('');
+
+    observeNewElements(ui.rankingList);
+  }
+
+  function getRankingGroup(hospital) {
+    const type = hospital.type || '';
+    const departmentId = hospital.departmentId || '';
+
+    if (departmentId === 'dental' || type.includes('치과')) return 'dental';
+    if (departmentId === 'korean' || type.includes('한의') || type.includes('한방')) return 'korean';
+    if (type === '의원') return 'clinic';
+    if (type.includes('병원') || type.includes('종합') || departmentId === 'general') return 'hospital';
+    return 'clinic';
+  }
+
+  function buildHospitalCard(hospital, rank) {
     const rankClass = rank <= 3 ? `rank-${rank}` : 'rank-default';
-    const scorePercent = (h.score / 5) * 100;
+    const scorePercent = Math.max(0, Math.min(100, ((hospital.score || 0) / 5) * 100));
     const tags = [];
-    if (h.saturdayOpen) tags.push('<span class="tag tag-sat">토요진료</span>');
-    if (h.nightOpen)    tags.push('<span class="tag tag-night">야간진료</span>');
-    if (h.sundayOpen)   tags.push('<span class="tag tag-sun">일요진료</span>');
+
+    if (hospital.saturdayOpen) tags.push('<span class="tag tag-sat">토요일진료</span>');
+    if (hospital.nightOpen) tags.push('<span class="tag tag-night">야간진료</span>');
+    if (hospital.sundayOpen) tags.push('<span class="tag tag-sun">일요일진료</span>');
 
     return `
-      <article class="hospital-card fade-up" data-hospital-id="${h.id}">
+      <article class="hospital-card fade-up" data-hospital-id="${escapeHtml(hospital.id)}">
         <div class="rank-badge ${rankClass}">${rank}</div>
         <div class="hospital-info">
           <div class="hospital-name">
-            ${escapeHtml(h.name)}
-            <span class="hospital-type-tag">${escapeHtml(h.type)}</span>
+            ${escapeHtml(hospital.name)}
+            <span class="hospital-type-tag">${escapeHtml(hospital.type)}</span>
           </div>
-          <div class="hospital-address">📍 ${escapeHtml(h.address)}</div>
+          <div class="hospital-address">📍 ${escapeHtml(hospital.address)}</div>
           <div class="hospital-meta">
             <div class="meta-item">
               <span class="meta-icon">⭐</span>
-              <span class="meta-value">${h.score}</span>
+              <span class="meta-value">${escapeHtml(hospital.score)}</span>
             </div>
             <div class="meta-item">
               <span class="meta-icon">👨‍⚕️</span>
-              <span class="meta-value">${h.specialistCount}</span>
-              <span class="meta-label">의사</span>
+              <span class="meta-value">${escapeHtml(hospital.specialistCount || 0)}</span>
+              <span class="meta-label">전문의</span>
             </div>
-            ${h.phone ? `<div class="meta-item"><span class="meta-icon">📞</span><span class="meta-value">${escapeHtml(h.phone)}</span></div>` : ''}
+            ${hospital.phone ? `<div class="meta-item"><span class="meta-icon">☎️</span><span class="meta-value">${escapeHtml(hospital.phone)}</span></div>` : ''}
           </div>
           <div class="score-bar-container">
             <div class="score-bar">
               <div class="score-fill" style="width:${scorePercent}%"></div>
             </div>
-            <span class="score-value">${h.score}</span>
+            <span class="score-value">${escapeHtml(hospital.score)}</span>
           </div>
           ${tags.length ? `<div class="hospital-tags">${tags.join('')}</div>` : ''}
         </div>
@@ -306,214 +364,259 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
-  // ═══════════════════════════════════════
-  // ═══════════════════════════════════════
-  // 리얼 블로그/카페 후기 렌더링 (Naver Search API 연동)
-  // ═══════════════════════════════════════
   async function renderReviews() {
-    if (!reviewsList) return;
-    reviewsList.innerHTML = '<div class="map-loader"><div class="spinner"></div><p>네이버 블로그 실시간 후기를 불러오는 중입니다...</p></div>';
-    
-    // 메인 페이지에서는 랜덤한 주요 질환 키워드로 블로그 후기 검색
-    const keywords = ['임플란트 후기', '수면내시경 후기', '라식 수술 후기', '도수치료 후기', '백내장 수술 후기'];
-    const randomKeyword = keywords[Math.floor(Math.random() * keywords.length)];
-    
-    document.querySelector('#reviews h2').textContent = `실시간 ${randomKeyword.replace(' 후기', '')} 리얼 후기`;
-    
-    const items = await HospitalAPI.fetchNaverSearch(randomKeyword, 'blog', 6);
-    
+    if (!ui.reviewsList) return;
+
+    ui.reviewsList.innerHTML = '<div class="map-loader"><div class="spinner"></div><p>리뷰 데이터를 불러오는 중입니다...</p></div>';
+
+    const keywords = [
+      '임플란트 후기',
+      '수면내시경 후기',
+      '백내장 수술 후기',
+      '안수치료 후기',
+      '라식 수술 후기',
+    ];
+    const selectedKeyword = keywords[Math.floor(Math.random() * keywords.length)];
+
+    if (ui.reviewsTitle) {
+      ui.reviewsTitle.textContent = `실시간 ${selectedKeyword.replace(' 후기', '')} 리뷰 후기`;
+    }
+
+    const items = await HospitalAPI.fetchNaverSearch(selectedKeyword, 'blog', 6);
+
     if (items.length === 0) {
-      reviewsList.innerHTML = '<p style="text-align:center; padding: 20px; color: var(--text-muted);">후기를 불러올 수 없습니다. API 키 설정을 확인해 주세요.</p>';
+      ui.reviewsList.innerHTML = '<p style="text-align:center; padding:20px; color:var(--text-muted);">리뷰를 불러오지 못했습니다.</p>';
       return;
     }
 
-    reviewsList.innerHTML = items.map((item, i) => {
-      // API 응답에는 title, description, bloggername, link, postdate 등이 포함됨 (HTML 태그가 섞여 있을 수 있음)
-      const title = item.title.replace(/<[^>]*>?/g, ''); // HTML 태그 제거
-      const desc = item.description.replace(/<[^>]*>?/g, '');
-      const date = item.postdate ? `${item.postdate.substring(0,4)}.${item.postdate.substring(4,6)}.${item.postdate.substring(6,8)}` : '';
-      
+    ui.reviewsList.innerHTML = items.map((item, index) => {
+      const title = stripHtml(item.title || '');
+      const description = stripHtml(item.description || '');
+      const date = formatNaverDate(item.postdate);
+
       return `
-        <a href="${item.link}" target="_blank" rel="noopener" class="review-card fade-up delay-${i % 3}" style="text-decoration:none; display:flex; flex-direction:column; cursor:pointer;">
+        <a href="${item.link}" target="_blank" rel="noopener" class="review-card fade-up delay-${index % 3}" style="text-decoration:none; display:flex; flex-direction:column; cursor:pointer;">
           <div class="review-header" style="margin-bottom:10px;">
             <span class="review-badge" style="background:#03C75A; color:white;">네이버 블로그</span>
-            <span class="review-hospital" style="font-size:0.85rem; color:var(--text-muted);">${escapeHtml(item.bloggername)}</span>
+            <span class="review-hospital" style="font-size:0.85rem; color:var(--text-muted);">${escapeHtml(item.bloggername || '')}</span>
             <span style="margin-left:auto; font-size:0.8rem; color:var(--text-muted);">${date}</span>
           </div>
           <h3 style="font-size:1rem; margin-bottom:8px; color:var(--text-heading); font-weight:600; line-height:1.4;">${escapeHtml(title)}</h3>
-          <p class="review-content" style="flex-grow:1; -webkit-line-clamp:3;">${escapeHtml(desc)}</p>
+          <p class="review-content" style="flex-grow:1; -webkit-line-clamp:3;">${escapeHtml(description)}</p>
         </a>
       `;
     }).join('');
-    
-    observeNewElements(reviewsList);
+
+    observeNewElements(ui.reviewsList);
   }
 
-  // ═══════════════════════════════════════
-  // 신규 개원 타임라인 렌더링
-  // ═══════════════════════════════════════
   function renderNewHospitals() {
-    if (!newHospitalsList) return;
-    newHospitalsList.innerHTML = NEW_HOSPITALS.map((h, i) => `
-      <div class="timeline-item fade-up delay-${i % 3}">
-        <span class="timeline-date">${formatDate(h.openDate)}</span>
+    if (!ui.newHospitalsList || typeof NEW_HOSPITALS === 'undefined') return;
+
+    ui.newHospitalsList.innerHTML = NEW_HOSPITALS.map((hospital, index) => `
+      <div class="timeline-item fade-up delay-${index % 3}">
+        <span class="timeline-date">${formatDate(hospital.openDate)}</span>
         <div class="timeline-card">
-          <div class="timeline-name">${escapeHtml(h.name)} <span class="hospital-type-tag">${escapeHtml(h.department)}</span></div>
-          <div class="timeline-addr">📍 ${escapeHtml(h.address)}</div>
+          <div class="timeline-name">${escapeHtml(hospital.name)} <span class="hospital-type-tag">${escapeHtml(hospital.department)}</span></div>
+          <div class="timeline-addr">📍 ${escapeHtml(hospital.address)}</div>
         </div>
       </div>
     `).join('');
-    observeNewElements(newHospitalsList);
+
+    observeNewElements(ui.newHospitalsList);
   }
 
-  // ═══════════════════════════════════════
-  // 검색 기능 (API 연동)
-  // ═══════════════════════════════════════
   async function performSearch() {
-    const query = heroSearch.value.trim();
-    if (!query) { clearSearch(); return; }
-
-    isSearchActive = true;
-    searchResults.classList.add('active');
-    searchQueryDisplay.textContent = `"${query}"`;
-    searchResultCount.innerHTML = '<span class="spinner-inline"></span> 검색 중...';
-    searchResultsList.innerHTML = '';
-
-    // API로 검색
-    const result = await HospitalAPI.fetchHospitals({ name: query, limit: 30 });
-    const hospitals = result.hospitals;
-
-    searchResultCount.innerHTML = `총 <strong>${result.fromMock ? hospitals.length : result.totalCount.toLocaleString()}</strong>개 결과`;
-
-    if (hospitals.length === 0) {
-      searchResultsList.innerHTML = `
-        <div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-muted);">
-          <p style="font-size:2rem;margin-bottom:12px;">😔</p>
-          <p>검색 결과가 없습니다.</p>
-          <p style="font-size:var(--fs-sm);">다른 키워드로 검색해 보세요.</p>
-        </div>`;
-    } else {
-      searchResultsList.innerHTML = hospitals.map((h, i) => buildHospitalCard(h, i + 1)).join('');
-      observeNewElements(searchResultsList);
-      
-      // 검색 결과 지도 마커 갱신
-      if (typeof MapModule !== 'undefined') {
-        MapModule.updateMarkers(hospitals);
-      }
+    const query = ui.heroSearch?.value.trim() || '';
+    if (!query) {
+      clearSearch();
+      return;
     }
 
-    searchResults.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    state.isSearchActive = true;
+    ui.searchResults?.classList.add('active');
+
+    if (ui.searchQueryDisplay) {
+      ui.searchQueryDisplay.textContent = `"${query}"`;
+    }
+    if (ui.searchResultCount) {
+      ui.searchResultCount.innerHTML = '<span class="spinner-inline"></span> 검색 중...';
+    }
+    if (ui.searchResultsList) {
+      ui.searchResultsList.innerHTML = '';
+    }
+
+    const result = await HospitalAPI.fetchHospitals({ name: query, limit: 30, preferMock: true });
+    const hospitals = result.hospitals;
+
+    if (ui.searchResultCount) {
+      ui.searchResultCount.innerHTML = `총 <strong>${result.fromMock ? hospitals.length : result.totalCount.toLocaleString()}</strong>개 결과`;
+    }
+
+    if (!ui.searchResultsList) return;
+
+    if (hospitals.length === 0) {
+      ui.searchResultsList.innerHTML = buildEmptyState('검색 결과가 없습니다.', '다른 키워드로 다시 검색해보세요.');
+    } else {
+      ui.searchResultsList.innerHTML = hospitals.map((hospital, index) => buildHospitalCard(hospital, index + 1)).join('');
+      observeNewElements(ui.searchResultsList);
+      updateMapHospitals(hospitals);
+    }
+
+    ui.searchResults?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   function clearSearch() {
-    isSearchActive = false;
-    heroSearch.value = '';
-    searchResults.classList.remove('active');
+    state.isSearchActive = false;
+    if (ui.heroSearch) ui.heroSearch.value = '';
+    ui.searchResults?.classList.remove('active');
+    updateMapHospitals(SearchEngine.sortHospitals(state.allFetchedHospitals, state.currentSort));
   }
 
-  // ═══════════════════════════════════════
-  // 이벤트 바인딩
-  // ═══════════════════════════════════════
   function bindEvents() {
-    // 테마 토글
-    themeToggle?.addEventListener('click', toggleTheme);
+    ui.themeToggle?.addEventListener('click', toggleTheme);
 
-    // 모바일 메뉴
-    mobileMenuBtn?.addEventListener('click', () => navLinks.classList.toggle('open'));
-    navLinks?.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => navLinks.classList.remove('open'));
+    ui.mobileMenuBtn?.addEventListener('click', () => {
+      ui.navLinks?.classList.toggle('open');
     });
 
-    // 검색
-    searchBtn?.addEventListener('click', performSearch);
-    heroSearch?.addEventListener('keyup', (e) => {
-      if (e.key === 'Enter') performSearch();
+    ui.navLinks?.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => ui.navLinks?.classList.remove('open'));
     });
-    clearSearchBtn?.addEventListener('click', clearSearch);
 
-    // 빠른 필터
-    $$('.quick-filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const filter = btn.dataset.filter;
-        switch (filter) {
-          case 'sat':
-          case 'night':
-          case 'sun':
-            // API에서는 지원하지 않으므로 안내
-            alert('토요/야간/일요 진료 필터는 상세 API 연동 시 제공됩니다.\n현재는 전체 목록을 표시합니다.');
-            break;
-          case 'new':
-            currentSort = 'newest';
-            if (sortFilter) sortFilter.value = 'newest';
-            reloadRanking();
-            break;
+    ui.searchBtn?.addEventListener('click', () => {
+      void performSearch();
+    });
+
+    ui.heroSearch?.addEventListener('keyup', (event) => {
+      if (event.key === 'Enter') {
+        void performSearch();
+      }
+    });
+
+    ui.clearSearchBtn?.addEventListener('click', clearSearch);
+
+    $$('.quick-filter-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        const filter = button.dataset.filter;
+
+        if (filter === 'new') {
+          state.currentSort = 'newest';
+          if (ui.sortFilter) ui.sortFilter.value = 'newest';
+          reloadRanking();
+        } else {
+          alert('토요일, 야간, 일요일 진료 필터는 상세 운영시간 API 연동 후 강화할 예정입니다.');
         }
-        document.getElementById('ranking')?.scrollIntoView({ behavior: 'smooth' });
+
+        $('#ranking')?.scrollIntoView({ behavior: 'smooth' });
       });
     });
 
-    // 진료과 카드 클릭
-    departmentGrid?.addEventListener('click', (e) => {
-      const card = e.target.closest('.dept-card');
+    ui.departmentGrid?.addEventListener('click', (event) => {
+      const card = event.target.closest('.dept-card');
       if (!card) return;
-      currentFilters.department = card.dataset.deptId;
+
+      state.currentFilters.department = card.dataset.deptId || 'all';
       reloadRanking();
-      document.getElementById('ranking')?.scrollIntoView({ behavior: 'smooth' });
+      $('#ranking')?.scrollIntoView({ behavior: 'smooth' });
     });
 
-    // 병원 카드 클릭 (상세 페이지 이동)
-    document.addEventListener('click', (e) => {
-      const card = e.target.closest('.hospital-card');
+    ui.departmentGrid?.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+
+      const card = event.target.closest('.dept-card');
       if (!card) return;
+
+      event.preventDefault();
+      state.currentFilters.department = card.dataset.deptId || 'all';
+      reloadRanking();
+      $('#ranking')?.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    $$('.theme-tag').forEach((tag) => {
+      tag.addEventListener('click', (event) => {
+        event.preventDefault();
+        const keyword = tag.dataset.keyword || '';
+        if (ui.heroSearch) {
+          ui.heroSearch.value = keyword;
+        }
+        void performSearch();
+      });
+    });
+
+    document.addEventListener('click', (event) => {
+      const card = event.target.closest('.hospital-card');
+      if (!card) return;
+
       const hospitalId = card.dataset.hospitalId;
       if (hospitalId) {
         window.location.href = `detail.html?id=${hospitalId}`;
       }
     });
 
-    // 필터 변경
-    regionFilter?.addEventListener('change', () => {
-      currentFilters.region = regionFilter.value;
+    ui.regionFilter?.addEventListener('change', () => {
+      state.currentFilters.region = ui.regionFilter.value;
       reloadRanking();
-    });
-    typeFilter?.addEventListener('change', () => {
-      currentFilters.type = typeFilter.value;
-      reloadRanking();
-    });
-    sortFilter?.addEventListener('change', () => {
-      currentSort = sortFilter.value;
-      // 클라이언트 정렬만 수행 (재요청 불필요)
-      const sorted = SearchEngine.sortHospitals(allFetchedHospitals, currentSort);
-      renderRankingCards(sorted);
     });
 
-    // 더보기 버튼
-    loadMoreBtn?.addEventListener('click', () => {
-      currentPage++;
-      loadRankingData(true); // append mode
+    ui.typeFilter?.addEventListener('change', () => {
+      state.currentFilters.type = ui.typeFilter.value;
+      reloadRanking();
+    });
+
+    ui.sortFilter?.addEventListener('change', () => {
+      state.currentSort = ui.sortFilter.value;
+      const sortedHospitals = SearchEngine.sortHospitals(state.allFetchedHospitals, state.currentSort);
+      renderRankingCards(sortedHospitals);
+      updateMapHospitals(sortedHospitals);
+    });
+
+    ui.loadMoreBtn?.addEventListener('click', () => {
+      state.currentPage += 1;
+      void loadRankingData(true);
     });
   }
 
-  /** 필터 변경 시 1페이지부터 다시 로드 */
   function reloadRanking() {
-    currentPage = 1;
-    allFetchedHospitals = [];
-    loadRankingData(false);
+    state.currentPage = 1;
+    state.allFetchedHospitals = [];
+    void loadRankingData(false);
   }
 
-  // ═══════════════════════════════════════
-  // 유틸리티
-  // ═══════════════════════════════════════
-  function formatDate(dateStr) {
-    const d = new Date(dateStr);
-    if (isNaN(d)) return dateStr;
-    return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+  function updateMapHospitals(hospitals) {
+    if (typeof MapModule !== 'undefined') {
+      MapModule.updateMarkers(hospitals);
+    }
   }
 
-  function escapeHtml(str) {
-    if (!str) return '';
+  function buildEmptyState(title, description) {
+    return `
+      <div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-muted);">
+        <p style="font-size:2rem;margin-bottom:12px;">🔎</p>
+        <p>${escapeHtml(title)}</p>
+        <p style="font-size:var(--fs-sm);">${escapeHtml(description)}</p>
+      </div>
+    `;
+  }
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    if (Number.isNaN(date.getTime())) return dateString;
+    return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+  }
+
+  function formatNaverDate(dateText) {
+    if (!dateText || dateText.length !== 8) return '';
+    return `${dateText.slice(0, 4)}.${dateText.slice(4, 6)}.${dateText.slice(6, 8)}`;
+  }
+
+  function stripHtml(value) {
+    return String(value || '').replace(/<[^>]*>/g, '');
+  }
+
+  function escapeHtml(value) {
     const div = document.createElement('div');
-    div.textContent = str;
+    div.textContent = String(value ?? '');
     return div.innerHTML;
   }
 });

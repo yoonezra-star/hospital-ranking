@@ -1,3 +1,9 @@
 node_modules/
 .wrangler/
 .env
+clean_detail.js
+clean_map.js
+update1.js
+index_check.txt
+test_map.html
+test_raw.bin

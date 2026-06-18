@@ -8,7 +8,15 @@
  *   DATA_API_KEY = 발급받은 인증키
  */
 export async function onRequestGet(context) {
-  let API_KEY = context.env?.DATA_API_KEY || '6016d506ccaac7277d8a3492ca0cce1845c6cee2acf054d92ac5cf0ef3049d0d';
+  const cache = caches.default;
+  const cacheKey = new Request(context.request.url, { method: 'GET' });
+  let API_KEY = context.env?.DATA_API_KEY;
+  if (!API_KEY) {
+    return new Response(JSON.stringify({ error: 'Missing DATA_API_KEY environment variable' }), {
+      status: 500,
+      headers: corsHeaders('application/json'),
+    });
+  }
   
   // 공공데이터 API 키 이중 인코딩 문제 방지를 위해 디코딩 적용
   try {
@@ -46,6 +54,11 @@ export async function onRequestGet(context) {
     clearTimeout(timeoutId);
 
     if (!response.ok) {
+      const cached = await cache.match(cacheKey);
+      if (cached) {
+        return withDataSourceHeader(cached, 'stale-cache');
+      }
+
       return new Response(JSON.stringify({ error: `Upstream API returned ${response.status}` }), {
         status: 502,
         headers: corsHeaders('application/json'),
@@ -59,24 +72,41 @@ export async function onRequestGet(context) {
     try {
       data = JSON.parse(text);
     } catch {
+      const cached = await cache.match(cacheKey);
+      if (cached) {
+        return withDataSourceHeader(cached, 'stale-cache');
+      }
+
       return new Response(JSON.stringify({ error: 'Invalid JSON from upstream', raw: text.slice(0, 500) }), {
         status: 502,
         headers: corsHeaders('application/json'),
       });
     }
 
-    return new Response(JSON.stringify(data), {
-      headers: corsHeaders('application/json', 'public, max-age=300'),
+    const liveHeaders = corsHeaders('application/json', 'public, max-age=300, stale-while-revalidate=3600');
+    liveHeaders['X-Data-Source'] = 'live';
+
+    const liveResponse = new Response(JSON.stringify(data), {
+      headers: liveHeaders,
     });
+
+    context.waitUntil(cache.put(cacheKey, liveResponse.clone()));
+
+    return liveResponse;
   } catch (error) {
     clearTimeout(timeoutId);
+
+    const cached = await cache.match(cacheKey);
+    if (cached) {
+      return withDataSourceHeader(cached, 'stale-cache');
+    }
     
     let status = 500;
     let message = error.message;
 
     if (error.name === 'AbortError') {
       status = 504;
-      message = 'Upstream API request timed out (3.5s limit)';
+      message = 'Upstream API request timed out (8.5s limit)';
     }
 
     return new Response(JSON.stringify({ error: message }), {
@@ -99,4 +129,15 @@ function corsHeaders(contentType, cacheControl) {
   if (contentType) h['Content-Type'] = contentType;
   if (cacheControl) h['Cache-Control'] = cacheControl;
   return h;
+}
+
+function withDataSourceHeader(response, value) {
+  const headers = new Headers(response.headers);
+  headers.set('X-Data-Source', value);
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
 }

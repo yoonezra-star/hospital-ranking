@@ -3,179 +3,252 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>질환 백과사전 및 건강 가이드 - 병원랭킹</title>
-  <meta name="description" content="임플란트, 수면내시경, 요로결석 등 주요 의료 테마별 질환 백과사전. 증상, 원인, 치료법 및 우수 병원 선택 가이드 완벽 제공.">
+  <title>건강 가이드 모음 - 병원랭킹</title>
+  <meta name="description" content="임플란트, 라식, 당뇨, 내시경, 우울증, 여드름, 재활, 비염, 비뇨기 질환까지 주요 주제별 건강 가이드를 모았습니다. 병원 선택 전에 확인할 핵심 정보를 정리했습니다.">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/theme.css">
+  <style>
+    .guide-page {
+      max-width: 1100px;
+      padding-top: 56px;
+    }
+    .guide-hero {
+      padding: 32px;
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-xl);
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(20, 184, 166, 0.08));
+      margin-bottom: 28px;
+    }
+    .guide-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+      color: var(--text-muted);
+      font-size: var(--fs-sm);
+    }
+    .guide-grid-page {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .guide-card-link {
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      background: var(--bg-card);
+      transition: transform var(--t-base), box-shadow var(--t-base), border-color var(--t-base);
+    }
+    .guide-card-link:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: rgba(37, 99, 235, 0.25);
+    }
+    .guide-card-visual {
+      min-height: 152px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 3rem;
+      font-weight: 700;
+    }
+    .guide-card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .guide-category {
+      color: var(--primary);
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-bold);
+    }
+    .guide-card-body h2 {
+      font-size: 1.1rem;
+      margin: 0;
+    }
+    .guide-card-body p {
+      color: var(--text-muted);
+      font-size: var(--fs-sm);
+      line-height: 1.7;
+      margin: 0;
+    }
+    .guide-note-box {
+      margin-top: 28px;
+      padding: 24px;
+      border-radius: var(--r-lg);
+      border: 1px solid var(--border-default);
+      background: var(--bg-card);
+    }
+    .guide-note-box ul {
+      margin-top: 12px;
+      padding-left: 18px;
+      color: var(--text-body);
+      line-height: 1.8;
+    }
+  </style>
 </head>
-<body class="light-mode">
-  <!-- Header -->
+<body>
   <header class="header" id="header" style="position:static; border-bottom:1px solid var(--border-default);">
-    <div class="header-inner container">
+    <div class="header-inner">
       <a href="/" class="logo">
-        <span class="logo-icon">🏥</span>
+        <span class="logo-icon">H</span>
         <span class="gradient-text">병원랭킹</span>
       </a>
       <nav class="nav-links">
-        <a href="/">홈으로 돌아가기</a>
+        <a href="index.html">홈</a>
+        <a href="about.html">사이트 소개</a>
+        <a href="contact.html">문의하기</a>
       </nav>
     </div>
   </header>
 
-  <main class="container section-padding" style="max-width: 1000px; padding-top: 60px;">
-    <h1 style="font-size: var(--fs-4xl); margin-bottom: var(--sp-2);">건강 매거진 및 병원 선택 가이드</h1>
-    <p style="color: var(--text-muted); margin-bottom: var(--sp-8); font-size: 1.1rem;">각종 질환의 원인과 증상, 최신 치료법부터 신뢰할 수 있는 우수 병원을 고르는 체크리스트까지. 병원랭킹이 제공하는 전문적인 의료 건강 가이드를 통해 현명한 의료 소비자가 되어보세요.</p>
-    
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px;">
-      
-      <!-- 치과: 임플란트 -->
-      <a href="guide-implant.html" style="text-decoration:none; display:flex; flex-direction:column; background:var(--bg-card); border:1px solid var(--border-default); border-radius:var(--r-lg); overflow:hidden; transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
-        <div style="height: 160px; background: linear-gradient(135deg, #14B8A6, #0D9488); display:flex; align-items:center; justify-content:center;">
-          <span style="font-size: 4rem;">🦷</span>
-        </div>
-        <div style="padding: 20px;">
-          <div style="color: var(--primary); font-size: 0.85rem; font-weight:600; margin-bottom: 8px;">치과</div>
-          <h3 style="font-size: 1.1rem; color: var(--text-heading); margin-bottom: 10px; line-height:1.4;">임플란트 완벽 가이드: 부작용 없는 성공적인 식립</h3>
-          <p style="color: var(--text-muted); font-size: 0.9rem; line-height:1.5; -webkit-line-clamp: 2; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical;">임플란트 부작용 없는 성공적인 식립을 위한 주의사항 및 좋은 치과 고르는 방법.</p>
+  <main class="container section-padding guide-page">
+    <section class="guide-hero fade-up visible">
+      <p style="color:var(--primary); font-weight:700; margin-bottom:8px;">건강 가이드 모음</p>
+      <h1 style="font-size:var(--fs-4xl); margin-bottom:14px;">병원 선택 전에 먼저 읽어야 할 핵심 가이드</h1>
+      <p style="color:var(--text-body); line-height:1.8; max-width:760px;">
+        병원랭킹의 가이드는 특정 병원을 홍보하기 위한 광고형 문서가 아니라, 진료 전 알아두면 좋은 기본 정보를 정리한 참고 콘텐츠입니다.
+        증상, 검사, 치료 방식, 병원 선택 체크포인트를 이해하기 쉽게 정리했고, 실제 진단과 치료 결정은 반드시 해당 병원 또는 의료진과 직접 상담해 주세요.
+      </p>
+      <div class="guide-meta">
+        <span>최종 수정일: 2026-06-18</span>
+        <span>운영 문의: replyleaders@naver.com</span>
+        <span>데이터/콘텐츠 성격: 참고용 정보</span>
+      </div>
+    </section>
+
+    <section class="guide-grid-page">
+      <a class="guide-card-link fade-up visible" href="guide-implant.html">
+        <div class="guide-card-visual" style="background:linear-gradient(135deg, #14B8A6, #0F766E);">치</div>
+        <div class="guide-card-body">
+          <span class="guide-category">치과</span>
+          <h2>임플란트 전 꼭 확인할 점</h2>
+          <p>시술 전 검사, 비용 구조, 부작용 가능성, 치과 선택 기준을 확인할 수 있는 기본 가이드입니다.</p>
         </div>
       </a>
 
-      <!-- 안과: 시력교정술 -->
-      <a href="guide-lasik.html" style="text-decoration:none; display:flex; flex-direction:column; background:var(--bg-card); border:1px solid var(--border-default); border-radius:var(--r-lg); overflow:hidden; transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
-        <div style="height: 160px; background: linear-gradient(135deg, #F59E0B, #D97706); display:flex; align-items:center; justify-content:center;">
-          <span style="font-size: 4rem;">👁️</span>
-        </div>
-        <div style="padding: 20px;">
-          <div style="color: var(--primary); font-size: 0.85rem; font-weight:600; margin-bottom: 8px;">안과</div>
-          <h3 style="font-size: 1.1rem; color: var(--text-heading); margin-bottom: 10px; line-height:1.4;">라식, 라섹, 스마일라식 비교 및 안과 선택 가이드</h3>
-          <p style="color: var(--text-muted); font-size: 0.9rem; line-height:1.5; -webkit-line-clamp: 2; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical;">시력교정술의 종류별 장단점 비교. 내 눈에 맞는 안전한 수술법과 안과 선택 팁.</p>
+      <a class="guide-card-link fade-up visible" href="guide-lasik.html">
+        <div class="guide-card-visual" style="background:linear-gradient(135deg, #F59E0B, #D97706);">안</div>
+        <div class="guide-card-body">
+          <span class="guide-category">안과</span>
+          <h2>라식·라섹 비교와 수술 전 체크포인트</h2>
+          <p>시력교정술 종류별 차이와 수술 전 검사, 회복 과정, 병원 상담 시 확인할 질문을 정리했습니다.</p>
         </div>
       </a>
 
-      <!-- 내분비내과: 당뇨병 -->
-      <a href="guide-diabetes.html" style="text-decoration:none; display:flex; flex-direction:column; background:var(--bg-card); border:1px solid var(--border-default); border-radius:var(--r-lg); overflow:hidden; transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
-        <div style="height: 160px; background: linear-gradient(135deg, #EF4444, #B91C1C); display:flex; align-items:center; justify-content:center;">
-          <span style="font-size: 4rem;">🩸</span>
-        </div>
-        <div style="padding: 20px;">
-          <div style="color: var(--primary); font-size: 0.85rem; font-weight:600; margin-bottom: 8px;">내분비내과</div>
-          <h3 style="font-size: 1.1rem; color: var(--text-heading); margin-bottom: 10px; line-height:1.4;">당뇨병 초기 증상과 완벽 관리법 (혈당 스파이크)</h3>
-          <p style="color: var(--text-muted); font-size: 0.9rem; line-height:1.5; -webkit-line-clamp: 2; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical;">침묵의 살인자 당뇨병. 혈당 스파이크의 위험성과 올바른 식단 관리, 예방 가이드.</p>
+      <a class="guide-card-link fade-up visible" href="guide-diabetes.html">
+        <div class="guide-card-visual" style="background:linear-gradient(135deg, #EF4444, #B91C1C);">내</div>
+        <div class="guide-card-body">
+          <span class="guide-category">내과</span>
+          <h2>당뇨 초기 관리와 생활 습관 정리</h2>
+          <p>혈당 관리의 기본 원칙, 정기 검사의 중요성, 내과 방문 전 준비하면 좋은 사항을 다룹니다.</p>
         </div>
       </a>
 
-      <!-- 소화기내과: 수면내시경 -->
-      <a href="guide-endoscopy.html" style="text-decoration:none; display:flex; flex-direction:column; background:var(--bg-card); border:1px solid var(--border-default); border-radius:var(--r-lg); overflow:hidden; transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
-        <div style="height: 160px; background: linear-gradient(135deg, #10B981, #047857); display:flex; align-items:center; justify-content:center;">
-          <span style="font-size: 4rem;">🔬</span>
-        </div>
-        <div style="padding: 20px;">
-          <div style="color: var(--primary); font-size: 0.85rem; font-weight:600; margin-bottom: 8px;">소화기내과</div>
-          <h3 style="font-size: 1.1rem; color: var(--text-heading); margin-bottom: 10px; line-height:1.4;">수면 위/대장내시경 가이드: 암을 예방하는 지름길</h3>
-          <p style="color: var(--text-muted); font-size: 0.9rem; line-height:1.5; -webkit-line-clamp: 2; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical;">조기 위암, 대장암 발견을 위한 필수 검진. 수면내시경의 안전성과 우수 내시경 병원 고르는 법.</p>
+      <a class="guide-card-link fade-up visible" href="guide-endoscopy.html">
+        <div class="guide-card-visual" style="background:linear-gradient(135deg, #10B981, #047857);">검</div>
+        <div class="guide-card-body">
+          <span class="guide-category">소화기내과</span>
+          <h2>위·대장 내시경 준비 가이드</h2>
+          <p>검사 전 주의사항, 금식, 수면내시경 상담 포인트, 검사 후 확인할 내용을 빠르게 파악할 수 있습니다.</p>
         </div>
       </a>
 
-      <!-- 정신건강의학과: 우울증 -->
-      <a href="guide-depression.html" style="text-decoration:none; display:flex; flex-direction:column; background:var(--bg-card); border:1px solid var(--border-default); border-radius:var(--r-lg); overflow:hidden; transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
-        <div style="height: 160px; background: linear-gradient(135deg, #8B5CF6, #6D28D9); display:flex; align-items:center; justify-content:center;">
-          <span style="font-size: 4rem;">🧠</span>
-        </div>
-        <div style="padding: 20px;">
-          <div style="color: var(--primary); font-size: 0.85rem; font-weight:600; margin-bottom: 8px;">정신건강의학과</div>
-          <h3 style="font-size: 1.1rem; color: var(--text-heading); margin-bottom: 10px; line-height:1.4;">우울증과 번아웃 증후군의 진단과 치료 오해 해소</h3>
-          <p style="color: var(--text-muted); font-size: 0.9rem; line-height:1.5; -webkit-line-clamp: 2; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical;">단순한 우울감인가 우울증인가? 현대인의 번아웃 증후군 극복 및 약물 치료에 대한 오해 해소.</p>
+      <a class="guide-card-link fade-up visible" href="guide-depression.html">
+        <div class="guide-card-visual" style="background:linear-gradient(135deg, #8B5CF6, #6D28D9);">정</div>
+        <div class="guide-card-body">
+          <span class="guide-category">정신건강의학과</span>
+          <h2>우울감과 상담 치료 시작하기</h2>
+          <p>상담이 필요한 신호, 초진 시 준비물, 병원 선택 시 확인할 점을 중심으로 정리했습니다.</p>
         </div>
       </a>
 
-      <!-- 피부과: 여드름 -->
-      <a href="guide-acne.html" style="text-decoration:none; display:flex; flex-direction:column; background:var(--bg-card); border:1px solid var(--border-default); border-radius:var(--r-lg); overflow:hidden; transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
-        <div style="height: 160px; background: linear-gradient(135deg, #EC4899, #BE185D); display:flex; align-items:center; justify-content:center;">
-          <span style="font-size: 4rem;">✨</span>
-        </div>
-        <div style="padding: 20px;">
-          <div style="color: var(--primary); font-size: 0.85rem; font-weight:600; margin-bottom: 8px;">피부과</div>
-          <h3 style="font-size: 1.1rem; color: var(--text-heading); margin-bottom: 10px; line-height:1.4;">성인 여드름과 파인 흉터 완벽 치료 가이드</h3>
-          <p style="color: var(--text-muted); font-size: 0.9rem; line-height:1.5; -webkit-line-clamp: 2; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical;">성인형 여드름의 원인 분석부터 로아큐탄 처방, 프락셀 및 레이저 토닝의 흉터 치료 효과까지.</p>
+      <a class="guide-card-link fade-up visible" href="guide-acne.html">
+        <div class="guide-card-visual" style="background:linear-gradient(135deg, #EC4899, #BE185D);">피</div>
+        <div class="guide-card-body">
+          <span class="guide-category">피부과</span>
+          <h2>여드름 치료 시작 전 알아둘 것</h2>
+          <p>약물 치료와 시술 치료의 차이, 흉터 관리, 피부과 상담 시 질문하면 좋은 항목을 다룹니다.</p>
         </div>
       </a>
 
-      <!-- 정형외과: 도수치료 -->
-      <a href="guide-ortho.html" style="text-decoration:none; display:flex; flex-direction:column; background:var(--bg-card); border:1px solid var(--border-default); border-radius:var(--r-lg); overflow:hidden; transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
-        <div style="height: 160px; background: linear-gradient(135deg, #0EA5E9, #0369A1); display:flex; align-items:center; justify-content:center;">
-          <span style="font-size: 4rem;">🦴</span>
-        </div>
-        <div style="padding: 20px;">
-          <div style="color: var(--primary); font-size: 0.85rem; font-weight:600; margin-bottom: 8px;">정형외과</div>
-          <h3 style="font-size: 1.1rem; color: var(--text-heading); margin-bottom: 10px; line-height:1.4;">도수치료 완벽 가이드: 거북목과 디스크 비수술 교정</h3>
-          <p style="color: var(--text-muted); font-size: 0.9rem; line-height:1.5; -webkit-line-clamp: 2; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical;">거북목과 디스크를 바로잡는 비수술 교정 치료인 도수치료의 원리와 효과, 좋은 병원 고르는 법.</p>
+      <a class="guide-card-link fade-up visible" href="guide-ortho.html">
+        <div class="guide-card-visual" style="background:linear-gradient(135deg, #0EA5E9, #0369A1);">재</div>
+        <div class="guide-card-body">
+          <span class="guide-category">정형외과·재활</span>
+          <h2>재활치료와 통증 관리 체크리스트</h2>
+          <p>재활치료를 시작하기 전 확인할 검사, 치료 빈도, 병원 선택 시 비교 포인트를 정리했습니다.</p>
         </div>
       </a>
 
-      <!-- 이비인후과: 비염 -->
-      <a href="guide-rhinitis.html" style="text-decoration:none; display:flex; flex-direction:column; background:var(--bg-card); border:1px solid var(--border-default); border-radius:var(--r-lg); overflow:hidden; transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
-        <div style="height: 160px; background: linear-gradient(135deg, #3B82F6, #1D4ED8); display:flex; align-items:center; justify-content:center;">
-          <span style="font-size: 4rem;">👃</span>
-        </div>
-        <div style="padding: 20px;">
-          <div style="color: var(--primary); font-size: 0.85rem; font-weight:600; margin-bottom: 8px;">이비인후과</div>
-          <h3 style="font-size: 1.1rem; color: var(--text-heading); margin-bottom: 10px; line-height:1.4;">지긋지긋한 만성 비염과 축농증 완벽 극복하기</h3>
-          <p style="color: var(--text-muted); font-size: 0.9rem; line-height:1.5; -webkit-line-clamp: 2; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical;">알레르기성 비염의 회피 요법, 면역 치료, 그리고 비염 수술(고주파 비염수술)에 대한 팩트체크.</p>
+      <a class="guide-card-link fade-up visible" href="guide-rhinitis.html">
+        <div class="guide-card-visual" style="background:linear-gradient(135deg, #3B82F6, #1D4ED8);">비</div>
+        <div class="guide-card-body">
+          <span class="guide-category">이비인후과</span>
+          <h2>만성 비염과 코막힘 관리</h2>
+          <p>비염 증상 구분, 약물 치료와 수술 상담 포인트, 이비인후과 진료 전에 알아둘 점을 담았습니다.</p>
         </div>
       </a>
 
-      <!-- 비뇨의학과: 요로결석 -->
-      <a href="guide-urology.html" style="text-decoration:none; display:flex; flex-direction:column; background:var(--bg-card); border:1px solid var(--border-default); border-radius:var(--r-lg); overflow:hidden; transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
-        <div style="height: 160px; background: linear-gradient(135deg, #64748B, #334155); display:flex; align-items:center; justify-content:center;">
-          <span style="font-size: 4rem;">💧</span>
-        </div>
-        <div style="padding: 20px;">
-          <div style="color: var(--primary); font-size: 0.85rem; font-weight:600; margin-bottom: 8px;">비뇨의학과</div>
-          <h3 style="font-size: 1.1rem; color: var(--text-heading); margin-bottom: 10px; line-height:1.4;">요로결석: 출산의 고통에 맞먹는 극심한 통증 대처법</h3>
-          <p style="color: var(--text-muted); font-size: 0.9rem; line-height:1.5; -webkit-line-clamp: 2; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical;">출산의 고통에 맞먹는 요로결석. 체외충격파쇄석술 및 야간 응급 진료 병원 찾기 가이드.</p>
+      <a class="guide-card-link fade-up visible" href="guide-urology.html">
+        <div class="guide-card-visual" style="background:linear-gradient(135deg, #64748B, #334155);">비</div>
+        <div class="guide-card-body">
+          <span class="guide-category">비뇨의학과</span>
+          <h2>요로결석과 응급 진료 판단</h2>
+          <p>응급실 방문이 필요한 경우, 통증 대응, 비뇨의학과 상담 전에 확인할 항목을 안내합니다.</p>
         </div>
       </a>
+    </section>
 
-    </div>
-
-    <!-- 광고 영역 -->
-    <div class="ad-slot ad-infeed" style="margin-top:40px; text-align:center;">
-      <ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout-key="-fb+5w+4e-db+86" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-    </div>
-
+    <section class="guide-note-box fade-up visible">
+      <h2 style="font-size:1.4rem; margin-bottom:10px;">가이드 이용 전 확인</h2>
+      <p style="color:var(--text-body); line-height:1.8;">
+        아래 내용은 광고나 진단서가 아니라, 병원 방문 전에 기본 맥락을 이해하기 위한 참고 자료입니다.
+      </p>
+      <ul>
+        <li>증상 악화, 급성 통증, 출혈, 호흡 곤란 등 응급 상황은 즉시 의료기관에 직접 연락하거나 응급 진료를 우선해 주세요.</li>
+        <li>병원별 진료 가능 시간, 장비, 비용, 수술 여부는 실제 방문 전 반드시 재확인해 주세요.</li>
+        <li>콘텐츠 수정 제안이나 오류 신고는 <a href="mailto:replyleaders@naver.com" style="color:var(--primary); font-weight:600;">replyleaders@naver.com</a> 으로 받을 수 있습니다.</li>
+      </ul>
+    </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="footer" style="margin-top: 50px;">
-    <div class="container footer-inner">
-      <div class="footer-col">
-        <h3>병원랭킹</h3>
-        <p>공공데이터를 활용한 전국 병의원 평점 및 후기 서비스. 가장 정확한 의료 정보를 제공합니다.</p>
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="logo">
+            <span class="logo-icon">H</span>
+            <span class="gradient-text">병원랭킹</span>
+          </div>
+          <p>공공 데이터와 편집형 건강 가이드를 바탕으로 병원 탐색에 필요한 참고 정보를 제공합니다.</p>
+        </div>
+        <div class="footer-links-group">
+          <h4>바로가기</h4>
+          <a href="index.html">홈</a>
+          <a href="about.html">사이트 소개</a>
+          <a href="contact.html">문의하기</a>
+        </div>
+        <div class="footer-links-group">
+          <h4>정책</h4>
+          <a href="terms.html">이용약관</a>
+          <a href="privacy.html">개인정보처리방침</a>
+        </div>
+        <div class="footer-links-group">
+          <h4>콘텐츠 안내</h4>
+          <a href="guide-implant.html">임플란트 가이드</a>
+          <a href="guide-endoscopy.html">내시경 가이드</a>
+        </div>
       </div>
-      <div class="footer-col">
-        <h4>바로가기</h4>
-        <ul>
-          <li><a href="index.html">홈으로</a></li>
-          <li><a href="guide.html">질환 백과사전</a></li>
-        </ul>
+      <div class="footer-bottom">
+        <p>&copy; 2026 병원랭킹. All rights reserved.</p>
+        <p>운영 문의 및 정보 정정 요청: <a href="mailto:replyleaders@naver.com" style="color:var(--primary); font-weight:600;">replyleaders@naver.com</a></p>
+        <p>가이드 콘텐츠는 참고용 의료 정보이며, 진단과 치료 결정은 반드시 해당 병원 또는 의료진과 직접 상담해 주세요.</p>
       </div>
-      <div class="footer-col">
-        <h4>약관 및 정책</h4>
-        <ul>
-          <li><a href="terms.html">이용약관</a></li>
-          <li><a href="privacy.html">개인정보처리방침</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>고객 지원</h4>
-        <ul>
-          <li><a href="contact.html">고객센터 및 제휴 문의</a></li>
-          <li><a href="about.html">회사 소개</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2026 병원랭킹. All rights reserved.</p>
     </div>
   </footer>
 </body>

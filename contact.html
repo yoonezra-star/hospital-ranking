@@ -3,143 +3,170 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>고객센터 및 제휴 문의 - 병원랭킹</title>
-  <meta name="description" content="병원랭킹 고객센터. 자주 묻는 질문(FAQ), 제휴 문의 양식 및 찾아오시는 길 안내.">
+  <title>문의하기 - 병원랭킹</title>
+  <meta name="description" content="병원 정보 정정 요청, 제휴 문의, 운영 문의, 콘텐츠 오류 신고를 위한 병원랭킹 공식 문의 페이지입니다. replyleaders@naver.com으로 문의할 수 있습니다.">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .contact-page {
+      max-width: 1080px;
+      padding-top: 56px;
+    }
+    .contact-hero {
+      padding: 32px;
+      border-radius: var(--r-xl);
+      border: 1px solid var(--border-default);
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(244, 63, 94, 0.06));
+      margin-bottom: 28px;
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+    }
+    .contact-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-lg);
+      padding: 28px;
+    }
+    .faq-item + .faq-item {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-default);
+    }
+    .contact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      color: var(--text-body);
+      line-height: 1.7;
+    }
+    @media (max-width: 900px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-<body class="light-mode">
-  <!-- Header -->
+<body>
   <header class="header" id="header" style="position:static; border-bottom:1px solid var(--border-default);">
-    <div class="header-inner container">
+    <div class="header-inner">
       <a href="/" class="logo">
-        <span class="logo-icon">🏥</span>
+        <span class="logo-icon">H</span>
         <span class="gradient-text">병원랭킹</span>
       </a>
       <nav class="nav-links">
-        <a href="/">홈으로 돌아가기</a>
+        <a href="index.html">홈</a>
+        <a href="guide.html">건강 가이드</a>
+        <a href="about.html">사이트 소개</a>
       </nav>
     </div>
   </header>
 
-  <main class="container section-padding" style="max-width: 1000px; padding-top: 60px;">
-    <h1 style="font-size: var(--fs-4xl); margin-bottom: var(--sp-2); text-align: center;">고객센터 및 제휴 문의</h1>
-    <p style="color: var(--text-muted); margin-bottom: var(--sp-10); font-size: 1.1rem; text-align: center;">병원랭킹 서비스 이용과 관련된 궁금한 점이나 제휴 제안을 남겨주세요.</p>
-    
-    <div style="display: grid; grid-template-columns: 1fr; gap: var(--sp-10);">
-      
-      <!-- FAQ Section -->
-      <section style="background: var(--bg-card); padding: 2rem; border-radius: 12px; border: 1px solid var(--border-default);">
-        <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--text-heading); border-bottom: 2px solid var(--border-default); padding-bottom: 10px;">자주 묻는 질문 (FAQ)</h2>
-        
-        <div style="margin-bottom: 1.5rem;">
-          <h3 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 0.5rem;">Q1. 병원의 랭킹 순위는 어떻게 결정되나요?</h3>
-          <p style="color: var(--text-body); line-height: 1.6; font-size: 0.95rem;">A. 건강보험심사평가원의 공공데이터를 기반으로 전문의 수, 진료 과목의 세분화 정도, 토요일 및 야간 진료 편의성, 보유 의료 장비 현황을 수치화하여 1차 점수를 매깁니다. 이후 자체 수집된 사용자 리뷰의 긍정/부정 감성 분석 점수를 합산하여 최종 랭킹이 실시간으로 변동됩니다.</p>
+  <main class="container section-padding contact-page">
+    <section class="contact-hero fade-up visible">
+      <p style="color:var(--primary); font-weight:700; margin-bottom:8px;">공식 문의 채널</p>
+      <h1 style="font-size:var(--fs-4xl); margin-bottom:14px;">문의, 정정 요청, 제휴 제안</h1>
+      <p style="color:var(--text-body); line-height:1.8; max-width:760px;">
+        병원랭킹은 병원 정보 탐색을 돕는 참고 사이트입니다. 병원명, 주소, 진료과, 연락처, 운영 정보 오류가 있거나
+        콘텐츠 관련 문의가 있다면 아래 안내에 따라 메일로 보내 주세요. 확인 가능한 근거가 함께 오면 처리 속도가 빨라집니다.
+      </p>
+      <p style="margin-top:16px; color:var(--text-muted); font-size:var(--fs-sm);">최종 수정일: 2026-06-18</p>
+    </section>
+
+    <section class="contact-grid">
+      <article class="contact-card fade-up visible">
+        <h2 style="font-size:1.5rem; margin-bottom:18px;">자주 묻는 질문</h2>
+
+        <div class="faq-item">
+          <h3 style="font-size:1.05rem; color:var(--primary); margin-bottom:8px;">병원 정보가 실제와 다릅니다. 어떻게 수정 요청하나요?</h3>
+          <p style="color:var(--text-body); line-height:1.8;">
+            병원명, 수정이 필요한 항목, 확인 가능한 근거 링크 또는 이미지 설명을 함께 보내 주세요.
+            접수 후 공공 데이터와 병원 공개 정보를 비교해 검토합니다.
+          </p>
         </div>
 
-        <div style="margin-bottom: 1.5rem;">
-          <h3 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 0.5rem;">Q2. 랭킹을 올리기 위해 광고비를 지불할 수 있나요?</h3>
-          <p style="color: var(--text-body); line-height: 1.6; font-size: 0.95rem;">A. <strong>절대 불가합니다.</strong> 병원랭킹은 100% 독립적이고 객관적인 공공데이터 기반 평가 플랫폼입니다. 어떠한 금전적 대가를 지불하더라도 병원의 별점이나 랭킹 순위를 인위적으로 상향 조정하는 것은 원천적으로 불가능하게 설계되어 있습니다.</p>
+        <div class="faq-item">
+          <h3 style="font-size:1.05rem; color:var(--primary); margin-bottom:8px;">광고나 제휴를 하면 순위가 올라가나요?</h3>
+          <p style="color:var(--text-body); line-height:1.8;">
+            아닙니다. 병원랭킹은 광고 집행 여부와 순위 노출을 직접 연결하지 않습니다.
+            광고 또는 제휴 문의는 별도 검토하며, 편집 기준과 데이터 기준은 분리해 운영합니다.
+          </p>
         </div>
 
-        <div style="margin-bottom: 1.5rem;">
-          <h3 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 0.5rem;">Q3. 우리 병원의 정보가 잘못 등록되어 있습니다. 어떻게 수정하나요?</h3>
-          <p style="color: var(--text-body); line-height: 1.6; font-size: 0.95rem;">A. 병원랭킹의 기본 데이터는 건강보험심사평가원 포털에 등록된 공식 정보를 그대로 미러링합니다. 심평원에 병원 정보를 먼저 업데이트하시면 통상 1~2일 내로 병원랭킹 사이트에도 자동으로 반영됩니다. 심평원 정보가 맞음에도 본 사이트에 오류가 있다면 아래 문의 양식을 통해 접수해 주시기 바랍니다.</p>
+        <div class="faq-item">
+          <h3 style="font-size:1.05rem; color:var(--primary); margin-bottom:8px;">의료 상담도 받을 수 있나요?</h3>
+          <p style="color:var(--text-body); line-height:1.8;">
+            병원랭킹은 의료 상담 기관이 아닙니다. 본 사이트의 정보는 참고용이며, 진단·처방·수술 여부 판단은 반드시 의료진과 직접 상담해 주세요.
+          </p>
         </div>
-        
-        <div style="margin-bottom: 0;">
-          <h3 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 0.5rem;">Q4. 웹사이트에 배너 광고를 게재하고 싶습니다.</h3>
-          <p style="color: var(--text-body); line-height: 1.6; font-size: 0.95rem;">A. 현재 병원랭킹은 구글 애드센스(Google AdSense) 플랫폼을 통해서만 디스플레이 배너 광고를 송출하고 있습니다. 사이트 내 직접적인 배너 입점이나 기사형 광고(Advertorial)는 취급하지 않사오니 구글 애드워즈를 통해 캠페인을 세팅해 주시기 바랍니다.</p>
+
+        <div class="faq-item">
+          <h3 style="font-size:1.05rem; color:var(--primary); margin-bottom:8px;">문의 답변은 얼마나 걸리나요?</h3>
+          <p style="color:var(--text-body); line-height:1.8;">
+            단순 문의는 통상 영업일 기준 2~5일 내 확인하고, 공공 데이터 대조가 필요한 정정 요청은 더 걸릴 수 있습니다.
+          </p>
         </div>
-      </section>
+      </article>
 
-      <!-- Contact Form & Map (Two columns on PC) -->
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-        
-        <!-- Contact Form -->
-        <section style="background: var(--bg-card); padding: 2rem; border-radius: 12px; border: 1px solid var(--border-default);">
-          <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-heading);">1:1 제휴 및 문의하기</h2>
-          <form style="display: flex; flex-direction: column; gap: 1rem;">
-            <div>
-              <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: bold; color: var(--text-body);">이름 / 소속 기관명</label>
-              <input type="text" placeholder="홍길동 / 한국병원" style="width: 100%; padding: 10px; border: 1px solid var(--border-default); border-radius: 6px; background: var(--bg-body); color: var(--text-body);">
-            </div>
-            <div>
-              <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: bold; color: var(--text-body);">이메일 주소</label>
-              <input type="email" placeholder="example@email.com" style="width: 100%; padding: 10px; border: 1px solid var(--border-default); border-radius: 6px; background: var(--bg-body); color: var(--text-body);">
-            </div>
-            <div>
-              <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: bold; color: var(--text-body);">문의 유형</label>
-              <select style="width: 100%; padding: 10px; border: 1px solid var(--border-default); border-radius: 6px; background: var(--bg-body); color: var(--text-body);">
-                <option>병원 정보 수정 요청</option>
-                <option>사업 제휴 문의</option>
-                <option>버그 리포트</option>
-                <option>기타 문의</option>
-              </select>
-            </div>
-            <div>
-              <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: bold; color: var(--text-body);">문의 내용</label>
-              <textarea rows="5" placeholder="상세한 내용을 입력해 주세요." style="width: 100%; padding: 10px; border: 1px solid var(--border-default); border-radius: 6px; background: var(--bg-body); color: var(--text-body); resize: vertical;"></textarea>
-            </div>
-            <button type="button" style="padding: 12px; background: var(--primary); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.2s;">문의 접수하기</button>
-            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; text-align: center;">※ 본 양식은 UI 데모용이며 실제 전송되지 않습니다. 이메일(<a href="mailto:replyleaders@naver.com" style="color:var(--primary)">replyleaders@naver.com</a>)로 연락주세요.</p>
-          </form>
-        </section>
+      <aside class="contact-card fade-up visible">
+        <h2 style="font-size:1.5rem; margin-bottom:18px;">문의 접수 안내</h2>
+        <div class="contact-list">
+          <div><strong>문의 이메일:</strong> <a href="mailto:replyleaders@naver.com" style="color:var(--primary); font-weight:700;">replyleaders@naver.com</a></div>
+          <div><strong>권장 제목:</strong> [병원랭킹 문의] 문의 유형 / 병원명</div>
+          <div><strong>권장 내용:</strong> 병원명, 수정 항목, 사유, 확인 가능한 출처</div>
+          <div><strong>처리 원칙:</strong> 공개 가능한 정보와 공공 데이터 기준으로 검토 후 반영</div>
+        </div>
 
-        <!-- Company Info & Map UI -->
-        <section style="background: var(--bg-card); padding: 2rem; border-radius: 12px; border: 1px solid var(--border-default);">
-          <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-heading);">본사 오시는 길</h2>
-          
-          <!-- Mock Map UI -->
-          <div style="width: 100%; height: 200px; background: #E2E8F0; border-radius: 8px; margin-bottom: 1.5rem; display: flex; justify-content: center; align-items: center; border: 1px solid var(--border-default); position: relative; overflow: hidden;">
-            <div style="position: absolute; width: 100%; height: 100%; opacity: 0.4; background-image: radial-gradient(#CBD5E1 2px, transparent 2px); background-size: 20px 20px;"></div>
-            <div style="z-index: 10; text-align: center;">
-              <span style="font-size: 2rem;">📍</span><br>
-              <span style="font-weight: bold; color: #334155;">리플리더스</span>
-            </div>
-          </div>
+        <a href="mailto:replyleaders@naver.com?subject=%5B%EB%B3%91%EC%9B%90%EB%9E%AD%ED%82%B9%20%EB%AC%B8%EC%9D%98%5D%20%EB%AC%B8%EC%9D%98%20%EC%A0%91%EC%88%98" style="display:inline-flex; align-items:center; justify-content:center; margin-top:20px; padding:12px 18px; background:var(--primary); color:#fff; border-radius:8px; font-weight:700; text-decoration:none;">
+          이메일로 문의하기
+        </a>
 
-          <ul style="list-style: none; padding: 0; line-height: 2; font-size: 0.95rem; color: var(--text-body);">
-            <li><strong>운영:</strong> 리플리더스</li>
-            <li><strong>주소:</strong> 경기도 파주시 책향기로 183 1504동 5층</li>
-            <li><strong>이메일:</strong> <a href="mailto:replyleaders@naver.com" style="color: var(--primary);">replyleaders@naver.com</a></li>
-          </ul>
-        </section>
-      </div>
-      
-    </div>
+        <hr style="margin:24px 0; border:none; border-top:1px solid var(--border-default);">
+
+        <h3 style="font-size:1.1rem; margin-bottom:10px;">운영 정보</h3>
+        <div class="contact-list">
+          <div><strong>운영명:</strong> 리플리더스</div>
+          <div><strong>사이트:</strong> hospital-ranking.kr</div>
+          <div><strong>콘텐츠 성격:</strong> 공공 데이터 기반 참고 정보</div>
+          <div><strong>관련 페이지:</strong> <a href="about.html" style="color:var(--primary);">사이트 소개</a> / <a href="privacy.html" style="color:var(--primary);">개인정보처리방침</a></div>
+        </div>
+      </aside>
+    </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="footer" style="margin-top: 50px;">
-    <div class="container footer-inner">
-      <div class="footer-col">
-        <h3>병원랭킹</h3>
-        <p>공공데이터를 활용한 전국 병의원 평점 및 후기 서비스. 가장 정확한 의료 정보를 제공합니다.</p>
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="logo">
+            <span class="logo-icon">H</span>
+            <span class="gradient-text">병원랭킹</span>
+          </div>
+          <p>공공 데이터와 편집 기준을 바탕으로 병원 탐색에 필요한 참고 정보를 제공합니다.</p>
+        </div>
+        <div class="footer-links-group">
+          <h4>바로가기</h4>
+          <a href="index.html">홈</a>
+          <a href="guide.html">건강 가이드</a>
+          <a href="about.html">사이트 소개</a>
+        </div>
+        <div class="footer-links-group">
+          <h4>정책</h4>
+          <a href="terms.html">이용약관</a>
+          <a href="privacy.html">개인정보처리방침</a>
+        </div>
+        <div class="footer-links-group">
+          <h4>문의</h4>
+          <a href="mailto:replyleaders@naver.com">replyleaders@naver.com</a>
+          <a href="contact.html">정정 요청 안내</a>
+        </div>
       </div>
-      <div class="footer-col">
-        <h4>바로가기</h4>
-        <ul>
-          <li><a href="index.html">홈으로</a></li>
-          <li><a href="guide.html">질환 백과사전</a></li>
-        </ul>
+      <div class="footer-bottom">
+        <p>&copy; 2026 병원랭킹. All rights reserved.</p>
+        <p>병원 정보 정정 요청은 병원명, 수정 항목, 확인 가능한 근거를 함께 보내주시면 검토 후 반영합니다.</p>
+        <p>본 사이트는 의료 상담 기관이 아니며, 진단과 치료 결정은 반드시 해당 병원 또는 의료진과 직접 상담해 주세요.</p>
       </div>
-      <div class="footer-col">
-        <h4>약관 및 정책</h4>
-        <ul>
-          <li><a href="terms.html">이용약관</a></li>
-          <li><a href="privacy.html">개인정보처리방침</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>고객 지원</h4>
-        <ul>
-          <li><a href="contact.html">고객센터 및 제휴 문의</a></li>
-          <li><a href="about.html">회사 소개</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2026 병원랭킹. All rights reserved.</p>
     </div>
   </footer>
 </body>

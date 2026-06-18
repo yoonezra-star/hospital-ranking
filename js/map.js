@@ -12,19 +12,37 @@ const MapModule = (() => {
   let isSdkLoaded = false;
 
   const DEFAULT_KEY = 'rgd9ajy97r';
-  // 네이버 클라우드 플랫폼에서 발급받은 Client ID (기본값)
-  const DEFAULT_KEY = 'rgd9ajy97r'; 
+  const STORAGE_KEY = 'NAVER_MAP_KEY';
 
   // 기본 위치 (서울시청)
   const DEFAULT_LAT = 37.5665;
   const DEFAULT_LNG = 126.9780;
+
+  function getStoredMapKey() {
+    try {
+      return localStorage.getItem(STORAGE_KEY);
+    } catch (error) {
+      console.warn('[MapModule] localStorage unavailable:', error.message);
+      return '';
+    }
+  }
+
+  function saveMapKey(value) {
+    try {
+      localStorage.setItem(STORAGE_KEY, value);
+      return true;
+    } catch (error) {
+      console.warn('[MapModule] Failed to store map key:', error.message);
+      return false;
+    }
+  }
 
   /**
    * 지도 초기화 진입점
    */
   async function init() {
     // localStorage에 저장된 사용자 키를 최우선으로 사용하고, 없으면 기본 키(DEFAULT_KEY)를 사용합니다.
-    const savedKey = DEFAULT_KEY;
+    const savedKey = getStoredMapKey() || DEFAULT_KEY;
     const container = document.getElementById('map-container');
     if (!container) return;
 
@@ -39,7 +57,7 @@ const MapModule = (() => {
         showMapLoading(false);
         // 오류 유형에 따라 다른 안내 메시지 표시
         if (err.message === 'TIMEOUT' || err.message === 'AUTH_FAIL') {
-          container.innerHTML = '<div style="padding:40px;text-align:center;color:#666;">지도를 불러올 수 없습니다.<br>네이버 지도 서비스가 일시적으로 원활하지 않거나, 아직 도메인 등록이 반영되지 않았습니다.</div>';
+          showMapSetupUI(container, '인증에 실패했거나 도메인 미등록 상태입니다. 올바른 Client ID를 입력해주세요.');
         } else {
           container.innerHTML = '<div style="padding:40px;text-align:center;color:#666;">네이버 지도 API 로드에 실패했습니다.</div>';
         }
@@ -126,6 +144,7 @@ const MapModule = (() => {
     };
 
     map = new naver.maps.Map(canvas, mapOptions);
+    watchForAuthFailure(container, canvas);
 
     // 이벤트 리스너 바인딩
     controlDiv.querySelector('.btn-my-loc').addEventListener('click', moveToCurrentLocation);
@@ -141,6 +160,32 @@ const MapModule = (() => {
   /**
    * 현재 기기 GPS 위치로 부드럽게 이동
    */
+  function watchForAuthFailure(container, canvas) {
+    const detectAuthFailure = () => {
+      const backgroundImage = window.getComputedStyle(canvas).backgroundImage || '';
+      if (!backgroundImage.includes('auth_fail')) {
+        return false;
+      }
+
+      showMapSetupUI(
+        container,
+        'Map auth failed. Check the hospital-ranking.kr domain registration in Naver Cloud.'
+      );
+      return true;
+    };
+
+    if (detectAuthFailure()) {
+      return;
+    }
+
+    let attempts = 0;
+    const timer = setInterval(() => {
+      attempts += 1;
+      if (detectAuthFailure() || attempts >= 10) {
+        clearInterval(timer);
+      }
+    }, 700);
+  }
   function moveToCurrentLocation() {
     if (!map) return;
     if (navigator.geolocation) {
@@ -172,6 +217,24 @@ const MapModule = (() => {
         </div>
       `;
     }
+  }
+
+  function showMapSetupUI(container, errorMsg) {
+    const errorHtml = errorMsg
+      ? `<p style="color: #dc2626; font-weight: bold; margin-bottom: 15px; font-size: 0.9rem;">${errorMsg}</p>`
+      : '';
+
+    container.innerHTML = `
+      <div style="padding: 20px; text-align: center; border: 1px solid var(--border-default); border-radius: 8px; background: var(--bg-card); display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+        <span style="font-size: 2rem; display: block; margin-bottom: 10px;">📍</span>
+        <h3 style="margin-bottom: 10px;">지도 미리보기 안내</h3>
+        ${errorHtml}
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 15px;">
+          현재는 병원 목록과 검색 기능을 먼저 이용할 수 있으며, 지도는 외부 네이버 지도에서 확인할 수 있습니다.
+        </p>
+        <a href="https://map.naver.com/v5/" target="_blank" rel="noopener" style="margin-top:12px; padding:10px 14px; background:var(--primary); color:white; border-radius:6px; text-decoration:none; font-weight:bold;">네이버 지도 열기</a>
+      </div>
+    `;
   }
 
   /**
@@ -270,10 +333,15 @@ const MapModule = (() => {
   };
 })();
 
-// DOM 로딩 완료 시 지도 연동 실행 (단, 상세 페이지 제외)
-document.addEventListener('DOMContentLoaded', () => {
+function bootstrapMapModule() {
   if (window.location.pathname.includes('detail.html') || window.location.search.includes('id=')) {
-    return; // 상세 페이지에서는 detail.js가 자체적으로 지도를 로드하므로 중복 로드 방지
+    return;
   }
   MapModule.init();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootstrapMapModule);
+} else {
+  bootstrapMapModule();
+}

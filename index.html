@@ -32,17 +32,11 @@
 <body class="light-mode">
   <!-- 사이드 플로팅 광고 공간 (PC) -->
   <aside class="ad-slot ad-floating-left">
-    <ins class="adsbygoogle"
-         style="display:inline-block;width:160px;height:600px"
-         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-         data-ad-slot="XXXXXXXXXX"></ins>
+    <div class="ad-placeholder">Ad slot</div>
   </aside>
   
   <aside class="ad-slot ad-floating-right">
-    <ins class="adsbygoogle"
-         style="display:inline-block;width:160px;height:600px"
-         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-         data-ad-slot="XXXXXXXXXX"></ins>
+    <div class="ad-placeholder">Ad slot</div>
   </aside>
 
   <!-- ===== Header ===== -->
@@ -188,8 +182,9 @@
         </div>
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;" class="fade-up">
           <p class="ranking-count" id="ranking-count"></p>
-          <span class="data-badge mock" id="data-source-badge">⏳ 로딩 중..</span>
+          <span class="data-badge mock" id="data-source-badge">Checking data status</span>
         </div>
+        <p class="section-desc fade-up" style="margin:-4px 0 16px;">When the live public API is delayed, curated fallback data is shown.</p>
         <div class="ranking-loader" id="ranking-loader">
           <div class="spinner"></div>
           <span>병원 데이터를 불러오는 중..</span>
@@ -275,14 +270,16 @@
       <div class="footer-bottom">
         <p>&copy; 2026 병원랭킹. 공공데이터 기반 병의원 정보 제공 서비스</p>
         <p>본 사이트의 정보는 참고용이며 정확한 진료 정보는 해당 병원에 직접 확인하시기 바랍니다.</p>
+        <p>운영 문의 및 정보 정정 요청: <a href="mailto:replyleaders@naver.com" style="color:var(--primary); font-weight:600;">replyleaders@naver.com</a></p>
+        <p>건강 칼럼과 병원 정보는 참고용이며, 실제 진료 판단은 의료진 상담을 우선해 주세요.</p>
       </div>
     </div>
   </footer>
 
-  <script src="js/data.js?v=7"></script>
-  <script src="js/search.js?v=7"></script>
-  <script src="js/api.js?v=7"></script>
-  <script src="js/map.js?v=7"></script>
-  <script src="js/app.js?v=7"></script>
+  <script src="js/data.js?v=13"></script>
+  <script src="js/search.js?v=14"></script>
+  <script src="js/api.js?v=13"></script>
+  <script src="js/map.js?v=14"></script>
+  <script src="js/app.js?v=15"></script>
 </body>
 </html>

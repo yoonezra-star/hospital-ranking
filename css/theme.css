@@ -1,0 +1,11 @@
+/* Shared page-level overrides for guide pages.
+   This file intentionally exists to prevent 404s on content pages. */
+
+.article-content h2,
+.article-content h3 {
+  scroll-margin-top: 96px;
+}
+
+.article-content table {
+  background: var(--bg-card);
+}

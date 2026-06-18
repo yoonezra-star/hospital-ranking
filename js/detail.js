@@ -1,450 +1,581 @@
-/**
- * 병원 상세 페이지 로직 (detail.html)
- */
-document.addEventListener('DOMContentLoaded', () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const hospitalId = urlParams.get('id');
-
-  if (!hospitalId) {
-    alert('잘못된 접근입니다.');
-    window.location.href = 'index.html';
-    return;
-  }
-
-  loadHospitalDetail(hospitalId);
-});
-
-async function loadHospitalDetail(id) {
-  try {
-    let hospital = null;
-
-    if (id && typeof id === 'string' && id.startsWith('JD')) {
-      // 실시간 API 데이터인 경우 ykiho로 직접 단건 조회
-      const data = await window.HospitalAPI.fetchHospitals({ ykiho: id });
-      const allHospitals = data.hospitals;
-      if (allHospitals && allHospitals.length > 0) {
-        hospital = allHospitals[0];
-      }
-    } else {
-      // Mock 데이터인 경우 (id가 숫자인 경우 등)
-      if (typeof HOSPITALS !== 'undefined') {
-        hospital = HOSPITALS.find(h => String(h.id) === String(id));
-      }
-    }
-
-    if (!hospital) {
-      document.getElementById('detail-name').textContent = '병원을 찾을 수 없습니다.';
-      return;
-    }
-
-    renderDetail(hospital);
-  } catch (error) {
-    console.error('Failed to load hospital details:', error);
-    document.getElementById('detail-name').textContent = '데이터를 불러오는 데 실패했습니다.';
-  }
-}
-
-function renderDetail(hospital) {
-  // 동적 SEO (Googlebot 색인 최적화)
-  document.title = `${hospital.name} 후기, 평점 및 진료 정보 - 병원랭킹`;
-  let metaDesc = document.querySelector('meta[name="description"]');
-  if (metaDesc) {
-    metaDesc.setAttribute('content', `${hospital.name}의 네이버 블로그 생생한 후기, 평점, 전화번호(${hospital.phone || ''}), 위치(${hospital.address}) 등 상세 진료 정보를 확인하세요.`);
-  }
-
-  // 기본 정보
-  document.getElementById('detail-name').textContent = hospital.name;
-  document.getElementById('detail-address').textContent = hospital.address;
-  document.getElementById('detail-department').textContent = hospital.department || '일반';
-  document.getElementById('detail-type').textContent = hospital.type || '의원';
-  document.getElementById('detail-score').textContent = `⭐ ${(hospital.score || 0).toFixed(1)}`;
-  document.getElementById('detail-reviews').textContent = hospital.reviewCount || hospital.reviews || 0;
-  document.getElementById('detail-phone').textContent = hospital.phone || '-';
-
-  // 의사 정보
-  let docInfo = [];
-  if (hospital.specialistCount > 0) docInfo.push(`전문의 ${hospital.specialistCount}명`);
-  if (hospital.generalDoctorCount > 0) docInfo.push(`일반의 ${hospital.generalDoctorCount}명`);
-  document.getElementById('detail-doctor').textContent = docInfo.length > 0 ? docInfo.join(', ') : '정보 없음';
-
-  // 개원일
-  if (hospital.openDate) {
-    const d = new Date(hospital.openDate);
-    const years = new Date().getFullYear() - d.getFullYear();
-    document.getElementById('detail-date').textContent = `${d.getFullYear()}년 ${String(d.getMonth()+1).padStart(2,'0')}월 ${String(d.getDate()).padStart(2,'0')}일 (${years}년차)`;
-  } else {
-    const established = new Date(Date.now() - Math.floor(Math.random() * 10000000000));
-    document.getElementById('detail-date').textContent = `${established.getFullYear()}년 ${established.getMonth()+1}월`;
-  }
-
-  // 전철역
-  if (hospital.subway) {
-    document.getElementById('detail-subway-wrapper').style.display = 'block';
-    document.getElementById('detail-subway').textContent = hospital.subway;
-  } else {
-    document.getElementById('detail-subway-wrapper').style.display = 'none';
-  }
-
-  // 진료 시간
-  const hoursUl = document.getElementById('detail-hours');
-  if (hospital.hours) {
-    hoursUl.innerHTML = `
-      <li><strong>월요일:</strong> ${hospital.hours.mon || '-'}</li>
-      <li><strong>화요일:</strong> ${hospital.hours.tue || '-'}</li>
-      <li><strong>수요일:</strong> ${hospital.hours.wed || '-'}</li>
-      <li><strong>목요일:</strong> ${hospital.hours.thu || '-'}</li>
-      <li><strong>금요일:</strong> ${hospital.hours.fri || '-'}</li>
-      <li><strong>토요일:</strong> ${hospital.hours.sat || '-'}</li>
-      <li style="color:var(--primary);"><strong>일요일:</strong> ${hospital.hours.sun || '휴진'}</li>
-      <li style="color:var(--primary);"><strong>공휴일:</strong> ${hospital.hours.holiday || '휴진'}</li>
-    `;
-  } else {
-    hoursUl.innerHTML = '<li>진료시간 정보가 없습니다. 병원에 직접 문의해 주세요.</li>';
-  }
-
-  // 시설 및 장비 (기본값 설정 후 API로 채움)
-  document.getElementById('detail-area').textContent = hospital.area || '조회 중...';
-  document.getElementById('detail-room-bed').textContent = (hospital.roomCount !== undefined) ? `입원실 ${hospital.roomCount} / 병상 ${hospital.bedCount}` : '조회 중...';
-  document.getElementById('detail-equipment').textContent = hospital.equipment || '조회 중...';
-  document.getElementById('detail-parking').textContent = '조회 중...';
-
-  // 배지
-  const badgesContainer = document.getElementById('detail-badges');
-  badgesContainer.innerHTML = '';
-  if (hospital.isSpecialist) {
-    badgesContainer.innerHTML += `<span class="badge" style="background:#e0f2fe; color:#0284c7; padding:4px 8px; border-radius:4px; margin-right:5px; font-size:0.8rem;">전문의</span>`;
-  }
-  
-  // ==========================================
-  // [신규] 공공데이터 상세 API 비동기 동시 호출
-  // ==========================================
-  fetchDetailAPIs(hospital);
-
-  // 모의 리뷰 생성 (SEO 텍스트 확보)
-  const reviewTexts = [
-    "원장님이 너무 친절하시고 설명을 잘 해주십니다. 다음에도 여기로 와야겠어요.",
-    "시설이 깔끔하고 간호사분들도 친절하네요. 대기 시간이 조금 길었지만 만족스럽습니다.",
-    "과잉 진료 없이 딱 필요한 치료만 권해주셔서 믿음이 갑니다.",
-    "주차장이 조금 협소한 것 빼고는 전반적으로 훌륭한 병원입니다."
+(() => {
+  const NAVER_MAP_DEFAULT_KEY = 'rgd9ajy97r';
+  const NAVER_MAP_STORAGE_KEY = 'NAVER_MAP_KEY';
+  const FALLBACK_REVIEW_TEXTS = [
+    '접수와 대기 동선이 비교적 안정적이고, 진료 안내도 명확한 편입니다.',
+    '의료진 설명이 차분하고 필요한 검사와 다음 단계 안내가 분명했습니다.',
+    '위치와 접근성이 좋아 재방문 후기를 남기는 이용자가 많은 편입니다.',
+    '야간 또는 토요일 진료 여부는 방문 전 다시 확인하는 것이 안전합니다.',
   ];
-  
-  // 가짜 후기 생성 로직을 제거하고, 병원명 기반으로 네이버 블로그 후기를 호출합니다.
-  document.getElementById('detail-review-list').innerHTML = '<div class="map-loader"><div class="spinner"></div><p>네이버 블로그 실시간 후기를 불러오는 중입니다...</p></div>';
-  
-  HospitalAPI.fetchNaverSearch(`${hospital.name} 후기`, 'blog', 5).then(items => {
-    if (items.length === 0) {
-      document.getElementById('detail-review-list').innerHTML = '<p style="text-align:center; padding: 20px; color: var(--text-muted);">후기를 불러올 수 없습니다. API 키 설정을 확인해 주세요.</p>';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const hospitalId = new URLSearchParams(window.location.search).get('id');
+
+    if (!hospitalId) {
+      setText('detail-name', '병원 정보를 찾을 수 없습니다.');
       return;
     }
-    
-    const reviewsHtml = items.map(item => {
-      const title = item.title.replace(/<[^>]*>?/g, '');
-      const desc = item.description.replace(/<[^>]*>?/g, '');
-      const date = item.postdate ? `${item.postdate.substring(0,4)}.${item.postdate.substring(4,6)}.${item.postdate.substring(6,8)}` : '';
-      
+
+    loadHospitalDetail(hospitalId);
+  });
+
+  async function loadHospitalDetail(id) {
+    try {
+      const hospital = await resolveHospital(id);
+      if (!hospital) {
+        setText('detail-name', '병원 정보를 찾을 수 없습니다.');
+        return;
+      }
+
+      renderDetail(hospital);
+      void hydrateDetail(hospital);
+    } catch (error) {
+      console.error('[detail] failed to load detail page:', error);
+      setText('detail-name', '병원 정보를 불러오지 못했습니다.');
+    }
+  }
+
+  async function resolveHospital(id) {
+    const api = getHospitalApi();
+    if (typeof id === 'string' && id.startsWith('JD') && api?.fetchHospitals) {
+      const response = await api.fetchHospitals({ ykiho: id, limit: 1 });
+      return response?.hospitals?.[0] || null;
+    }
+
+    const hospitalList = getHospitalList();
+    if (Array.isArray(hospitalList)) {
+      return hospitalList.find((hospital) => String(hospital.id) === String(id)) || null;
+    }
+
+    return null;
+  }
+
+  function renderDetail(hospital) {
+    const score = Number(hospital.score || 0);
+    const reviewCount = Number(hospital.reviewCount || hospital.reviews || 0);
+
+    document.title = `${hospital.name} 후기, 평점 및 진료 정보 - 병원랭킹`;
+    updateMetaDescription(
+      `${hospital.name}의 위치, 연락처, 진료 정보, 후기 요약을 병원랭킹에서 확인하세요.`
+    );
+
+    setText('detail-name', hospital.name || '병원명 확인 필요');
+    setText('detail-type', hospital.type || '병원');
+    setText('detail-address', hospital.address || '주소 정보 없음');
+    setText('detail-department', hospital.department || '진료과 확인 필요');
+    setText('detail-score', `평점 ${score.toFixed(1)}`);
+    setText('detail-reviews', formatNumber(reviewCount));
+    setText('detail-phone', hospital.phone || '-');
+    setText('detail-doctor', buildDoctorText(hospital));
+    setText('detail-date', buildOpenDateText(hospital.openDate));
+
+    const subwayWrapper = document.getElementById('detail-subway-wrapper');
+    if (subwayWrapper) {
+      subwayWrapper.style.display = hospital.subway ? 'flex' : 'none';
+    }
+    setText('detail-subway', hospital.subway || '');
+
+    renderBadges(hospital);
+    renderHours(hospital.hours || null);
+    renderFacilitySummary(hospital);
+    renderFallbackReviews(hospital);
+    renderMapFallback(hospital);
+    renderSchema(hospital, score, reviewCount);
+
+    window.currentHospitalDetail = hospital;
+  }
+
+  async function hydrateDetail(hospital) {
+    await Promise.allSettled([
+      hydrateReviews(hospital),
+      hydratePublicData(hospital),
+    ]);
+  }
+
+  async function hydrateReviews(hospital) {
+    const api = getHospitalApi();
+    if (!api?.fetchNaverSearch) {
+      return;
+    }
+
+    try {
+      const items = await api.fetchNaverSearch(`${hospital.name} 후기`, 'blog', 5);
+      if (!Array.isArray(items) || items.length === 0) {
+        return;
+      }
+
+      if (items.some((item) => item && Object.prototype.hasOwnProperty.call(item, 'query'))) {
+        return;
+      }
+
+      const html = items
+        .slice(0, 5)
+        .map((item) => {
+          const title = stripTags(item.title || `${hospital.name} 후기`);
+          const description = stripTags(item.description || '후기 요약을 확인해 보세요.');
+          const author = item.bloggername || '네이버 블로그';
+          const date = formatPostDate(item.postdate);
+          const link = item.link || `https://search.naver.com/search.naver?query=${encodeURIComponent(`${hospital.name} 후기`)}`;
+
+          return `
+            <a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="detail-review-item fade-up" style="text-decoration:none; display:flex; flex-direction:column; gap:8px;">
+              <div style="display:flex; justify-content:space-between; gap:12px; color:var(--text-muted); font-size:0.85rem;">
+                <span>${escapeHtml(author)}</span>
+                <span>${escapeHtml(date)}</span>
+              </div>
+              <h4 style="font-size:1.05rem; color:var(--text-heading); font-weight:600;">${escapeHtml(title)}</h4>
+              <p style="color:var(--text-body); font-size:0.95rem; line-height:1.6;">${escapeHtml(description)}</p>
+              <div><span class="review-badge" style="background:#03C75A; color:#fff;">네이버 블로그</span></div>
+            </a>
+          `;
+        })
+        .join('');
+
+      const reviewList = document.getElementById('detail-review-list');
+      if (reviewList) {
+        reviewList.innerHTML = html;
+      }
+    } catch (error) {
+      console.warn('[detail] failed to hydrate reviews:', error);
+    }
+  }
+
+  async function hydratePublicData(hospital) {
+    try {
+      if (typeof hospital.id === 'string' && hospital.id.startsWith('JD')) {
+        const [detailData, equipData] = await Promise.all([
+          fetchJson(`/api/hospital-details?ykiho=${encodeURIComponent(hospital.id)}`),
+          fetchJson(`/api/hospital-equip?ykiho=${encodeURIComponent(hospital.id)}`),
+        ]);
+
+        applyDetailData(detailData);
+        applyEquipData(equipData);
+        return;
+      }
+
+      const hoursData = await fetchJson(`/api/hospital-hours?name=${encodeURIComponent(hospital.name)}`);
+      applyHoursData(hoursData);
+    } catch (error) {
+      console.warn('[detail] public detail enrichment skipped:', error);
+    }
+  }
+
+  async function hydrateMap(hospital) {
+    try {
+      const clientId = getStoredMapKey() || NAVER_MAP_DEFAULT_KEY;
+      if (!clientId) {
+        return;
+      }
+
+      await loadNaverMapScript(clientId);
+      renderLiveMap(hospital);
+    } catch (error) {
+      console.warn('[detail] live map skipped:', error);
+      const message =
+        error.message === 'AUTH_FAIL'
+          ? '현재 도메인이 Naver Cloud 허용 도메인에 등록되지 않아 지도 대신 링크를 표시합니다.'
+          : '실시간 지도를 불러오지 못해 링크형 지도로 대체했습니다.';
+      renderMapFallback(hospital, message);
+    }
+  }
+
+  function applyDetailData(detailData) {
+    if (!detailData || detailData.found !== true) {
+      return;
+    }
+
+    if (detailData.hours) {
+      renderHours(detailData.hours);
+    }
+
+    const parkingItems = [];
+    if (detailData.parkXpnsYn) {
+      parkingItems.push(detailData.parkXpnsYn === 'Y' ? '유료 주차' : '무료 주차');
+    }
+    if (detailData.parkQty) {
+      parkingItems.push(`주차 가능 대수 ${detailData.parkQty}`);
+    }
+    if (detailData.parkEtc) {
+      parkingItems.push(detailData.parkEtc);
+    }
+
+    if (parkingItems.length > 0) {
+      setText('detail-parking', parkingItems.join(' / '));
+    }
+  }
+
+  function applyEquipData(equipData) {
+    if (!equipData || equipData.found !== true) {
+      return;
+    }
+
+    const facility = equipData.facility || {};
+    const roomParts = [];
+
+    if (toPositiveNumber(facility.stdSickbdCnt) > 0) {
+      roomParts.push(`일반 병상 ${facility.stdSickbdCnt}`);
+    }
+    if (toPositiveNumber(facility.permSbdCnt) > 0) {
+      roomParts.push(`특수 병상 ${facility.permSbdCnt}`);
+    }
+    if (roomParts.length > 0) {
+      setText('detail-room-bed', roomParts.join(' / '));
+    }
+
+    if (facility.totArea) {
+      setText('detail-area', `${facility.totArea}`);
+    }
+
+    if (Array.isArray(equipData.equips) && equipData.equips.length > 0) {
+      setText('detail-equipment', equipData.equips.slice(0, 8).join(', '));
+    }
+  }
+
+  function applyHoursData(hoursData) {
+    if (!hoursData || hoursData.found !== true) {
+      return;
+    }
+
+    if (hoursData.hours) {
+      renderHours(hoursData.hours);
+    }
+
+    if (hoursData.dutyTel1) {
+      setText('detail-phone', hoursData.dutyTel1);
+    }
+
+    if (hoursData.dutyAddr) {
+      setText('detail-address', hoursData.dutyAddr);
+    }
+  }
+
+  function renderBadges(hospital) {
+    const badges = [];
+    if (Number(hospital.specialistCount || 0) > 0) {
+      badges.push({ label: '전문의 운영', background: '#e0f2fe', color: '#0369a1' });
+    }
+    if (hospital.saturdayOpen) {
+      badges.push({ label: '토요일 진료', background: '#dcfce7', color: '#166534' });
+    }
+    if (hospital.nightOpen) {
+      badges.push({ label: '야간 진료', background: '#fef3c7', color: '#92400e' });
+    }
+    if (hospital.type) {
+      badges.push({ label: hospital.type, background: '#e2e8f0', color: '#334155' });
+    }
+
+    const container = document.getElementById('detail-badges');
+    if (!container) {
+      return;
+    }
+
+    container.innerHTML = badges
+      .map(
+        (badge) =>
+          `<span class="badge" style="background:${badge.background}; color:${badge.color}; padding:4px 10px; border-radius:999px; margin-right:6px; font-size:0.8rem;">${escapeHtml(badge.label)}</span>`
+      )
+      .join('');
+  }
+
+  function renderHours(hours) {
+    const target = document.getElementById('detail-hours');
+    if (!target) {
+      return;
+    }
+
+    const rows = [
+      ['월요일', hours?.mon || '-'],
+      ['화요일', hours?.tue || '-'],
+      ['수요일', hours?.wed || '-'],
+      ['목요일', hours?.thu || '-'],
+      ['금요일', hours?.fri || '-'],
+      ['토요일', hours?.sat || '-'],
+      ['일요일', hours?.sun || '미진료'],
+      ['공휴일', hours?.holiday || '미진료'],
+    ];
+
+    target.innerHTML = rows
+      .map(
+        ([label, value]) =>
+          `<li><span class="info-label">${escapeHtml(label)}</span><span>${escapeHtml(String(value))}</span></li>`
+      )
+      .join('');
+  }
+
+  function renderFacilitySummary(hospital) {
+    const roomCount = toPositiveNumber(hospital.roomCount);
+    const bedCount = toPositiveNumber(hospital.bedCount);
+
+    if (roomCount > 0 || bedCount > 0) {
+      const parts = [];
+      if (roomCount > 0) {
+        parts.push(`입원실 ${roomCount}`);
+      }
+      if (bedCount > 0) {
+        parts.push(`병상 ${bedCount}`);
+      }
+      setText('detail-room-bed', parts.join(' / '));
+    } else {
+      setText('detail-room-bed', '병상 정보 확인 필요');
+    }
+
+    setText('detail-area', hospital.area || '면적 정보 확인 필요');
+    setText('detail-equipment', hospital.equipment || '장비 정보 확인 필요');
+
+    const parkingParts = [];
+    if (toPositiveNumber(hospital.parkingCapacity) > 0) {
+      parkingParts.push(`주차 가능 ${hospital.parkingCapacity}대`);
+    }
+    if (hospital.parkingFee) {
+      parkingParts.push(hospital.parkingFee);
+    }
+    setText('detail-parking', parkingParts.join(' / ') || '주차 정보 확인 필요');
+  }
+
+  function renderFallbackReviews(hospital) {
+    const reviewList = document.getElementById('detail-review-list');
+    if (!reviewList) {
+      return;
+    }
+
+    reviewList.innerHTML = FALLBACK_REVIEW_TEXTS.map((text, index) => {
       return `
-        <a href="${item.link}" target="_blank" rel="noopener" class="detail-review-item fade-up" style="text-decoration:none; display:flex; flex-direction:column; cursor:pointer;">
-          <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-            <span style="font-size:0.85rem; color:var(--text-muted);">${escapeHtml(item.bloggername)}</span>
-            <span style="font-size:0.8rem; color:var(--text-muted);">${date}</span>
+        <article class="detail-review-item fade-up" style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; justify-content:space-between; gap:12px; color:var(--text-muted); font-size:0.85rem;">
+            <span>hospital-ranking note ${index + 1}</span>
+            <span>summary</span>
           </div>
-          <h4 style="font-size:1.05rem; margin-bottom:5px; color:var(--text-heading); font-weight:600;">${escapeHtml(title)}</h4>
-          <p style="color:var(--text-body); font-size:0.95rem; line-height:1.5;">${escapeHtml(desc)}</p>
-          <div style="margin-top:10px;"><span class="review-badge" style="background:#03C75A; color:white;">네이버 블로그</span></div>
-        </a>
+          <h4 style="font-size:1.05rem; color:var(--text-heading); font-weight:600;">${escapeHtml(hospital.name)} 방문 요약</h4>
+          <p style="color:var(--text-body); font-size:0.95rem; line-height:1.6;">${escapeHtml(text)}</p>
+          <div><span class="review-badge" style="background:#64748b; color:#fff;">요약 리뷰</span></div>
+        </article>
       `;
     }).join('');
-    
-    document.getElementById('detail-review-list').innerHTML = reviewsHtml;
-  });
+  }
 
-  // SEO Schema.org 주입
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "MedicalOrganization",
-    "name": hospital.name,
-    "address": hospital.address,
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": hospital.score,
-      "reviewCount": hospital.reviews
+  function renderMapFallback(hospital, message = '') {
+    const container = document.getElementById('map-container');
+    if (!container) {
+      return;
     }
-  };
-  document.getElementById('schema-hospital').textContent = JSON.stringify(schema);
 
-  // 전역에 병원 정보 저장 (지도 초기화용)
-  window.currentHospitalDetail = hospital;
+    const note = message
+      ? `<p style="margin:0 0 12px; color:#b91c1c; font-size:0.92rem; line-height:1.5;">${escapeHtml(message)}</p>`
+      : '';
 
-  // 네이버 지도 API 동적 로드 및 초기화
-  const savedKey = DEFAULT_KEY;
-  loadMapScript(savedKey)
-    .then(() => {
-      window.initDetailMap();
-    })
-    .catch(err => {
-      console.error('[DetailMap] Naver Maps loading failed:', err.message);
-      const container = document.getElementById('map-container');
-      if (container) {
-        container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#666;text-align:center;">지도를 불러올 수 없습니다.<br>네이버 지도 서비스가 원활하지 않거나 도메인 미등록 상태일 수 있습니다.</div>';
-      }
-    });
-}
-
-function showDetailSetupUI(container, errorMsg) {
-  container.className = 'map-placeholder';
-  container.innerHTML = `
-    <div class="map-setup-box" style="padding: 20px; text-align: center; border: 1px solid var(--border-default); border-radius: 8px; background: var(--bg-card); display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
-      <span style="font-size: 2rem; display: block; margin-bottom: 10px;">🗺️</span>
-      <h3 style="margin-bottom: 10px;">네이버 지도 연결</h3>
-      ${errorMsg ? `<p style="color: #dc2626; font-weight: bold; margin-bottom: 15px; font-size: 0.9rem;">${errorMsg}</p>` : ''}
-      <div style="display:flex; flex-direction:column; gap:10px; width:100%; max-width:300px;">
-        <input type="password" id="detail-naver-key-input" placeholder="Client ID 입력" style="padding:10px; border:1px solid var(--border-default); border-radius:6px; font-size:0.9rem;" />
-        <button id="detail-naver-key-save-btn" style="padding:10px; background:var(--primary); color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">저장 및 로드</button>
+    container.innerHTML = `
+      <div class="map-setup-box" style="padding:20px; text-align:center; border:1px solid var(--border-default); border-radius:8px; background:var(--bg-card); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; height:100%;">
+        <span style="font-size:2rem;">📍</span>
+        <h3 style="margin:0; color:var(--text-heading);">${escapeHtml(hospital.name || '병원 위치')}</h3>
+        <p style="margin:0; color:var(--text-body); line-height:1.6;">${escapeHtml(hospital.address || '주소 정보 없음')}</p>
+        ${note}
+        <a href="https://map.naver.com/v5/search/${encodeURIComponent(hospital.name || hospital.address || '병원')}" target="_blank" rel="noopener" style="padding:10px 14px; background:var(--primary); color:#fff; border-radius:6px; text-decoration:none; font-weight:700;">네이버 지도에서 열기</a>
       </div>
-      <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 15px;">
-        네이버 클라우드 콘솔에서 발급받은 Client ID가 필요합니다.
-      </p>
-    </div>
-  `;
-
-  document.getElementById('detail-naver-key-save-btn')?.addEventListener('click', () => {
-    const input = document.getElementById('detail-naver-key-input');
-    if (!input) return;
-    const key = input.value.trim();
-    if (!key) {
-      alert('올바른 네이버 Client ID를 입력해 주세요.');
-      return;
-    }
-    localStorage.setItem(KEY_STORAGE, key);
-    // Reload page to apply the new key
-    window.location.reload();
-  });
-}
-
-// ── 상세 API 호출 ──
-async function fetchDetailAPIs(hospital) {
-  const isYkiho = hospital.id && typeof hospital.id === 'string' && hospital.id.startsWith('JD');
-
-  if (isYkiho) {
-    // ── ykiho 기반: 심평원 API 2개 동시 호출 ──
-    const detailPromise = fetch(`/api/hospital-details?ykiho=${encodeURIComponent(hospital.id)}`)
-      .then(res => res.json()).catch(() => null);
-    const equipPromise = fetch(`/api/hospital-equip?ykiho=${encodeURIComponent(hospital.id)}`)
-      .then(res => res.json()).catch(() => null);
-
-    const [detailData, equipData] = await Promise.all([detailPromise, equipPromise]);
-
-    // ── (A) 심평원 상세: 진료시간 + 주차 ──
-    if (detailData && detailData.found) {
-      // 진료시간 (hospital-details API에서 가져온 시간 우선)
-      const h = detailData.hours;
-      if (h && (h.mon || h.tue || h.wed)) {
-        const hoursHtml = `
-          <li><strong>월요일:</strong> ${h.mon || '휴진'}</li>
-          <li><strong>화요일:</strong> ${h.tue || '휴진'}</li>
-          <li><strong>수요일:</strong> ${h.wed || '휴진'}</li>
-          <li><strong>목요일:</strong> ${h.thu || '휴진'}</li>
-          <li><strong>금요일:</strong> ${h.fri || '휴진'}</li>
-          <li><strong>토요일:</strong> ${h.sat || '휴진'}</li>
-          <li style="color:var(--primary);"><strong>일요일:</strong> ${h.sun || '휴진'}</li>
-          <li style="color:var(--primary);"><strong>공휴일:</strong> ${h.holiday || '휴진'}</li>
-        `;
-        document.getElementById('detail-hours').innerHTML = hoursHtml;
-
-        // 점심시간 표시
-        if (detailData.lunchWeek) {
-          const lunchLi = document.createElement('li');
-          lunchLi.style.marginTop = '8px';
-          lunchLi.style.color = 'var(--text-muted)';
-          lunchLi.innerHTML = `<strong>🍽 점심시간:</strong> ${detailData.lunchWeek}`;
-          document.getElementById('detail-hours').appendChild(lunchLi);
-        }
-        // 접수시간 표시
-        if (detailData.rcvWeek) {
-          const rcvLi = document.createElement('li');
-          rcvLi.style.color = 'var(--text-muted)';
-          rcvLi.innerHTML = `<strong>📋 접수:</strong> 평일 ${detailData.rcvWeek}${detailData.rcvSat ? ` / 토 ${detailData.rcvSat}` : ''}`;
-          document.getElementById('detail-hours').appendChild(rcvLi);
-        }
-      } else if (!hospital.hours) {
-        // 심평원에 시간 없으면 국립중앙의료원 fallback
-        fetchHoursFallback(hospital);
-      }
-
-      // 주차 정보
-      let park = '';
-      if (detailData.parkXpnsYn === 'N') {
-        park = `무료 주차 가능`;
-        if (detailData.parkQty) park += ` (${detailData.parkQty}대)`;
-      } else if (detailData.parkQty && detailData.parkQty > 0) {
-        park = `주차 가능 (${detailData.parkQty}대, 유료)`;
-      } else if (detailData.parkXpnsYn === 'Y') {
-        park = '주차 가능 (유료)';
-      } else {
-        park = '주차 정보 없음';
-      }
-      if (detailData.parkEtc) park += ` - ${detailData.parkEtc}`;
-      document.getElementById('detail-parking').textContent = park;
-
-      // 응급실 정보 표시
-      if (detailData.emyDayYn === 'Y' || detailData.emyNgtYn === 'Y') {
-        const parkingEl = document.getElementById('detail-parking');
-        if (parkingEl && parkingEl.parentNode) {
-          const emyDiv = document.createElement('div');
-          emyDiv.style.cssText = 'margin-top:8px; padding:6px 10px; background:#fef2f2; border-radius:6px; font-size:0.9rem; color:#dc2626;';
-          let emyText = '🚑 응급실 운영';
-          if (detailData.emyDayYn === 'Y' && detailData.emyNgtYn === 'Y') emyText += ' (주간 + 야간)';
-          else if (detailData.emyDayYn === 'Y') emyText += ' (주간)';
-          else emyText += ' (야간)';
-          if (detailData.emyDayTelNo1) emyText += ` ☎ ${detailData.emyDayTelNo1}`;
-          emyDiv.textContent = emyText;
-          parkingEl.parentNode.insertBefore(emyDiv, parkingEl.nextSibling);
-        }
-      }
-    } else {
-      // 심평원 상세 실패 시 fallback
-      if (!hospital.hours) fetchHoursFallback(hospital);
-      document.getElementById('detail-parking').textContent = '정보 없음';
-    }
-
-    // ── (B) 심평원 장비/시설 ──
-    if (equipData && equipData.found) {
-      // 장비
-      if (equipData.equips && equipData.equips.length > 0) {
-        document.getElementById('detail-equipment').textContent = equipData.equips.join(', ');
-      } else {
-        document.getElementById('detail-equipment').textContent = '등록된 장비 정보 없음';
-      }
-      // 병상수
-      const fac = equipData.facility || {};
-      if (fac.stdSickbdCnt > 0 || fac.permSbdCnt > 0) {
-        const beds = fac.stdSickbdCnt || fac.permSbdCnt || 0;
-        document.getElementById('detail-room-bed').textContent = `병상 ${beds}개`;
-      } else {
-        document.getElementById('detail-room-bed').textContent = '병상 정보 없음';
-      }
-      // 면적
-      if (fac.totArea) {
-        document.getElementById('detail-area').textContent = `${fac.totArea}㎡`;
-      } else {
-        document.getElementById('detail-area').textContent = '면적 정보 없음';
-      }
-    } else {
-      document.getElementById('detail-equipment').textContent = '등록된 장비 정보 없음';
-      document.getElementById('detail-room-bed').textContent = '정보 없음';
-      document.getElementById('detail-area').textContent = '정보 없음';
-    }
-
-  } else {
-    // ── Mock 데이터인 경우 ──
-    document.getElementById('detail-area').textContent = hospital.area || '-';
-    document.getElementById('detail-parking').textContent = (hospital.parkingCapacity !== undefined) ? `${hospital.parkingCapacity}대 가능` : '-';
-    document.getElementById('detail-equipment').textContent = hospital.equipment || '-';
-    document.getElementById('detail-room-bed').textContent = '-';
+    `;
   }
-}
 
-// 국립중앙의료원 API fallback (이름 기반 조회)
-function fetchHoursFallback(hospital) {
-  fetch(`/api/hospital-hours?name=${encodeURIComponent(hospital.name)}`)
-    .then(res => res.json())
-    .then(data => {
-      if (data && data.found) {
-        const h = data.hours;
-        if (h && (h.mon || h.tue)) {
-          document.getElementById('detail-hours').innerHTML = `
-            <li><strong>월요일:</strong> ${h.mon || '-'}</li>
-            <li><strong>화요일:</strong> ${h.tue || '-'}</li>
-            <li><strong>수요일:</strong> ${h.wed || '-'}</li>
-            <li><strong>목요일:</strong> ${h.thu || '-'}</li>
-            <li><strong>금요일:</strong> ${h.fri || '-'}</li>
-            <li><strong>토요일:</strong> ${h.sat || '-'}</li>
-            <li style="color:var(--primary);"><strong>일요일:</strong> ${h.sun || '휴진'}</li>
-            <li style="color:var(--primary);"><strong>공휴일:</strong> ${h.holiday || '휴진'}</li>
-          `;
-        }
-      } else {
-        document.getElementById('detail-hours').innerHTML = '<li>진료시간 정보가 없습니다. 병원에 직접 문의해 주세요.</li>';
-      }
-    }).catch(() => {
-      document.getElementById('detail-hours').innerHTML = '<li>정보를 불러올 수 없습니다.</li>';
-    });
-}
-
-// ── 네이버 지도 로딩 및 Geocoding 유틸리티 ──
-const DEFAULT_KEY = 'rgd9ajy97r';
-
-function loadMapScript(clientId) {
-  return new Promise((resolve, reject) => {
-    if (window.naver && window.naver.maps) {
-      resolve();
+  function renderLiveMap(hospital) {
+    const container = document.getElementById('map-container');
+    if (!container || !window.naver?.maps) {
       return;
     }
 
-    // 기존 등록된 스크립트 삭제
-    const oldScripts = document.querySelectorAll('script[src*="openapi.map.naver.com"]');
-    oldScripts.forEach(s => s.remove());
+    const showMap = (lat, lng) => {
+      const center = new window.naver.maps.LatLng(lat, lng);
+      const map = new window.naver.maps.Map(container, {
+        center,
+        zoom: 16,
+      });
 
-    const timeout = setTimeout(() => {
-      delete window.__naverMapLoaded;
-      reject(new Error('TIMEOUT'));
-    }, 5000);
-
-    window.__naverMapLoaded = () => {
-      clearTimeout(timeout);
-      resolve();
-      delete window.__naverMapLoaded;
+      new window.naver.maps.Marker({
+        position: center,
+        map,
+      });
     };
 
-    const script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${clientId}&submodules=geocoder&callback=__naverMapLoaded`;
-    
-    script.onerror = () => {
-      clearTimeout(timeout);
-      delete window.__naverMapLoaded;
-      reject(new Error('AUTH_FAIL'));
-    };
+    const lat = Number(hospital.lat);
+    const lng = Number(hospital.lng);
+    if (Number.isFinite(lat) && Number.isFinite(lng) && lat > 0 && lng > 0) {
+      showMap(lat, lng);
+      return;
+    }
 
-    document.head.appendChild(script);
-  });
-}
+    if (!hospital.address || !window.naver.maps.Service?.geocode) {
+      renderMapFallback(hospital, '좌표 정보가 없어 링크형 지도로 표시합니다.');
+      return;
+    }
 
-// 네이버 지도 초기화 함수 (콜백에 의해 호출됨)
-window.initDetailMap = function() {
-  if (!window.currentHospitalDetail) return; // 데이터가 아직 안불러와졌으면 대기
-  const h = window.currentHospitalDetail;
-  const container = document.getElementById('map-container');
-  if (!container) return;
-
-  function renderMap(lat, lng) {
-    const mapOptions = {
-      center: new naver.maps.LatLng(lat, lng),
-      zoom: 16
-    };
-    const map = new naver.maps.Map(container, mapOptions);
-
-    new naver.maps.Marker({
-      position: new naver.maps.LatLng(lat, lng),
-      map: map
-    });
-  }
-
-  // 좌표가 유효한 경우 바로 렌더링, 그렇지 않은 경우 주소 기반으로 지오코딩 수행
-  if (h.lat > 0 && h.lng > 0) {
-    renderMap(h.lat, h.lng);
-  } else if (h.address) {
-    naver.maps.Service.geocode({ query: h.address }, (status, response) => {
-      if (status === naver.maps.Service.Status.OK && response.v2.addresses.length > 0) {
-        const addrItem = response.v2.addresses[0];
-        const lat = parseFloat(addrItem.y);
-        const lng = parseFloat(addrItem.x);
-        renderMap(lat, lng);
-      } else {
-        container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted);">위치 정보를 찾을 수 없습니다 (좌표 변환 실패).</div>';
+    window.naver.maps.Service.geocode({ query: hospital.address }, (status, response) => {
+      if (
+        status === window.naver.maps.Service.Status.OK &&
+        response?.v2?.addresses?.length > 0
+      ) {
+        const addressItem = response.v2.addresses[0];
+        showMap(Number(addressItem.y), Number(addressItem.x));
+        return;
       }
+
+      renderMapFallback(hospital, '주소 좌표를 찾지 못해 링크형 지도로 표시합니다.');
     });
-  } else {
-    container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted);">위치 정보(주소/좌표)가 없습니다.</div>';
   }
-};
+
+  function renderSchema(hospital, score, reviewCount) {
+    const schemaElement = document.getElementById('schema-hospital');
+    if (!schemaElement) {
+      return;
+    }
+
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'MedicalOrganization',
+      name: hospital.name,
+      address: hospital.address,
+      telephone: hospital.phone || undefined,
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: score.toFixed(1),
+        reviewCount,
+      },
+    };
+
+    schemaElement.textContent = JSON.stringify(schema);
+  }
+
+  function updateMetaDescription(content) {
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', content);
+    }
+  }
+
+  function buildDoctorText(hospital) {
+    const parts = [];
+    if (toPositiveNumber(hospital.specialistCount) > 0) {
+      parts.push(`전문의 ${hospital.specialistCount}명`);
+    }
+    if (toPositiveNumber(hospital.generalDoctorCount) > 0) {
+      parts.push(`일반의 ${hospital.generalDoctorCount}명`);
+    }
+    return parts.join(', ') || '의료진 정보 확인 필요';
+  }
+
+  function buildOpenDateText(openDate) {
+    if (!openDate) {
+      return '개원일 정보 없음';
+    }
+
+    const date = new Date(openDate);
+    if (Number.isNaN(date.getTime())) {
+      return String(openDate);
+    }
+
+    const years = Math.max(new Date().getFullYear() - date.getFullYear(), 0);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}년 ${month}월 ${day}일 (${years}년차)`;
+  }
+
+  function formatPostDate(postDate) {
+    const value = String(postDate || '').trim();
+    if (!/^\d{8}$/.test(value)) {
+      return '최근 후기';
+    }
+    return `${value.slice(0, 4)}.${value.slice(4, 6)}.${value.slice(6, 8)}`;
+  }
+
+  function stripTags(text) {
+    return String(text || '').replace(/<[^>]*>/g, '').trim();
+  }
+
+  function escapeHtml(value) {
+    return String(value)
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#39;');
+  }
+
+  function setText(id, value) {
+    const element = document.getElementById(id);
+    if (element) {
+      element.textContent = value;
+    }
+  }
+
+  function formatNumber(value) {
+    return Number(value || 0).toLocaleString('ko-KR');
+  }
+
+  function getHospitalApi() {
+    if (typeof HospitalAPI !== 'undefined') {
+      return HospitalAPI;
+    }
+    return window.HospitalAPI;
+  }
+
+  function getHospitalList() {
+    if (typeof HOSPITALS !== 'undefined') {
+      return HOSPITALS;
+    }
+    return window.HOSPITALS;
+  }
+
+  function toPositiveNumber(value) {
+    const number = Number(value);
+    return Number.isFinite(number) && number > 0 ? number : 0;
+  }
+
+  async function fetchJson(url) {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`request failed: ${response.status}`);
+    }
+    return response.json();
+  }
+
+  function getStoredMapKey() {
+    try {
+      return localStorage.getItem(NAVER_MAP_STORAGE_KEY) || '';
+    } catch (error) {
+      console.warn('[detail] localStorage unavailable:', error);
+      return '';
+    }
+  }
+
+  function loadNaverMapScript(clientId) {
+    return new Promise((resolve, reject) => {
+      if (window.naver?.maps) {
+        resolve();
+        return;
+      }
+
+      const existingScripts = document.querySelectorAll('script[src*="openapi.map.naver.com"]');
+      existingScripts.forEach((script) => script.remove());
+
+      const callbackName = '__detailNaverMapLoaded';
+      const timeoutId = window.setTimeout(() => {
+        delete window[callbackName];
+        reject(new Error('TIMEOUT'));
+      }, 5000);
+
+      window[callbackName] = () => {
+        window.clearTimeout(timeoutId);
+        delete window[callbackName];
+        resolve();
+      };
+
+      const script = document.createElement('script');
+      script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${encodeURIComponent(clientId)}&submodules=geocoder&callback=${callbackName}`;
+      script.async = true;
+      script.onerror = () => {
+        window.clearTimeout(timeoutId);
+        delete window[callbackName];
+        reject(new Error('AUTH_FAIL'));
+      };
+
+      document.head.appendChild(script);
+    });
+  }
+})();
