@@ -544,6 +544,12 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   margin-bottom: var(--sp-3);
   line-height: 1.5;
 }
+.quick-access-subinfo {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  margin-bottom: var(--sp-3);
+  line-height: 1.6;
+}
 .quick-access-meta {
   display: flex;
   flex-wrap: wrap;

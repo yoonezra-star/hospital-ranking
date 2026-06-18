@@ -469,12 +469,13 @@
     if (hospital.type) items.push(hospital.type);
     if (hospital.region) items.push(hospital.region);
 
-    if (items.length === 0) {
+    const uniqueItems = Array.from(new Set(items.filter(Boolean)));
+    if (uniqueItems.length === 0) {
       target.innerHTML = '<span style="color:var(--text-muted);">비교 포인트를 준비 중입니다...</span>';
       return;
     }
 
-    target.innerHTML = items.map((item) => `
+    target.innerHTML = uniqueItems.map((item) => `
       <span style="display:inline-flex; align-items:center; padding:8px 12px; border-radius:999px; background:var(--bg-body); color:var(--text-heading); border:1px solid var(--border-default); font-size:0.9rem; font-weight:600;">
         ${escapeHtml(item)}
       </span>
@@ -926,3 +927,4 @@
     });
   }
 })();
+

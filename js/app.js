@@ -334,10 +334,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const tags = [];
     const subinfo = buildHospitalSubinfo(hospital);
 
-    if (hospital.saturdayOpen) tags.push('<span class="tag tag-sat">토요일진료</span>');
-    if (hospital.nightOpen) tags.push('<span class="tag tag-night">야간진료</span>');
-    if (hospital.sundayOpen) tags.push('<span class="tag tag-sun">일요일진료</span>');
-
+    if (hospital.saturdayOpen) tags.push('<span class="tag tag-sat">토요일 진료</span>');
+    if (hospital.nightOpen) tags.push('<span class="tag tag-night">야간 진료</span>');
+    if (hospital.sundayOpen) tags.push('<span class="tag tag-sun">일요일 진료</span>');
     if (hospital.url) tags.push('<span class="tag tag-site">공식 홈페이지</span>');
 
     return `
@@ -348,19 +347,20 @@ document.addEventListener('DOMContentLoaded', () => {
             ${escapeHtml(hospital.name)}
             <span class="hospital-type-tag">${escapeHtml(hospital.type)}</span>
           </div>
-          <div class="hospital-address">📍 ${escapeHtml(hospital.address)}</div>
+          <div class="hospital-address">주소 ${escapeHtml(hospital.address)}</div>
           ${subinfo ? `<div class="hospital-subinfo">${subinfo}</div>` : ''}
           <div class="hospital-meta">
             <div class="meta-item">
-              <span class="meta-icon">⭐</span>
+              <span class="meta-icon">평점</span>
               <span class="meta-value">${escapeHtml(hospital.score)}</span>
             </div>
+            ${hospital.reviewCount ? `<div class="meta-item"><span class="meta-icon">리뷰</span><span class="meta-value">${escapeHtml(Number(hospital.reviewCount).toLocaleString())}</span><span class="meta-label">개</span></div>` : ''}
             <div class="meta-item">
-              <span class="meta-icon">👨‍⚕️</span>
+              <span class="meta-icon">전문의</span>
               <span class="meta-value">${escapeHtml(hospital.specialistCount || 0)}</span>
-              <span class="meta-label">전문의</span>
+              <span class="meta-label">명</span>
             </div>
-            ${hospital.phone ? `<div class="meta-item"><span class="meta-icon">☎️</span><span class="meta-value">${escapeHtml(hospital.phone)}</span></div>` : ''}
+            ${hospital.phone ? `<div class="meta-item"><span class="meta-icon">전화</span><span class="meta-value">${escapeHtml(hospital.phone)}</span></div>` : ''}
           </div>
           <div class="score-bar-container">
             <div class="score-bar">
@@ -570,9 +570,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const href = hospital.id ? `detail.html?id=${encodeURIComponent(hospital.id)}` : '#';
     const type = hospital.department || hospital.type || '병원';
     const meta = [];
+    const subinfo = buildHospitalSubinfo(hospital);
 
     if (hospital.score) meta.push(`평점 ${hospital.score}`);
     if (hospital.reviewCount) meta.push(`리뷰 ${Number(hospital.reviewCount).toLocaleString()}개`);
+    if (hospital.specialistCount) meta.push(`전문의 ${Number(hospital.specialistCount).toLocaleString()}명`);
     if (hospital.phone) meta.push(hospital.phone);
 
     return `
@@ -581,7 +583,8 @@ document.addEventListener('DOMContentLoaded', () => {
           <strong>${escapeHtml(hospital.name)}</strong>
           <span class="hospital-type-tag">${escapeHtml(type)}</span>
         </div>
-        <p class="quick-access-address">${escapeHtml(hospital.address || '주소 확인 중')}</p>
+        <p class="quick-access-address">${escapeHtml(hospital.address || '주소 확인 필요')}</p>
+        ${subinfo ? `<div class="quick-access-subinfo">${subinfo}</div>` : ''}
         <div class="quick-access-meta">${meta.map((item) => `<span>${escapeHtml(item)}</span>`).join('')}</div>
       </a>
     `;
@@ -589,8 +592,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function buildRecentOpenCard(hospital) {
     const type = hospital.department || hospital.type || '병원';
-    const openDate = hospital.openDate ? `개원 ${formatDate(hospital.openDate)}` : '개원일 확인 중';
-    const address = hospital.address || '주소 확인 중';
+    const openDate = hospital.openDate ? `개원 ${formatDate(hospital.openDate)}` : '개원일 확인 필요';
+    const address = hospital.address || '주소 확인 필요';
+    const location = [hospital.region, hospital.district].filter(Boolean).join(' / ');
 
     return `
       <div class="quick-access-item fade-up">
@@ -599,6 +603,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <span class="hospital-type-tag">${escapeHtml(type)}</span>
         </div>
         <p class="quick-access-address">${escapeHtml(address)}</p>
+        ${location ? `<div class="quick-access-subinfo">${escapeHtml(location)}</div>` : ''}
         <div class="quick-access-meta">
           <span>${escapeHtml(openDate)}</span>
         </div>
@@ -881,3 +886,4 @@ document.addEventListener('DOMContentLoaded', () => {
     return div.innerHTML;
   }
 });
+
