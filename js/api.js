@@ -126,7 +126,7 @@ const HospitalAPI = (() => {
     }
 
     const res = await fetch(`${PROXY_PATH}?${queryParams}`, {
-      signal: AbortSignal.timeout(9000),
+      signal: AbortSignal.timeout(12000),
     });
 
     if (!res.ok) {

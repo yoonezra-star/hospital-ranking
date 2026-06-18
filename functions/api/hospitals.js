@@ -45,7 +45,7 @@ export async function onRequestGet(context) {
 
   // 타임아웃 설정 (8.5초)
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 12000);
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
 
   try {
     const response = await fetch(apiUrl.toString(), {
@@ -106,7 +106,7 @@ export async function onRequestGet(context) {
 
     if (error.name === 'AbortError') {
       status = 504;
-      message = 'Upstream API request timed out (12s limit)';
+      message = 'Upstream API request timed out (15s limit)';
     }
 
     return new Response(JSON.stringify({ error: message }), {

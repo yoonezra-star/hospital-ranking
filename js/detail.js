@@ -109,7 +109,7 @@
         const [detailResult, equipResult, hoursResult] = await Promise.allSettled([
           fetchJson(`/api/hospital-details?ykiho=${encodeURIComponent(publicYkiho)}`),
           fetchJson(`/api/hospital-equip?ykiho=${encodeURIComponent(publicYkiho)}`),
-          fetchJson(`/api/hospital-hours?name=${encodeURIComponent(hospital.name)}`),
+          fetchJson(buildHospitalHoursUrl(hospital)),
         ]);
 
         if (detailResult.status === 'fulfilled') {
@@ -133,7 +133,7 @@
           }
         }
       } else {
-        const hoursData = await fetchJson(`/api/hospital-hours?name=${encodeURIComponent(hospital.name)}`);
+        const hoursData = await fetchJson(buildHospitalHoursUrl(hospital));
         applyHoursData(hoursData, hospital);
         if (hoursData?.found === true) {
           sourceStates.push('진료시간 API');
@@ -713,6 +713,21 @@
     hospital.specialistCount = Math.max(Number(hospital.specialistCount || 0), Number(matchedHospital.specialistCount || 0));
     hospital.reviewCount = Math.max(Number(hospital.reviewCount || 0), Number(matchedHospital.reviewCount || 0));
     hospital.score = Math.max(Number(hospital.score || 0), Number(matchedHospital.score || 0));
+  }
+
+  function buildHospitalHoursUrl(hospital) {
+    const params = new URLSearchParams({
+      name: hospital.name || '',
+    });
+
+    if (hospital.address) {
+      params.set('address', hospital.address);
+    }
+    if (hospital.region) {
+      params.set('region', hospital.region);
+    }
+
+    return `/api/hospital-hours?${params.toString()}`;
   }
 
   function updateMetaDescription(content) {

@@ -18,6 +18,8 @@ export async function onRequestGet(context) {
   const url = new URL(context.request.url);
   const params = url.searchParams;
   const name = params.get('name');
+  const address = params.get('address') || '';
+  const region = params.get('region') || '';
   
   if (!name) {
     return new Response(JSON.stringify({ error: 'Missing name parameter' }), {
@@ -56,7 +58,36 @@ export async function onRequestGet(context) {
     }
 
     const list = Array.isArray(items) ? items : [items];
-    const match = list.find(h => h.dutyName && h.dutyName.includes(name)) || list[0];
+    const normalize = (value) => String(value || '').replace(/\s+/g, '').toLowerCase();
+    const splitTerms = (value) =>
+      String(value || '')
+        .split(/\s+/)
+        .map((part) => part.trim())
+        .filter((part) => part.length >= 2);
+
+    const targetName = normalize(name);
+    const targetAddress = normalize(address);
+    const targetRegion = normalize(region);
+    const addressTerms = splitTerms(address);
+
+    const scored = list.map((item) => {
+      const itemName = normalize(item.dutyName);
+      const itemAddress = normalize(item.dutyAddr);
+      let score = 0;
+
+      if (itemName === targetName) score += 120;
+      else if (itemName.includes(targetName)) score += 70;
+
+      if (targetRegion && itemAddress.includes(targetRegion)) score += 30;
+      if (targetAddress && itemAddress.includes(targetAddress)) score += 60;
+
+      const termMatches = addressTerms.filter((term) => item.dutyAddr?.includes(term)).length;
+      score += termMatches * 8;
+
+      return { item, score };
+    }).sort((left, right) => right.score - left.score);
+
+    const match = scored[0]?.item || list[0];
 
     const normalizeTimeValue = (value) => {
       if (value === null || value === undefined || value === '') return '';
