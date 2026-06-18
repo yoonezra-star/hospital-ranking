@@ -1,5 +1,55 @@
 # hospital-ranking.kr AdSense / Trust Audit Plan
 
+## Current deployment baseline (2026-06-18)
+
+- GitHub repository:
+  - `https://github.com/yoonezra-star/hospital-ranking.git`
+- Production branch:
+  - `main`
+- Cloudflare Pages project:
+  - `hospital-ranking`
+- Verified deployment path:
+  - local change -> `git commit` -> `git push origin main` -> Cloudflare Pages auto deploy
+- Latest verified production source during this audit:
+  - commit `74e47bd`
+
+## Confirmed live issues from browser verification (2026-06-18)
+
+### 1. Naver Maps is still an external-console problem, not a code wiring problem
+
+- Client ID wired in code:
+  - `rgd9ajy97r`
+- Verified in live browser console:
+  - `Authentication Failed`
+  - `Client ID: rgd9ajy97r`
+  - `URI: https://hospital-ranking.kr/`
+- Current conclusion:
+  - the site code is loading the SDK
+  - the active domain is not fully authorized in Naver Cloud Maps
+  - GitHub push / Cloudflare deploy does not solve this by itself
+
+### 2. Cloudflare Pages preview domains also fail Naver Maps auth
+
+- Example verified preview deployment:
+  - `https://c6314341.hospital-ranking.pages.dev`
+- Console result was also `Authentication Failed`
+- This means Naver Cloud needs explicit allowed web service URLs for every domain you expect to use, or you should only rely on the custom production domain for map embedding.
+
+## Fixed in this round
+
+- Guide trust-signal updates were pushed through GitHub and deployed via Cloudflare Pages.
+- `about.html` was strengthened as a clearer trust / methodology / correction-policy page.
+
+## Required external action before map embed can work
+
+1. Open Naver Cloud Platform Maps console for client id `rgd9ajy97r`.
+2. Check the Web Service URL allowlist.
+3. Make sure these exact origins are registered if you want them to work:
+   - `https://hospital-ranking.kr`
+   - `https://www.hospital-ranking.kr`
+4. If Pages preview domains must also render maps, add the required `*.hospital-ranking.pages.dev` deployment URL strategy. If that is not practical, do not rely on preview domains for map verification.
+5. Save the console change, wait a few minutes, then re-test the production homepage in browser.
+
 Last updated: 2026-06-18
 
 ## 1. Current status
