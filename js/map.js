@@ -169,7 +169,7 @@ const MapModule = (() => {
 
       showMapSetupUI(
         container,
-        'Map auth failed. Check the hospital-ranking.kr domain registration in Naver Cloud.'
+        '네이버 지도 인증이 실패했습니다. Naver Cloud에서 hospital-ranking.kr 도메인 등록 상태를 확인해 주세요.'
       );
       return true;
     };
@@ -221,7 +221,7 @@ const MapModule = (() => {
 
   function showMapSetupUI(container, errorMsg) {
     const errorHtml = errorMsg
-      ? `<p style="color: #dc2626; font-weight: bold; margin-bottom: 15px; font-size: 0.9rem;">${errorMsg}</p>`
+      ? `<p style="color: #dc2626; font-weight: bold; margin-bottom: 15px; font-size: 0.9rem; line-height: 1.5;">${errorMsg}</p>`
       : '';
 
     container.innerHTML = `
@@ -229,7 +229,7 @@ const MapModule = (() => {
         <span style="font-size: 2rem; display: block; margin-bottom: 10px;">📍</span>
         <h3 style="margin-bottom: 10px;">지도 미리보기 안내</h3>
         ${errorHtml}
-        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 15px;">
+        <p style="font-size: 0.86rem; color: var(--text-muted); margin-top: 6px; line-height: 1.6;">
           현재는 병원 목록과 검색 기능을 먼저 이용할 수 있으며, 지도는 외부 네이버 지도에서 확인할 수 있습니다.
         </p>
         <a href="https://map.naver.com/v5/" target="_blank" rel="noopener" style="margin-top:12px; padding:10px 14px; background:var(--primary); color:white; border-radius:6px; text-decoration:none; font-weight:bold;">네이버 지도 열기</a>

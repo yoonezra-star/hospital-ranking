@@ -345,6 +345,9 @@
       hospital.lat = Number(hoursData.wgs84Lat);
       hospital.lng = Number(hoursData.wgs84Lon);
     }
+    if (hoursData.dutyMapimg) {
+      hospital.mapImage = hoursData.dutyMapimg;
+    }
 
     if (hoursData.dutyInf) {
       setText('detail-duty-note', hoursData.dutyInf);
@@ -510,6 +513,13 @@
     const note = message
       ? `<p style="margin:0 0 12px; color:#b91c1c; font-size:0.92rem; line-height:1.5;">${escapeHtml(message)}</p>`
       : '';
+    const mapImage = hospital.mapImage
+      ? `
+        <div style="width:100%; max-width:640px; margin:0 auto 14px; border-radius:10px; overflow:hidden; border:1px solid var(--border-default); background:var(--bg-body);">
+          <img src="${escapeHtml(hospital.mapImage)}" alt="${escapeHtml(hospital.name || '병원')} 위치 미리보기" style="display:block; width:100%; height:auto;">
+        </div>
+      `
+      : '';
 
     container.innerHTML = `
       <div class="map-setup-box" style="padding:20px; text-align:center; border:1px solid var(--border-default); border-radius:8px; background:var(--bg-card); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; height:100%;">
@@ -517,6 +527,7 @@
         <h3 style="margin:0; color:var(--text-heading);">${escapeHtml(hospital.name || '병원 위치')}</h3>
         <p style="margin:0; color:var(--text-body); line-height:1.6;">${escapeHtml(hospital.address || '주소 정보 없음')}</p>
         ${note}
+        ${mapImage}
         <a href="https://map.naver.com/v5/search/${encodeURIComponent(hospital.name || hospital.address || '병원')}" target="_blank" rel="noopener" style="padding:10px 14px; background:var(--primary); color:#fff; border-radius:6px; text-decoration:none; font-weight:700;">네이버 지도에서 열기</a>
       </div>
     `;
