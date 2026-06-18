@@ -467,6 +467,104 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
 }
 .filter-select:focus { border-color: var(--primary); }
 
+/* ===== Quick Access ===== */
+.quick-access-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--sp-5);
+}
+.quick-access-panel {
+  background:
+    linear-gradient(180deg, rgba(37,99,235,0.05), transparent 28%),
+    var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-xl);
+  padding: var(--sp-5);
+  box-shadow: var(--shadow-sm);
+}
+[data-theme="dark"] .quick-access-panel {
+  background:
+    linear-gradient(180deg, rgba(96,165,250,0.08), transparent 28%),
+    var(--bg-card);
+}
+.quick-access-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+}
+.quick-access-head h3 {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+}
+.quick-access-head span {
+  font-size: var(--fs-xs);
+  color: var(--primary);
+  background: var(--primary-50);
+  border-radius: var(--r-full);
+  padding: 5px 10px;
+  white-space: nowrap;
+}
+[data-theme="dark"] .quick-access-head span {
+  background: rgba(37,99,235,0.15);
+}
+.quick-access-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.quick-access-item {
+  display: block;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4);
+  transition: transform var(--t-base) var(--ease-out), box-shadow var(--t-base) var(--ease-out), border-color var(--t-base);
+}
+.quick-access-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-light);
+}
+.quick-access-title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-2);
+  flex-wrap: wrap;
+}
+.quick-access-title-row strong {
+  color: var(--text-heading);
+  font-size: var(--fs-base);
+}
+.quick-access-address {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  margin-bottom: var(--sp-3);
+  line-height: 1.5;
+}
+.quick-access-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+.quick-access-meta span {
+  font-size: var(--fs-xs);
+  color: var(--text-body);
+  background: var(--bg-body);
+  border-radius: var(--r-full);
+  padding: 4px 9px;
+}
+[data-theme="dark"] .quick-access-meta span {
+  background: rgba(255,255,255,0.06);
+}
+.quick-access-empty {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  padding: var(--sp-5) 0;
+}
+
 /* ===== Department Grid ===== */
 .dept-grid {
   display: grid;

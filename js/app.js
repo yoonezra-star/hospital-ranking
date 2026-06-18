@@ -33,6 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
     rankingLoader: $('#ranking-loader'),
     reviewsList: $('#reviews-list'),
     newHospitalsList: $('#new-hospitals-list'),
+    currentOpenList: $('#current-open-list'),
+    saturdayOpenList: $('#saturday-open-list'),
+    nightOpenList: $('#night-open-list'),
+    recentOpenList: $('#recent-open-list'),
     loadMoreBtn: $('#load-more-btn'),
     dataSourceBadge: $('#data-source-badge'),
     reviewsTitle: $('#reviews h2'),
@@ -47,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
   void loadRankingData();
   void renderReviews();
   renderNewHospitals();
+  renderQuickAccess();
   bindEvents();
 
   function initTheme() {
@@ -230,6 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const sortedHospitals = SearchEngine.sortHospitals(state.allFetchedHospitals, state.currentSort);
     renderRankingCards(sortedHospitals);
+    renderQuickAccess();
     updateDataBadge(result.fromMock);
     updateMapHospitals(sortedHospitals);
     showLoading(false);
@@ -424,6 +430,248 @@ document.addEventListener('DOMContentLoaded', () => {
     `).join('');
 
     observeNewElements(ui.newHospitalsList);
+  }
+
+  function renderQuickAccess() {
+    if (!ui.currentOpenList || !ui.saturdayOpenList || !ui.nightOpenList || !ui.recentOpenList) return;
+
+    const hospitals = getFeaturedHospitalsSource();
+    const liveOpenHospitals = hospitals
+      .filter((hospital) => isHospitalOpenNow(hospital))
+      .sort(compareFeaturedHospitals)
+      .slice(0, 4);
+    const currentOpen = liveOpenHospitals.length
+      ? liveOpenHospitals
+      : hospitals
+        .filter((hospital) => isAvailableToday(hospital))
+        .sort(compareFeaturedHospitals)
+        .slice(0, 4);
+    const saturdayOpen = hospitals
+      .filter((hospital) => hospital.saturdayOpen)
+      .sort(compareFeaturedHospitals)
+      .slice(0, 4);
+    const nightOpen = hospitals
+      .filter((hospital) => hospital.nightOpen)
+      .sort(compareFeaturedHospitals)
+      .slice(0, 4);
+    const recentOpen = getRecentOpenHospitals(hospitals).slice(0, 4);
+
+    renderQuickAccessList(
+      ui.currentOpenList,
+      currentOpen,
+      '현재 진료중으로 표시할 병원이 없습니다.',
+      buildQuickAccessCard
+    );
+    renderQuickAccessList(
+      ui.saturdayOpenList,
+      saturdayOpen,
+      '토요일 진료 병원 정보를 준비 중입니다.',
+      buildQuickAccessCard
+    );
+    renderQuickAccessList(
+      ui.nightOpenList,
+      nightOpen,
+      '야간 진료 병원 정보를 준비 중입니다.',
+      buildQuickAccessCard
+    );
+    renderQuickAccessList(
+      ui.recentOpenList,
+      recentOpen,
+      '최근 개원 병원 정보를 준비 중입니다.',
+      buildRecentOpenCard
+    );
+  }
+
+  function renderQuickAccessList(container, hospitals, emptyMessage, renderer) {
+    if (!container) return;
+
+    if (!hospitals.length) {
+      container.innerHTML = `<p class="quick-access-empty">${escapeHtml(emptyMessage)}</p>`;
+      return;
+    }
+
+    container.innerHTML = hospitals.map((hospital) => renderer(hospital)).join('');
+    observeNewElements(container);
+  }
+
+  function getFeaturedHospitalsSource() {
+    const fallbackHospitals = Array.isArray(HOSPITALS) ? HOSPITALS : [];
+    if (!state.allFetchedHospitals.length) {
+      return fallbackHospitals.slice();
+    }
+
+    const fallbackByKey = new Map(fallbackHospitals.map((hospital) => [buildHospitalKey(hospital), hospital]));
+    const merged = state.allFetchedHospitals.map((hospital) => {
+      const fallback = fallbackByKey.get(buildHospitalKey(hospital));
+      return {
+        ...fallback,
+        ...hospital,
+        hours: hospital.hours || fallback?.hours,
+        saturdayOpen: hospital.saturdayOpen || fallback?.saturdayOpen || false,
+        sundayOpen: hospital.sundayOpen || fallback?.sundayOpen || false,
+        nightOpen: hospital.nightOpen || fallback?.nightOpen || false,
+        openDate: hospital.openDate || fallback?.openDate || '',
+      };
+    });
+
+    const mergedKeys = new Set(merged.map((hospital) => buildHospitalKey(hospital)));
+    const extras = fallbackHospitals.filter((hospital) => !mergedKeys.has(buildHospitalKey(hospital)));
+    return [...merged, ...extras];
+  }
+
+  function getRecentOpenHospitals(hospitals) {
+    const recentSeed = Array.isArray(NEW_HOSPITALS) ? NEW_HOSPITALS : [];
+    const merged = dedupeHospitals([...recentSeed, ...hospitals]);
+    return merged
+      .filter((hospital) => hospital.openDate)
+      .sort((left, right) => new Date(right.openDate) - new Date(left.openDate));
+  }
+
+  function dedupeHospitals(hospitals) {
+    const seen = new Set();
+    return hospitals.filter((hospital) => {
+      const key = buildHospitalKey(hospital);
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }
+
+  function buildHospitalKey(hospital) {
+    return [hospital?.name, hospital?.address]
+      .map((value) => String(value || '').trim().toLowerCase())
+      .filter(Boolean)
+      .join('|');
+  }
+
+  function compareFeaturedHospitals(left, right) {
+    return (
+      (right.score || 0) - (left.score || 0) ||
+      (right.reviewCount || 0) - (left.reviewCount || 0) ||
+      (right.specialistCount || 0) - (left.specialistCount || 0) ||
+      String(left.name || '').localeCompare(String(right.name || ''), 'ko')
+    );
+  }
+
+  function buildQuickAccessCard(hospital) {
+    const href = hospital.id ? `detail.html?id=${encodeURIComponent(hospital.id)}` : '#';
+    const type = hospital.department || hospital.type || '병원';
+    const meta = [];
+
+    if (hospital.score) meta.push(`평점 ${hospital.score}`);
+    if (hospital.reviewCount) meta.push(`리뷰 ${Number(hospital.reviewCount).toLocaleString()}개`);
+    if (hospital.phone) meta.push(hospital.phone);
+
+    return `
+      <a class="quick-access-item fade-up" href="${href}">
+        <div class="quick-access-title-row">
+          <strong>${escapeHtml(hospital.name)}</strong>
+          <span class="hospital-type-tag">${escapeHtml(type)}</span>
+        </div>
+        <p class="quick-access-address">${escapeHtml(hospital.address || '주소 확인 중')}</p>
+        <div class="quick-access-meta">${meta.map((item) => `<span>${escapeHtml(item)}</span>`).join('')}</div>
+      </a>
+    `;
+  }
+
+  function buildRecentOpenCard(hospital) {
+    const type = hospital.department || hospital.type || '병원';
+    const openDate = hospital.openDate ? `개원 ${formatDate(hospital.openDate)}` : '개원일 확인 중';
+    const address = hospital.address || '주소 확인 중';
+
+    return `
+      <div class="quick-access-item fade-up">
+        <div class="quick-access-title-row">
+          <strong>${escapeHtml(hospital.name)}</strong>
+          <span class="hospital-type-tag">${escapeHtml(type)}</span>
+        </div>
+        <p class="quick-access-address">${escapeHtml(address)}</p>
+        <div class="quick-access-meta">
+          <span>${escapeHtml(openDate)}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  function isHospitalOpenNow(hospital, now = new Date()) {
+    const day = now.getDay();
+    const currentMinutes = (now.getHours() * 60) + now.getMinutes();
+    const hoursValue = getHoursByDay(hospital.hours, day);
+    const parsedRange = parseOperatingRange(hoursValue);
+
+    if (parsedRange) {
+      return currentMinutes >= parsedRange.start && currentMinutes <= parsedRange.end;
+    }
+
+    return isLikelyOpenByFlags(hospital, day, currentMinutes);
+  }
+
+  function getHoursByDay(hours, day) {
+    if (!hours) return '';
+
+    if (day === 0) return hours.sun || hours.holiday || '';
+    if (day === 6) return hours.sat || '';
+
+    return [hours.mon, hours.tue, hours.wed, hours.thu, hours.fri][day - 1] || '';
+  }
+
+  function parseOperatingRange(hoursValue) {
+    if (!hoursValue || isClosedHoursText(hoursValue)) return null;
+
+    const matches = String(hoursValue).match(/(\d{1,2}):(\d{2})/g);
+    if (!matches || matches.length < 2) return null;
+
+    const start = parseTimeText(matches[0]);
+    const end = parseTimeText(matches[matches.length - 1]);
+    if (start === null || end === null) return null;
+
+    return { start, end };
+  }
+
+  function parseTimeText(value) {
+    const match = String(value).match(/(\d{1,2}):(\d{2})/);
+    if (!match) return null;
+
+    return (Number(match[1]) * 60) + Number(match[2]);
+  }
+
+  function isClosedHoursText(hoursValue) {
+    const text = String(hoursValue || '').trim().toLowerCase();
+    return !text || ['미진료', '휴진', '휴무', '없음', '-', 'closed'].some((keyword) => text.includes(keyword));
+  }
+
+  function isLikelyOpenByFlags(hospital, day, currentMinutes) {
+    const weekdayStart = 9 * 60;
+    const weekdayEnd = 18 * 60;
+    const nightEnd = 21 * 60;
+    const weekendEnd = 13 * 60;
+
+    if (day === 0) {
+      return Boolean(hospital.sundayOpen) && currentMinutes >= weekdayStart && currentMinutes <= weekendEnd;
+    }
+
+    if (day === 6) {
+      return Boolean(hospital.saturdayOpen) && currentMinutes >= weekdayStart && currentMinutes <= weekendEnd;
+    }
+
+    if (currentMinutes < weekdayStart || currentMinutes > nightEnd) {
+      return false;
+    }
+
+    if (currentMinutes <= weekdayEnd) {
+      return true;
+    }
+
+    return Boolean(hospital.nightOpen);
+  }
+
+  function isAvailableToday(hospital, now = new Date()) {
+    const day = now.getDay();
+
+    if (day === 0) return Boolean(hospital.sundayOpen);
+    if (day === 6) return Boolean(hospital.saturdayOpen);
+
+    return true;
   }
 
   async function performSearch() {
