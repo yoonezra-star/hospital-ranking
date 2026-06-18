@@ -332,10 +332,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const rankClass = rank <= 3 ? `rank-${rank}` : 'rank-default';
     const scorePercent = Math.max(0, Math.min(100, ((hospital.score || 0) / 5) * 100));
     const tags = [];
+    const subinfo = buildHospitalSubinfo(hospital);
 
     if (hospital.saturdayOpen) tags.push('<span class="tag tag-sat">토요일진료</span>');
     if (hospital.nightOpen) tags.push('<span class="tag tag-night">야간진료</span>');
     if (hospital.sundayOpen) tags.push('<span class="tag tag-sun">일요일진료</span>');
+
+    if (hospital.url) tags.push('<span class="tag tag-site">공식 홈페이지</span>');
 
     return `
       <article class="hospital-card fade-up" data-hospital-id="${escapeHtml(hospital.id)}">
@@ -346,6 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="hospital-type-tag">${escapeHtml(hospital.type)}</span>
           </div>
           <div class="hospital-address">📍 ${escapeHtml(hospital.address)}</div>
+          ${subinfo ? `<div class="hospital-subinfo">${subinfo}</div>` : ''}
           <div class="hospital-meta">
             <div class="meta-item">
               <span class="meta-icon">⭐</span>
@@ -368,6 +372,15 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </article>
     `;
+  }
+
+  function buildHospitalSubinfo(hospital) {
+    const bits = [];
+    const location = [hospital.region, hospital.district].filter(Boolean).join(' / ');
+    if (location) bits.push(location);
+    if (hospital.openDate) bits.push(`개원 ${formatDate(hospital.openDate)}`);
+    if (hospital.url) bits.push('공식 홈페이지');
+    return bits.map((bit) => escapeHtml(bit)).join(' · ');
   }
 
   async function renderReviews() {

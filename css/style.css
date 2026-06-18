@@ -729,6 +729,12 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   align-items: center;
   gap: var(--sp-1);
 }
+.hospital-subinfo {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  margin-bottom: var(--sp-3);
+  line-height: 1.6;
+}
 .hospital-meta {
   display: flex;
   align-items: center;
@@ -786,9 +792,11 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
 .tag-sat { background: #ECFDF5; color: #059669; }
 .tag-night { background: #EFF6FF; color: #2563EB; }
 .tag-sun { background: #FFF7ED; color: #EA580C; }
+.tag-site { background: #F5F3FF; color: #6D28D9; }
 [data-theme="dark"] .tag-sat { background: rgba(5,150,105,0.15); }
 [data-theme="dark"] .tag-night { background: rgba(37,99,235,0.15); }
 [data-theme="dark"] .tag-sun { background: rgba(234,88,12,0.15); }
+[data-theme="dark"] .tag-site { background: rgba(109,40,217,0.18); }
 
 .ranking-count {
   font-size: var(--fs-sm);
