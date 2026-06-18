@@ -54,9 +54,9 @@
     const score = Number(hospital.score || 0);
     const reviewCount = Number(hospital.reviewCount || hospital.reviews || 0);
 
-    document.title = `${hospital.name} 후기, 평점 및 진료 정보 - 병원랭킹`;
+    document.title = `${hospital.name} 후기, 평점 및 진료 정보 - 병원찾기`;
     updateMetaDescription(
-      `${hospital.name}의 위치, 연락처, 진료 정보, 후기 요약을 병원랭킹에서 확인하세요.`
+      `${hospital.name}의 위치, 연락처, 진료 정보, 후기 요약을 병원찾기에서 확인하세요.`
     );
 
     setText('detail-name', hospital.name || '병원명 확인 필요');
@@ -403,7 +403,7 @@
       return `
         <article class="detail-review-item fade-up" style="display:flex; flex-direction:column; gap:8px;">
           <div style="display:flex; justify-content:space-between; gap:12px; color:var(--text-muted); font-size:0.85rem;">
-            <span>hospital-ranking note ${index + 1}</span>
+            <span>병원찾기 note ${index + 1}</span>
             <span>summary</span>
           </div>
           <h4 style="font-size:1.05rem; color:var(--text-heading); font-weight:600;">${escapeHtml(hospital.name)} 방문 요약</h4>

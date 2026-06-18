@@ -1,5 +1,5 @@
 /**
- * 병원랭킹 - 공공데이터 API 클라이언트
+ * 병원찾기 - 공공데이터 API 클라이언트
  * 브라우저에서는 Cloudflare Pages Functions 프록시만 사용한다.
  * 프록시가 불가하면 목업 데이터로 안전하게 폴백한다.
  */
@@ -276,7 +276,7 @@ const HospitalAPI = (() => {
     return list.map((hospital, index) => ({
       title: `${hospital.name} 이용 후기`,
       description: `${hospital.address} 기준으로 정리한 방문자 요약입니다. 진료과와 위치, 기본 평점 정보를 빠르게 확인할 수 있습니다.`,
-      bloggername: `hospital-ranking note ${index + 1}`,
+      bloggername: `병원찾기 note ${index + 1}`,
       link: `detail.html?id=${encodeURIComponent(hospital.id)}`,
       postdate: '',
       query,

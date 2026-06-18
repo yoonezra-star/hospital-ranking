@@ -1,4 +1,4 @@
-# 병원랭킹 - 전국 병의원 순위 정보
+# 병원찾기 - 전국 병의원 순위 정보
 
 건강보험심사평가원 공공데이터 기반 전국 병의원 랭킹, 후기, 진료 시간 정보를 제공하는 정적 웹사이트입니다.
 
@@ -28,7 +28,7 @@ npx serve .
    ```bash
    git init
    git add .
-   git commit -m "Initial commit: 병원랭킹 사이트"
+   git commit -m "Initial commit: 병원찾기 사이트"
    git remote add origin https://github.com/[사용자명]/hospital-ranking.git
    git push -u origin main
    ```

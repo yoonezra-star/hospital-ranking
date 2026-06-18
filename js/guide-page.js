@@ -48,7 +48,7 @@ function applyGuidePageEnhancements() {
 
   if (footerBottom) {
     footerBottom.innerHTML = `
-      <p>&copy; 2026 병원랭킹. All rights reserved.</p>
+      <p>&copy; 2026 병원찾기. All rights reserved.</p>
       <p>운영 문의 및 정보 정정 요청: <a href="mailto:replyleaders@naver.com" style="color:var(--primary); font-weight:600;">replyleaders@naver.com</a></p>
       <p>이 페이지의 정보는 참고용이며, 진단과 치료 결정은 반드시 해당 병원 또는 의료진과 직접 상담해 주세요.</p>
     `;
