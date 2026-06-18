@@ -94,6 +94,15 @@ const HospitalAPI = (() => {
     if (params.name) {
       q.set('yadmNm', params.name);
     }
+    if (params.xPos) {
+      q.set('xPos', String(params.xPos));
+    }
+    if (params.yPos) {
+      q.set('yPos', String(params.yPos));
+    }
+    if (params.radius) {
+      q.set('radius', String(params.radius));
+    }
     if (params.type) {
       const typeMap = {
         hospital: ['01', '11', '21'],

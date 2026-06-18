@@ -68,6 +68,10 @@
     setText('detail-phone', hospital.phone || '-');
     setText('detail-doctor', buildDoctorText(hospital));
     setText('detail-date', buildOpenDateText(hospital.openDate));
+    setHomepageLink(hospital.url || '');
+    setText('detail-emergency', '응급 진료 정보 확인 필요');
+    setText('detail-hours-note', '점심시간 및 접수 안내 확인 중...');
+    setText('detail-duty-note', '공개 데이터와 안내 콘텐츠를 바탕으로 정리한 참고 정보입니다.');
 
     const subwayWrapper = document.getElementById('detail-subway-wrapper');
     if (subwayWrapper) {
@@ -89,6 +93,8 @@
     await Promise.allSettled([
       hydrateReviews(hospital),
       hydratePublicData(hospital),
+      hydrateNearbyHospitals(hospital),
+      hydrateMap(hospital),
     ]);
   }
 
@@ -143,13 +149,21 @@
   async function hydratePublicData(hospital) {
     try {
       if (typeof hospital.id === 'string' && hospital.id.startsWith('JD')) {
-        const [detailData, equipData] = await Promise.all([
+        const [detailResult, equipResult, hoursResult] = await Promise.allSettled([
           fetchJson(`/api/hospital-details?ykiho=${encodeURIComponent(hospital.id)}`),
           fetchJson(`/api/hospital-equip?ykiho=${encodeURIComponent(hospital.id)}`),
+          fetchJson(`/api/hospital-hours?name=${encodeURIComponent(hospital.name)}`),
         ]);
 
-        applyDetailData(detailData);
-        applyEquipData(equipData);
+        if (detailResult.status === 'fulfilled') {
+          applyDetailData(detailResult.value);
+        }
+        if (equipResult.status === 'fulfilled') {
+          applyEquipData(equipResult.value);
+        }
+        if (hoursResult.status === 'fulfilled') {
+          applyHoursData(hoursResult.value);
+        }
         return;
       }
 
@@ -202,6 +216,36 @@
     if (parkingItems.length > 0) {
       setText('detail-parking', parkingItems.join(' / '));
     }
+
+    const emergencyItems = [];
+    if (detailData.emyDayYn === 'Y') {
+      emergencyItems.push('주간 응급 진료 가능');
+    }
+    if (detailData.emyNgtYn === 'Y') {
+      emergencyItems.push('야간 응급 진료 가능');
+    }
+    if (detailData.emyDayTelNo1) {
+      emergencyItems.push(`응급 문의 ${detailData.emyDayTelNo1}`);
+    }
+    if (emergencyItems.length > 0) {
+      setText('detail-emergency', emergencyItems.join(' / '));
+    }
+
+    const noteItems = [];
+    if (detailData.rcvWeek) {
+      noteItems.push(`평일 접수 ${detailData.rcvWeek}`);
+    }
+    if (detailData.rcvSat) {
+      noteItems.push(`토요일 접수 ${detailData.rcvSat}`);
+    }
+    if (detailData.lunchWeek) {
+      noteItems.push(`점심시간 ${detailData.lunchWeek}`);
+    }
+    if (noteItems.length > 0) {
+      setText('detail-hours-note', noteItems.join(' / '));
+    }
+
+    updateOperationalBadges(detailData.hours, detailData);
   }
 
   function applyEquipData(equipData) {
@@ -226,7 +270,15 @@
       setText('detail-area', `${facility.totArea}`);
     }
 
-    if (Array.isArray(equipData.equips) && equipData.equips.length > 0) {
+    if (Array.isArray(equipData.equipDetails) && equipData.equipDetails.length > 0) {
+      setText(
+        'detail-equipment',
+        equipData.equipDetails
+          .slice(0, 8)
+          .map((item) => `${item.name} ${item.count}대`)
+          .join(', ')
+      );
+    } else if (Array.isArray(equipData.equips) && equipData.equips.length > 0) {
       setText('detail-equipment', equipData.equips.slice(0, 8).join(', '));
     }
   }
@@ -247,6 +299,12 @@
     if (hoursData.dutyAddr) {
       setText('detail-address', hoursData.dutyAddr);
     }
+
+    if (hoursData.dutyInf) {
+      setText('detail-duty-note', hoursData.dutyInf);
+    }
+
+    updateOperationalBadges(hoursData.hours);
   }
 
   function renderBadges(hospital) {
@@ -259,6 +317,9 @@
     }
     if (hospital.nightOpen) {
       badges.push({ label: '야간 진료', background: '#fef3c7', color: '#92400e' });
+    }
+    if (hospital.hasEmergency) {
+      badges.push({ label: '응급 진료', background: '#fee2e2', color: '#b91c1c' });
     }
     if (hospital.type) {
       badges.push({ label: hospital.type, background: '#e2e8f0', color: '#334155' });
@@ -372,6 +433,97 @@
         <a href="https://map.naver.com/v5/search/${encodeURIComponent(hospital.name || hospital.address || '병원')}" target="_blank" rel="noopener" style="padding:10px 14px; background:var(--primary); color:#fff; border-radius:6px; text-decoration:none; font-weight:700;">네이버 지도에서 열기</a>
       </div>
     `;
+  }
+
+  async function hydrateNearbyHospitals(hospital) {
+    const container = document.getElementById('detail-nearby-list');
+    const api = getHospitalApi();
+    if (!container || !api?.fetchHospitals) {
+      return;
+    }
+
+    try {
+      let candidates = [];
+
+      if (
+        Number.isFinite(Number(hospital.lng)) &&
+        Number(hospital.lng) > 0 &&
+        Number.isFinite(Number(hospital.lat)) &&
+        Number(hospital.lat) > 0
+      ) {
+        const nearby = await api.fetchHospitals({
+          xPos: Number(hospital.lng),
+          yPos: Number(hospital.lat),
+          radius: 3000,
+          limit: 12,
+        });
+        candidates = Array.isArray(nearby?.hospitals) ? nearby.hospitals : [];
+      }
+
+      if (candidates.length === 0) {
+        const localList = getHospitalList();
+        candidates = Array.isArray(localList) ? localList : [];
+      }
+
+      const filtered = candidates
+        .filter((item) => String(item.id) !== String(hospital.id))
+        .sort((a, b) => {
+          if (a.departmentId === hospital.departmentId && b.departmentId !== hospital.departmentId) return -1;
+          if (a.departmentId !== hospital.departmentId && b.departmentId === hospital.departmentId) return 1;
+          return (b.specialistCount || 0) - (a.specialistCount || 0);
+        })
+        .slice(0, 6);
+
+      renderNearbyHospitals(filtered, hospital);
+    } catch (error) {
+      console.warn('[detail] nearby hospitals skipped:', error);
+      renderNearbyHospitals([], hospital);
+    }
+  }
+
+  function renderNearbyHospitals(items, hospital) {
+    const container = document.getElementById('detail-nearby-list');
+    if (!container) {
+      return;
+    }
+
+    if (!Array.isArray(items) || items.length === 0) {
+      container.innerHTML = '<p style="margin:0; color:var(--text-muted);">주변 비교 병원 정보를 아직 찾지 못했습니다.</p>';
+      return;
+    }
+
+    container.innerHTML = items.map((item) => `
+      <a href="detail.html?id=${encodeURIComponent(item.id)}" style="display:flex; flex-direction:column; gap:8px; padding:16px; border:1px solid var(--border-default); border-radius:12px; text-decoration:none; background:var(--bg-body); color:inherit;">
+        <strong style="font-size:1rem; color:var(--text-heading);">${escapeHtml(item.name)}</strong>
+        <span style="font-size:0.9rem; color:var(--primary); font-weight:600;">${escapeHtml(item.type || hospital.type || '병원')}</span>
+        <span style="font-size:0.92rem; color:var(--text-body); line-height:1.5;">${escapeHtml(item.address || '주소 정보 확인 필요')}</span>
+        <span style="font-size:0.82rem; color:var(--text-muted);">전문의 ${escapeHtml(String(item.specialistCount || 0))}명 · 후기 ${escapeHtml(String(item.reviewCount || 0))}개</span>
+      </a>
+    `).join('');
+  }
+
+  function updateOperationalBadges(hours, detailData = null) {
+    const hospital = window.currentHospitalDetail;
+    if (!hospital || !hours) {
+      return;
+    }
+
+    hospital.saturdayOpen = typeof hours.sat === 'string' && hours.sat.includes(':');
+    hospital.sundayOpen = typeof hours.sun === 'string' && hours.sun.includes(':');
+    hospital.nightOpen = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat'].some((key) => {
+      const value = hours[key];
+      if (typeof value !== 'string' || !value.includes('~')) {
+        return false;
+      }
+      const end = value.split('~')[1]?.trim() || '';
+      return end >= '18:30';
+    });
+
+    if (detailData && (detailData.emyDayYn === 'Y' || detailData.emyNgtYn === 'Y')) {
+      hospital.hasEmergency = true;
+    }
+
+    renderBadges(hospital);
   }
 
   function renderLiveMap(hospital) {
@@ -502,6 +654,23 @@
     if (element) {
       element.textContent = value;
     }
+  }
+
+  function setHomepageLink(url) {
+    const row = document.getElementById('detail-homepage-row');
+    const link = document.getElementById('detail-homepage-link');
+    if (!row || !link) {
+      return;
+    }
+
+    if (!url) {
+      row.style.display = 'none';
+      link.removeAttribute('href');
+      return;
+    }
+
+    row.style.display = 'flex';
+    link.href = url;
   }
 
   function formatNumber(value) {
