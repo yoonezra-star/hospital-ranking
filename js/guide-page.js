@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+function applyGuidePageEnhancements() {
   const path = window.location.pathname.split('/').pop() || '';
   if (!path.startsWith('guide-') || !path.endsWith('.html')) {
     return;
@@ -53,4 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
       <p>이 페이지의 정보는 참고용이며, 진단과 치료 결정은 반드시 해당 병원 또는 의료진과 직접 상담해 주세요.</p>
     `;
   }
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', applyGuidePageEnhancements);
+} else {
+  applyGuidePageEnhancements();
+}
