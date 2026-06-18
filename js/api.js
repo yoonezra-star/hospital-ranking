@@ -259,14 +259,14 @@ const HospitalAPI = (() => {
       const url = `/api/search?query=${encodeURIComponent(query)}&type=${type}&display=${display}&sort=sim`;
       const res = await fetch(url);
       if (!res.ok) {
-        throw new Error('Search API response error');
+        return buildFallbackSearchItems(query, display);
       }
 
       const data = await res.json();
       const items = data.items || [];
       return items.length > 0 ? items : buildFallbackSearchItems(query, display);
     } catch (error) {
-      console.error('[NaverSearch]', error);
+      console.warn('[NaverSearch] fallback applied:', error.message);
       return buildFallbackSearchItems(query, display);
     }
   }

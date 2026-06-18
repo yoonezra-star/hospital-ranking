@@ -58,9 +58,16 @@ export async function onRequestGet(context) {
     const list = Array.isArray(items) ? items : [items];
     const match = list.find(h => h.dutyName && h.dutyName.includes(name)) || list[0];
 
+    const normalizeTimeValue = (value) => {
+      if (value === null || value === undefined || value === '') return '';
+      const digits = String(value).replace(/\D/g, '');
+      return digits.padStart(4, '0').slice(0, 4);
+    };
     const formatTime = (s, c) => {
-      if (!s || !c) return null;
-      return `${s.slice(0,2)}:${s.slice(2,4)} ~ ${c.slice(0,2)}:${c.slice(2,4)}`;
+      const start = normalizeTimeValue(s);
+      const close = normalizeTimeValue(c);
+      if (!start || !close || start.length !== 4 || close.length !== 4) return null;
+      return `${start.slice(0, 2)}:${start.slice(2, 4)} ~ ${close.slice(0, 2)}:${close.slice(2, 4)}`;
     };
 
     const result = {
@@ -69,7 +76,10 @@ export async function onRequestGet(context) {
       dutyName: match.dutyName,
       dutyAddr: match.dutyAddr,
       dutyTel1: match.dutyTel1,
+      dutyMapimg: match.dutyMapimg || null,
       dutyInf: match.dutyInf,
+      wgs84Lat: match.wgs84Lat || null,
+      wgs84Lon: match.wgs84Lon || null,
       hours: {
         mon: formatTime(match.dutyTime1s, match.dutyTime1c),
         tue: formatTime(match.dutyTime2s, match.dutyTime2c),

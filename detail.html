@@ -130,8 +130,27 @@
           <li><span class="info-label">전화번호</span> <span id="detail-phone">로딩 중...</span></li>
           <li><span class="info-label">의료진</span> <span id="detail-doctor">로딩 중...</span></li>
           <li><span class="info-label">개원일</span> <span id="detail-date">로딩 중...</span></li>
+          <li><span class="info-label">지역</span> <span id="detail-region">로딩 중...</span></li>
           <li id="detail-homepage-row" style="display:none;"><span class="info-label">홈페이지</span> <span><a id="detail-homepage-link" href="#" target="_blank" rel="noopener" style="color:var(--primary); font-weight:600;">공식 홈페이지 열기</a></span></li>
+          <li><span class="info-label">데이터 출처</span> <span id="detail-source-summary">공공데이터 연동 상태 확인 중...</span></li>
         </ul>
+      </div>
+
+      <div class="info-card">
+        <h3>빠른 연결</h3>
+        <div id="detail-quick-links" style="display:flex; flex-wrap:wrap; gap:10px;">
+          <a id="detail-call-link" href="#" style="display:inline-flex; align-items:center; justify-content:center; padding:10px 14px; background:var(--primary); color:#fff; border-radius:8px; text-decoration:none; font-weight:700;">전화 문의</a>
+          <a id="detail-homepage-button" href="#" target="_blank" rel="noopener" style="display:none; align-items:center; justify-content:center; padding:10px 14px; background:var(--bg-body); color:var(--text-heading); border:1px solid var(--border-default); border-radius:8px; text-decoration:none; font-weight:700;">공식 홈페이지</a>
+          <a id="detail-map-link" href="#" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; justify-content:center; padding:10px 14px; background:var(--bg-body); color:var(--text-heading); border:1px solid var(--border-default); border-radius:8px; text-decoration:none; font-weight:700;">네이버 지도</a>
+          <a id="detail-search-link" href="#" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; justify-content:center; padding:10px 14px; background:var(--bg-body); color:var(--text-heading); border:1px solid var(--border-default); border-radius:8px; text-decoration:none; font-weight:700;">네이버 검색</a>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h3>비교 포인트</h3>
+        <div id="detail-compare-points" style="display:flex; flex-wrap:wrap; gap:10px;">
+          <span style="color:var(--text-muted);">비교 포인트를 정리하는 중입니다...</span>
+        </div>
       </div>
 
       <div class="info-card">
@@ -226,9 +245,9 @@
   </footer>
 
   <script src="js/data.js?v=13"></script>
-  <script src="js/api.js?v=15"></script>
+  <script src="js/api.js?v=16"></script>
   <script src="js/map.js?v=14"></script>
-  <script src="js/detail.js?v=18"></script>
+  <script src="js/detail.js?v=19"></script>
   <script src="js/app.js?v=13"></script>
 </body>
 </html>
