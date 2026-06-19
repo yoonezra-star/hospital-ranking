@@ -11,7 +11,7 @@ const MapModule = (() => {
   let activeInfoWindow = null;
   let isSdkLoaded = false;
 
-  const DEFAULT_KEY = '390058kho4';
+  const DEFAULT_KEYS = ['390058kho4', 'rgd9ajy97r'];
   const STORAGE_KEY = 'NAVER_MAP_KEY';
 
   // 기본 위치 (서울시청)
@@ -37,31 +37,50 @@ const MapModule = (() => {
     }
   }
 
+  function getMapKeyCandidates() {
+    const storedKey = getStoredMapKey();
+    return Array.from(new Set([storedKey, ...DEFAULT_KEYS].filter(Boolean)));
+  }
+
   /**
    * 지도 초기화 진입점
    */
   async function init() {
-    // localStorage에 저장된 사용자 키를 최우선으로 사용하고, 없으면 기본 키(DEFAULT_KEY)를 사용합니다.
-    const savedKey = getStoredMapKey() || DEFAULT_KEY;
+    const candidateKeys = getMapKeyCandidates();
     const container = document.getElementById('map-container');
     if (!container) return;
 
-    if (savedKey) {
+    if (candidateKeys.length > 0) {
       showMapLoading(true);
+      let lastError = null;
       try {
-        await loadScript(savedKey);
-        isSdkLoaded = true;
-        initMap(container);
+        for (const clientId of candidateKeys) {
+          try {
+            resetNaverMapRuntime();
+            await loadScript(clientId);
+            isSdkLoaded = true;
+            initMap(container);
+
+            const authOk = await verifyMapReady(container);
+            if (!authOk) {
+              lastError = new Error(`AUTH_FAIL:${clientId}`);
+              isSdkLoaded = false;
+              continue;
+            }
+
+            saveMapKey(clientId);
+            return;
+          } catch (error) {
+            lastError = error;
+            isSdkLoaded = false;
+          }
+        }
+
+        console.error('[MapModule]', lastError?.message || 'UNKNOWN');
+        showMapSetupUI(container, buildMapAuthMessage(candidateKeys));
       } catch (err) {
         console.error('[MapModule]', err.message);
-        showMapLoading(false);
-        // 오류 유형에 따라 다른 안내 메시지 표시
-        if (err.message === 'TIMEOUT' || err.message === 'AUTH_FAIL') {
-          showMapSetupUI(container, '인증에 실패했거나 도메인 미등록 상태입니다. 올바른 Client ID를 입력해주세요.');
-        } else {
-          container.innerHTML = '<div style="padding:40px;text-align:center;color:#666;">네이버 지도 API 로드에 실패했습니다.</div>';
-        }
-        return;
+        container.innerHTML = '<div style="padding:40px;text-align:center;color:#666;">네이버 지도 API 로드에 실패했습니다.</div>';
       } finally {
         showMapLoading(false);
       }
@@ -76,10 +95,6 @@ const MapModule = (() => {
         resolve();
         return;
       }
-
-      // 기존 등록된 스크립트가 있다면 삭제
-      const oldScripts = document.querySelectorAll('script[src*="openapi.map.naver.com"]');
-      oldScripts.forEach(s => s.remove());
 
       // 5초 타임아웃 (도메인 미등록 등으로 응답 없을 경우)
       const timeout = setTimeout(() => {
@@ -167,10 +182,7 @@ const MapModule = (() => {
         return false;
       }
 
-      showMapSetupUI(
-        container,
-        '네이버 지도 인증이 실패했습니다. Naver Cloud에서 hospital-ranking.kr 도메인 등록 상태를 확인해 주세요.'
-      );
+      showMapSetupUI(container, buildMapAuthMessage(getMapKeyCandidates()));
       return true;
     };
 
@@ -235,6 +247,48 @@ const MapModule = (() => {
         <a href="https://map.naver.com/v5/" target="_blank" rel="noopener" style="margin-top:12px; padding:10px 14px; background:var(--primary); color:white; border-radius:6px; text-decoration:none; font-weight:bold;">네이버 지도 열기</a>
       </div>
     `;
+  }
+
+  function resetNaverMapRuntime() {
+    document
+      .querySelectorAll('script[src*="openapi.map.naver.com"], script[src*="oapi.map.naver.com"]')
+      .forEach((script) => script.remove());
+    delete window.__naverMapLoaded;
+    try {
+      delete window.naver;
+    } catch (error) {
+      window.naver = undefined;
+    }
+  }
+
+  function verifyMapReady(container) {
+    const canvas = container?.querySelector('#map-canvas');
+    if (!canvas) {
+      return Promise.resolve(false);
+    }
+
+    return new Promise((resolve) => {
+      let attempts = 0;
+      const timer = setInterval(() => {
+        attempts += 1;
+        const backgroundImage = window.getComputedStyle(canvas).backgroundImage || '';
+        if (backgroundImage.includes('auth_fail')) {
+          clearInterval(timer);
+          resolve(false);
+          return;
+        }
+
+        if (attempts >= 8) {
+          clearInterval(timer);
+          resolve(true);
+        }
+      }, 700);
+    });
+  }
+
+  function buildMapAuthMessage(candidateKeys) {
+    const keyLabel = Array.from(new Set(candidateKeys.filter(Boolean))).join(', ');
+    return `네이버 지도 인증이 실패했습니다. Naver Cloud Maps에서 사용 중인 Key ID(${keyLabel})에 https://hospital-ranking.kr 와 https://www.hospital-ranking.kr 를 등록했는지 확인해 주세요.`;
   }
 
   /**

@@ -5,7 +5,77 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>개인정보처리방침 - 병원찾기</title>
   <meta name="description" content="병원찾기의 개인정보처리방침. 개인정보보호법에 의거한 정보 수집, 이용, 제공, 파기 등에 관한 규정 안내.">
+  <link rel="canonical" href="https://hospital-ranking.kr/privacy.html">
+  <meta name="robots" content="index,follow">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .policy-page {
+      max-width: 980px;
+      padding-top: 56px;
+    }
+    .policy-hero {
+      padding: 34px;
+      border: 1px solid var(--border-default);
+      border-radius: var(--r-xl);
+      background:
+        radial-gradient(circle at top right, rgba(199, 139, 70, 0.12), transparent 28%),
+        linear-gradient(135deg, color-mix(in srgb, var(--bg-card) 86%, white 14%), color-mix(in srgb, var(--bg-body) 92%, white 8%));
+      margin-bottom: 24px;
+    }
+    .policy-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .policy-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border-default);
+      background: color-mix(in srgb, var(--bg-card) 88%, white 12%);
+      color: var(--text-muted);
+      font-size: 0.92rem;
+    }
+    .policy-section {
+      border: 1px solid var(--border-default);
+      border-radius: 18px;
+      background: var(--bg-card);
+      box-shadow: var(--shadow-xs);
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+    .policy-content {
+      line-height: 1.82;
+      color: var(--text-body);
+      font-size: 1.04rem;
+    }
+    .policy-content h2 {
+      font-size: 1.42rem;
+      margin: 0 0 12px;
+      color: var(--text-heading);
+    }
+    .policy-content h2:not(:first-of-type) {
+      margin-top: 28px;
+    }
+    .policy-content p,
+    .policy-content li {
+      line-height: 1.82;
+    }
+    .policy-content ul {
+      margin-bottom: 1rem;
+    }
+    @media (max-width: 768px) {
+      .policy-page {
+        padding-top: 44px;
+      }
+      .policy-hero,
+      .policy-section {
+        padding: 22px 18px;
+      }
+    }
+  </style>
 </head>
 <body class="light-mode">
   <!-- Header -->
@@ -21,32 +91,43 @@
     </div>
   </header>
 
-  <main class="container section-padding" style="max-width: 900px; padding-top: 60px;">
-    <h1 style="font-size: var(--fs-4xl); margin-bottom: var(--sp-6);">개인정보처리방침 (Privacy Policy)</h1>
-    
-    <div style="line-height: var(--lh-relaxed); color: var(--text-body); font-size: 1.05rem;">
-      <p style="margin-bottom: 2rem; font-weight: bold; background: var(--bg-card); padding: 15px; border-radius: 8px;">시행일자: 2026년 06월 17일<br>최종 수정일: 2026년 06월 17일</p>
-      
-      <p style="margin-bottom: 2rem;">'병원찾기'(이하 '회사' 또는 '본 사이트')은(는) 「개인정보 보호법」, 「정보통신망 이용촉진 및 정보보호 등에 관한 법률」 등 관련 법령상의 개인정보 보호 규정을 준수하며, 정보주체의 개인정보 보호 및 권익을 보호하고 개인정보와 관련한 이용자의 고충을 원활하게 처리할 수 있도록 다음과 같은 처리방침을 두고 있습니다.</p>
+  <main class="container section-padding policy-page">
+    <section class="policy-hero">
+      <div class="policy-badges">
+        <span class="policy-badge">개인정보 처리 기준</span>
+        <span class="policy-badge">시행일자 2026-06-17</span>
+        <span class="policy-badge">최종 수정일 2026-06-20</span>
+      </div>
+      <h1 style="font-size: var(--fs-4xl); margin:0 0 14px; color:var(--text-heading);">개인정보처리방침</h1>
+      <p style="max-width:760px; color:var(--text-body); line-height:1.82; margin:0;">
+        병원찾기가 어떤 정보를 어떤 목적과 기준으로 처리하는지 설명하는 정책 문서입니다.
+        문의, 광고, 접속 기록, 위치 검색 기능과 관련한 기본 처리 원칙을 확인할 수 있습니다.
+      </p>
+    </section>
+
+    <section class="policy-section">
+    <div class="policy-content">
+
+      <p style="margin-bottom: 2rem;">'병원찾기'(이하 '운영자' 또는 '본 사이트')는 「개인정보 보호법」, 「정보통신망 이용촉진 및 정보보호 등에 관한 법률」 등 관련 법령상의 개인정보 보호 규정을 준수하며, 정보주체의 개인정보 보호 및 권익을 보호하고 개인정보와 관련한 이용자의 고충을 원활하게 처리할 수 있도록 다음과 같은 처리방침을 두고 있습니다.</p>
 
       <h2 style="font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem; color: var(--text-heading);">제1조 (개인정보의 처리 목적)</h2>
-      <p>회사는 다음의 목적을 위하여 개인정보를 처리합니다. 처리하고 있는 개인정보는 다음의 목적 이외의 용도로는 이용되지 않으며, 이용 목적이 변경되는 경우에는 「개인정보 보호법」 제18조에 따라 별도의 동의를 받는 등 필요한 조치를 이행할 예정입니다.</p>
+      <p>운영자는 다음의 목적을 위하여 개인정보를 처리합니다. 처리하고 있는 개인정보는 다음의 목적 이외의 용도로는 이용되지 않으며, 이용 목적이 변경되는 경우에는 「개인정보 보호법」 제18조에 따라 필요한 조치를 이행할 예정입니다.</p>
       <ul style="padding-left: 20px; list-style-type: disc; margin-bottom: 1rem;">
-        <li><strong>홈페이지 회원가입 및 관리:</strong> 회원 가입의사 확인, 회원제 서비스 제공에 따른 본인 식별·인증, 회원자격 유지·관리, 서비스 부정이용 방지, 만 14세 미만 아동의 개인정보 처리 시 법정대리인의 동의여부 확인, 각종 고지·통지, 고충처리 등을 목적으로 개인정보를 처리합니다. (단, 현재 본 사이트는 비회원제로 운영되고 있습니다.)</li>
+        <li><strong>서비스 운영 및 접속 기록 관리:</strong> 서비스 안정성 유지, 비정상 접근 차단, 오류 분석, 방문 통계 확인 등을 목적으로 접속 기록을 처리합니다.</li>
         <li><strong>민원사무 처리:</strong> 민원인의 신원 확인, 민원사항 확인, 사실조사를 위한 연락·통지, 처리결과 통보 등을 목적으로 개인정보를 처리합니다.</li>
-        <li><strong>맞춤형 의료 정보 및 광고 제공:</strong> 신규 서비스(제품) 개발 및 맞춤 서비스 제공, 이벤트 및 광고성 정보 제공 및 참여기회 제공, 인구통계학적 특성에 따른 서비스 제공 및 광고 게재, 서비스의 유효성 확인, 접속빈도 파악 또는 회원의 서비스 이용에 대한 통계 등을 목적으로 개인정보를 처리합니다.</li>
+        <li><strong>광고 및 서비스 품질 개선:</strong> 광고 게재, 콘텐츠 품질 점검, 이용 흐름 파악, 페이지 성능 개선 등을 목적으로 최소한의 이용 기록을 활용할 수 있습니다.</li>
       </ul>
 
       <h2 style="font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem; color: var(--text-heading);">제2조 (처리하는 개인정보의 항목)</h2>
-      <p>회사는 서비스 제공을 위해 아래와 같은 개인정보를 수집하고 있습니다.</p>
+      <p>운영자는 서비스 제공을 위해 아래와 같은 개인정보를 수집하거나 처리할 수 있습니다.</p>
       <ul style="padding-left: 20px; list-style-type: disc; margin-bottom: 1rem;">
         <li><strong>필수 항목:</strong> 서비스 이용 과정에서 생성되는 IP 주소, 쿠키(Cookie), 방문 일시, 서비스 이용 기록, 불량 이용 기록, 접속 단말기 정보(OS, 브라우저 정보)</li>
         <li><strong>선택 항목:</strong> 사용자가 위치 기반 병원 검색 기능을 사용할 경우 수집되는 위도 및 경도 데이터 (이 정보는 실시간 검색에만 활용되며 서버에 영구 저장되지 않습니다.)</li>
-        <li><strong>문의하기 이용 시:</strong> 이메일 주소, 이름, 문의 내용</li>
+        <li><strong>문의하기 이용 시:</strong> 이메일 주소, 이름 또는 식별 가능한 서명, 문의 내용</li>
       </ul>
 
       <h2 style="font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem; color: var(--text-heading);">제3조 (개인정보의 처리 및 보유 기간)</h2>
-      <p>① 회사는 법령에 따른 개인정보 보유·이용기간 또는 정보주체로부터 개인정보를 수집 시에 동의받은 개인정보 보유·이용기간 내에서 개인정보를 처리·보유합니다.<br>
+      <p>① 운영자는 법령에 따른 개인정보 보유·이용기간 또는 정보주체로부터 개인정보를 수집 시에 동의받은 개인정보 보유·이용기간 내에서 개인정보를 처리·보유합니다.<br>
       ② 각각의 개인정보 처리 및 보유 기간은 다음과 같습니다.</p>
       <ul style="padding-left: 20px; list-style-type: disc; margin-bottom: 1rem;">
         <li>소비자의 불만 또는 분쟁처리에 관한 기록: 3년 (전자상거래 등에서의 소비자보호에 관한 법률)</li>
@@ -55,7 +136,7 @@
       </ul>
 
       <h2 style="font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem; color: var(--text-heading);">제4조 (개인정보의 제3자 제공)</h2>
-      <p>회사는 정보주체의 개인정보를 제1조(개인정보의 처리 목적)에서 명시한 범위 내에서만 처리하며, 정보주체의 동의, 법률의 특별한 규정 등 「개인정보 보호법」 제17조 및 제18조에 해당하는 경우에만 개인정보를 제3자에게 제공합니다. 현재 회사는 어떠한 개인정보도 제3자에게 임의로 제공하고 있지 않습니다.</p>
+      <p>운영자는 정보주체의 개인정보를 제1조(개인정보의 처리 목적)에서 명시한 범위 내에서만 처리하며, 정보주체의 동의, 법률의 특별한 규정 등 「개인정보 보호법」 제17조 및 제18조에 해당하는 경우에만 개인정보를 제3자에게 제공합니다. 현재 운영자는 법령상 요구되는 경우를 제외하고 개인정보를 임의로 제3자에게 제공하지 않습니다.</p>
 
       <h2 style="font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem; color: var(--text-heading);">제5조 (구글 애드센스(Google AdSense) 및 쿠키 운용)</h2>
       <p>① 본 사이트는 구글 애드센스(Google AdSense)를 포함한 제3자 광고 업체의 광고를 게재합니다.<br>
@@ -64,10 +145,10 @@
       ④ 정보주체는 <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener" style="color: var(--primary); text-decoration: underline;">구글 광고 설정 페이지</a>를 방문하여 개인 맞춤 광고를 언제든지 해제(Opt-out)할 수 있습니다.</p>
 
       <h2 style="font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem; color: var(--text-heading);">제6조 (개인정보의 파기절차 및 파기방법)</h2>
-      <p>회사는 개인정보 보유기간의 경과, 처리목적 달성 등 개인정보가 불필요하게 되었을 때에는 지체 없이 해당 개인정보를 파기합니다. 전자적 파일 형태의 정보는 기록을 재생할 수 없는 기술적 방법을 사용하며, 종이에 출력된 개인정보는 분쇄기로 분쇄하거나 소각하여 파기합니다.</p>
+      <p>운영자는 개인정보 보유기간의 경과, 처리목적 달성 등 개인정보가 불필요하게 되었을 때에는 지체 없이 해당 개인정보를 파기합니다. 전자적 파일 형태의 정보는 기록을 재생할 수 없는 기술적 방법을 사용하며, 종이에 출력된 개인정보는 분쇄기로 분쇄하거나 소각하여 파기합니다.</p>
 
       <h2 style="font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem; color: var(--text-heading);">제7조 (정보주체의 권리·의무 및 그 행사방법)</h2>
-      <p>정보주체는 회사에 대해 언제든지 다음 각 호의 개인정보 보호 관련 권리를 행사할 수 있습니다. 권리 행사는 회사에 대해 서면, 전자우편, 모사전송(FAX) 등을 통하여 하실 수 있으며, 회사는 이에 대해 지체 없이 조치하겠습니다.</p>
+      <p>정보주체는 운영자에 대해 언제든지 다음 각 호의 개인정보 보호 관련 권리를 행사할 수 있습니다. 권리 행사는 운영자에 대해 서면, 전자우편 등을 통하여 하실 수 있으며, 운영자는 이에 대해 지체 없이 조치하겠습니다.</p>
       <ul style="padding-left: 20px; list-style-type: decimal; margin-bottom: 1rem;">
         <li>개인정보 열람요구</li>
         <li>오류 등이 있을 경우 정정 요구</li>
@@ -76,14 +157,14 @@
       </ul>
 
       <h2 style="font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem; color: var(--text-heading);">제8조 (개인정보 보호책임자)</h2>
-      <p>회사는 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 정보주체의 불만처리 및 피해구제 등을 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.</p>
+      <p>운영자는 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 정보주체의 불만처리 및 피해구제 등을 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.</p>
       <ul style="list-style: none; padding: 0; line-height: 2; background: var(--bg-body); padding: 15px; border-radius: 8px; margin-bottom: 1rem;">
         <li><strong>▶ 개인정보 보호책임자 (겸 청소년보호책임자)</strong></li>
         <li>- 이 름 : 최해원</li>
         <li>- 소 속 : 에젤리더스</li>
         <li>- E-mail : <a href="mailto:replyleaders@naver.com" style="color: var(--primary); text-decoration: underline;">replyleaders@naver.com</a></li>
       </ul>
-      <p>정보주체는 회사의 서비스를 이용하시면서 발생한 모든 개인정보 보호 관련 문의, 불만처리, 피해구제 등에 관한 사항을 개인정보 보호책임자 및 담당부서로 문의하실 수 있습니다. 회사는 정보주체의 문의에 대해 지체 없이 답변 및 처리해드릴 것입니다.</p>
+      <p>정보주체는 운영자의 서비스를 이용하시면서 발생한 모든 개인정보 보호 관련 문의, 불만처리, 피해구제 등에 관한 사항을 개인정보 보호책임자에게 문의하실 수 있습니다. 운영자는 정보주체의 문의에 대해 지체 없이 답변 및 처리해드릴 것입니다.</p>
 
       <h2 style="font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem; color: var(--text-heading);">제9조 (권익침해 구제방법)</h2>
       <p>정보주체는 아래의 기관에 대해 개인정보 침해에 대한 피해구제, 상담 등을 문의하실 수 있습니다.</p>
@@ -96,6 +177,7 @@
       <h2 style="font-size: 1.5rem; margin-top: 2rem; margin-bottom: 1rem; color: var(--text-heading);">제10조 (개인정보 처리방침 변경)</h2>
       <p>이 개인정보처리방침은 2026년 06월 17일부터 적용됩니다. 법령 및 방침에 따른 변경내용의 추가, 삭제 및 정정이 있는 경우에는 변경사항의 시행 7일 전부터 공지사항을 통하여 고지할 것입니다.</p>
     </div>
+    </section>
   </main>
 
   <!-- Footer -->
@@ -103,13 +185,13 @@
     <div class="container footer-inner">
       <div class="footer-col">
         <h3>병원찾기</h3>
-        <p>공공데이터를 활용한 전국 병의원 평점 및 후기 서비스. 가장 정확한 의료 정보를 제공합니다.</p>
+        <p>공공데이터를 바탕으로 병원 탐색에 필요한 참고 정보를 정리해 제공합니다.</p>
       </div>
       <div class="footer-col">
         <h4>바로가기</h4>
         <ul>
           <li><a href="index.html">홈으로</a></li>
-          <li><a href="guide.html">질환 백과사전</a></li>
+          <li><a href="guide.html">건강 가이드</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -123,12 +205,12 @@
         <h4>고객 지원</h4>
         <ul>
           <li><a href="contact.html">고객센터 및 제휴 문의</a></li>
-          <li><a href="about.html">회사 소개</a></li>
+          <li><a href="about.html">사이트 소개</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 병원찾기. All rights reserved.</p>
+      <p>&copy; 2026 병원찾기. 모든 권리 보유.</p>
     </div>
   </footer>
 </body>

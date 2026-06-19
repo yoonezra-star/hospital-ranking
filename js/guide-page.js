@@ -20,7 +20,7 @@ function applyGuidePageEnhancements() {
     trustMeta.style.lineHeight = '1.8';
     trustMeta.style.fontSize = '0.96rem';
     trustMeta.innerHTML = `
-      <strong style="color:var(--text-heading);">최종 검토일:</strong> 2026-06-19<br>
+      <strong style="color:var(--text-heading);">최종 검토일:</strong> 2026-06-20<br>
       <strong style="color:var(--text-heading);">문의 및 정정 요청:</strong> <a href="mailto:replyleaders@naver.com" style="color:var(--primary); font-weight:700;">replyleaders@naver.com</a><br>
       <strong style="color:var(--text-heading);">안내:</strong> 본 문서는 참고용 건강 정보이며, 실제 진단과 치료 결정은 반드시 해당 병원 또는 의료진과 직접 상담해 주세요.
     `;
@@ -70,7 +70,7 @@ function applyGuidePageEnhancements() {
 
   if (footerBottom) {
     footerBottom.innerHTML = `
-      <p>&copy; 2026 병원찾기. All rights reserved.</p>
+      <p>&copy; 2026 병원찾기. 모든 권리 보유.</p>
       <p>운영 문의 및 정보 정정 요청: <a href="mailto:replyleaders@naver.com" style="color:var(--primary); font-weight:600;">replyleaders@naver.com</a></p>
       <p>본 페이지의 정보는 참고용이며, 실제 진단과 치료 결정은 반드시 해당 병원 또는 의료진과 직접 상담해 주세요.</p>
     `;

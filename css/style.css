@@ -832,6 +832,60 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
 }
 .ranking-count strong { color: var(--primary); }
 
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-7);
+}
+.trust-card,
+.faq-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-xs);
+}
+.trust-card {
+  padding: var(--sp-5);
+}
+.trust-kicker {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: var(--r-full);
+  background: color-mix(in srgb, var(--primary) 10%, white 90%);
+  color: var(--primary);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  margin-bottom: var(--sp-3);
+}
+.trust-card h3,
+.faq-card h3 {
+  font-size: var(--fs-lg);
+  color: var(--text-heading);
+  margin-bottom: var(--sp-2);
+}
+.trust-card p,
+.faq-card p {
+  color: var(--text-body);
+  font-size: var(--fs-sm);
+  line-height: 1.75;
+}
+.trust-card a,
+.faq-card a {
+  color: var(--primary);
+  font-weight: var(--fw-semibold);
+}
+
+.faq-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-4);
+}
+.faq-card {
+  padding: var(--sp-6);
+}
+
 /* ===== Review Cards ===== */
 .reviews-grid {
   display: grid;
@@ -1263,6 +1317,8 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   :root { --fs-5xl: 2.5rem; --fs-4xl: 2rem; }
   .ranking-grid { grid-template-columns: 1fr; }
   .hero-stats { gap: var(--sp-7); }
+  .trust-grid,
+  .faq-list { grid-template-columns: 1fr; }
 }
 
 /* ===== Responsive: Mobile ===== */
@@ -1304,6 +1360,8 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   
   .ranking-grid { grid-template-columns: 1fr; }
   .hospital-card { padding: var(--sp-5); }
+  .trust-card,
+  .faq-card { padding: var(--sp-5); }
   
   .reviews-grid { grid-template-columns: 1fr; }
   

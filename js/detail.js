@@ -1,5 +1,5 @@
 (() => {
-  const NAVER_MAP_DEFAULT_KEY = '390058kho4';
+  const NAVER_MAP_DEFAULT_KEYS = ['390058kho4', 'rgd9ajy97r'];
   const NAVER_MAP_STORAGE_KEY = 'NAVER_MAP_KEY';
   const FALLBACK_REVIEW_TEXTS = [
     '접수 대기 동선이 비교적 안정적이고 진료 안내가 명확한 편입니다.',
@@ -267,18 +267,37 @@
   }
 
   async function hydrateMap(hospital) {
+    let lastError = null;
     try {
-      const clientId = getStoredMapKey() || NAVER_MAP_DEFAULT_KEY;
-      if (!clientId) {
+      const candidateKeys = getMapKeyCandidates();
+      if (candidateKeys.length === 0) {
         return;
       }
 
-      await loadNaverMapScript(clientId);
-      renderLiveMap(hospital);
+      for (const clientId of candidateKeys) {
+        try {
+          resetNaverMapRuntime();
+          await loadNaverMapScript(clientId);
+          renderLiveMap(hospital);
+
+          const authOk = await verifyRenderedMap();
+          if (authOk) {
+            return;
+          }
+
+          lastError = new Error(`AUTH_FAIL:${clientId}`);
+        } catch (error) {
+          lastError = error;
+        }
+      }
     } catch (error) {
-      console.warn('[detail] live map skipped:', error);
-      const message = error.message === 'AUTH_FAIL'
-        ? '네이버 지도 인증이 실패해 지도 영역 대신 네이버 지도 바로가기를 표시합니다.'
+      lastError = error;
+    }
+
+    if (lastError) {
+      console.warn('[detail] live map skipped:', lastError);
+      const message = String(lastError.message || '').startsWith('AUTH_FAIL')
+        ? buildDetailMapAuthMessage(getMapKeyCandidates())
         : '실시간 지도를 불러오지 못해 네이버 지도 바로가기로 대체했습니다.';
       renderMapFallback(hospital, message);
     }
@@ -1203,6 +1222,11 @@
     }
   }
 
+  function getMapKeyCandidates() {
+    const storedKey = getStoredMapKey();
+    return Array.from(new Set([storedKey, ...NAVER_MAP_DEFAULT_KEYS].filter(Boolean)));
+  }
+
   function loadNaverMapScript(clientId) {
     return new Promise((resolve, reject) => {
       if (window.naver?.maps) {
@@ -1210,7 +1234,9 @@
         return;
       }
 
-      document.querySelectorAll('script[src*="openapi.map.naver.com"]').forEach((script) => script.remove());
+      document
+        .querySelectorAll('script[src*="openapi.map.naver.com"], script[src*="oapi.map.naver.com"]')
+        .forEach((script) => script.remove());
 
       const callbackName = '__detailNaverMapLoaded';
       const timeoutId = window.setTimeout(() => {
@@ -1235,6 +1261,47 @@
 
       document.head.appendChild(script);
     });
+  }
+
+  function resetNaverMapRuntime() {
+    document
+      .querySelectorAll('script[src*="openapi.map.naver.com"], script[src*="oapi.map.naver.com"]')
+      .forEach((script) => script.remove());
+    try {
+      delete window.naver;
+    } catch (error) {
+      window.naver = undefined;
+    }
+  }
+
+  function verifyRenderedMap() {
+    const container = document.getElementById('map-container');
+    if (!container) {
+      return Promise.resolve(false);
+    }
+
+    return new Promise((resolve) => {
+      let attempts = 0;
+      const timer = setInterval(() => {
+        attempts += 1;
+        const backgroundImage = window.getComputedStyle(container).backgroundImage || '';
+        if (backgroundImage.includes('auth_fail')) {
+          clearInterval(timer);
+          resolve(false);
+          return;
+        }
+
+        if (attempts >= 8) {
+          clearInterval(timer);
+          resolve(true);
+        }
+      }, 700);
+    });
+  }
+
+  function buildDetailMapAuthMessage(candidateKeys) {
+    const keyLabel = Array.from(new Set(candidateKeys.filter(Boolean))).join(', ');
+    return `네이버 지도 인증이 실패했습니다. Naver Cloud Maps에서 사용 중인 Key ID(${keyLabel})에 https://hospital-ranking.kr 와 https://www.hospital-ranking.kr 를 등록했는지 확인해 주세요.`;
   }
 })();
 

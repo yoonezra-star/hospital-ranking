@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     recentOpenList: $('#recent-open-list'),
     loadMoreBtn: $('#load-more-btn'),
     dataSourceBadge: $('#data-source-badge'),
+    dataSourceNote: $('#data-source-note'),
     reviewsTitle: $('#reviews h2'),
   };
 
@@ -196,13 +197,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!ui.dataSourceBadge) return;
 
     if (fromMock) {
-      ui.dataSourceBadge.textContent = '샘플 데이터';
+      ui.dataSourceBadge.textContent = '보강 데이터 표시';
       ui.dataSourceBadge.className = 'data-badge mock';
+      if (ui.dataSourceNote) {
+        ui.dataSourceNote.textContent = '실시간 공공 API가 지연되면 검수한 보강 데이터와 요약 정보를 먼저 보여줍니다.';
+      }
       return;
     }
 
-    ui.dataSourceBadge.textContent = '공공데이터 API 연동';
+    ui.dataSourceBadge.textContent = '공공데이터 실시간 연동';
     ui.dataSourceBadge.className = 'data-badge live';
+    if (ui.dataSourceNote) {
+      ui.dataSourceNote.textContent = '건강보험심사평가원 등 공공 API 응답을 우선 반영해 병원 목록을 보여주고 있습니다.';
+    }
   }
 
   async function loadRankingData(append = false) {
