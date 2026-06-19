@@ -232,7 +232,9 @@ document.addEventListener('DOMContentLoaded', () => {
       ? [...state.allFetchedHospitals, ...result.hospitals]
       : result.hospitals;
 
-    const sortedHospitals = SearchEngine.sortHospitals(state.allFetchedHospitals, state.currentSort);
+    const sortedHospitals = typeof SearchEngine !== 'undefined'
+      ? SearchEngine.sortHospitals(state.allFetchedHospitals, state.currentSort)
+      : [...state.allFetchedHospitals];
     renderRankingCards(sortedHospitals);
     renderQuickAccess();
     updateDataBadge(result.fromMock);
@@ -735,7 +737,11 @@ document.addEventListener('DOMContentLoaded', () => {
     state.isSearchActive = false;
     if (ui.heroSearch) ui.heroSearch.value = '';
     ui.searchResults?.classList.remove('active');
-    updateMapHospitals(SearchEngine.sortHospitals(state.allFetchedHospitals, state.currentSort));
+    updateMapHospitals(
+      typeof SearchEngine !== 'undefined'
+        ? SearchEngine.sortHospitals(state.allFetchedHospitals, state.currentSort)
+        : [...state.allFetchedHospitals]
+    );
   }
 
   function bindEvents() {
@@ -831,7 +837,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     ui.sortFilter?.addEventListener('change', () => {
       state.currentSort = ui.sortFilter.value;
-      const sortedHospitals = SearchEngine.sortHospitals(state.allFetchedHospitals, state.currentSort);
+      const sortedHospitals = typeof SearchEngine !== 'undefined'
+        ? SearchEngine.sortHospitals(state.allFetchedHospitals, state.currentSort)
+        : [...state.allFetchedHospitals];
       renderRankingCards(sortedHospitals);
       updateMapHospitals(sortedHospitals);
     });
