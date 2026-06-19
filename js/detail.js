@@ -7,6 +7,7 @@
     '위치와 접근성이 좋아 재방문 후기에서 자주 언급되는 병원입니다.',
     '야간 또는 토요일 진료 여부는 방문 전 다시 확인하는 편이 안전합니다.',
   ];
+  const detailRuntime = createEmptyDetailRuntime();
 
   document.addEventListener('DOMContentLoaded', () => {
     const hospitalId = new URLSearchParams(window.location.search).get('id');
@@ -51,6 +52,7 @@
 
   function renderDetail(hospital) {
     window.currentHospitalDetail = hospital;
+    resetDetailRuntime();
     document.title = `${hospital.name} 후기, 평점 및 진료 정보 - 병원찾기`;
     updateMetaDescription(
       `${hospital.name}의 위치, 연락처, 진료 정보, 후기 요약을 병원찾기에서 확인하세요.`
@@ -60,6 +62,10 @@
     setText('detail-emergency', '응급 진료 정보 확인 필요');
     setText('detail-hours-note', '점심시간 및 접수 안내 확인 중...');
     setText('detail-duty-note', '공개 데이터 기반 진료 안내 정보를 정리 중입니다.');
+    setText('detail-match-summary', '공공 병원 데이터 매칭 확인 중...');
+    setText('detail-operation-summary', '운영 정보를 정리 중입니다.');
+    setText('detail-location-summary', '위치 기준 정보를 정리 중입니다.');
+    setText('detail-equipment-summary', '장비와 시설 정보를 정리 중입니다.');
     updateSourceSummary(['기본 병원 정보']);
 
     const subwayWrapper = document.getElementById('detail-subway-wrapper');
@@ -87,65 +93,88 @@
   async function hydratePublicData(hospital) {
     const api = getHospitalApi();
     const sourceStates = [];
+    let matchMeta = null;
 
     try {
       let publicYkiho = typeof hospital.id === 'string' && hospital.id.startsWith('JD') ? hospital.id : '';
 
       if (!publicYkiho && api?.fetchHospitals) {
         const matchedHospital = await findPublicHospitalMatch(hospital, api);
-        if (matchedHospital) {
-          mergePublicHospital(hospital, matchedHospital);
-          publicYkiho = matchedHospital.id;
+        if (matchedHospital?.hospital) {
+          mergePublicHospital(hospital, matchedHospital.hospital);
+          publicYkiho = matchedHospital.hospital.id;
+          matchMeta = matchedHospital.meta;
           sourceStates.push('기본 병원 API 연동');
           refreshHospitalOverview(hospital);
         } else {
+          matchMeta = {
+            status: 'fallback',
+            summary: '공공 병원 데이터 매칭이 없어 현재 보유 정보 기준으로 노출합니다.',
+          };
           sourceStates.push('기본 정보는 보유 데이터 사용');
         }
       } else if (publicYkiho) {
+        matchMeta = {
+          status: 'direct',
+          summary: `공공 병원 고유코드(${publicYkiho})로 직접 조회했습니다.`,
+        };
         sourceStates.push('기본 병원 API 연동');
       }
 
       if (publicYkiho) {
         const [detailResult, equipResult, hoursResult] = await Promise.allSettled([
-          fetchJson(`/api/hospital-details?ykiho=${encodeURIComponent(publicYkiho)}`),
-          fetchJson(`/api/hospital-equip?ykiho=${encodeURIComponent(publicYkiho)}`),
-          fetchJson(buildHospitalHoursUrl(hospital)),
+          fetchJsonWithMeta(`/api/hospital-details?ykiho=${encodeURIComponent(publicYkiho)}`),
+          fetchJsonWithMeta(`/api/hospital-equip?ykiho=${encodeURIComponent(publicYkiho)}`),
+          fetchJsonWithMeta(buildHospitalHoursUrl(hospital)),
         ]);
 
         if (detailResult.status === 'fulfilled') {
-          applyDetailData(detailResult.value, hospital);
-          if (detailResult.value?.found === true) {
-            sourceStates.push('상세 정보 API');
+          detailRuntime.detailData = detailResult.value.data;
+          applyDetailData(detailResult.value.data, hospital);
+          if (detailResult.value.data?.found === true) {
+            sourceStates.push(buildSourceStateLabel('상세 정보 API', detailResult.value.dataSource));
           }
         }
 
         if (equipResult.status === 'fulfilled') {
-          applyEquipData(equipResult.value);
-          if (equipResult.value?.found === true) {
-            sourceStates.push('장비 정보 API');
+          detailRuntime.equipData = equipResult.value.data;
+          applyEquipData(equipResult.value.data);
+          if (equipResult.value.data?.found === true) {
+            sourceStates.push(buildSourceStateLabel('장비 정보 API', equipResult.value.dataSource));
           }
         }
 
         if (hoursResult.status === 'fulfilled') {
-          applyHoursData(hoursResult.value, hospital);
-          if (hoursResult.value?.found === true) {
-            sourceStates.push('진료시간 API');
+          detailRuntime.hoursData = hoursResult.value.data;
+          applyHoursData(hoursResult.value.data, hospital);
+          if (hoursResult.value.data?.found === true) {
+            sourceStates.push(buildSourceStateLabel('진료시간 API', hoursResult.value.dataSource));
           }
         }
       } else {
-        const hoursData = await fetchJson(buildHospitalHoursUrl(hospital));
-        applyHoursData(hoursData, hospital);
-        if (hoursData?.found === true) {
-          sourceStates.push('진료시간 API');
+        const hoursData = await fetchJsonWithMeta(buildHospitalHoursUrl(hospital));
+        detailRuntime.hoursData = hoursData.data;
+        applyHoursData(hoursData.data, hospital);
+        if (hoursData.data?.found === true) {
+          sourceStates.push(buildSourceStateLabel('진료시간 API', hoursData.dataSource));
         }
       }
     } catch (error) {
       console.warn('[detail] public detail enrichment skipped:', error);
+      if (!matchMeta) {
+        matchMeta = {
+          status: 'error',
+          summary: '공공데이터 상세 연동 중 오류가 발생해 기본 정보를 우선 표시합니다.',
+        };
+      }
       sourceStates.push('공공데이터 상세 연동 실패');
     }
 
+    detailRuntime.matchMeta = matchMeta;
+    detailRuntime.sourceStates = sourceStates;
     updateSourceSummary(sourceStates);
     refreshHospitalOverview(hospital);
+    renderPublicDigest(hospital);
   }
 
   async function hydrateReviews(hospital) {
@@ -157,10 +186,12 @@
     try {
       const items = await api.fetchNaverSearch(`${hospital.name} 후기`, 'blog', 5);
       if (!Array.isArray(items) || items.length === 0) {
+        renderFallbackReviews(hospital);
         return;
       }
 
       if (items.some((item) => item && Object.prototype.hasOwnProperty.call(item, 'query'))) {
+        renderFallbackReviews(hospital);
         return;
       }
 
@@ -491,15 +522,16 @@
       return;
     }
 
-    reviewList.innerHTML = FALLBACK_REVIEW_TEXTS.map((text, index) => `
+    const dynamicSummaries = buildFallbackReviewSummaries(hospital);
+    reviewList.innerHTML = dynamicSummaries.map((item, index) => `
       <article class="detail-review-item fade-up" style="display:flex; flex-direction:column; gap:8px;">
         <div style="display:flex; justify-content:space-between; gap:12px; color:var(--text-muted); font-size:0.85rem;">
           <span>병원찾기 note ${index + 1}</span>
-          <span>summary</span>
+          <span>${escapeHtml(item.meta)}</span>
         </div>
-        <h4 style="font-size:1.05rem; color:var(--text-heading); font-weight:600;">${escapeHtml(hospital.name)} 방문 요약</h4>
-        <p style="color:var(--text-body); font-size:0.95rem; line-height:1.6;">${escapeHtml(text)}</p>
-        <div><span class="review-badge" style="background:#64748b; color:#fff;">요약 리뷰</span></div>
+        <h4 style="font-size:1.05rem; color:var(--text-heading); font-weight:600;">${escapeHtml(item.title)}</h4>
+        <p style="color:var(--text-body); font-size:0.95rem; line-height:1.6;">${escapeHtml(item.body)}</p>
+        <div><span class="review-badge" style="background:#64748b; color:#fff;">${escapeHtml(item.badge)}</span></div>
       </article>
     `).join('');
   }
@@ -679,9 +711,22 @@
     target.textContent = uniqueItems.length > 0 ? uniqueItems.join(' / ') : '공공데이터 연동 상태 확인 중';
   }
 
+  function renderPublicDigest(hospital) {
+    const matchSummary = detailRuntime.matchMeta?.summary
+      || '공공 병원 데이터 매칭 정보를 정리 중입니다.';
+    const operationSummary = buildOperationSummary(hospital, detailRuntime.detailData);
+    const locationSummary = buildLocationSummary(hospital, detailRuntime.hoursData);
+    const equipmentSummary = buildEquipmentSummary(hospital, detailRuntime.equipData);
+
+    setText('detail-match-summary', matchSummary);
+    setText('detail-operation-summary', operationSummary);
+    setText('detail-location-summary', locationSummary);
+    setText('detail-equipment-summary', equipmentSummary);
+  }
+
   async function findPublicHospitalMatch(hospital, api) {
     try {
-      const response = await api.fetchHospitals({ name: hospital.name, limit: 10 });
+      const response = await api.fetchHospitals({ name: hospital.name, region: hospital.region, limit: 15 });
       if (response?.fromMock) {
         return null;
       }
@@ -691,18 +736,85 @@
       }
 
       const targetName = normalizeCompareText(hospital.name);
-      const targetAddress = normalizeCompareText(hospital.address);
+      const targetLooseName = normalizeNameText(hospital.name);
+      const targetNameTokens = extractTextTokens(hospital.name);
+      const targetAddressTokens = extractAddressTokens(hospital.address);
 
       const scored = hospitals.map((item) => {
         let score = 0;
-        if (normalizeCompareText(item.name) === targetName) score += 100;
-        if (targetAddress && normalizeCompareText(item.address).includes(targetAddress)) score += 30;
-        if (hospital.region && item.region === hospital.region) score += 15;
-        if (hospital.type && item.type === hospital.type) score += 10;
-        return { item, score };
+        const reasons = [];
+        const itemName = normalizeCompareText(item.name);
+        const itemLooseName = normalizeNameText(item.name);
+        const itemNameTokens = extractTextTokens(item.name);
+        const itemAddressTokens = extractAddressTokens(item.address);
+        const nameOverlap = countTokenOverlap(targetNameTokens, itemNameTokens);
+        const addressOverlap = countTokenOverlap(targetAddressTokens, itemAddressTokens);
+
+        if (itemName === targetName) {
+          score += 140;
+          reasons.push('이름 정확히 일치');
+        } else if (itemLooseName === targetLooseName) {
+          score += 120;
+          reasons.push('이름 정규화 일치');
+        } else if ((targetLooseName && itemLooseName.includes(targetLooseName)) || (itemLooseName && targetLooseName.includes(itemLooseName))) {
+          score += 80;
+          reasons.push('이름 부분 일치');
+        } else if (nameOverlap >= 2) {
+          score += 55;
+          reasons.push(`이름 핵심어 ${nameOverlap}개 일치`);
+        }
+
+        if (addressOverlap > 0) {
+          score += Math.min(addressOverlap * 12, 36);
+          reasons.push(`주소 핵심어 ${addressOverlap}개 일치`);
+        }
+        if (hospital.region && item.region === hospital.region) {
+          score += 20;
+          reasons.push('지역 일치');
+        }
+        if (hospital.district && item.district === hospital.district) {
+          score += 18;
+          reasons.push('세부 지역 일치');
+        }
+        if (hospital.type && item.type === hospital.type) {
+          score += 10;
+          reasons.push('병원 유형 일치');
+        }
+        if (hospital.departmentId && item.departmentId === hospital.departmentId) {
+          score += 8;
+          reasons.push('진료 분류 일치');
+        }
+
+        return {
+          item,
+          score,
+          reasons,
+          addressOverlap,
+          exactName: itemName === targetName || itemLooseName === targetLooseName,
+        };
       }).sort((left, right) => right.score - left.score);
 
-      return scored[0]?.score >= 100 ? scored[0].item : null;
+      const top = scored[0];
+      if (!top) {
+        return null;
+      }
+
+      const confidentMatch =
+        (top.exactName && top.score >= 120) ||
+        (top.score >= 118 && top.addressOverlap >= 1) ||
+        top.score >= 145;
+
+      if (!confidentMatch) {
+        return null;
+      }
+
+      return {
+        hospital: top.item,
+        meta: {
+          status: 'matched',
+          summary: `공공 병원 데이터 매칭 완료 · ${top.reasons.slice(0, 3).join(' / ')}`,
+        },
+      };
     } catch (error) {
       console.warn('[detail] public hospital match failed:', error);
       return null;
@@ -815,8 +927,191 @@
     return earthRadiusKm * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
   }
 
+  function createEmptyDetailRuntime() {
+    return {
+      matchMeta: null,
+      sourceStates: [],
+      detailData: null,
+      equipData: null,
+      hoursData: null,
+    };
+  }
+
+  function resetDetailRuntime() {
+    Object.assign(detailRuntime, createEmptyDetailRuntime());
+  }
+
+  function buildSourceStateLabel(label, dataSource) {
+    if (dataSource === 'stale-cache') {
+      return `${label} (캐시 보강)`;
+    }
+    return `${label} (실시간)`;
+  }
+
+  function buildOperationSummary(hospital, detailData) {
+    const parts = [];
+
+    if (hospital.saturdayOpen) parts.push('토요일 진료');
+    if (hospital.sundayOpen) parts.push('일요일 진료');
+    if (hospital.nightOpen) parts.push('야간 진료');
+    if (hospital.hasEmergency) parts.push('응급 진료 가능');
+    if (detailData?.rcvWeek) parts.push(`평일 접수 ${detailData.rcvWeek}`);
+    if (detailData?.rcvSat) parts.push(`토요일 접수 ${detailData.rcvSat}`);
+    if (detailData?.lunchWeek) parts.push(`점심시간 ${detailData.lunchWeek}`);
+
+    return parts.length > 0 ? parts.join(' / ') : '운영 요약 정보 확인 필요';
+  }
+
+  function buildLocationSummary(hospital, hoursData) {
+    const parts = [];
+    const regionText = buildRegionText(hospital);
+    const coordinateText = buildCoordinateLabel(hospital.lat, hospital.lng);
+
+    if (regionText && regionText !== '지역 정보 확인 중') {
+      parts.push(regionText);
+    }
+    if (hospital.subway) {
+      parts.push(hospital.subway);
+    }
+    if (coordinateText) {
+      parts.push(coordinateText);
+    }
+    if (hoursData?.dutyMapimg || hospital.mapImage) {
+      parts.push('지도 이미지 연동');
+    }
+
+    return parts.length > 0 ? parts.join(' / ') : (hospital.address || '위치 기준 정보 확인 필요');
+  }
+
+  function buildEquipmentSummary(hospital, equipData) {
+    const parts = [];
+    const facility = equipData?.facility || {};
+    const equipmentItems = Array.isArray(equipData?.equipDetails) && equipData.equipDetails.length > 0
+      ? equipData.equipDetails.slice(0, 4).map((item) => `${item.name} ${item.count}대`)
+      : Array.isArray(equipData?.equips) && equipData.equips.length > 0
+        ? equipData.equips.slice(0, 4)
+        : [];
+
+    if (equipmentItems.length > 0) {
+      parts.push(equipmentItems.join(', '));
+    } else if (hospital.equipment) {
+      parts.push(hospital.equipment);
+    }
+
+    const roomBedParts = [];
+    if (toPositiveNumber(facility.stdSickbdCnt) > 0) roomBedParts.push(`일반 병상 ${facility.stdSickbdCnt}`);
+    if (toPositiveNumber(facility.permSbdCnt) > 0) roomBedParts.push(`특수 병상 ${facility.permSbdCnt}`);
+    if (roomBedParts.length === 0) {
+      if (toPositiveNumber(hospital.roomCount) > 0) roomBedParts.push(`입원실 ${hospital.roomCount}`);
+      if (toPositiveNumber(hospital.bedCount) > 0) roomBedParts.push(`병상 ${hospital.bedCount}`);
+    }
+    if (roomBedParts.length > 0) {
+      parts.push(roomBedParts.join(' / '));
+    }
+
+    if (facility.totArea) {
+      parts.push(`면적 ${facility.totArea}`);
+    } else if (hospital.area) {
+      parts.push(hospital.area);
+    }
+
+    return parts.length > 0 ? parts.join(' / ') : '장비와 시설 정보 확인 필요';
+  }
+
+  function buildFallbackReviewSummaries(hospital) {
+    const doctorText = buildDoctorText(hospital);
+    const operationSummary = buildOperationSummary(hospital, detailRuntime.detailData);
+    const locationSummary = buildLocationSummary(hospital, detailRuntime.hoursData);
+    const equipmentSummary = buildEquipmentSummary(hospital, detailRuntime.equipData);
+
+    return [
+      {
+        title: `${hospital.name} 운영 포인트`,
+        body: truncateText(
+          operationSummary !== '운영 요약 정보 확인 필요' ? operationSummary : FALLBACK_REVIEW_TEXTS[0],
+          120
+        ),
+        meta: '운영 요약',
+        badge: '운영 체크',
+      },
+      {
+        title: `${hospital.name} 방문 동선`,
+        body: truncateText(
+          locationSummary !== '위치 기준 정보 확인 필요'
+            ? `${hospital.address || ''} / ${locationSummary}`
+            : FALLBACK_REVIEW_TEXTS[2],
+          140
+        ),
+        meta: '위치 기준',
+        badge: '방문 체크',
+      },
+      {
+        title: `${hospital.name} 규모와 장비`,
+        body: truncateText(
+          `${doctorText} / ${equipmentSummary !== '장비와 시설 정보 확인 필요' ? equipmentSummary : FALLBACK_REVIEW_TEXTS[1]}`,
+          140
+        ),
+        meta: '시설 요약',
+        badge: '시설 체크',
+      },
+    ];
+  }
+
+  function buildCoordinateLabel(lat, lng) {
+    const parsedLat = Number(lat);
+    const parsedLng = Number(lng);
+    if (!Number.isFinite(parsedLat) || !Number.isFinite(parsedLng) || parsedLat <= 0 || parsedLng <= 0) {
+      return '';
+    }
+    return `좌표 ${parsedLat.toFixed(6)}, ${parsedLng.toFixed(6)}`;
+  }
+
   function normalizeCompareText(value) {
     return String(value || '').replace(/\s+/g, '').toLowerCase();
+  }
+
+  function normalizeNameText(value) {
+    return String(value || '')
+      .toLowerCase()
+      .replace(/\([^)]*\)/g, ' ')
+      .replace(/[^0-9a-zA-Z가-힣]/g, '');
+  }
+
+  function extractTextTokens(value) {
+    return Array.from(new Set(
+      String(value || '')
+        .toLowerCase()
+        .replace(/[()]/g, ' ')
+        .split(/[\s,./-]+/)
+        .map((token) => token.trim())
+        .filter((token) => token.length >= 2)
+    ));
+  }
+
+  function extractAddressTokens(value) {
+    return extractTextTokens(
+      String(value || '')
+        .replace(/\d+층/g, ' ')
+        .replace(/\d+호/g, ' ')
+        .replace(/[()]/g, ' ')
+    ).slice(0, 10);
+  }
+
+  function countTokenOverlap(leftTokens, rightTokens) {
+    if (!Array.isArray(leftTokens) || !Array.isArray(rightTokens)) {
+      return 0;
+    }
+
+    const rightSet = new Set(rightTokens);
+    return leftTokens.filter((token) => rightSet.has(token)).length;
+  }
+
+  function truncateText(value, maxLength) {
+    const text = String(value || '').trim();
+    if (text.length <= maxLength) {
+      return text;
+    }
+    return `${text.slice(0, maxLength - 1).trim()}…`;
   }
 
   function formatPostDate(postDate) {
@@ -887,12 +1182,16 @@
     return Number.isFinite(number) && number > 0 ? number : 0;
   }
 
-  async function fetchJson(url) {
+  async function fetchJsonWithMeta(url) {
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`request failed: ${response.status}`);
     }
-    return response.json();
+
+    return {
+      data: await response.json(),
+      dataSource: response.headers.get('X-Data-Source') || 'live',
+    };
   }
 
   function getStoredMapKey() {
