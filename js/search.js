@@ -149,3 +149,5 @@ const SearchEngine = (() => {
 
   return { debounce, searchHospitals, filterHospitals, sortHospitals, query };
 })();
+
+globalThis.SearchEngine = SearchEngine;
