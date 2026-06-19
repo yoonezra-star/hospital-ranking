@@ -6,6 +6,8 @@
  * /getDtlInfo2.8
  */
 export async function onRequestGet(context) {
+  const cache = caches.default;
+  const cacheKey = new Request(context.request.url, { method: 'GET' });
   let API_KEY = context.env?.HIRA_DTL_API_KEY;
   if (!API_KEY) {
     return new Response(JSON.stringify({ error: 'Missing HIRA_DTL_API_KEY environment variable' }), {
@@ -32,20 +34,36 @@ export async function onRequestGet(context) {
   apiUrl.searchParams.set('ykiho', ykiho);
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 8500);
+  const timeoutId = setTimeout(() => controller.abort(), 12000);
 
   try {
     const response = await fetch(apiUrl.toString(), { signal: controller.signal });
     clearTimeout(timeoutId);
 
     if (!response.ok) {
-      return new Response(JSON.stringify({ error: `Upstream error ${response.status}` }), { status: 502, headers: corsHeaders('application/json') });
+      const cached = await cache.match(cacheKey);
+      if (cached) {
+        return withDataSourceHeader(cached, 'stale-cache');
+      }
+
+      return new Response(JSON.stringify({ found: false, error: `Upstream error ${response.status}` }), {
+        headers: corsHeaders('application/json'),
+      });
     }
 
     const text = await response.text();
     let data;
     try { data = JSON.parse(text); } 
-    catch { return new Response(JSON.stringify({ error: 'Invalid JSON', raw: text.slice(0, 500) }), { status: 502, headers: corsHeaders('application/json') }); }
+    catch {
+      const cached = await cache.match(cacheKey);
+      if (cached) {
+        return withDataSourceHeader(cached, 'stale-cache');
+      }
+
+      return new Response(JSON.stringify({ found: false, error: 'Invalid JSON', raw: text.slice(0, 500) }), {
+        headers: corsHeaders('application/json'),
+      });
+    }
 
     const items = data?.response?.body?.items?.item;
     if (!items) {
@@ -92,13 +110,25 @@ export async function onRequestGet(context) {
       emyDayTelNo1: item.emyDayTelNo1,
     };
 
-    return new Response(JSON.stringify(result), { headers: corsHeaders('application/json', 'public, max-age=3600') });
+    const liveResponse = new Response(JSON.stringify(result), {
+      headers: corsHeaders('application/json', 'public, max-age=3600, stale-while-revalidate=86400'),
+    });
+
+    context.waitUntil(cache.put(cacheKey, liveResponse.clone()));
+
+    return withDataSourceHeader(liveResponse, 'live');
 
   } catch (err) {
     clearTimeout(timeoutId);
-    let status = 500;
-    if (err.name === 'AbortError') status = 504;
-    return new Response(JSON.stringify({ error: err.message }), { status, headers: corsHeaders('application/json') });
+    const cached = await cache.match(cacheKey);
+    if (cached) {
+      return withDataSourceHeader(cached, 'stale-cache');
+    }
+
+    return new Response(JSON.stringify({
+      found: false,
+      error: err.name === 'AbortError' ? 'Upstream API request timed out' : err.message,
+    }), { headers: corsHeaders('application/json') });
   }
 }
 
@@ -115,4 +145,15 @@ function corsHeaders(contentType, cacheControl) {
   if (contentType) h['Content-Type'] = contentType;
   if (cacheControl) h['Cache-Control'] = cacheControl;
   return h;
+}
+
+function withDataSourceHeader(response, value) {
+  const headers = new Headers(response.headers);
+  headers.set('X-Data-Source', value);
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
 }
