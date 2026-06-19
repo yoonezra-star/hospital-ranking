@@ -1,5 +1,5 @@
 (() => {
-  const NAVER_MAP_DEFAULT_KEY = 'rgd9ajy97r';
+  const NAVER_MAP_DEFAULT_KEY = '390058kho4';
   const NAVER_MAP_STORAGE_KEY = 'NAVER_MAP_KEY';
   const FALLBACK_REVIEW_TEXTS = [
     '접수 대기 동선이 비교적 안정적이고 진료 안내가 명확한 편입니다.',
@@ -926,7 +926,7 @@
       };
 
       const script = document.createElement('script');
-      script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${encodeURIComponent(clientId)}&submodules=geocoder&callback=${callbackName}`;
+      script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${encodeURIComponent(clientId)}&submodules=geocoder&callback=${callbackName}`;
       script.async = true;
       script.onerror = () => {
         window.clearTimeout(timeoutId);

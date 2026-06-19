@@ -11,7 +11,7 @@ const MapModule = (() => {
   let activeInfoWindow = null;
   let isSdkLoaded = false;
 
-  const DEFAULT_KEY = 'rgd9ajy97r';
+  const DEFAULT_KEY = '390058kho4';
   const STORAGE_KEY = 'NAVER_MAP_KEY';
 
   // 기본 위치 (서울시청)
@@ -97,7 +97,7 @@ const MapModule = (() => {
       const script = document.createElement('script');
       script.type = 'text/javascript';
       // callback 파라미터 필수 추가 (비동기 로드 시)
-      script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${clientId}&submodules=geocoder&callback=__naverMapLoaded`;
+      script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${clientId}&submodules=geocoder&callback=__naverMapLoaded`;
       
       script.onerror = () => {
         clearTimeout(timeout);

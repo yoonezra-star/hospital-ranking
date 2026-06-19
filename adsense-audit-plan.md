@@ -102,7 +102,7 @@ Official reference:
 
 Note:
 
-- The official troubleshooting page confirms the script should use `ncpClientId`.
+- The current NAVER Maps documentation uses `ncpKeyId` for the JavaScript SDK query parameter.
 - Based on the live auth-fail behavior, the remaining issue is very likely domain/app registration rather than a code typo.
 
 ## 4. AdSense approval risk areas
