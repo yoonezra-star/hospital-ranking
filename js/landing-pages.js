@@ -3,6 +3,7 @@
     { href: 'seoul-dental.html', title: '서울 치과 병원찾기', region: '서울', department: '치과', description: '임플란트, 교정, 보철 기준으로 서울 치과 탐색 흐름을 정리했습니다.' },
     { href: 'seoul-ophthalmology.html', title: '서울 안과 병원찾기', region: '서울', department: '안과', description: '시력검사와 백내장 상담 기준으로 서울 안과 비교 흐름을 묶었습니다.' },
     { href: 'seoul-internal.html', title: '서울 내과 병원찾기', region: '서울', department: '내과', description: '건강검진 상담, 소화기 증상, 만성질환 추적 기준으로 서울 내과를 정리했습니다.' },
+    { href: 'seoul-obgyn.html', title: '서울 산부인과 병원찾기', region: '서울', department: '산부인과', description: '여성검진, 자궁경부검사, 초음파 상담, 부정출혈 체크 기준으로 서울 산부인과 흐름을 정리했습니다.' },
     { href: 'gyeonggi-orthopedic.html', title: '경기 정형외과 병원찾기', region: '경기', department: '정형외과', description: '허리, 무릎, 관절 통증 외래 기준으로 경기 정형외과를 비교합니다.' },
     { href: 'gyeonggi-dental.html', title: '경기 치과 병원찾기', region: '경기', department: '치과', description: '임플란트, 교정, 보철과 주말 외래 기준으로 경기 치과를 비교합니다.' },
     { href: 'busan-ophthalmology.html', title: '부산 안과 병원찾기', region: '부산', department: '안과', description: '시력검사와 안과 상담 기준으로 부산 지역 외래 탐색을 정리했습니다.' },
