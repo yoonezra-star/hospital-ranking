@@ -195,6 +195,15 @@
       badge: '대구 · 이비인후과',
     },
     {
+      href: 'seoul-psychiatry.html',
+      title: '서울 정신건강의학과 찾기',
+      description: '서울 정신건강의학과 비교와 우울, 불안, 수면 상담 준비 정보를 함께 확인합니다.',
+      regionKeywords: ['서울'],
+      departmentIds: ['psychiatry'],
+      departmentKeywords: ['정신건강의학과', '우울', '불안'],
+      badge: '서울 · 정신건강의학과',
+    },
+    {
       href: 'seoul-internal.html',
       title: '서울 내과 찾기',
       description: '서울 내과 비교와 건강검진, 만성질환, 소화기 상담 준비 정보를 확인합니다.',
