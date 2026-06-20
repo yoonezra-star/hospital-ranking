@@ -475,6 +475,7 @@
     renderRelatedSearchLinks(hospital);
     renderRegionalLandingLinks(hospital);
     const faqItems = renderHospitalFaqs(hospital);
+    renderOperationalExploreLinks(hospital);
     renderSchema(hospital, score, reviewCount);
     renderFaqSchema(faqItems);
   }
@@ -684,6 +685,28 @@
     return items;
   }
 
+  function renderOperationalExploreLinks(hospital) {
+    const container = ensureOperationalExploreContainer();
+    if (!container) {
+      return;
+    }
+
+    const contentApi = getHospitalContent();
+    const links = contentApi?.buildOperationalExploreLinks?.(hospital) || [];
+    if (!links.length) {
+      container.innerHTML = '<p style="margin:0; color:var(--text-muted);">운영 조건별 추천 탐색을 준비 중입니다.</p>';
+      return;
+    }
+
+    container.innerHTML = links.map((link) => `
+      <a href="${escapeHtml(link.href)}" style="display:flex; flex-direction:column; gap:8px; padding:16px; border:1px solid var(--border-default); border-radius:12px; text-decoration:none; background:var(--bg-body); color:inherit;">
+        <strong style="font-size:1rem; color:var(--text-heading);">${escapeHtml(link.title)}</strong>
+        <span style="font-size:0.93rem; color:var(--text-body); line-height:1.6;">${escapeHtml(link.description)}</span>
+        <span style="font-size:0.82rem; color:var(--primary); font-weight:600;">${escapeHtml(link.badge || '추천 탐색')}</span>
+      </a>
+    `).join('');
+  }
+
   function ensureHospitalFaqContainer() {
     const existing = document.getElementById('detail-faq-list');
     if (existing) {
@@ -708,6 +731,32 @@
 
     anchorCard.insertAdjacentElement('afterend', wrapper);
     return wrapper.querySelector('#detail-faq-list');
+  }
+
+  function ensureOperationalExploreContainer() {
+    const existing = document.getElementById('detail-operational-links');
+    if (existing) {
+      return existing;
+    }
+
+    const faqContainer = document.getElementById('detail-faq-list');
+    const anchorCard = faqContainer?.closest('.info-card')
+      || document.getElementById('detail-landing-links')?.closest('.info-card');
+    if (!anchorCard || !anchorCard.parentElement) {
+      return null;
+    }
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'info-card';
+    wrapper.innerHTML = `
+      <h3>운영 조건별 추천 탐색</h3>
+      <div id="detail-operational-links" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
+        <p style="margin:0; color:var(--text-muted);">토요일 진료, 야간 진료, 주차 정보 기준의 추천 경로를 불러오는 중입니다...</p>
+      </div>
+    `;
+
+    anchorCard.insertAdjacentElement('afterend', wrapper);
+    return wrapper.querySelector('#detail-operational-links');
   }
 
   function buildFallbackHospitalProfile(hospital) {

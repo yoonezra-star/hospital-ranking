@@ -430,6 +430,63 @@
     return results.slice(0, 3);
   }
 
+  function buildOperationalExploreLinks(hospital) {
+    const departmentId = hospital?.departmentId || inferDepartmentId(hospital);
+    const region = hospital?.region || '';
+    const departmentLabel = hospital?.department || hospital?.type || '병원';
+    const links = [];
+
+    if (hospital?.saturdayOpen) {
+      links.push({
+        title: `${region || '해당 지역'} 토요일 진료 ${departmentLabel} 찾기`,
+        href: buildIndexFilterHref({ region, department: departmentId, sort: 'newest' }),
+        description: '주말 방문이 필요한 경우 최근 운영 정보와 함께 비교할 수 있는 목록으로 이동합니다.',
+        badge: '토요일 진료',
+      });
+    } else {
+      links.push({
+        title: `${region || '해당 지역'} 주말 대비 병원 목록 보기`,
+        href: buildIndexFilterHref({ region, department: departmentId, sort: 'rating' }),
+        description: '토요일 진료 여부를 포함해 같은 진료과 병원을 먼저 비교할 수 있습니다.',
+        badge: '주말 비교',
+      });
+    }
+
+    if (hospital?.nightOpen) {
+      links.push({
+        title: `${region || '해당 지역'} 야간 진료 병원 더 보기`,
+        href: buildIndexFilterHref({ region, department: departmentId, sort: 'newest' }),
+        description: '퇴근 후 방문이 필요한 상황을 고려해 운영 흐름이 비슷한 병원을 이어서 탐색합니다.',
+        badge: '야간 진료',
+      });
+    } else {
+      links.push({
+        title: `${region || '해당 지역'} 최근 운영 병원 확인`,
+        href: buildIndexFilterHref({ region, department: departmentId, sort: 'newest' }),
+        description: '운영 시간 변동이 있을 수 있어 최근 정렬 기준으로 다시 보는 데 적합합니다.',
+        badge: '운영 정보',
+      });
+    }
+
+    if (hospital?.parkingCapacity || hospital?.parkingFee) {
+      links.push({
+        title: `${region || '해당 지역'} 주차 정보 있는 병원 찾기`,
+        href: buildIndexFilterHref({ region, department: departmentId, type: 'hospital' }),
+        description: '차량 이동이 필요한 경우 주차 정보와 접근성을 함께 확인할 수 있는 목록입니다.',
+        badge: '주차 정보',
+      });
+    } else {
+      links.push({
+        title: `${region || '해당 지역'} 접근성 비교 병원 보기`,
+        href: buildIndexFilterHref({ region, department: departmentId }),
+        description: '대중교통과 생활권 이동 동선을 중심으로 병원 후보를 다시 비교할 수 있습니다.',
+        badge: '이동 동선',
+      });
+    }
+
+    return links.slice(0, 3);
+  }
+
   function buildHospitalFaqs(hospital) {
     const profile = buildHospitalProfile(hospital);
     const departmentLabel = hospital?.department || hospital?.type || '진료과';
@@ -559,6 +616,7 @@
     buildGuideRecommendations,
     buildRelatedSearchLinks,
     buildRegionalLandingLinks,
+    buildOperationalExploreLinks,
     buildHospitalFaqs,
     getRegionalLandingSections,
     getGuideSpotlights,
