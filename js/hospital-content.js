@@ -123,6 +123,69 @@
     { title: '우울·불안 상담 병원 찾기', href: 'guide-depression.html', description: '정신건강의학과 상담 전 준비사항과 초기 질문 포인트를 정리합니다.', badge: '상담 가이드' },
   ];
 
+  const GUIDE_RECOMMENDATIONS = {
+    general: [
+      { title: '수면내시경 준비 가이드', href: 'guide-endoscopy.html', description: '검사 전 금식, 귀가 동선, 회복 포인트를 먼저 확인합니다.' },
+      { title: '당뇨 관리 가이드', href: 'guide-diabetes.html', description: '만성질환 추적 진료 전에 체크할 항목을 정리합니다.' },
+    ],
+    dental: [
+      { title: '임플란트 치과 가이드', href: 'guide-implant.html', description: '상담 전 촬영, 비용, 보철 계획을 확인할 수 있습니다.' },
+      { title: '교정 치과 가이드', href: 'guide-ortho.html', description: '교정 상담 전에 기간과 검사 포인트를 정리합니다.' },
+    ],
+    orthopedic: [
+      { title: '정형외과 진료 준비 가이드', href: 'guide-ortho.html', description: '허리, 어깨, 무릎 통증 진료 전에 확인할 내용을 모았습니다.' },
+      { title: '비염 아닌 목·통증 외래와 구분하기', href: 'guide-rhinitis.html', description: '호흡기 증상과 근골격계 증상을 구분해 외래를 찾을 때 참고합니다.' },
+    ],
+    ophthalmology: [
+      { title: '라식·라섹 가이드', href: 'guide-lasik.html', description: '시력교정술 전 검사와 회복 포인트를 확인합니다.' },
+      { title: '백내장·안과 검사 전 체크', href: 'guide-endoscopy.html', description: '정밀검사 전 준비 흐름을 참고용으로 정리했습니다.' },
+    ],
+    dermatology: [
+      { title: '여드름 피부과 가이드', href: 'guide-acne.html', description: '약 처방과 시술 상담 전에 체크할 기준을 정리합니다.' },
+      { title: '피부과 방문 전 체크', href: 'guide-rhinitis.html', description: '증상 기록과 복용약 정리를 위한 참고 가이드입니다.' },
+    ],
+    ent: [
+      { title: '비염·이비인후과 가이드', href: 'guide-rhinitis.html', description: '코막힘, 알레르기, 반복 감기 진료 전에 확인할 포인트를 모았습니다.' },
+      { title: '수면내시경 검사 가이드', href: 'guide-endoscopy.html', description: '목·위장 관련 검사 전 준비 흐름을 참고용으로 확인할 수 있습니다.' },
+    ],
+    pediatric: [
+      { title: '소아과 방문 전 체크', href: 'guide-rhinitis.html', description: '발열, 기침, 비염 증상 정리에 도움이 되는 참고 가이드입니다.' },
+      { title: '정신건강 상담 준비 가이드', href: 'guide-depression.html', description: '청소년 상담이 필요한 경우 초기 질문 포인트를 참고할 수 있습니다.' },
+    ],
+    obgyn: [
+      { title: '여성 건강 검진 전 체크', href: 'guide-endoscopy.html', description: '검사 전 준비와 귀가 동선을 참고용으로 확인할 수 있습니다.' },
+      { title: '우울·불안 상담 가이드', href: 'guide-depression.html', description: '산전·산후 정서 상담을 준비할 때 참고할 수 있습니다.' },
+    ],
+    urology: [
+      { title: '비뇨의학과 방문 가이드', href: 'guide-urology.html', description: '배뇨 불편, 결석, 전립선 진료 전에 체크할 내용을 정리했습니다.' },
+      { title: '수면내시경 검사 가이드', href: 'guide-endoscopy.html', description: '검사 동선과 준비 절차를 참고용으로 확인할 수 있습니다.' },
+    ],
+    psychiatry: [
+      { title: '우울·불안 상담 가이드', href: 'guide-depression.html', description: '초진 상담 전에 증상 정리와 질문 포인트를 먼저 확인합니다.' },
+      { title: '수면 문제 상담 전 체크', href: 'guide-depression.html', description: '수면장애와 불안 증상 기록에 참고할 수 있습니다.' },
+    ],
+    plastic: [
+      { title: '피부과·성형 상담 전 체크', href: 'guide-acne.html', description: '시술 전 준비사항과 피부 상태 기록에 참고할 수 있습니다.' },
+      { title: '라식·안과 수술 회복 가이드', href: 'guide-lasik.html', description: '수술 전후 생활 관리 흐름을 참고용으로 볼 수 있습니다.' },
+    ],
+    familymed: [
+      { title: '당뇨 관리 가이드', href: 'guide-diabetes.html', description: '검진 결과 상담과 만성질환 추적 전 체크할 내용을 정리했습니다.' },
+      { title: '비염·감기 외래 가이드', href: 'guide-rhinitis.html', description: '생활 증상 외래를 찾을 때 참고할 수 있는 기본 가이드입니다.' },
+    ],
+    pain: [
+      { title: '정형외과·통증 외래 가이드', href: 'guide-ortho.html', description: '통증 진료 전 촬영 기록과 증상 정리에 참고할 수 있습니다.' },
+      { title: '비뇨·통증 증상 구분 가이드', href: 'guide-urology.html', description: '통증 위치에 따라 필요한 외래를 구분할 때 참고용으로 확인합니다.' },
+    ],
+    korean: [
+      { title: '비염 한방 진료 전 체크', href: 'guide-rhinitis.html', description: '한방 외래와 이비인후과 방문 전 참고할 포인트를 정리했습니다.' },
+      { title: '통증 외래 준비 가이드', href: 'guide-ortho.html', description: '추나·침 상담 전 증상 정리에 도움이 되는 참고 가이드입니다.' },
+    ],
+    rehab: [
+      { title: '재활 전 정형외과 가이드', href: 'guide-ortho.html', description: '수술 후 재활, 도수치료 상담 전 체크할 항목을 정리했습니다.' },
+      { title: '만성질환 회복 관리 가이드', href: 'guide-diabetes.html', description: '회복기 생활관리와 추적 외래에 참고할 수 있습니다.' },
+    ],
+  };
+
   function buildHospitalProfile(hospital) {
     const departmentId = hospital?.departmentId || inferDepartmentId(hospital);
     const departmentProfile = DEPARTMENT_PROFILES[departmentId] || DEPARTMENT_PROFILES.general;
@@ -174,6 +237,12 @@
 
   function getGuideSpotlights() {
     return GUIDE_SPOTLIGHTS.slice();
+  }
+
+  function buildGuideRecommendations(hospital) {
+    const departmentId = hospital?.departmentId || inferDepartmentId(hospital);
+    const selected = GUIDE_RECOMMENDATIONS[departmentId] || GUIDE_RECOMMENDATIONS.general || [];
+    return selected.slice(0, 2);
   }
 
   function buildEquipmentHighlights(hospital) {
@@ -250,6 +319,7 @@
 
   window.HospitalContent = {
     buildHospitalProfile,
+    buildGuideRecommendations,
     getRegionalLandingSections,
     getGuideSpotlights,
   };

@@ -1584,30 +1584,6 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
 }
 
 /* ===== AdSense Slots ===== */
-.ad-slot {
-  background: var(--bg-body);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
-.ad-floating-left, .ad-floating-right {
-  position: fixed;
-  top: 150px;
-  width: 160px;
-  height: 600px;
-  display: none; /* Mobile default */
-  z-index: 50;
-}
-.ad-floating-left { left: max(10px, calc(50% - 750px)); }
-.ad-floating-right { right: max(10px, calc(50% - 750px)); }
-
-@media (min-width: 1400px) {
-  .ad-floating-left, .ad-floating-right {
-    display: block;
-  }
-}
-
 /* ===== Detail Page Specific ===== */
 .detail-page .main-content {
   padding-bottom: 80px;

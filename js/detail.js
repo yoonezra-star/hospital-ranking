@@ -425,6 +425,7 @@
     renderBadges(hospital);
     renderSupplementaryDetails(hospital);
     renderComparePoints(hospital);
+    renderGuideRecommendations(hospital);
     renderSchema(hospital, score, reviewCount);
   }
 
@@ -517,6 +518,28 @@
     setText('detail-transport', profile.transport || '대중교통과 주차 동선을 방문 전에 확인하세요.');
     setText('detail-accessibility', profile.accessibility || '엘리베이터, 주차, 보호자 대기 공간은 병원에 직접 확인하는 편이 안전합니다.');
     setText('detail-checklist', formatDetailList(profile.checklist, '초진 목적과 증상 시작 시점을 메모해 가면 설명이 빨라집니다.'));
+  }
+
+  function renderGuideRecommendations(hospital) {
+    const container = document.getElementById('detail-guide-links');
+    if (!container) {
+      return;
+    }
+
+    const contentApi = getHospitalContent();
+    const guides = contentApi?.buildGuideRecommendations?.(hospital) || [];
+    if (!guides.length) {
+      container.innerHTML = '<p style="margin:0; color:var(--text-muted);">관련 가이드를 준비 중입니다.</p>';
+      return;
+    }
+
+    container.innerHTML = guides.map((guide) => `
+      <a href="${escapeHtml(guide.href)}" style="display:flex; flex-direction:column; gap:8px; padding:16px; border:1px solid var(--border-default); border-radius:12px; text-decoration:none; background:var(--bg-body); color:inherit;">
+        <strong style="font-size:1rem; color:var(--text-heading);">${escapeHtml(guide.title)}</strong>
+        <span style="font-size:0.93rem; color:var(--text-body); line-height:1.6;">${escapeHtml(guide.description)}</span>
+        <span style="font-size:0.82rem; color:var(--primary); font-weight:600;">가이드 열기</span>
+      </a>
+    `).join('');
   }
 
   function buildFallbackHospitalProfile(hospital) {
