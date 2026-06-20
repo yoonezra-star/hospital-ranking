@@ -132,7 +132,7 @@
           detailRuntime.detailData = detailResult.value.data;
           applyDetailData(detailResult.value.data, hospital);
           if (detailResult.value.data?.found === true) {
-            sourceStates.push(buildSourceStateLabel('상세 정보 API', detailResult.value.dataSource));
+            sourceStates.push(buildSourceStateLabelSafe('상세 정보 API', detailResult.value.dataSource));
           }
         }
 
@@ -140,7 +140,7 @@
           detailRuntime.equipData = equipResult.value.data;
           applyEquipData(equipResult.value.data);
           if (equipResult.value.data?.found === true) {
-            sourceStates.push(buildSourceStateLabel('장비 정보 API', equipResult.value.dataSource));
+            sourceStates.push(buildSourceStateLabelSafe('장비 정보 API', equipResult.value.dataSource));
           }
         }
 
@@ -148,7 +148,7 @@
           detailRuntime.hoursData = hoursResult.value.data;
           applyHoursData(hoursResult.value.data, hospital);
           if (hoursResult.value.data?.found === true) {
-            sourceStates.push(buildSourceStateLabel('진료시간 API', hoursResult.value.dataSource));
+            sourceStates.push(buildSourceStateLabelSafe('진료시간 API', hoursResult.value.dataSource));
           }
         }
       } else {
@@ -156,7 +156,7 @@
         detailRuntime.hoursData = hoursData.data;
         applyHoursData(hoursData.data, hospital);
         if (hoursData.data?.found === true) {
-          sourceStates.push(buildSourceStateLabel('진료시간 API', hoursData.dataSource));
+          sourceStates.push(buildSourceStateLabelSafe('진료시간 API', hoursData.dataSource));
         }
       }
     } catch (error) {
@@ -172,6 +172,10 @@
 
     detailRuntime.matchMeta = matchMeta;
     detailRuntime.sourceStates = sourceStates;
+    const publicCodeSummary = buildPublicCodeSummarySafe(detailRuntime.detailData, detailRuntime.hoursData);
+    if (publicCodeSummary) {
+      sourceStates.push(publicCodeSummary);
+    }
     updateSourceSummary(sourceStates);
     refreshHospitalOverview(hospital);
     renderPublicDigest(hospital);
@@ -308,39 +312,69 @@
       return;
     }
 
+    if (detailData.telno && !hospital.phone) {
+      hospital.phone = detailData.telno;
+    }
+    if (detailData.addr && !hospital.address) {
+      hospital.address = detailData.addr;
+    }
+    if (detailData.hospUrl && !hospital.url) {
+      hospital.url = detailData.hospUrl;
+    }
+
     if (detailData.hours) {
       renderHours(detailData.hours);
     }
 
-    const parkingItems = [];
-    if (detailData.parkXpnsYn) {
-      parkingItems.push(detailData.parkXpnsYn === 'Y' ? '유료 주차' : '무료 주차');
-    }
-    if (detailData.parkQty) {
-      parkingItems.push(`주차 가능 대수 ${detailData.parkQty}`);
-    }
-    if (detailData.parkEtc) {
-      parkingItems.push(detailData.parkEtc);
+    const parkingItems = Array.isArray(detailData.parkingSummary)
+      ? detailData.parkingSummary.filter(Boolean)
+      : [];
+    if (parkingItems.length === 0) {
+      if (detailData.parkXpnsYn) {
+        parkingItems.push(detailData.parkXpnsYn === 'Y' ? '유료 주차' : '무료 주차');
+      }
+      if (detailData.parkQty) {
+        parkingItems.push(`주차 가능 대수 ${detailData.parkQty}`);
+      }
+      if (detailData.parkEtc) {
+        parkingItems.push(detailData.parkEtc);
+      }
     }
     if (parkingItems.length > 0) {
       setText('detail-parking', parkingItems.join(' / '));
     }
 
-    const emergencyItems = [];
-    if (detailData.emyDayYn === 'Y') emergencyItems.push('주간 응급 진료 가능');
-    if (detailData.emyNgtYn === 'Y') emergencyItems.push('야간 응급 진료 가능');
-    if (detailData.emyDayTelNo1) emergencyItems.push(`응급 문의 ${detailData.emyDayTelNo1}`);
+    const emergencyItems = Array.isArray(detailData.emergencySummary)
+      ? detailData.emergencySummary.filter(Boolean)
+      : [];
+    if (emergencyItems.length === 0) {
+      if (detailData.emyDayYn === 'Y') emergencyItems.push('주간 응급 진료 가능');
+      if (detailData.emyNgtYn === 'Y') emergencyItems.push('야간 응급 진료 가능');
+      if (detailData.emyDayTelNo1) emergencyItems.push(`응급 문의 ${detailData.emyDayTelNo1}`);
+    }
     if (emergencyItems.length > 0) {
       setText('detail-emergency', emergencyItems.join(' / '));
       hospital.hasEmergency = true;
     }
 
-    const noteItems = [];
-    if (detailData.rcvWeek) noteItems.push(`평일 접수 ${detailData.rcvWeek}`);
-    if (detailData.rcvSat) noteItems.push(`토요일 접수 ${detailData.rcvSat}`);
-    if (detailData.lunchWeek) noteItems.push(`점심시간 ${detailData.lunchWeek}`);
+    const noteItems = Array.isArray(detailData.receptionSummary)
+      ? detailData.receptionSummary.filter(Boolean)
+      : [];
+    if (noteItems.length === 0) {
+      if (detailData.rcvWeek) noteItems.push(`평일 접수 ${detailData.rcvWeek}`);
+      if (detailData.rcvSat) noteItems.push(`토요일 접수 ${detailData.rcvSat}`);
+      if (detailData.lunchWeek) noteItems.push(`점심시간 ${detailData.lunchWeek}`);
+    }
     if (noteItems.length > 0) {
       setText('detail-hours-note', noteItems.join(' / '));
+    }
+
+    const detailNotes = [];
+    if (detailData.ykiho) detailNotes.push(`HIRA 코드 ${detailData.ykiho}`);
+    if (detailData.hospUrl || hospital.url) detailNotes.push('공식 홈페이지 정보 확인');
+    if (parkingItems.length > 0) detailNotes.push(parkingItems[0]);
+    if (detailNotes.length > 0) {
+      setText('detail-duty-note', detailNotes.join(' / '));
     }
 
     updateOperationalBadges(detailData.hours, detailData);
@@ -374,6 +408,16 @@
     } else if (Array.isArray(equipData.equips) && equipData.equips.length > 0) {
       setText('detail-equipment', equipData.equips.slice(0, 10).join(', '));
     }
+
+    if (Array.isArray(equipData.topEquipment) && equipData.topEquipment.length > 0) {
+      const topSummary = equipData.topEquipment
+        .slice(0, 4)
+        .map((item) => `${item.name} ${item.count}대`)
+        .join(', ');
+      setText('detail-equipment-summary', topSummary);
+    } else if (Array.isArray(equipData.facilitySummary) && equipData.facilitySummary.length > 0) {
+      setText('detail-equipment-summary', equipData.facilitySummary.join(' / '));
+    }
   }
 
   function applyHoursData(hoursData, hospital) {
@@ -399,7 +443,9 @@
       hospital.mapImage = hoursData.dutyMapimg;
     }
 
-    if (hoursData.dutyInf) {
+    if (Array.isArray(hoursData.operationSummary) && hoursData.operationSummary.length > 0) {
+      setText('detail-duty-note', hoursData.operationSummary.slice(0, 3).join(' / '));
+    } else if (hoursData.dutyInf) {
       setText('detail-duty-note', hoursData.dutyInf);
     }
 
@@ -827,12 +873,114 @@
     target.textContent = uniqueItems.length > 0 ? uniqueItems.join(' / ') : '공공데이터 연동 상태 확인 중';
   }
 
+  function buildSourceStateLabelSafe(label, dataSource) {
+    if (dataSource === 'stale-cache') {
+      return `${label} (캐시 보강)`;
+    }
+    return `${label} (실시간)`;
+  }
+
+  function buildPublicCodeSummarySafe(detailData, hoursData) {
+    const codes = [];
+    if (detailData?.ykiho) {
+      codes.push(`HIRA ${detailData.ykiho}`);
+    }
+    if (hoursData?.hpid) {
+      codes.push(`NEMC ${hoursData.hpid}`);
+    }
+    return codes.length > 0 ? `기준 코드 ${codes.join(' / ')}` : '';
+  }
+
+  function buildOperationSummarySafe(hospital, detailData) {
+    const parts = [];
+
+    if (hospital.saturdayOpen) parts.push('토요일 진료');
+    if (hospital.sundayOpen) parts.push('일요일 진료');
+    if (hospital.nightOpen) parts.push('야간 진료');
+    if (hospital.hasEmergency) parts.push('응급 진료 가능');
+
+    if (Array.isArray(detailData?.receptionSummary) && detailData.receptionSummary.length > 0) {
+      parts.push(...detailData.receptionSummary.slice(0, 3));
+    } else {
+      if (detailData?.rcvWeek) parts.push(`평일 접수 ${detailData.rcvWeek}`);
+      if (detailData?.rcvSat) parts.push(`토요일 접수 ${detailData.rcvSat}`);
+      if (detailData?.lunchWeek) parts.push(`점심시간 ${detailData.lunchWeek}`);
+    }
+
+    if (Array.isArray(detailData?.parkingSummary) && detailData.parkingSummary.length > 0) {
+      parts.push(detailData.parkingSummary[0]);
+    }
+
+    return parts.length > 0 ? parts.join(' / ') : '운영 요약 정보 확인 필요';
+  }
+
+  function buildLocationSummarySafe(hospital, hoursData) {
+    const parts = [];
+    const regionText = buildRegionText(hospital);
+    const coordinateText = buildCoordinateLabel(hospital.lat, hospital.lng);
+
+    if (regionText && !regionText.includes('확인')) {
+      parts.push(regionText);
+    }
+    if (hospital.subway) {
+      parts.push(hospital.subway);
+    }
+    if (hoursData?.matchedSummary) {
+      parts.push(hoursData.matchedSummary);
+    }
+    if (coordinateText) {
+      parts.push(coordinateText);
+    }
+    if (hoursData?.dutyMapimg || hospital.mapImage) {
+      parts.push('지도 기준 정보 연동');
+    }
+
+    return parts.length > 0 ? parts.join(' / ') : (hospital.address || '위치 기준 정보 확인 필요');
+  }
+
+  function buildEquipmentSummarySafe(hospital, equipData) {
+    const parts = [];
+    const facility = equipData?.facility || {};
+    const equipmentItems = Array.isArray(equipData?.topEquipment) && equipData.topEquipment.length > 0
+      ? equipData.topEquipment.slice(0, 4).map((item) => `${item.name} ${item.count}대`)
+      : Array.isArray(equipData?.equipDetails) && equipData.equipDetails.length > 0
+        ? equipData.equipDetails.slice(0, 4).map((item) => `${item.name} ${item.count}대`)
+        : Array.isArray(equipData?.equips) && equipData.equips.length > 0
+          ? equipData.equips.slice(0, 4)
+          : [];
+
+    if (equipmentItems.length > 0) {
+      parts.push(equipmentItems.join(', '));
+    } else if (hospital.equipment) {
+      parts.push(hospital.equipment);
+    }
+
+    const roomBedParts = [];
+    if (toPositiveNumber(facility.stdSickbdCnt) > 0) roomBedParts.push(`일반 병상 ${facility.stdSickbdCnt}`);
+    if (toPositiveNumber(facility.permSbdCnt) > 0) roomBedParts.push(`특수 병상 ${facility.permSbdCnt}`);
+    if (roomBedParts.length === 0) {
+      if (toPositiveNumber(hospital.roomCount) > 0) roomBedParts.push(`입원실 ${hospital.roomCount}`);
+      if (toPositiveNumber(hospital.bedCount) > 0) roomBedParts.push(`병상 ${hospital.bedCount}`);
+    }
+    if (roomBedParts.length > 0) {
+      parts.push(roomBedParts.join(' / '));
+    }
+
+    if (facility.totArea) {
+      parts.push(`면적 ${facility.totArea}`);
+    } else if (hospital.area) {
+      parts.push(hospital.area);
+    }
+
+    return parts.length > 0 ? parts.join(' / ') : '장비와 시설 정보 확인 필요';
+  }
+
   function renderPublicDigest(hospital) {
     const matchSummary = detailRuntime.matchMeta?.summary
       || '공공 병원 데이터 매칭 정보를 정리 중입니다.';
-    const operationSummary = buildOperationSummary(hospital, detailRuntime.detailData);
-    const locationSummary = buildLocationSummary(hospital, detailRuntime.hoursData);
-    const equipmentSummary = buildEquipmentSummary(hospital, detailRuntime.equipData);
+    const operationSummary = buildOperationSummarySafe(hospital, detailRuntime.detailData);
+    const locationSummary = buildLocationSummarySafe(hospital, detailRuntime.hoursData);
+    const equipmentSummary = buildEquipmentSummarySafe(hospital, detailRuntime.equipData);
 
     setText('detail-match-summary', matchSummary);
     setText('detail-operation-summary', operationSummary);
@@ -1136,9 +1284,9 @@
 
   function buildFallbackReviewSummaries(hospital) {
     const doctorText = buildDoctorText(hospital);
-    const operationSummary = buildOperationSummary(hospital, detailRuntime.detailData);
-    const locationSummary = buildLocationSummary(hospital, detailRuntime.hoursData);
-    const equipmentSummary = buildEquipmentSummary(hospital, detailRuntime.equipData);
+    const operationSummary = buildOperationSummarySafe(hospital, detailRuntime.detailData);
+    const locationSummary = buildLocationSummarySafe(hospital, detailRuntime.hoursData);
+    const equipmentSummary = buildEquipmentSummarySafe(hospital, detailRuntime.equipData);
 
     return [
       {

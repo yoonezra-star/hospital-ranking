@@ -1,35 +1,37 @@
 /**
- * Cloudflare Pages Function - 병원 상세정보 프록시
- * 경로: /api/hospital-details
- * 
- * 원본 API: 건강보험심사평가원_의료기관별상세정보서비스 (MadmDtlInfoService2.8)
- * /getDtlInfo2.8
+ * Cloudflare Pages Function - hospital details proxy
+ * Route: /api/hospital-details
+ *
+ * Source API: HIRA MadmDtlInfoService2.8 /getDtlInfo2.8
  */
 export async function onRequestGet(context) {
   const cache = caches.default;
   const cacheKey = new Request(context.request.url, { method: 'GET' });
-  let API_KEY = context.env?.HIRA_DTL_API_KEY;
-  if (!API_KEY) {
+  let apiKey = context.env?.HIRA_DTL_API_KEY;
+
+  if (!apiKey) {
     return new Response(JSON.stringify({ error: 'Missing HIRA_DTL_API_KEY environment variable' }), {
       status: 500,
       headers: corsHeaders('application/json'),
     });
   }
-  try { API_KEY = decodeURIComponent(API_KEY); } catch (e) {}
+
+  try {
+    apiKey = decodeURIComponent(apiKey);
+  } catch (error) {}
 
   const url = new URL(context.request.url);
-  const params = url.searchParams;
-  const ykiho = params.get('ykiho');
-  
+  const ykiho = url.searchParams.get('ykiho');
+
   if (!ykiho) {
     return new Response(JSON.stringify({ error: 'Missing ykiho parameter' }), {
-      status: 400, headers: corsHeaders('application/json')
+      status: 400,
+      headers: corsHeaders('application/json'),
     });
   }
 
-  const BASE_URL = 'https://apis.data.go.kr/B551182/MadmDtlInfoService2.8/getDtlInfo2.8';
-  const apiUrl = new URL(BASE_URL);
-  apiUrl.searchParams.set('serviceKey', API_KEY);
+  const apiUrl = new URL('https://apis.data.go.kr/B551182/MadmDtlInfoService2.8/getDtlInfo2.8');
+  apiUrl.searchParams.set('serviceKey', apiKey);
   apiUrl.searchParams.set('_type', 'json');
   apiUrl.searchParams.set('ykiho', ykiho);
 
@@ -53,8 +55,10 @@ export async function onRequestGet(context) {
 
     const text = await response.text();
     let data;
-    try { data = JSON.parse(text); } 
-    catch {
+
+    try {
+      data = JSON.parse(text);
+    } catch (error) {
       const cached = await cache.match(cacheKey);
       if (cached) {
         return withDataSourceHeader(cached, 'stale-cache');
@@ -67,30 +71,54 @@ export async function onRequestGet(context) {
 
     const items = data?.response?.body?.items?.item;
     if (!items) {
-      return new Response(JSON.stringify({ found: false }), { headers: corsHeaders('application/json') });
+      return new Response(JSON.stringify({ found: false }), {
+        headers: corsHeaders('application/json'),
+      });
     }
 
     const item = Array.isArray(items) ? items[0] : items;
-
-    // 진료시간 포맷 헬퍼 (0830 → 08:30)
-    const fmtTime = (v) => {
-      if (!v) return null;
-      const s = String(v).padStart(4, '0');
-      return s.slice(0, 2) + ':' + s.slice(2, 4);
+    const fmtTime = (value) => {
+      if (!value) return null;
+      const textValue = String(value).padStart(4, '0');
+      return `${textValue.slice(0, 2)}:${textValue.slice(2, 4)}`;
     };
     const fmtRange = (start, end) => {
-      const s = fmtTime(start);
-      const e = fmtTime(end);
-      return (s && e) ? `${s} ~ ${e}` : null;
+      const open = fmtTime(start);
+      const close = fmtTime(end);
+      return open && close ? `${open} ~ ${close}` : null;
     };
+
+    const parkingSummary = [];
+    if (item.parkXpnsYn) {
+      parkingSummary.push(item.parkXpnsYn === 'Y' ? '유료 주차' : '무료 주차');
+    }
+    if (item.parkQty) {
+      parkingSummary.push(`주차 가능 ${item.parkQty}대`);
+    }
+    if (item.parkEtc) {
+      parkingSummary.push(item.parkEtc);
+    }
+
+    const emergencySummary = [];
+    if (item.emyDayYn === 'Y') emergencySummary.push('주간 응급 진료 가능');
+    if (item.emyNgtYn === 'Y') emergencySummary.push('야간 응급 진료 가능');
+    if (item.emyDayTelNo1) emergencySummary.push(`응급 문의 ${item.emyDayTelNo1}`);
+
+    const receptionSummary = [];
+    if (item.rcvWeek) receptionSummary.push(`평일 접수 ${item.rcvWeek}`);
+    if (item.rcvSat) receptionSummary.push(`토요일 접수 ${item.rcvSat}`);
+    if (item.lunchWeek) receptionSummary.push(`점심시간 ${item.lunchWeek}`);
 
     const result = {
       found: true,
-      // 주차 정보
-      parkXpnsYn: item.parkXpnsYn, // 주차비 유무 (Y/N)
+      ykiho,
+      yadmNm: item.yadmNm || null,
+      addr: item.addr || null,
+      telno: item.telno || null,
+      hospUrl: item.hospUrl || null,
+      parkXpnsYn: item.parkXpnsYn,
       parkEtc: item.parkEtc,
       parkQty: item.parkQty,
-      // 진료시간
       hours: {
         mon: fmtRange(item.trmtMonStart, item.trmtMonEnd),
         tue: fmtRange(item.trmtTueStart, item.trmtTueEnd),
@@ -104,10 +132,12 @@ export async function onRequestGet(context) {
       lunchWeek: item.lunchWeek || null,
       rcvWeek: item.rcvWeek || null,
       rcvSat: item.rcvSat || null,
-      // 응급실
       emyDayYn: item.emyDayYn,
       emyNgtYn: item.emyNgtYn,
       emyDayTelNo1: item.emyDayTelNo1,
+      parkingSummary,
+      emergencySummary,
+      receptionSummary,
     };
 
     const liveResponse = new Response(JSON.stringify(result), {
@@ -115,10 +145,8 @@ export async function onRequestGet(context) {
     });
 
     context.waitUntil(cache.put(cacheKey, liveResponse.clone()));
-
     return withDataSourceHeader(liveResponse, 'live');
-
-  } catch (err) {
+  } catch (error) {
     clearTimeout(timeoutId);
     const cached = await cache.match(cacheKey);
     if (cached) {
@@ -127,8 +155,10 @@ export async function onRequestGet(context) {
 
     return new Response(JSON.stringify({
       found: false,
-      error: err.name === 'AbortError' ? 'Upstream API request timed out' : err.message,
-    }), { headers: corsHeaders('application/json') });
+      error: error.name === 'AbortError' ? 'Upstream API request timed out' : error.message,
+    }), {
+      headers: corsHeaders('application/json'),
+    });
   }
 }
 
@@ -137,14 +167,15 @@ export async function onRequestOptions() {
 }
 
 function corsHeaders(contentType, cacheControl) {
-  const h = {
+  const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
   };
-  if (contentType) h['Content-Type'] = contentType;
-  if (cacheControl) h['Cache-Control'] = cacheControl;
-  return h;
+
+  if (contentType) headers['Content-Type'] = contentType;
+  if (cacheControl) headers['Cache-Control'] = cacheControl;
+  return headers;
 }
 
 function withDataSourceHeader(response, value) {
