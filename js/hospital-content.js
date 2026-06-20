@@ -245,6 +245,48 @@
     return selected.slice(0, 2);
   }
 
+  function buildRelatedSearchLinks(hospital) {
+    const departmentId = hospital?.departmentId || inferDepartmentId(hospital);
+    const region = hospital?.region || '';
+    const links = [];
+
+    if (region && departmentId) {
+      links.push({
+        title: `${region} ${hospital.department || '병원'} 더 보기`,
+        href: buildIndexFilterHref({ region, department: departmentId }),
+        description: `같은 지역에서 ${hospital.department || '비슷한 진료과'} 병원을 더 비교합니다.`,
+      });
+    }
+
+    if (region) {
+      links.push({
+        title: `${region} 병원급 기관 찾기`,
+        href: buildIndexFilterHref({ region, type: 'hospital' }),
+        description: '입원·검사 연계가 가능한 병원급 기관 중심으로 다시 볼 수 있습니다.',
+      });
+    }
+
+    if (hospital?.saturdayOpen || hospital?.nightOpen) {
+      links.push({
+        title: `${region || '해당 지역'} 운영 정보 확인`,
+        href: buildIndexFilterHref({ region, department: departmentId, sort: 'newest' }),
+        description: '주말·야간·최근 개원 흐름을 함께 보면서 비교할 수 있습니다.',
+      });
+    }
+
+    return links.slice(0, 3);
+  }
+
+  function buildIndexFilterHref({ region = '', department = '', type = '', sort = '' } = {}) {
+    const params = new URLSearchParams();
+    if (region) params.set('region', region);
+    if (department) params.set('department', department);
+    if (type) params.set('type', type);
+    if (sort) params.set('sort', sort);
+    const query = params.toString();
+    return query ? `index.html?${query}#ranking` : 'index.html#ranking';
+  }
+
   function buildEquipmentHighlights(hospital) {
     if (!hospital?.equipment) {
       return [];
@@ -320,6 +362,7 @@
   window.HospitalContent = {
     buildHospitalProfile,
     buildGuideRecommendations,
+    buildRelatedSearchLinks,
     getRegionalLandingSections,
     getGuideSpotlights,
   };

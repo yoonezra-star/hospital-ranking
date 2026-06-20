@@ -45,6 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
     reviewsTitle: $('#reviews h2'),
   };
 
+  applyInitialRouteState();
+
   initTheme();
   initHeader();
   initCounters();
@@ -57,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderQuickAccess();
   renderLandingSections();
   bindEvents();
+  triggerInitialKeywordSearch();
 
   function initTheme() {
     const savedTheme = localStorage.getItem('theme');
@@ -181,6 +184,8 @@ document.addEventListener('DOMContentLoaded', () => {
       option.textContent = region.name;
       ui.regionFilter.appendChild(option);
     });
+
+    syncFilterControls();
   }
 
   function showLoading(show) {
@@ -252,6 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateMapHospitals(sortedHospitals);
     showLoading(false);
     updateLoadMore();
+    syncListingQuery();
   }
 
   function renderLandingSections() {
@@ -820,6 +826,7 @@ document.addEventListener('DOMContentLoaded', () => {
       updateMapHospitals(hospitals);
     }
 
+    syncListingQuery(query);
     ui.searchResults?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
@@ -832,6 +839,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ? SearchEngine.sortHospitals(state.allFetchedHospitals, state.currentSort)
         : [...state.allFetchedHospitals]
     );
+    syncListingQuery();
   }
 
   function bindEvents() {
@@ -1010,6 +1018,64 @@ document.addEventListener('DOMContentLoaded', () => {
       return HospitalContent;
     }
     return window.HospitalContent;
+  }
+
+  function applyInitialRouteState() {
+    const params = new URLSearchParams(window.location.search);
+    const validDepartments = new Set((typeof DEPARTMENTS !== 'undefined' ? DEPARTMENTS : []).map((item) => item.id));
+    const validRegions = new Set((typeof REGIONS !== 'undefined' ? REGIONS : []).map((item) => item.name));
+    const validTypes = new Set(['all', 'hospital', 'clinic', 'dental', 'korean']);
+    const validSorts = new Set(['score', 'reviews', 'specialists', 'newest', 'name']);
+
+    const region = params.get('region');
+    const department = params.get('department');
+    const type = params.get('type');
+    const sort = params.get('sort');
+    const keyword = params.get('keyword');
+
+    if (region && validRegions.has(region)) {
+      state.currentFilters.region = region;
+    }
+    if (department && validDepartments.has(department)) {
+      state.currentFilters.department = department;
+    }
+    if (type && validTypes.has(type)) {
+      state.currentFilters.type = type;
+    }
+    if (sort && validSorts.has(sort)) {
+      state.currentSort = sort;
+    }
+    if (keyword && ui.heroSearch) {
+      ui.heroSearch.value = keyword;
+    }
+  }
+
+  function syncFilterControls() {
+    if (ui.regionFilter) ui.regionFilter.value = state.currentFilters.region;
+    if (ui.typeFilter) ui.typeFilter.value = state.currentFilters.type;
+    if (ui.sortFilter) ui.sortFilter.value = state.currentSort;
+  }
+
+  function syncListingQuery(keyword = '') {
+    const params = new URLSearchParams();
+    if (state.currentFilters.region !== 'all') params.set('region', state.currentFilters.region);
+    if (state.currentFilters.department !== 'all') params.set('department', state.currentFilters.department);
+    if (state.currentFilters.type !== 'all') params.set('type', state.currentFilters.type);
+    if (state.currentSort !== 'score') params.set('sort', state.currentSort);
+    if (keyword) params.set('keyword', keyword);
+
+    const basePath = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ''}`;
+    const hash = keyword ? '#search-results' : (params.toString() ? '#ranking' : '');
+    const nextUrl = `${basePath}${hash}`;
+    window.history.replaceState({}, '', nextUrl);
+  }
+
+  function triggerInitialKeywordSearch() {
+    const keyword = new URLSearchParams(window.location.search).get('keyword');
+    if (!keyword) {
+      return;
+    }
+    void performSearch();
   }
 });
 

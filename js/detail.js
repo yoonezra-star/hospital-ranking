@@ -426,6 +426,7 @@
     renderSupplementaryDetails(hospital);
     renderComparePoints(hospital);
     renderGuideRecommendations(hospital);
+    renderRelatedSearchLinks(hospital);
     renderSchema(hospital, score, reviewCount);
   }
 
@@ -538,6 +539,28 @@
         <strong style="font-size:1rem; color:var(--text-heading);">${escapeHtml(guide.title)}</strong>
         <span style="font-size:0.93rem; color:var(--text-body); line-height:1.6;">${escapeHtml(guide.description)}</span>
         <span style="font-size:0.82rem; color:var(--primary); font-weight:600;">가이드 열기</span>
+      </a>
+    `).join('');
+  }
+
+  function renderRelatedSearchLinks(hospital) {
+    const container = document.getElementById('detail-related-searches');
+    if (!container) {
+      return;
+    }
+
+    const contentApi = getHospitalContent();
+    const links = contentApi?.buildRelatedSearchLinks?.(hospital) || [];
+    if (!links.length) {
+      container.innerHTML = '<p style="margin:0; color:var(--text-muted);">관련 탐색 링크를 준비 중입니다.</p>';
+      return;
+    }
+
+    container.innerHTML = links.map((link) => `
+      <a href="${escapeHtml(link.href)}" style="display:flex; flex-direction:column; gap:8px; padding:16px; border:1px solid var(--border-default); border-radius:12px; text-decoration:none; background:var(--bg-body); color:inherit;">
+        <strong style="font-size:1rem; color:var(--text-heading);">${escapeHtml(link.title)}</strong>
+        <span style="font-size:0.93rem; color:var(--text-body); line-height:1.6;">${escapeHtml(link.description)}</span>
+        <span style="font-size:0.82rem; color:var(--primary); font-weight:600;">목록으로 이동</span>
       </a>
     `).join('');
   }
@@ -660,14 +683,23 @@
       return;
     }
 
-    container.innerHTML = items.map((item) => `
+    container.innerHTML = items.map((item) => {
+      const contentApi = getHospitalContent();
+      const profile = contentApi?.buildHospitalProfile?.(item);
+      const serviceText = Array.isArray(profile?.primaryServices) && profile.primaryServices.length
+        ? profile.primaryServices.slice(0, 2).join(', ')
+        : '';
+
+      return `
       <a href="detail.html?id=${encodeURIComponent(item.id)}" style="display:flex; flex-direction:column; gap:8px; padding:16px; border:1px solid var(--border-default); border-radius:12px; text-decoration:none; background:var(--bg-body); color:inherit;">
         <strong style="font-size:1rem; color:var(--text-heading);">${escapeHtml(item.name)}</strong>
         <span style="font-size:0.9rem; color:var(--primary); font-weight:600;">${escapeHtml(item.type || hospital.type || '병원')}</span>
         <span style="font-size:0.92rem; color:var(--text-body); line-height:1.5;">${escapeHtml(item.address || '주소 정보 확인 필요')}</span>
+        ${serviceText ? `<span style="font-size:0.88rem; color:var(--text-body); line-height:1.5;">주요 진료: ${escapeHtml(serviceText)}</span>` : ''}
         <span style="font-size:0.82rem; color:var(--text-muted);">전문의 ${escapeHtml(String(item.specialistCount || 0))}명 / 리뷰 ${escapeHtml(String(item.reviewCount || 0))}개${buildDistanceLabel(hospital, item)}</span>
       </a>
-    `).join('');
+    `;
+    }).join('');
   }
 
   function updateOperationalBadges(hours, detailData = null) {
