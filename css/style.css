@@ -560,6 +560,12 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   margin-bottom: var(--sp-3);
   line-height: 1.6;
 }
+.quick-access-highlights {
+  margin-bottom: var(--sp-3);
+}
+.quick-access-summary {
+  margin-bottom: var(--sp-3);
+}
 .quick-access-meta {
   display: flex;
   flex-wrap: wrap;
@@ -664,6 +670,40 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   color: var(--text-body);
   font-size: var(--fs-sm);
   line-height: 1.6;
+}
+
+.hospital-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin: 0 0 var(--sp-3);
+}
+
+.hospital-highlight {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: var(--r-full);
+  background: rgba(104, 134, 127, 0.10);
+  color: var(--primary-dark);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+}
+
+[data-theme="dark"] .hospital-highlight {
+  background: rgba(199, 139, 70, 0.18);
+  color: var(--secondary-light);
+}
+
+.hospital-data-summary {
+  margin: 0 0 var(--sp-3);
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  line-height: 1.65;
+}
+
+.hospital-data-summary.is-pending {
+  color: var(--text-muted);
 }
 
 /* ===== Department Grid ===== */
