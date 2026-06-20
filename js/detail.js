@@ -474,7 +474,9 @@
     renderGuideRecommendations(hospital);
     renderRelatedSearchLinks(hospital);
     renderRegionalLandingLinks(hospital);
+    const faqItems = renderHospitalFaqs(hospital);
     renderSchema(hospital, score, reviewCount);
+    renderFaqSchema(faqItems);
   }
 
   function renderBadges(hospital) {
@@ -657,6 +659,55 @@
 
     relatedCard.insertAdjacentElement('afterend', wrapper);
     return wrapper.querySelector('#detail-landing-links');
+  }
+
+  function renderHospitalFaqs(hospital) {
+    const container = ensureHospitalFaqContainer();
+    if (!container) {
+      return [];
+    }
+
+    const contentApi = getHospitalContent();
+    const items = contentApi?.buildHospitalFaqs?.(hospital) || [];
+    if (!items.length) {
+      container.innerHTML = '<p style="margin:0; color:var(--text-muted);">방문 전 자주 묻는 질문을 준비 중입니다.</p>';
+      return [];
+    }
+
+    container.innerHTML = items.map((item, index) => `
+      <details ${index === 0 ? 'open' : ''} style="border:1px solid var(--border-default); border-radius:14px; background:var(--bg-body); padding:16px 18px;">
+        <summary style="cursor:pointer; font-weight:700; color:var(--text-heading); line-height:1.5;">${escapeHtml(item.question)}</summary>
+        <p style="margin:12px 0 0; color:var(--text-body); line-height:1.75;">${escapeHtml(item.answer)}</p>
+      </details>
+    `).join('');
+
+    return items;
+  }
+
+  function ensureHospitalFaqContainer() {
+    const existing = document.getElementById('detail-faq-list');
+    if (existing) {
+      return existing;
+    }
+
+    const landingContainer = document.getElementById('detail-landing-links');
+    const anchorCard = landingContainer?.closest('.info-card')
+      || document.getElementById('detail-related-searches')?.closest('.info-card');
+    if (!anchorCard || !anchorCard.parentElement) {
+      return null;
+    }
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'info-card';
+    wrapper.innerHTML = `
+      <h3>병원 방문 FAQ</h3>
+      <div id="detail-faq-list" style="display:flex; flex-direction:column; gap:12px;">
+        <p style="margin:0; color:var(--text-muted);">병원 방문 전 자주 묻는 질문을 불러오는 중입니다...</p>
+      </div>
+    `;
+
+    anchorCard.insertAdjacentElement('afterend', wrapper);
+    return wrapper.querySelector('#detail-faq-list');
   }
 
   function buildFallbackHospitalProfile(hospital) {
@@ -869,6 +920,35 @@
         ratingValue: score.toFixed(1),
         reviewCount,
       },
+    };
+
+    schemaElement.textContent = JSON.stringify(schema);
+  }
+
+  function renderFaqSchema(items) {
+    if (!Array.isArray(items) || items.length === 0) {
+      return;
+    }
+
+    let schemaElement = document.getElementById('schema-hospital-faq');
+    if (!schemaElement) {
+      schemaElement = document.createElement('script');
+      schemaElement.type = 'application/ld+json';
+      schemaElement.id = 'schema-hospital-faq';
+      document.head.appendChild(schemaElement);
+    }
+
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: items.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer,
+        },
+      })),
     };
 
     schemaElement.textContent = JSON.stringify(schema);

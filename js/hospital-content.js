@@ -390,6 +390,48 @@
     return results.slice(0, 3);
   }
 
+  function buildHospitalFaqs(hospital) {
+    const profile = buildHospitalProfile(hospital);
+    const departmentLabel = hospital?.department || hospital?.type || '진료과';
+    const hospitalLabel = hospital?.name || '이 병원';
+    const visitTargets = uniqueList(profile.visitTargets || []).slice(0, 2).join(', ');
+    const documents = uniqueList(profile.documents || []).slice(0, 3).join(', ');
+    const primaryServices = uniqueList(profile.primaryServices || []).slice(0, 3).join(', ');
+    const operationFlags = [];
+
+    if (hospital?.saturdayOpen) operationFlags.push('토요일 진료');
+    if (hospital?.sundayOpen) operationFlags.push('일요일 진료');
+    if (hospital?.nightOpen) operationFlags.push('야간 진료');
+    if (hospital?.hasEmergency) operationFlags.push('응급 진료');
+
+    const operationLine = operationFlags.length > 0
+      ? `${operationFlags.join(', ')} 여부가 확인된 상태입니다.`
+      : '운영 시간과 접수 마감 시간은 방문 전에 한 번 더 확인하는 편이 안전합니다.';
+
+    const parkingLine = hospital?.parkingCapacity
+      ? `주차 가능 대수는 약 ${hospital.parkingCapacity}대로 안내되고 있습니다.`
+      : (hospital?.parkingFee ? `주차 정보는 ${hospital.parkingFee} 기준으로 확인됩니다.` : '주차 가능 여부와 비용은 병원에 직접 확인하는 편이 좋습니다.');
+
+    return [
+      {
+        question: `${hospitalLabel}에서는 어떤 진료를 우선 확인하면 좋나요?`,
+        answer: `${departmentLabel} 기준으로 ${primaryServices || '기본 진료 범위'}를 먼저 보는 것이 좋습니다. 현재 페이지에는 공개 데이터와 병원 안내 기준으로 핵심 진료 정보를 함께 정리했습니다.`,
+      },
+      {
+        question: `${hospitalLabel} 방문 전에 무엇을 준비하면 좋나요?`,
+        answer: `${documents || '신분증과 기존 검사 결과'}를 미리 챙기면 접수와 상담이 훨씬 수월합니다. ${profile.reservation || '초진 접수 시간과 필요 서류를 먼저 확인하는 편이 좋습니다.'}`,
+      },
+      {
+        question: `${hospitalLabel}가 잘 맞을 수 있는 경우는 언제인가요?`,
+        answer: `${visitTargets || `${departmentLabel} 관련 증상 상담이 필요할 때`}에 우선 검토하기 좋습니다. ${hospital?.region ? `${hospital.region} 권역에서 비교 중이라면 같은 지역 병원 페이지도 함께 보는 것이 효율적입니다.` : '비슷한 진료과 병원과 함께 비교해 보면 선택이 쉬워집니다.'}`,
+      },
+      {
+        question: `${hospitalLabel}의 운영 시간과 주차는 어떻게 확인하나요?`,
+        answer: `${operationLine} ${parkingLine} ${profile.transport || '방문 전 이동 동선도 함께 확인하는 편이 좋습니다.'}`,
+      },
+    ];
+  }
+
   function buildIndexFilterHref({ region = '', department = '', type = '', sort = '' } = {}) {
     const params = new URLSearchParams();
     if (region) params.set('region', region);
@@ -477,6 +519,7 @@
     buildGuideRecommendations,
     buildRelatedSearchLinks,
     buildRegionalLandingLinks,
+    buildHospitalFaqs,
     getRegionalLandingSections,
     getGuideSpotlights,
   };
