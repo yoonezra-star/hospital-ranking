@@ -5,6 +5,7 @@
     { href: 'seoul-internal.html', region: '서울', department: '내과', focus: '건강검진 상담, 소화기 증상, 만성질환 추적', guideLabel: '만성질환 가이드' },
     { href: 'seoul-obgyn.html', region: '서울', department: '산부인과', focus: '여성검진, 초음파 상담, 부정출혈, 폐경 전후 체크', guideLabel: '여성검진 가이드' },
     { href: 'seoul-psychiatry.html', region: '서울', department: '정신건강의학과', focus: '우울, 불안, 수면 문제, 공황, 약물 추적', guideLabel: '우울·불안 가이드' },
+    { href: 'seoul-urology.html', region: '서울', department: '비뇨의학과', focus: '요로결석, 배뇨장애, 전립선 상담, 여성 요실금', guideLabel: '비뇨의학과 가이드' },
     { href: 'gyeonggi-orthopedic.html', region: '경기', department: '정형외과', focus: '허리, 무릎, 관절 통증', guideLabel: '정형외과 가이드' },
     { href: 'gyeonggi-dental.html', region: '경기', department: '치과', focus: '임플란트, 교정, 보철', guideLabel: '임플란트 가이드' },
     { href: 'busan-ophthalmology.html', region: '부산', department: '안과', focus: '시력검사, 백내장 상담, 안구건조', guideLabel: '시력교정 가이드' },

@@ -116,6 +116,7 @@
     { title: '서울 정신건강의학과 찾기', region: '서울', department: 'psychiatry', description: '우울, 불안, 수면 상담을 서울권 외래 중심으로 비교합니다.', badge: '서울 + 정신건강' },
     { title: '서울 내과 찾기', region: '서울', department: 'general', description: '건강검진 상담, 소화기 증상, 만성질환 추적 중심으로 서울 내과 목록을 바로 탐색합니다.', badge: '서울 + 내과' },
     { title: '서울 산부인과 찾기', region: '서울', department: 'obgyn', description: '여성검진, 초음파 상담, 부정출혈 체크 기준으로 서울 산부인과 외래를 빠르게 비교합니다.', badge: '서울 + 산부인과' },
+    { title: '서울 비뇨의학과 찾기', region: '서울', department: 'urology', description: '요로결석, 배뇨장애, 전립선 상담 기준으로 서울 비뇨의학과 외래를 빠르게 비교합니다.', badge: '서울 + 비뇨의학과' },
     { title: '경기 치과 찾기', region: '경기', department: 'dental', description: '임플란트, 교정, 보철 상담 기준으로 경기권 치과 목록을 빠르게 비교합니다.', badge: '경기 + 치과' },
     { title: '인천 안과 찾기', region: '인천', department: 'ophthalmology', description: '시력검사, 백내장 상담, 안구건조 증상 중심으로 인천 안과를 비교합니다.', badge: '인천 + 안과' },
     { title: '대전 이비인후과 찾기', region: '대전', department: 'ent', description: '비염, 목 통증, 귀 증상 외래를 대전 지역 기준으로 묶어 탐색합니다.', badge: '대전 + 이비인후과' },
@@ -202,6 +203,15 @@
       departmentIds: ['psychiatry'],
       departmentKeywords: ['정신건강의학과', '우울', '불안'],
       badge: '서울 · 정신건강의학과',
+    },
+    {
+      href: 'seoul-urology.html',
+      title: '서울 비뇨의학과 찾기',
+      description: '서울 비뇨의학과 비교와 요로결석, 배뇨장애, 전립선 상담 준비 정보를 함께 확인합니다.',
+      regionKeywords: ['서울'],
+      departmentIds: ['urology'],
+      departmentKeywords: ['비뇨의학과', '요로결석', '전립선'],
+      badge: '서울 · 비뇨의학과',
     },
     {
       href: 'seoul-internal.html',
