@@ -253,7 +253,7 @@
     ],
     ophthalmology: [
       { title: '라식·라섹 가이드', href: 'guide-lasik.html', description: '시력교정술 전 검사와 회복 포인트를 확인합니다.' },
-      { title: '백내장·안과 검사 전 체크', href: 'guide-endoscopy.html', description: '정밀검사 전 준비 흐름을 참고용으로 정리했습니다.' },
+      { title: '백내장·안과 검사 전 체크', href: 'guide-cataract.html', description: '시야 흐림, 눈부심, 렌즈 선택, 수술 상담 질문을 참고용으로 정리했습니다.' },
     ],
     dermatology: [
       { title: '여드름 피부과 가이드', href: 'guide-acne.html', description: '약 처방과 시술 상담 전에 체크할 기준을 정리합니다.' },
@@ -268,7 +268,7 @@
       { title: '정신건강 상담 준비 가이드', href: 'guide-depression.html', description: '청소년 상담이 필요한 경우 초기 질문 포인트를 참고할 수 있습니다.' },
     ],
     obgyn: [
-      { title: '여성 건강 검진 전 체크', href: 'guide-endoscopy.html', description: '검사 전 준비와 귀가 동선을 참고용으로 확인할 수 있습니다.' },
+      { title: '여성 건강 검진 전 체크', href: 'guide-womens-checkup.html', description: '자궁경부검사, 초음파 상담, 부정출혈 질문 포인트를 미리 정리할 수 있습니다.' },
       { title: '우울·불안 상담 가이드', href: 'guide-depression.html', description: '산전·산후 정서 상담을 준비할 때 참고할 수 있습니다.' },
     ],
     urology: [
