@@ -37,6 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
     saturdayOpenList: $('#saturday-open-list'),
     nightOpenList: $('#night-open-list'),
     recentOpenList: $('#recent-open-list'),
+    regionSpotlightList: $('#region-spotlight-list'),
+    guideSpotlightList: $('#guide-spotlight-list'),
     loadMoreBtn: $('#load-more-btn'),
     dataSourceBadge: $('#data-source-badge'),
     dataSourceNote: $('#data-source-note'),
@@ -53,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
   void renderReviews();
   renderNewHospitals();
   renderQuickAccess();
+  renderLandingSections();
   bindEvents();
 
   function initTheme() {
@@ -244,10 +247,72 @@ document.addEventListener('DOMContentLoaded', () => {
       : [...state.allFetchedHospitals];
     renderRankingCards(sortedHospitals);
     renderQuickAccess();
+    renderLandingSections();
     updateDataBadge(result.fromMock);
     updateMapHospitals(sortedHospitals);
     showLoading(false);
     updateLoadMore();
+  }
+
+  function renderLandingSections() {
+    const contentApi = getHospitalContent();
+    const hospitals = getFeaturedHospitalsSource();
+
+    if (ui.regionSpotlightList) {
+      const sections = contentApi?.getRegionalLandingSections?.() || [];
+      ui.regionSpotlightList.innerHTML = sections.map((section, index) => {
+        const count = countLandingMatches(hospitals, section);
+        return `
+          <button
+            type="button"
+            class="landing-card fade-up delay-${index % 3}"
+            data-landing-region="${escapeHtml(section.region || '')}"
+            data-landing-department="${escapeHtml(section.department || '')}"
+            data-landing-type="${escapeHtml(section.type || '')}"
+          >
+            <span class="landing-card-badge">${escapeHtml(section.badge || '지역별 탐색')}</span>
+            <h3>${escapeHtml(section.title)}</h3>
+            <p>${escapeHtml(section.description)}</p>
+            <div class="landing-card-footer">
+              <span>필터를 적용해 병원 목록으로 바로 이동</span>
+              <span class="landing-card-count">${count.toLocaleString()}곳</span>
+            </div>
+          </button>
+        `;
+      }).join('');
+      observeNewElements(ui.regionSpotlightList);
+    }
+
+    if (ui.guideSpotlightList) {
+      const sections = contentApi?.getGuideSpotlights?.() || [];
+      ui.guideSpotlightList.innerHTML = sections.map((section, index) => `
+        <a href="${escapeHtml(section.href || '#')}" class="landing-card fade-up delay-${index % 3}">
+          <span class="landing-card-badge">${escapeHtml(section.badge || '바로가기')}</span>
+          <h3>${escapeHtml(section.title)}</h3>
+          <p>${escapeHtml(section.description)}</p>
+          <div class="landing-card-footer">
+            <span>가이드 또는 빠른 탐색 섹션으로 이동</span>
+            <span class="landing-card-count">열기</span>
+          </div>
+        </a>
+      `).join('');
+      observeNewElements(ui.guideSpotlightList);
+    }
+  }
+
+  function countLandingMatches(hospitals, section) {
+    return hospitals.filter((hospital) => {
+      if (section.region && hospital.region !== section.region) {
+        return false;
+      }
+      if (section.department && hospital.departmentId !== section.department) {
+        return false;
+      }
+      if (section.type && statefulRankingGroup(hospital) !== section.type) {
+        return false;
+      }
+      return true;
+    }).length;
   }
 
   function renderRankingCards(hospitals) {
@@ -336,11 +401,16 @@ document.addEventListener('DOMContentLoaded', () => {
     return 'clinic';
   }
 
+  function statefulRankingGroup(hospital) {
+    return getRankingGroup(hospital);
+  }
+
   function buildHospitalCard(hospital, rank) {
     const rankClass = rank <= 3 ? `rank-${rank}` : 'rank-default';
     const scorePercent = Math.max(0, Math.min(100, ((hospital.score || 0) / 5) * 100));
     const tags = [];
     const subinfo = buildHospitalSubinfo(hospital);
+    const featureNote = buildHospitalFeatureNote(hospital);
 
     if (hospital.saturdayOpen) tags.push('<span class="tag tag-sat">토요일 진료</span>');
     if (hospital.nightOpen) tags.push('<span class="tag tag-night">야간 진료</span>');
@@ -357,6 +427,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div class="hospital-address">주소 ${escapeHtml(hospital.address)}</div>
           ${subinfo ? `<div class="hospital-subinfo">${subinfo}</div>` : ''}
+          ${featureNote ? `<p class="hospital-feature-note">${escapeHtml(featureNote)}</p>` : ''}
           <div class="hospital-meta">
             <div class="meta-item">
               <span class="meta-icon">평점</span>
@@ -389,6 +460,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (hospital.openDate) bits.push(`개원 ${formatDate(hospital.openDate)}`);
     if (hospital.url) bits.push('공식 홈페이지');
     return bits.map((bit) => escapeHtml(bit)).join(' · ');
+  }
+
+  function buildHospitalFeatureNote(hospital) {
+    const contentApi = getHospitalContent();
+    const profile = contentApi?.buildHospitalProfile?.(hospital);
+    if (!profile?.primaryServices?.length) {
+      return '';
+    }
+
+    return `주요 진료: ${profile.primaryServices.slice(0, 3).join(', ')}`;
   }
 
   async function renderReviews() {
@@ -579,6 +660,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const type = hospital.department || hospital.type || '병원';
     const meta = [];
     const subinfo = buildHospitalSubinfo(hospital);
+    const featureNote = buildHospitalFeatureNote(hospital);
 
     if (hospital.score) meta.push(`평점 ${hospital.score}`);
     if (hospital.reviewCount) meta.push(`리뷰 ${Number(hospital.reviewCount).toLocaleString()}개`);
@@ -593,6 +675,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <p class="quick-access-address">${escapeHtml(hospital.address || '주소 확인 필요')}</p>
         ${subinfo ? `<div class="quick-access-subinfo">${subinfo}</div>` : ''}
+        ${featureNote ? `<p class="hospital-feature-note">${escapeHtml(featureNote)}</p>` : ''}
         <div class="quick-access-meta">${meta.map((item) => `<span>${escapeHtml(item)}</span>`).join('')}</div>
       </a>
     `;
@@ -823,6 +906,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('click', (event) => {
+      const landingCard = event.target.closest('.landing-card[data-landing-region]');
+      if (landingCard) {
+        event.preventDefault();
+        applyLandingPreset(landingCard);
+        return;
+      }
+
       const card = event.target.closest('.hospital-card');
       if (!card) return;
 
@@ -863,6 +953,21 @@ document.addEventListener('DOMContentLoaded', () => {
     void loadRankingData(false);
   }
 
+  function applyLandingPreset(card) {
+    state.currentFilters.region = card.dataset.landingRegion || 'all';
+    state.currentFilters.department = card.dataset.landingDepartment || 'all';
+    state.currentFilters.type = card.dataset.landingType || 'all';
+    state.currentSort = 'score';
+
+    if (ui.regionFilter) ui.regionFilter.value = state.currentFilters.region;
+    if (ui.typeFilter) ui.typeFilter.value = state.currentFilters.type;
+    if (ui.sortFilter) ui.sortFilter.value = 'score';
+
+    clearSearch();
+    reloadRanking();
+    $('#ranking')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   function updateMapHospitals(hospitals) {
     if (typeof MapModule !== 'undefined') {
       MapModule.updateMarkers(hospitals);
@@ -898,6 +1003,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const div = document.createElement('div');
     div.textContent = String(value ?? '');
     return div.innerHTML;
+  }
+
+  function getHospitalContent() {
+    if (typeof HospitalContent !== 'undefined') {
+      return HospitalContent;
+    }
+    return window.HospitalContent;
   }
 });
 

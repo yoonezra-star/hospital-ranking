@@ -581,6 +581,91 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   padding: var(--sp-5) 0;
 }
 
+.landing-hub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--sp-5);
+}
+
+.landing-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  min-height: 220px;
+  padding: var(--sp-5);
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-xl);
+  background:
+    radial-gradient(circle at top right, rgba(199,139,70,0.10), transparent 32%),
+    var(--bg-card);
+  box-shadow: var(--shadow-xs);
+  text-decoration: none;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: transform var(--t-fast), box-shadow var(--t-fast), border-color var(--t-fast);
+}
+
+.landing-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-light);
+}
+
+.landing-card-badge {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 5px 12px;
+  border-radius: var(--r-full);
+  background: var(--primary-50);
+  color: var(--secondary-dark);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+}
+
+.landing-card h3 {
+  color: var(--text-heading);
+  font-size: var(--fs-xl);
+  line-height: 1.35;
+}
+
+.landing-card p {
+  color: var(--text-body);
+  font-size: var(--fs-sm);
+  line-height: 1.75;
+}
+
+.landing-card-footer {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+}
+
+.landing-card-count {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 11px;
+  border-radius: var(--r-full);
+  background: var(--bg-body);
+  border: 1px solid var(--border-default);
+  color: var(--text-body);
+  font-weight: var(--fw-semibold);
+}
+
+.hospital-feature-note {
+  margin: 0 0 var(--sp-3);
+  color: var(--text-body);
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+}
+
 /* ===== Department Grid ===== */
 .dept-grid {
   display: grid;

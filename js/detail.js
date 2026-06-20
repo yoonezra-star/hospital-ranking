@@ -423,6 +423,7 @@
     setHomepageLink(hospital.url || '');
     setQuickLinks(hospital);
     renderBadges(hospital);
+    renderSupplementaryDetails(hospital);
     renderComparePoints(hospital);
     renderSchema(hospital, score, reviewCount);
   }
@@ -503,6 +504,47 @@
       parkingParts.push(hospital.parkingFee);
     }
     setText('detail-parking', parkingParts.join(' / ') || '주차 정보 확인 필요');
+  }
+
+  function renderSupplementaryDetails(hospital) {
+    const contentApi = getHospitalContent();
+    const profile = contentApi?.buildHospitalProfile?.(hospital) || buildFallbackHospitalProfile(hospital);
+
+    setText('detail-primary-services', formatDetailList(profile.primaryServices, '주요 진료 정보를 준비 중입니다.'));
+    setText('detail-visit-targets', formatDetailList(profile.visitTargets, '어떤 상황에 잘 맞는지 정리 중입니다.'));
+    setText('detail-documents', formatDetailList(profile.documents, '신분증과 기존 검사 결과를 먼저 챙기는 편이 좋습니다.'));
+    setText('detail-reservation', profile.reservation || '방문 전 접수 시간과 필요한 서류를 먼저 확인하세요.');
+    setText('detail-transport', profile.transport || '대중교통과 주차 동선을 방문 전에 확인하세요.');
+    setText('detail-accessibility', profile.accessibility || '엘리베이터, 주차, 보호자 대기 공간은 병원에 직접 확인하는 편이 안전합니다.');
+    setText('detail-checklist', formatDetailList(profile.checklist, '초진 목적과 증상 시작 시점을 메모해 가면 설명이 빨라집니다.'));
+  }
+
+  function buildFallbackHospitalProfile(hospital) {
+    const services = [];
+    if (hospital.department) services.push(`${hospital.department} 외래`);
+    if (hospital.type) services.push(`${hospital.type} 진료`);
+    if (hospital.equipment) services.push(String(hospital.equipment).split(',')[0].trim());
+
+    const documents = ['신분증'];
+    if (hospital.reviewCount) documents.push('기존 검사 결과 또는 복용약 목록');
+
+    const checklist = ['증상 시작 시점과 현재 불편을 메모해 가세요.'];
+    if (hospital.phone) checklist.push('방문 전 접수 가능 시간과 휴진 여부를 전화로 확인하세요.');
+
+    return {
+      primaryServices: services,
+      visitTargets: ['초진 진료 전 기본 정보를 미리 확인하려는 경우'],
+      documents,
+      reservation: '초진 접수 가능 시간과 점심시간을 먼저 확인하는 편이 좋습니다.',
+      transport: hospital.address || '방문 전 이동 동선을 확인하세요.',
+      accessibility: '주차와 병원 건물 편의 시설은 방문 전에 병원에 직접 확인하세요.',
+      checklist,
+    };
+  }
+
+  function formatDetailList(items, emptyMessage) {
+    const values = Array.from(new Set((items || []).filter(Boolean)));
+    return values.length > 0 ? values.join(' / ') : emptyMessage;
   }
 
   function renderComparePoints(hospital) {
@@ -1194,6 +1236,13 @@
       return HOSPITALS;
     }
     return window.HOSPITALS;
+  }
+
+  function getHospitalContent() {
+    if (typeof HospitalContent !== 'undefined') {
+      return HospitalContent;
+    }
+    return window.HospitalContent;
   }
 
   function toPositiveNumber(value) {
