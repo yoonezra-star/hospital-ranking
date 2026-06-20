@@ -7,6 +7,16 @@ function applyGuidePageEnhancements() {
   const article = document.querySelector('main article');
   const heading = article?.querySelector('h1');
   const footerBottom = document.querySelector('.footer-bottom');
+  const adSlots = document.querySelectorAll('.ad-slot, .ad-placeholder');
+
+  adSlots.forEach((node) => {
+    const slot = node.classList.contains('ad-slot') ? node : node.closest('.ad-slot');
+    if (slot) {
+      slot.remove();
+      return;
+    }
+    node.remove();
+  });
 
   if (article && heading) {
     const trustMeta = article.querySelector('[data-guide-trust-meta]') || document.createElement('div');
