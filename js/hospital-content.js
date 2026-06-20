@@ -236,6 +236,8 @@
     { title: '임플란트 치과 가이드', href: 'guide-implant.html', description: '상담 전 체크포인트, 비용, 촬영 준비를 먼저 정리해 둡니다.', badge: '치과 가이드' },
     { title: '수면내시경 병원 찾기', href: 'guide-endoscopy.html', description: '검사 전 준비, 주의사항, 회복 동선을 정리한 가이드로 연결합니다.', badge: '검사 가이드' },
     { title: '우울·불안 상담 병원 찾기', href: 'guide-depression.html', description: '정신건강의학과 상담 전 준비사항과 초기 질문 포인트를 정리합니다.', badge: '상담 가이드' },
+    { title: '백내장 검사 가이드', href: 'guide-cataract.html', description: '시야 흐림, 눈부심, 인공수정체 선택과 수술 상담 질문을 한 번에 정리합니다.', badge: '안과 가이드' },
+    { title: '여성검진 준비 가이드', href: 'guide-womens-checkup.html', description: '자궁경부검사, 초음파 상담, 부정출혈 체크 포인트를 방문 전에 정리합니다.', badge: '산부인과 가이드' },
   ];
 
   const GUIDE_RECOMMENDATIONS = {
