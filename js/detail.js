@@ -476,6 +476,7 @@
     renderRegionalLandingLinks(hospital);
     const faqItems = renderHospitalFaqs(hospital);
     renderOperationalExploreLinks(hospital);
+    renderTrustDetails(hospital);
     renderSchema(hospital, score, reviewCount);
     renderFaqSchema(faqItems);
   }
@@ -757,6 +758,59 @@
 
     anchorCard.insertAdjacentElement('afterend', wrapper);
     return wrapper.querySelector('#detail-operational-links');
+  }
+
+  function renderTrustDetails(hospital) {
+    const container = ensureTrustDetailsContainer();
+    if (!container) {
+      return;
+    }
+
+    const regionText = hospital?.region || '해당 지역';
+    const departmentText = hospital?.department || hospital?.type || '병원';
+    container.innerHTML = `
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
+        <div style="padding:16px; border:1px solid var(--border-default); border-radius:12px; background:var(--bg-body);">
+          <strong style="display:block; margin-bottom:8px; color:var(--text-heading);">데이터 기준</strong>
+          <p style="margin:0; color:var(--text-body); line-height:1.7;">이 페이지는 공개 데이터와 병원 안내 기준으로 ${regionText} ${departmentText} 정보를 참고용으로 정리한 화면입니다.</p>
+        </div>
+        <div style="padding:16px; border:1px solid var(--border-default); border-radius:12px; background:var(--bg-body);">
+          <strong style="display:block; margin-bottom:8px; color:var(--text-heading);">운영 확인</strong>
+          <p style="margin:0; color:var(--text-body); line-height:1.7;">접수 마감, 검사 포함 여부, 비용, 보호자 동행 필요 여부는 방문 전 병원에 직접 확인하는 편이 안전합니다.</p>
+        </div>
+        <div style="padding:16px; border:1px solid var(--border-default); border-radius:12px; background:var(--bg-body);">
+          <strong style="display:block; margin-bottom:8px; color:var(--text-heading);">수정 요청</strong>
+          <p style="margin:0; color:var(--text-body); line-height:1.7;">정보가 다르면 <a href="contact.html" style="color:var(--primary); font-weight:600;">문의하기</a> 또는 <a href="mailto:replyleaders@naver.com" style="color:var(--primary); font-weight:600;">replyleaders@naver.com</a>으로 보내주시면 검토 후 반영합니다.</p>
+        </div>
+      </div>
+      <p style="margin:16px 0 0; color:var(--text-muted); line-height:1.7;">자세한 운영 기준은 <a href="about.html" style="color:var(--primary); font-weight:600;">사이트 소개</a>, <a href="editorial-policy.html" style="color:var(--primary); font-weight:600;">콘텐츠 편집 원칙</a>, <a href="ad-policy.html" style="color:var(--primary); font-weight:600;">광고 및 제휴 안내</a>에서 확인할 수 있습니다.</p>
+    `;
+  }
+
+  function ensureTrustDetailsContainer() {
+    const existing = document.getElementById('detail-trust-details');
+    if (existing) {
+      return existing;
+    }
+
+    const operationalContainer = document.getElementById('detail-operational-links');
+    const anchorCard = operationalContainer?.closest('.info-card')
+      || document.getElementById('detail-faq-list')?.closest('.info-card');
+    if (!anchorCard || !anchorCard.parentElement) {
+      return null;
+    }
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'info-card';
+    wrapper.innerHTML = `
+      <h3>이 페이지를 보는 기준</h3>
+      <div id="detail-trust-details">
+        <p style="margin:0; color:var(--text-muted);">데이터 기준과 운영 확인 방법을 불러오는 중입니다...</p>
+      </div>
+    `;
+
+    anchorCard.insertAdjacentElement('afterend', wrapper);
+    return wrapper.querySelector('#detail-trust-details');
   }
 
   function buildFallbackHospitalProfile(hospital) {
