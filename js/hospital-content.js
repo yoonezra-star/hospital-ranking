@@ -116,6 +116,81 @@
     { title: '서울 정신건강의학과 찾기', region: '서울', department: 'psychiatry', description: '우울, 불안, 수면 상담을 서울권 외래 중심으로 비교합니다.', badge: '서울 + 정신건강' },
   ];
 
+  const REGIONAL_LANDING_LINKS = [
+    {
+      href: 'seoul-dental.html',
+      title: '서울 치과 찾기',
+      description: '서울 지역 치과 비교와 준비 정보를 한 번에 확인합니다.',
+      regionKeywords: ['서울'],
+      departmentIds: ['dental'],
+      departmentKeywords: ['치과'],
+      badge: '서울 · 치과',
+    },
+    {
+      href: 'seoul-ophthalmology.html',
+      title: '서울 안과 찾기',
+      description: '서울 안과 진료 비교와 검사 준비 정보를 함께 확인합니다.',
+      regionKeywords: ['서울'],
+      departmentIds: ['ophthalmology'],
+      departmentKeywords: ['안과'],
+      badge: '서울 · 안과',
+    },
+    {
+      href: 'gyeonggi-orthopedic.html',
+      title: '경기 정형외과 찾기',
+      description: '경기권 정형외과를 통증 부위와 진료 흐름 중심으로 비교합니다.',
+      regionKeywords: ['경기', '경기도'],
+      departmentIds: ['orthopedic'],
+      departmentKeywords: ['정형외과'],
+      badge: '경기 · 정형외과',
+    },
+    {
+      href: 'busan-ophthalmology.html',
+      title: '부산 안과 찾기',
+      description: '부산 지역 안과를 시력검사와 수술 상담 관점에서 정리했습니다.',
+      regionKeywords: ['부산'],
+      departmentIds: ['ophthalmology'],
+      departmentKeywords: ['안과'],
+      badge: '부산 · 안과',
+    },
+    {
+      href: 'busan-dental.html',
+      title: '부산 치과 찾기',
+      description: '부산권 치과를 임플란트, 보철, 일반 진료 기준으로 살펴봅니다.',
+      regionKeywords: ['부산'],
+      departmentIds: ['dental'],
+      departmentKeywords: ['치과'],
+      badge: '부산 · 치과',
+    },
+    {
+      href: 'daejeon-internal.html',
+      title: '대전 내과 찾기',
+      description: '대전 내과 방문 전 확인할 검사, 만성질환, 진료 흐름 정보를 모았습니다.',
+      regionKeywords: ['대전'],
+      departmentIds: ['general'],
+      departmentKeywords: ['내과'],
+      badge: '대전 · 내과',
+    },
+    {
+      href: 'incheon-pediatric.html',
+      title: '인천 소아과 찾기',
+      description: '인천 소아과 진료와 예방접종, 발열 대응 정보를 함께 안내합니다.',
+      regionKeywords: ['인천'],
+      departmentIds: ['pediatric'],
+      departmentKeywords: ['소아과', '소아청소년과'],
+      badge: '인천 · 소아과',
+    },
+    {
+      href: 'daegu-ent.html',
+      title: '대구 이비인후과 찾기',
+      description: '대구 이비인후과를 비염, 목 통증, 귀 증상 중심으로 비교합니다.',
+      regionKeywords: ['대구'],
+      departmentIds: ['ent'],
+      departmentKeywords: ['이비인후과'],
+      badge: '대구 · 이비인후과',
+    },
+  ];
+
   const GUIDE_SPOTLIGHTS = [
     { title: '토요일 진료 병원 모아보기', href: '#quick-access', description: '주말 진료, 야간 진료, 최근 개원 병원을 빠르게 체크할 수 있습니다.', badge: '상황별 탐색' },
     { title: '임플란트 치과 가이드', href: 'guide-implant.html', description: '상담 전 체크포인트, 비용, 촬영 준비를 먼저 정리해 둡니다.', badge: '치과 가이드' },
@@ -277,6 +352,44 @@
     return links.slice(0, 3);
   }
 
+  function buildRegionalLandingLinks(hospital) {
+    const regionText = `${hospital?.region || ''} ${hospital?.address || ''}`;
+    const departmentId = hospital?.departmentId || inferDepartmentId(hospital);
+    const departmentText = `${hospital?.department || ''} ${hospital?.type || ''}`;
+    const picked = new Set();
+    const results = [];
+
+    const appendMatches = (predicate) => {
+      REGIONAL_LANDING_LINKS.forEach((item) => {
+        if (picked.has(item.href) || !predicate(item)) {
+          return;
+        }
+
+        picked.add(item.href);
+        results.push({
+          href: item.href,
+          title: item.title,
+          description: item.description,
+          badge: item.badge,
+        });
+      });
+    };
+
+    appendMatches((item) => {
+      const regionMatch = item.regionKeywords.some((keyword) => regionText.includes(keyword));
+      const departmentMatch = item.departmentIds.includes(departmentId)
+        || item.departmentKeywords.some((keyword) => departmentText.includes(keyword));
+      return regionMatch && departmentMatch;
+    });
+
+    appendMatches((item) => item.regionKeywords.some((keyword) => regionText.includes(keyword)));
+    appendMatches((item) => item.departmentIds.includes(departmentId)
+      || item.departmentKeywords.some((keyword) => departmentText.includes(keyword)));
+    appendMatches(() => true);
+
+    return results.slice(0, 3);
+  }
+
   function buildIndexFilterHref({ region = '', department = '', type = '', sort = '' } = {}) {
     const params = new URLSearchParams();
     if (region) params.set('region', region);
@@ -363,6 +476,7 @@
     buildHospitalProfile,
     buildGuideRecommendations,
     buildRelatedSearchLinks,
+    buildRegionalLandingLinks,
     getRegionalLandingSections,
     getGuideSpotlights,
   };

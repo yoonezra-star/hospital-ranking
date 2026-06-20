@@ -473,6 +473,7 @@
     renderComparePoints(hospital);
     renderGuideRecommendations(hospital);
     renderRelatedSearchLinks(hospital);
+    renderRegionalLandingLinks(hospital);
     renderSchema(hospital, score, reviewCount);
   }
 
@@ -609,6 +610,53 @@
         <span style="font-size:0.82rem; color:var(--primary); font-weight:600;">목록으로 이동</span>
       </a>
     `).join('');
+  }
+
+  function renderRegionalLandingLinks(hospital) {
+    const container = ensureRegionalLandingContainer();
+    if (!container) {
+      return;
+    }
+
+    const contentApi = getHospitalContent();
+    const links = contentApi?.buildRegionalLandingLinks?.(hospital) || [];
+    if (!links.length) {
+      container.innerHTML = '<p style="margin:0; color:var(--text-muted);">지역별 병원 페이지를 준비 중입니다.</p>';
+      return;
+    }
+
+    container.innerHTML = links.map((link) => `
+      <a href="${escapeHtml(link.href)}" style="display:flex; flex-direction:column; gap:8px; padding:16px; border:1px solid var(--border-default); border-radius:12px; text-decoration:none; background:var(--bg-body); color:inherit;">
+        <strong style="font-size:1rem; color:var(--text-heading);">${escapeHtml(link.title)}</strong>
+        <span style="font-size:0.93rem; color:var(--text-body); line-height:1.6;">${escapeHtml(link.description)}</span>
+        <span style="font-size:0.82rem; color:var(--primary); font-weight:600;">${escapeHtml(link.badge || '지역 페이지')}</span>
+      </a>
+    `).join('');
+  }
+
+  function ensureRegionalLandingContainer() {
+    const existing = document.getElementById('detail-landing-links');
+    if (existing) {
+      return existing;
+    }
+
+    const relatedContainer = document.getElementById('detail-related-searches');
+    const relatedCard = relatedContainer?.closest('.info-card');
+    if (!relatedCard || !relatedCard.parentElement) {
+      return null;
+    }
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'info-card';
+    wrapper.innerHTML = `
+      <h3>지역 랜딩 페이지</h3>
+      <div id="detail-landing-links" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
+        <p style="margin:0; color:var(--text-muted);">같은 지역 기준으로 정리한 랜딩 페이지를 불러오는 중입니다...</p>
+      </div>
+    `;
+
+    relatedCard.insertAdjacentElement('afterend', wrapper);
+    return wrapper.querySelector('#detail-landing-links');
   }
 
   function buildFallbackHospitalProfile(hospital) {
