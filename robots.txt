@@ -1,4 +1,13 @@
 User-agent: *
 Allow: /
+Disallow: /adsense-audit-plan.md
+Disallow: /README.md
+Disallow: /hospital-ranking-deploy-20260620.zip
+Disallow: /test_map.html
+Disallow: /index_check.txt
+Disallow: /test_raw.bin
+Disallow: /clean_detail.js
+Disallow: /clean_map.js
+Disallow: /update1.js
 
 Sitemap: https://hospital-ranking.kr/sitemap.xml

@@ -876,6 +876,39 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   color: var(--primary);
   font-weight: var(--fw-semibold);
 }
+.policy-link-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--sp-4);
+  margin-top: var(--sp-5);
+}
+.policy-link-card {
+  display: block;
+  padding: var(--sp-5);
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--bg-card) 90%, white 10%);
+  box-shadow: var(--shadow-xs);
+  text-decoration: none;
+  transition: transform var(--t-fast), box-shadow var(--t-fast), border-color var(--t-fast);
+}
+.policy-link-card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--secondary) 45%, var(--border-default) 55%);
+  box-shadow: var(--shadow-sm);
+}
+.policy-link-card strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-heading);
+  font-size: var(--fs-md);
+}
+.policy-link-card span {
+  display: block;
+  color: var(--text-body);
+  font-size: var(--fs-sm);
+  line-height: 1.72;
+}
 
 .faq-list {
   display: grid;

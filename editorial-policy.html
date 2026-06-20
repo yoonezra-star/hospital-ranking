@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>콘텐츠 편집 원칙 - 병원찾기</title>
+  <meta name="description" content="병원찾기의 콘텐츠 편집 원칙, 정보 출처, 검수 기준, 수정 요청 처리 방식, 의료 정보 면책 원칙을 안내합니다.">
+  <link rel="canonical" href="https://hospital-ranking.kr/editorial-policy.html">
+  <meta name="robots" content="index,follow">
+  <link rel="stylesheet" href="css/style.css?v=4">
+  <style>
+    .policy-page {
+      max-width: 1040px;
+      padding-top: 56px;
+    }
+    .policy-hero,
+    .policy-section {
+      border: 1px solid var(--border-default);
+      border-radius: 18px;
+      background: var(--bg-card);
+      box-shadow: var(--shadow-xs);
+    }
+    .policy-hero {
+      padding: 34px;
+      margin-bottom: 24px;
+      background:
+        radial-gradient(circle at top right, rgba(199, 139, 70, 0.12), transparent 30%),
+        linear-gradient(135deg, color-mix(in srgb, var(--bg-card) 88%, white 12%), color-mix(in srgb, var(--bg-body) 94%, white 6%));
+    }
+    .policy-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .policy-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border-default);
+      background: color-mix(in srgb, var(--bg-card) 88%, white 12%);
+      color: var(--text-muted);
+      font-size: 0.92rem;
+    }
+    .policy-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .policy-section {
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+    .policy-section h2 {
+      margin-bottom: 12px;
+      color: var(--text-heading);
+      font-size: 1.42rem;
+    }
+    .policy-section p,
+    .policy-section li {
+      color: var(--text-body);
+      line-height: 1.82;
+    }
+    .policy-list {
+      padding-left: 18px;
+      margin: 12px 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .policy-link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .policy-link-row a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border-default);
+      background: var(--bg-body);
+      color: var(--text-heading);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    @media (max-width: 768px) {
+      .policy-page {
+        padding-top: 44px;
+      }
+      .policy-hero,
+      .policy-section {
+        padding: 22px 18px;
+      }
+      .policy-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "콘텐츠 편집 원칙",
+    "url": "https://hospital-ranking.kr/editorial-policy.html",
+    "description": "병원찾기의 콘텐츠 편집 기준, 정보 출처, 검수 원칙, 정정 요청 절차를 설명하는 페이지입니다.",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "병원찾기",
+      "url": "https://hospital-ranking.kr/"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "홈",
+        "item": "https://hospital-ranking.kr/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "콘텐츠 편집 원칙",
+        "item": "https://hospital-ranking.kr/editorial-policy.html"
+      }
+    ]
+  }
+  </script>
+</head>
+<body class="light-mode">
+  <header class="header" id="header" style="position:static; border-bottom:1px solid var(--border-default);">
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <span class="logo-icon">🏥</span>
+        <span class="gradient-text">병원찾기</span>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">홈</a>
+        <a href="guide.html">건강 가이드</a>
+        <a href="about.html">사이트 소개</a>
+        <a href="contact.html">문의하기</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container section-padding policy-page">
+    <section class="policy-hero">
+      <div class="policy-badges">
+        <span class="policy-badge">콘텐츠 운영 기준</span>
+        <span class="policy-badge">최종 검토일 2026-06-20</span>
+        <span class="policy-badge">정정 요청 replyleaders@naver.com</span>
+      </div>
+      <h1 style="font-size:var(--fs-4xl); margin:0 0 14px; color:var(--text-heading);">병원찾기 콘텐츠 편집 원칙</h1>
+      <p style="max-width:840px; color:var(--text-body); line-height:1.85; font-size:1.05rem; margin:0;">
+        병원찾기는 병원 선택 전에 참고할 수 있는 공공 데이터 기반 탐색 정보를 제공하는 사이트입니다.
+        특정 병원을 광고성으로 추천하거나 진료 결과를 보장하는 목적이 아니라, 이용자가 위치, 진료과, 운영 정보, 준비사항을 더 쉽게 확인하도록 돕는 데 목적이 있습니다.
+      </p>
+    </section>
+
+    <div class="policy-grid">
+      <section class="policy-section">
+        <h2>1. 작성 목적</h2>
+        <ul class="policy-list">
+          <li>병원명, 지역, 진료과, 운영시간, 공개 가능한 부가 정보를 한곳에서 정리합니다.</li>
+          <li>건강 가이드는 병원 방문 전 기본 이해를 돕는 참고 문서로 작성합니다.</li>
+          <li>특정 병원 또는 특정 치료를 유도하는 과장 표현은 지양합니다.</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>2. 정보 출처</h2>
+        <ul class="policy-list">
+          <li>건강보험심사평가원, 공공데이터포털 등 공개 가능한 공식 데이터를 우선 활용합니다.</li>
+          <li>병원 안내 정보는 공개 확인이 가능한 범위 안에서만 요약합니다.</li>
+          <li>실시간 응답이 지연될 경우 보강 요약 정보가 먼저 노출될 수 있습니다.</li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="policy-grid">
+      <section class="policy-section">
+        <h2>3. 검수와 수정</h2>
+        <ul class="policy-list">
+          <li>페이지 문구, 출처, 링크, 날짜 표기를 정기적으로 확인합니다.</li>
+          <li>병원명, 주소, 전화번호, 운영시간 변경 제보는 메일로 접수합니다.</li>
+          <li>근거가 확인되면 우선 검토 후 수정 반영합니다.</li>
+        </ul>
+      </section>
+
+      <section class="policy-section">
+        <h2>4. 의료 정보 면책</h2>
+        <ul class="policy-list">
+          <li>이 사이트의 정보는 참고용이며 진단, 치료, 약물 결정 자체를 대신하지 않습니다.</li>
+          <li>응급 증상, 갑작스러운 악화, 복용 중인 약 관련 판단은 의료진 상담이 우선입니다.</li>
+          <li>비용, 대기시간, 장비 보유 여부는 방문 전 해당 병원에 다시 확인해야 합니다.</li>
+        </ul>
+      </section>
+    </div>
+
+    <section class="policy-section">
+      <h2>5. 품질 원칙</h2>
+      <ul class="policy-list">
+        <li>동일한 문구를 기계적으로 반복하는 얇은 페이지 대신, 이용자가 실제로 확인해야 할 체크포인트를 중심으로 작성합니다.</li>
+        <li>광고 영역과 정보성 콘텐츠를 구분하고, 광고 여부가 병원 목록 정렬 기준을 직접 바꾸지 않도록 운영합니다.</li>
+        <li>정책, 출처, 정정 요청 방법은 페이지 하단 링크와 별도 안내 페이지에서 확인할 수 있게 유지합니다.</li>
+      </ul>
+    </section>
+
+    <section class="policy-section">
+      <h2>바로가기</h2>
+      <p>운영 기준과 관련된 페이지를 함께 확인할 수 있습니다.</p>
+      <div class="policy-link-row">
+        <a href="about.html">사이트 소개</a>
+        <a href="ad-policy.html">광고 및 제휴 안내</a>
+        <a href="contact.html">정정 요청 문의</a>
+        <a href="privacy.html">개인정보처리방침</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" style="margin-top:48px;">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="logo">
+            <span class="logo-icon">🏥</span>
+            <span class="gradient-text">병원찾기</span>
+          </div>
+          <p>공공 데이터와 공개 가능한 의료 정보를 바탕으로 병원 탐색에 필요한 참고 정보를 제공합니다.</p>
+        </div>
+        <div class="footer-links-group">
+          <h4>바로가기</h4>
+          <a href="index.html">홈</a>
+          <a href="guide.html">건강 가이드</a>
+          <a href="about.html">사이트 소개</a>
+        </div>
+        <div class="footer-links-group">
+          <h4>운영 기준</h4>
+          <a href="editorial-policy.html">콘텐츠 편집 원칙</a>
+          <a href="ad-policy.html">광고 및 제휴 안내</a>
+        </div>
+        <div class="footer-links-group">
+          <h4>문의</h4>
+          <a href="contact.html">문의하기</a>
+          <a href="mailto:replyleaders@naver.com">replyleaders@naver.com</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 병원찾기. 모든 권리 보유.</p>
+        <p>콘텐츠는 참고용이며 실제 진단과 치료 결정은 반드시 해당 병원 또는 의료진과 직접 상담해 주세요.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
