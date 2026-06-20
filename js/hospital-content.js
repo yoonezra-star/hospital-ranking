@@ -114,6 +114,10 @@
     { title: '부산 종합병원 찾기', region: '부산', type: 'hospital', description: '입원·검사 연계가 필요한 부산권 병원급 의료기관을 모아 봅니다.', badge: '부산 + 병원급' },
     { title: '대전 피부과 찾기', region: '대전', department: 'dermatology', description: '피부염, 여드름, 색소 상담 병원을 대전 기준으로 빠르게 찾습니다.', badge: '대전 + 피부과' },
     { title: '서울 정신건강의학과 찾기', region: '서울', department: 'psychiatry', description: '우울, 불안, 수면 상담을 서울권 외래 중심으로 비교합니다.', badge: '서울 + 정신건강' },
+    { title: '서울 내과 찾기', region: '서울', department: 'general', description: '건강검진 상담, 소화기 증상, 만성질환 추적 중심으로 서울 내과 목록을 바로 탐색합니다.', badge: '서울 + 내과' },
+    { title: '경기 치과 찾기', region: '경기', department: 'dental', description: '임플란트, 교정, 보철 상담 기준으로 경기권 치과 목록을 빠르게 비교합니다.', badge: '경기 + 치과' },
+    { title: '인천 안과 찾기', region: '인천', department: 'ophthalmology', description: '시력검사, 백내장 상담, 안구건조 증상 중심으로 인천 안과를 비교합니다.', badge: '인천 + 안과' },
+    { title: '대전 이비인후과 찾기', region: '대전', department: 'ent', description: '비염, 목 통증, 귀 증상 외래를 대전 지역 기준으로 묶어 탐색합니다.', badge: '대전 + 이비인후과' },
   ];
 
   const REGIONAL_LANDING_LINKS = [
@@ -188,6 +192,42 @@
       departmentIds: ['ent'],
       departmentKeywords: ['이비인후과'],
       badge: '대구 · 이비인후과',
+    },
+    {
+      href: 'seoul-internal.html',
+      title: '서울 내과 찾기',
+      description: '서울 내과 비교와 건강검진, 만성질환, 소화기 상담 준비 정보를 확인합니다.',
+      regionKeywords: ['서울'],
+      departmentIds: ['general'],
+      departmentKeywords: ['내과'],
+      badge: '서울 · 내과',
+    },
+    {
+      href: 'gyeonggi-dental.html',
+      title: '경기 치과 찾기',
+      description: '경기 지역 치과를 임플란트, 교정, 보철 기준으로 비교합니다.',
+      regionKeywords: ['경기', '경기도'],
+      departmentIds: ['dental'],
+      departmentKeywords: ['치과'],
+      badge: '경기 · 치과',
+    },
+    {
+      href: 'incheon-ophthalmology.html',
+      title: '인천 안과 찾기',
+      description: '인천 안과 진료 비교와 시력검사, 백내장 상담 준비 정보를 함께 확인합니다.',
+      regionKeywords: ['인천'],
+      departmentIds: ['ophthalmology'],
+      departmentKeywords: ['안과'],
+      badge: '인천 · 안과',
+    },
+    {
+      href: 'daejeon-ent.html',
+      title: '대전 이비인후과 찾기',
+      description: '대전 이비인후과를 비염, 목 통증, 귀 증상 중심으로 비교합니다.',
+      regionKeywords: ['대전'],
+      departmentIds: ['ent'],
+      departmentKeywords: ['이비인후과'],
+      badge: '대전 · 이비인후과',
     },
   ];
 
