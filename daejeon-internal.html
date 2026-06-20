@@ -17,14 +17,19 @@
   <style>
     .landing-page { max-width: 1120px; padding-top: 56px; }
     .landing-hero { padding: 36px; border: 1px solid var(--border-default); border-radius: 24px; background: radial-gradient(circle at top right, rgba(84, 117, 74, 0.16), transparent 28%), linear-gradient(135deg, color-mix(in srgb, var(--bg-card) 84%, white 16%), color-mix(in srgb, var(--bg-body) 90%, white 10%)); margin-bottom: 28px; }
-    .landing-grid, .landing-link-grid { display: grid; gap: 20px; }
+    .landing-grid, .landing-link-grid, .hospital-spotlight-grid { display: grid; gap: 20px; }
     .landing-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-bottom: 28px; }
     .landing-link-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .hospital-spotlight-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-top: 28px; }
     .landing-card-page, .landing-note { border: 1px solid var(--border-default); border-radius: 20px; background: var(--bg-card); box-shadow: var(--shadow-xs); padding: 24px; }
     .landing-card-page ul { padding-left: 18px; margin: 0; }
     .landing-card-page li, .landing-card-page p, .landing-note p { color: var(--text-body); line-height: 1.7; }
     .landing-link { display:flex; flex-direction:column; gap:10px; min-height:100%; padding:22px; border:1px solid var(--border-default); border-radius:18px; background:var(--bg-card); text-decoration:none; color:inherit; box-shadow:var(--shadow-xs); }
     .landing-badge { display:inline-flex; width:fit-content; padding:7px 12px; border-radius:999px; background:color-mix(in srgb, #eaf4df 68%, white 32%); color:#4c6f22; font-size:0.84rem; font-weight:700; }
+    .hospital-spotlight-card { display:flex; flex-direction:column; gap:12px; padding:22px; border:1px solid var(--border-default); border-radius:18px; background:var(--bg-card); text-decoration:none; color:inherit; box-shadow:var(--shadow-xs); }
+    .hospital-spotlight-meta { color:var(--text-muted); font-size:0.92rem; line-height:1.6; }
+    .hospital-spotlight-tags { display:flex; flex-wrap:wrap; gap:8px; }
+    .hospital-spotlight-tags span { padding:6px 10px; border-radius:999px; background:color-mix(in srgb, var(--bg-body) 78%, white 22%); border:1px solid var(--border-default); color:var(--text-body); font-size:0.83rem; }
   </style>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1441018945572157" crossorigin="anonymous"></script>
 </head>
@@ -46,6 +51,26 @@
       <a href="index.html?region=대전&department=internal&keyword=검진#ranking" class="landing-link"><span class="landing-badge">상황별 찾기</span><strong>대전 건강검진 연계 내과 찾기</strong><span>검진 결과 상담과 추적 외래를 함께 보려는 경우에 맞춘 링크입니다.</span></a>
       <a href="index.html?region=대전&department=internal&keyword=당뇨#ranking" class="landing-link"><span class="landing-badge">상황별 찾기</span><strong>대전 당뇨 외래 찾기</strong><span>혈당 조절, 약 조정, 정기 추적 상담이 필요한 경우를 위한 링크입니다.</span></a>
       <a href="index.html?region=대전&department=internal&sort=rating#ranking" class="landing-link"><span class="landing-badge">목록 바로가기</span><strong>대전 내과 평점순 보기</strong><span>공개 데이터와 내부 비교 포인트를 기준으로 먼저 살펴볼 수 있습니다.</span></a>
+    </section>
+    <section class="hospital-spotlight-grid">
+      <a href="detail.html?id=101" class="hospital-spotlight-card">
+        <span class="landing-badge">신규 의원 예시</span>
+        <strong>판교디지털내과의원</strong>
+        <p class="hospital-spotlight-meta">검진 후 외래 상담이나 생활형 내과 방문 흐름을 어떻게 보여줄지 참고할 수 있는 의원 카드입니다.</p>
+        <div class="hospital-spotlight-tags"><span>내과</span><span>검진 상담</span><span>상세 보기</span></div>
+      </a>
+      <a href="detail.html?id=18" class="hospital-spotlight-card">
+        <span class="landing-badge">대전 종합병원 예시</span>
+        <strong>대전을지대학교병원</strong>
+        <p class="hospital-spotlight-meta">대전권 대형 병원 기준에서 위치, 운영시간, 공공 데이터 요약이 어떻게 보이는지 확인할 수 있습니다.</p>
+        <div class="hospital-spotlight-tags"><span>대전 서구</span><span>종합병원</span><span>공공 데이터</span></div>
+      </a>
+      <a href="guide-diabetes.html" class="hospital-spotlight-card">
+        <span class="landing-badge">관리 가이드</span>
+        <strong>당뇨 관리 가이드</strong>
+        <p class="hospital-spotlight-meta">혈당 기록, 복용약 정리, 추적 진료 질문 포인트를 먼저 보고 병원 목록으로 넘어갈 수 있습니다.</p>
+        <div class="hospital-spotlight-tags"><span>당뇨</span><span>복용약</span><span>추적 진료</span></div>
+      </a>
     </section>
     <section class="landing-note"><h3>방문 전 메모</h3><p>내과는 증상 기록과 복용약 정리가 상담 품질에 큰 영향을 줍니다. 혈압, 혈당, 체중 변화나 복통 발생 시점을 적어 가면 초진에서도 필요한 설명을 빠르게 진행할 수 있습니다. 이 페이지는 대전 지역 내과 탐색을 돕는 참고 페이지입니다.</p></section>
   </main>

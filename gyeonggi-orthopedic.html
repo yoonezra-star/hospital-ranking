@@ -17,15 +17,20 @@
   <style>
     .landing-page { max-width: 1120px; padding-top: 56px; }
     .landing-hero { padding: 36px; border: 1px solid var(--border-default); border-radius: 24px; background: radial-gradient(circle at top right, rgba(30, 107, 155, 0.15), transparent 28%), linear-gradient(135deg, color-mix(in srgb, var(--bg-card) 84%, white 16%), color-mix(in srgb, var(--bg-body) 90%, white 10%)); margin-bottom: 28px; }
-    .landing-grid, .landing-link-grid { display: grid; gap: 20px; }
+    .landing-grid, .landing-link-grid, .hospital-spotlight-grid { display: grid; gap: 20px; }
     .landing-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-bottom: 28px; }
     .landing-link-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .hospital-spotlight-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-top: 28px; }
     .landing-card-page, .landing-note { border: 1px solid var(--border-default); border-radius: 20px; background: var(--bg-card); box-shadow: var(--shadow-xs); }
     .landing-card-page, .landing-note { padding: 24px; }
     .landing-card-page ul { padding-left: 18px; margin: 0; }
     .landing-card-page li, .landing-card-page p, .landing-note p { color: var(--text-body); line-height: 1.7; }
     .landing-link { display:flex; flex-direction:column; gap:10px; min-height:100%; padding:22px; border:1px solid var(--border-default); border-radius:18px; background:var(--bg-card); text-decoration:none; color:inherit; box-shadow:var(--shadow-xs); }
     .landing-badge { display:inline-flex; width:fit-content; padding:7px 12px; border-radius:999px; background:color-mix(in srgb, var(--secondary-50) 68%, white 32%); color:var(--secondary-700); font-size:0.84rem; font-weight:700; }
+    .hospital-spotlight-card { display:flex; flex-direction:column; gap:12px; padding:22px; border:1px solid var(--border-default); border-radius:18px; background:var(--bg-card); text-decoration:none; color:inherit; box-shadow:var(--shadow-xs); }
+    .hospital-spotlight-meta { color:var(--text-muted); font-size:0.92rem; line-height:1.6; }
+    .hospital-spotlight-tags { display:flex; flex-wrap:wrap; gap:8px; }
+    .hospital-spotlight-tags span { padding:6px 10px; border-radius:999px; background:color-mix(in srgb, var(--bg-body) 78%, white 22%); border:1px solid var(--border-default); color:var(--text-body); font-size:0.83rem; }
   </style>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1441018945572157" crossorigin="anonymous"></script>
 </head>
@@ -47,6 +52,26 @@
       <a href="index.html?region=경기&department=orthopedic&keyword=허리#ranking" class="landing-link"><span class="landing-badge">부위별 찾기</span><strong>경기 허리 통증 외래 찾기</strong><span>허리디스크, 좌골신경통, 요통 외래를 먼저 좁혀볼 때 유용합니다.</span></a>
       <a href="index.html?region=경기&department=orthopedic&keyword=무릎#ranking" class="landing-link"><span class="landing-badge">부위별 찾기</span><strong>경기 무릎 통증 외래 찾기</strong><span>관절 주사, 재활, 촬영 상담이 필요한 경우를 위한 링크입니다.</span></a>
       <a href="index.html?region=경기&department=orthopedic&sort=rating#ranking" class="landing-link"><span class="landing-badge">목록 바로가기</span><strong>경기 정형외과 평점순 보기</strong><span>공개 정보와 내부 비교 포인트를 기준으로 먼저 살펴볼 수 있습니다.</span></a>
+    </section>
+    <section class="hospital-spotlight-grid">
+      <a href="detail.html?id=16" class="hospital-spotlight-card">
+        <span class="landing-badge">경기 정형외과 예시</span>
+        <strong>수원윌스기념병원</strong>
+        <p class="hospital-spotlight-meta">경기권에서 허리와 관절 통증 외래를 비교할 때 참고하기 좋은 정형외과 예시입니다.</p>
+        <div class="hospital-spotlight-tags"><span>경기 수원</span><span>정형외과</span><span>상세 보기</span></div>
+      </a>
+      <a href="detail.html?id=8" class="hospital-spotlight-card">
+        <span class="landing-badge">통증 외래 예시</span>
+        <strong>관절힐링정형외과</strong>
+        <p class="hospital-spotlight-meta">무릎, 어깨, 허리 통증처럼 생활형 통증 외래를 찾을 때 비교하기 쉬운 카드입니다.</p>
+        <div class="hospital-spotlight-tags"><span>통증 외래</span><span>토요일 진료</span><span>주차 확인</span></div>
+      </a>
+      <a href="guide-ortho.html" class="hospital-spotlight-card">
+        <span class="landing-badge">준비 가이드</span>
+        <strong>허리·무릎 통증 진료 준비</strong>
+        <p class="hospital-spotlight-meta">영상 검사 전 준비와 기존 촬영본 정리 포인트를 먼저 보고 병원 목록으로 이동할 수 있습니다.</p>
+        <div class="hospital-spotlight-tags"><span>X-ray</span><span>MRI</span><span>증상 기록</span></div>
+      </a>
     </section>
     <section class="landing-note"><h3>방문 전 메모</h3><p>통증 진료는 증상 지속 기간과 악화 패턴을 정리해 가는 것이 중요합니다. 언제부터 아팠는지, 어느 자세에서 심해지는지, 촬영본이 있는지 메모하면 외래 상담이 더 정확해집니다. 이 페이지는 병원 선택을 돕는 참고용 탐색 페이지입니다.</p></section>
   </main>

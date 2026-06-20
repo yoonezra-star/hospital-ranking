@@ -38,9 +38,10 @@
         linear-gradient(135deg, color-mix(in srgb, var(--bg-card) 84%, white 16%), color-mix(in srgb, var(--bg-body) 90%, white 10%));
       margin-bottom: 28px;
     }
-    .landing-grid, .landing-link-grid { display: grid; gap: 20px; }
+    .landing-grid, .landing-link-grid, .hospital-spotlight-grid { display: grid; gap: 20px; }
     .landing-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-bottom: 28px; }
     .landing-link-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .hospital-spotlight-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-top: 28px; }
     .landing-card-page, .landing-note {
       border: 1px solid var(--border-default);
       border-radius: 20px;
@@ -76,6 +77,28 @@
       color: var(--primary-700);
       font-size: 0.84rem;
       font-weight: 700;
+    }
+    .hospital-spotlight-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 22px;
+      border: 1px solid var(--border-default);
+      border-radius: 18px;
+      background: var(--bg-card);
+      text-decoration: none;
+      color: inherit;
+      box-shadow: var(--shadow-xs);
+    }
+    .hospital-spotlight-meta { color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; }
+    .hospital-spotlight-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .hospital-spotlight-tags span {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--bg-body) 78%, white 22%);
+      border: 1px solid var(--border-default);
+      color: var(--text-body);
+      font-size: 0.83rem;
     }
   </style>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1441018945572157" crossorigin="anonymous"></script>
@@ -151,6 +174,27 @@
         <span class="landing-badge">목록 바로가기</span>
         <strong>서울 치과 평점순 보기</strong>
         <span>공개 데이터와 내부 정리 기준을 바탕으로 먼저 비교할 수 있습니다.</span>
+      </a>
+    </section>
+
+    <section class="hospital-spotlight-grid">
+      <a href="detail.html?id=6" class="hospital-spotlight-card">
+        <span class="landing-badge">서울 치과 예시</span>
+        <strong>미소들치과</strong>
+        <p class="hospital-spotlight-meta">서울 마포구 기준으로 비교할 수 있는 치과 예시입니다. 교정, 보철, 토요일 진료 흐름을 함께 확인하기 좋습니다.</p>
+        <div class="hospital-spotlight-tags"><span>치과의원</span><span>서울 마포</span><span>토요일 진료</span></div>
+      </a>
+      <a href="detail.html?id=101" class="hospital-spotlight-card">
+        <span class="landing-badge">상세 예시</span>
+        <strong>김흥진치과의원</strong>
+        <p class="hospital-spotlight-meta">주차, 운영시간, 방문 전 체크 항목이 상세 페이지에서 어떻게 정리되는지 확인할 수 있는 카드입니다.</p>
+        <div class="hospital-spotlight-tags"><span>주차 정보</span><span>상세 페이지</span><span>비교 기준</span></div>
+      </a>
+      <a href="guide-implant.html" class="hospital-spotlight-card">
+        <span class="landing-badge">준비 가이드</span>
+        <strong>임플란트 상담 전 체크</strong>
+        <p class="hospital-spotlight-meta">CT 촬영, 비용 상담, 보철 계획을 먼저 정리한 뒤 서울 치과 목록으로 이동하는 흐름에 맞는 가이드입니다.</p>
+        <div class="hospital-spotlight-tags"><span>임플란트</span><span>CT 촬영</span><span>상담 준비</span></div>
       </a>
     </section>
 
