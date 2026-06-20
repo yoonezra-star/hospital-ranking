@@ -783,7 +783,8 @@
           <p style="margin:0; color:var(--text-body); line-height:1.7;">정보가 다르면 <a href="contact.html" style="color:var(--primary); font-weight:600;">문의하기</a> 또는 <a href="mailto:replyleaders@naver.com" style="color:var(--primary); font-weight:600;">replyleaders@naver.com</a>으로 보내주시면 검토 후 반영합니다.</p>
         </div>
       </div>
-      <p style="margin:16px 0 0; color:var(--text-muted); line-height:1.7;">자세한 운영 기준은 <a href="about.html" style="color:var(--primary); font-weight:600;">사이트 소개</a>, <a href="editorial-policy.html" style="color:var(--primary); font-weight:600;">콘텐츠 편집 원칙</a>, <a href="ad-policy.html" style="color:var(--primary); font-weight:600;">광고 및 제휴 안내</a>에서 확인할 수 있습니다.</p>
+      <p style="margin:16px 0 0; color:var(--text-muted); line-height:1.7;">최근 확인일: 2026-06-20 · 자세한 운영 기준은 <a href="about.html" style="color:var(--primary); font-weight:600;">사이트 소개</a>, <a href="editorial-policy.html" style="color:var(--primary); font-weight:600;">콘텐츠 편집 원칙</a>, <a href="ad-policy.html" style="color:var(--primary); font-weight:600;">광고 및 제휴 안내</a>에서 확인할 수 있습니다.</p>
+      <p style="margin:8px 0 0; color:var(--text-muted); line-height:1.7;">증상 악화, 응급 상황, 수술 결정은 이 페이지만으로 판단하지 말고 해당 병원이나 의료진과 직접 상담해 주세요.</p>
     `;
   }
 
