@@ -118,6 +118,7 @@
     { title: '서울 산부인과 찾기', region: '서울', department: 'obgyn', description: '여성검진, 초음파 상담, 부정출혈 체크 기준으로 서울 산부인과 외래를 빠르게 비교합니다.', badge: '서울 + 산부인과' },
     { title: '서울 비뇨의학과 찾기', region: '서울', department: 'urology', description: '요로결석, 배뇨장애, 전립선 상담 기준으로 서울 비뇨의학과 외래를 빠르게 비교합니다.', badge: '서울 + 비뇨의학과' },
     { title: '서울 피부과 찾기', region: '서울', department: 'dermatology', description: '여드름, 흉터, 색소, 피부염 상담 기준으로 서울 피부과 외래를 빠르게 비교합니다.', badge: '서울 + 피부과' },
+    { title: '서울 소아청소년과 찾기', region: '서울', department: 'pediatric', description: '발열, 기침, 비염, 예방접종 기준으로 서울 소아청소년과 외래를 빠르게 비교합니다.', badge: '서울 + 소아청소년과' },
     { title: '경기 치과 찾기', region: '경기', department: 'dental', description: '임플란트, 교정, 보철 상담 기준으로 경기권 치과 목록을 빠르게 비교합니다.', badge: '경기 + 치과' },
     { title: '인천 안과 찾기', region: '인천', department: 'ophthalmology', description: '시력검사, 백내장 상담, 안구건조 증상 중심으로 인천 안과를 비교합니다.', badge: '인천 + 안과' },
     { title: '대전 이비인후과 찾기', region: '대전', department: 'ent', description: '비염, 목 통증, 귀 증상 외래를 대전 지역 기준으로 묶어 탐색합니다.', badge: '대전 + 이비인후과' },
@@ -222,6 +223,15 @@
       departmentIds: ['dermatology'],
       departmentKeywords: ['피부과', '여드름', '흉터'],
       badge: '서울 · 피부과',
+    },
+    {
+      href: 'seoul-pediatric.html',
+      title: '서울 소아청소년과 찾기',
+      description: '서울 소아청소년과 비교와 발열, 기침, 비염, 예방접종 준비 정보를 함께 확인합니다.',
+      regionKeywords: ['서울'],
+      departmentIds: ['pediatric'],
+      departmentKeywords: ['소아청소년과', '발열', '예방접종'],
+      badge: '서울 · 소아청소년과',
     },
     {
       href: 'seoul-internal.html',

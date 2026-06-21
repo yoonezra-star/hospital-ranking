@@ -7,6 +7,7 @@
     { href: 'seoul-psychiatry.html', region: '서울', department: '정신건강의학과', focus: '우울, 불안, 수면 문제, 공황, 약물 추적', guideLabel: '우울·불안 가이드' },
     { href: 'seoul-urology.html', region: '서울', department: '비뇨의학과', focus: '요로결석, 배뇨장애, 전립선 상담, 여성 요실금', guideLabel: '비뇨의학과 가이드' },
     { href: 'seoul-dermatology.html', region: '서울', department: '피부과', focus: '여드름, 흉터, 색소, 피부염, 가려움', guideLabel: '여드름 가이드' },
+    { href: 'seoul-pediatric.html', region: '서울', department: '소아과', focus: '발열, 기침, 비염, 예방접종, 주말 진료', guideLabel: '증상 체크 가이드' },
     { href: 'gyeonggi-orthopedic.html', region: '경기', department: '정형외과', focus: '허리, 무릎, 관절 통증', guideLabel: '정형외과 가이드' },
     { href: 'gyeonggi-dental.html', region: '경기', department: '치과', focus: '임플란트, 교정, 보철', guideLabel: '임플란트 가이드' },
     { href: 'busan-ophthalmology.html', region: '부산', department: '안과', focus: '시력검사, 백내장 상담, 안구건조', guideLabel: '시력교정 가이드' },
