@@ -123,6 +123,7 @@
     { title: '경기 치과 찾기', region: '경기', department: 'dental', description: '임플란트, 교정, 보철 상담 기준으로 경기권 치과 목록을 빠르게 비교합니다.', badge: '경기 + 치과' },
     { title: '인천 안과 찾기', region: '인천', department: 'ophthalmology', description: '시력검사, 백내장 상담, 안구건조 증상 중심으로 인천 안과를 비교합니다.', badge: '인천 + 안과' },
     { title: '대전 이비인후과 찾기', region: '대전', department: 'ent', description: '비염, 목 통증, 귀 증상 외래를 대전 지역 기준으로 묶어 탐색합니다.', badge: '대전 + 이비인후과' },
+    { title: '서울 정형외과 찾기', region: '서울', department: 'orthopedic', description: '허리, 무릎, 어깨 통증과 도수치료, 재활 상담 기준으로 서울 정형외과를 빠르게 비교합니다.', badge: '서울 + 정형외과' },
   ];
 
   const REGIONAL_LANDING_LINKS = [
@@ -143,6 +144,15 @@
       departmentIds: ['ophthalmology'],
       departmentKeywords: ['안과'],
       badge: '서울 · 안과',
+    },
+    {
+      href: 'seoul-orthopedic.html',
+      title: '서울 정형외과 찾기',
+      description: '서울 정형외과를 허리, 무릎, 어깨 통증과 도수치료 상담 기준으로 비교합니다.',
+      regionKeywords: ['서울'],
+      departmentIds: ['orthopedic'],
+      departmentKeywords: ['정형외과', '도수치료', '무릎'],
+      badge: '서울 · 정형외과',
     },
     {
       href: 'gyeonggi-orthopedic.html',

@@ -32,9 +32,6 @@
         <span>👁️ <strong>조회수:</strong> 29,102</span>
       </div>
       
-      <div class="ad-slot" style="margin-bottom:30px; text-align:center;">
-        <div class="ad-placeholder">광고 영역</div>
-      </div>
       
       <div class="article-content" style="line-height: 1.8; color: var(--text-body); font-size: 1.1rem; letter-spacing: -0.5px;">
 
@@ -123,13 +120,12 @@
 
       </div>
 
-      <div class="ad-slot" style="margin-top:40px; text-align:center;">
-        <div class="ad-placeholder">광고 영역</div>
-      </div>
     </article>
 
-    <div style="text-align: center;">
-      <a href="guide.html" class="btn btn-outline" style="padding: 15px 30px; font-size: 1.1rem;">건강 매거진 목록 보기</a>
+    <div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center;">
+      <a href="seoul-orthopedic.html" class="btn btn-primary" style="padding: 15px 26px; font-size: 1.05rem;">서울 정형외과 병원찾기</a>
+      <a href="index.html?region=서울&department=orthopedic#ranking" class="btn btn-outline" style="padding: 15px 26px; font-size: 1.05rem;">서울 정형외과 목록</a>
+      <a href="guide.html" class="btn btn-outline" style="padding: 15px 26px; font-size: 1.05rem;">건강 매거진 목록 보기</a>
     </div>
   </main>
 
@@ -160,7 +156,7 @@
         const meta = document.createElement('div');
         meta.setAttribute('data-guide-trust-meta', 'true');
         meta.style.cssText = 'margin:18px 0 28px;padding:14px 16px;border:1px solid var(--border-default);border-radius:12px;background:var(--bg-body);color:var(--text-body);line-height:1.7;font-size:.95rem;';
-        meta.innerHTML = '<strong style="color:var(--text-heading);">최종 검토일:</strong> 2026-06-20<br><strong style="color:var(--text-heading);">문의 및 정정 요청:</strong> <a href="mailto:replyleaders@naver.com" style="color:var(--primary);font-weight:600;">replyleaders@naver.com</a><br><strong style="color:var(--text-heading);">안내:</strong> 본 문서는 참고용 건강 정보이며, 실제 진단과 치료 결정은 반드시 해당 병원 또는 의료진과 직접 상담해 주세요.';
+        meta.innerHTML = '<strong style="color:var(--text-heading);">최종 검토일:</strong> 2026-06-21<br><strong style="color:var(--text-heading);">문의 및 정정 요청:</strong> <a href="mailto:replyleaders@naver.com" style="color:var(--primary);font-weight:600;">replyleaders@naver.com</a><br><strong style="color:var(--text-heading);">안내:</strong> 본 문서는 참고용 건강 정보이며, 실제 진단과 치료 결정은 반드시 해당 병원 또는 의료진과 직접 상담해 주세요.';
         heading.insertAdjacentElement('afterend', meta);
       }
       if (article && !article.querySelector('[data-guide-trust-note]')) {
