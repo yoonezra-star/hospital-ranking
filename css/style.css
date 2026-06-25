@@ -723,6 +723,41 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   margin: 0 0 var(--sp-3);
 }
 
+.hospital-fact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-2);
+  margin: 0 0 var(--sp-3);
+}
+
+.hospital-fact-grid-compact {
+  grid-template-columns: 1fr;
+}
+
+.hospital-fact-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, var(--bg-card) 74%, white 26%);
+  border: 1px solid var(--border-default);
+  min-height: 84px;
+}
+
+.hospital-fact-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: var(--fw-semibold);
+}
+
+.hospital-fact-value {
+  font-size: var(--fs-xs);
+  color: var(--text-heading);
+  line-height: 1.65;
+  font-weight: var(--fw-semibold);
+}
+
 .hospital-highlight {
   display: inline-flex;
   align-items: center;
@@ -737,6 +772,10 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
 [data-theme="dark"] .hospital-highlight {
   background: rgba(199, 139, 70, 0.18);
   color: var(--secondary-light);
+}
+
+[data-theme="dark"] .hospital-fact-item {
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .hospital-data-summary {
@@ -1616,6 +1655,8 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   
   .ranking-grid { grid-template-columns: 1fr; }
   .hospital-card { padding: var(--sp-5); }
+  .hospital-fact-grid { grid-template-columns: 1fr; }
+  .hospital-fact-item { min-height: auto; }
   .trust-card,
   .faq-card { padding: var(--sp-5); }
   
