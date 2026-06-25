@@ -151,6 +151,16 @@
         <h2>검색 결과: <span id="search-query-display"></span></h2>
         <button class="clear-search-btn" id="clear-search">검색 초기화</button>
       </div>
+      <div class="search-intent-summary" id="search-intent-summary"></div>
+      <div class="search-refine-bar" id="search-refine-bar" aria-label="검색 결과 좁히기">
+        <button type="button" class="search-refine-btn" data-refine="sat">토요 진료</button>
+        <button type="button" class="search-refine-btn" data-refine="night">야간 진료</button>
+        <button type="button" class="search-refine-btn" data-refine="sun">일요 진료</button>
+        <button type="button" class="search-refine-btn" data-refine="parking">주차 가능</button>
+        <button type="button" class="search-refine-btn" data-refine="specialist">전문의</button>
+        <button type="button" class="search-refine-btn" data-refine="recent">최근 개원</button>
+        <button type="button" class="search-refine-btn" data-refine="emergency">응급</button>
+      </div>
       <p class="ranking-count" id="search-result-count"></p>
       <div class="ranking-grid" id="search-results-list"></div>
     </section>

@@ -1,5 +1,5 @@
 /**
- * 병원찾기 - 검색 및 필터 모듈
+ * 병원찾기 - 검색/필터 모듈
  */
 
 const SearchEngine = (() => {
@@ -75,6 +75,7 @@ const SearchEngine = (() => {
     통증클리닉: 'pain',
     한의원: 'korean',
     한방병원: 'korean',
+    한의원진료: 'korean',
     한방: 'korean',
     재활의학과: 'rehab',
     재활: 'rehab',
@@ -89,7 +90,7 @@ const SearchEngine = (() => {
     주말: 'saturdayOpen',
     야간: 'nightOpen',
     야간진료: 'nightOpen',
-    퇴근후: 'nightOpen',
+    늦게: 'nightOpen',
     일요: 'sundayOpen',
     일요일: 'sundayOpen',
     일요진료: 'sundayOpen',
@@ -102,7 +103,30 @@ const SearchEngine = (() => {
     nightOpen: '야간 진료',
   };
 
-  const IGNORE_KEYWORDS = new Set(['병원', '의원', '진료', '검색', '찾기']);
+  const FEATURE_ALIASES = {
+    주차: 'parkingAvailable',
+    주차가능: 'parkingAvailable',
+    주차가능한: 'parkingAvailable',
+    전문의: 'specialistOnly',
+    전문의병원: 'specialistOnly',
+    전문의있는: 'specialistOnly',
+    신규: 'recentOpen',
+    최근: 'recentOpen',
+    개원: 'recentOpen',
+    최근개원: 'recentOpen',
+    응급: 'hasEmergency',
+    응급진료: 'hasEmergency',
+    응급실: 'hasEmergency',
+  };
+
+  const FEATURE_LABELS = {
+    parkingAvailable: '주차 가능',
+    specialistOnly: '전문의',
+    recentOpen: '최근 개원',
+    hasEmergency: '응급 진료',
+  };
+
+  const IGNORE_KEYWORDS = new Set(['병원', '의원', '진료', '검색', '찾기', '가능', '가능한', '있는']);
 
   function debounce(fn, delay = 300) {
     return (...args) => {
@@ -122,6 +146,10 @@ const SearchEngine = (() => {
       saturdayOpen: false,
       sundayOpen: false,
       nightOpen: false,
+      parkingAvailable: false,
+      specialistOnly: false,
+      recentOpen: false,
+      hasEmergency: false,
     };
 
     tokens.forEach((token) => {
@@ -146,6 +174,12 @@ const SearchEngine = (() => {
         return;
       }
 
+      const featureKey = FEATURE_ALIASES[normalized];
+      if (featureKey) {
+        intent[featureKey] = true;
+        return;
+      }
+
       if (IGNORE_KEYWORDS.has(normalized)) {
         return;
       }
@@ -155,7 +189,15 @@ const SearchEngine = (() => {
 
     intent.keywordText = intent.keywordTokens.join(' ').trim();
     intent.isStructured = Boolean(
-      intent.region || intent.department || intent.saturdayOpen || intent.sundayOpen || intent.nightOpen
+      intent.region ||
+      intent.department ||
+      intent.saturdayOpen ||
+      intent.sundayOpen ||
+      intent.nightOpen ||
+      intent.parkingAvailable ||
+      intent.specialistOnly ||
+      intent.recentOpen ||
+      intent.hasEmergency
     );
 
     return intent;
@@ -172,6 +214,10 @@ const SearchEngine = (() => {
     if (intent.saturdayOpen) parts.push(OPERATION_LABELS.saturdayOpen);
     if (intent.sundayOpen) parts.push(OPERATION_LABELS.sundayOpen);
     if (intent.nightOpen) parts.push(OPERATION_LABELS.nightOpen);
+    if (intent.parkingAvailable) parts.push(FEATURE_LABELS.parkingAvailable);
+    if (intent.specialistOnly) parts.push(FEATURE_LABELS.specialistOnly);
+    if (intent.recentOpen) parts.push(FEATURE_LABELS.recentOpen);
+    if (intent.hasEmergency) parts.push(FEATURE_LABELS.hasEmergency);
     if (intent.keywordText) parts.push(`키워드 ${intent.keywordText}`);
     return parts.join(' · ');
   }
@@ -209,11 +255,16 @@ const SearchEngine = (() => {
     if (filters.type && filters.type !== 'all') {
       result = result.filter((hospital) => {
         switch (filters.type) {
-          case 'hospital': return hospital.type === '종합병원' || hospital.type === '병원';
-          case 'clinic': return hospital.type === '의원';
-          case 'dental': return String(hospital.type || '').includes('치과');
-          case 'korean': return String(hospital.type || '').includes('한의') || String(hospital.type || '').includes('한방');
-          default: return true;
+          case 'hospital':
+            return hospital.type === '종합병원' || hospital.type === '병원';
+          case 'clinic':
+            return hospital.type === '의원';
+          case 'dental':
+            return String(hospital.type || '').includes('치과');
+          case 'korean':
+            return String(hospital.type || '').includes('한의') || String(hospital.type || '').includes('한방');
+          default:
+            return true;
         }
       });
     }
@@ -226,6 +277,18 @@ const SearchEngine = (() => {
     }
     if (filters.nightOpen) {
       result = result.filter((hospital) => hospital.nightOpen === true);
+    }
+    if (filters.parkingAvailable) {
+      result = result.filter((hospital) => hasParkingInfo(hospital));
+    }
+    if (filters.specialistOnly) {
+      result = result.filter((hospital) => Number(hospital.specialistCount || 0) > 0);
+    }
+    if (filters.recentOpen) {
+      result = result.filter((hospital) => isRecentOpenDate(hospital.openDate));
+    }
+    if (filters.hasEmergency) {
+      result = result.filter((hospital) => hospital.hasEmergency === true);
     }
 
     return result;
@@ -260,6 +323,10 @@ const SearchEngine = (() => {
       saturdayOpen: Boolean(filters.saturdayOpen || resolvedIntent.saturdayOpen),
       sundayOpen: Boolean(filters.sundayOpen || resolvedIntent.sundayOpen),
       nightOpen: Boolean(filters.nightOpen || resolvedIntent.nightOpen),
+      parkingAvailable: Boolean(filters.parkingAvailable || resolvedIntent.parkingAvailable),
+      specialistOnly: Boolean(filters.specialistOnly || resolvedIntent.specialistOnly),
+      recentOpen: Boolean(filters.recentOpen || resolvedIntent.recentOpen),
+      hasEmergency: Boolean(filters.hasEmergency || resolvedIntent.hasEmergency),
     };
 
     let result = searchHospitals(searchText, hospitals, resolvedIntent);
@@ -287,7 +354,30 @@ const SearchEngine = (() => {
       hospital?.region,
       hospital?.district,
       hospital?.phone,
+      hospital?.subway,
+      hospital?.equipment,
+      hasParkingInfo(hospital) ? '주차 가능' : '',
+      Number(hospital?.specialistCount || 0) > 0 ? '전문의' : '',
+      hospital?.hasEmergency === true ? '응급 진료' : '',
+      isRecentOpenDate(hospital?.openDate) ? '최근 개원' : '',
+      hospital?.saturdayOpen ? '토요일 진료' : '',
+      hospital?.sundayOpen ? '일요일 진료' : '',
+      hospital?.nightOpen ? '야간 진료' : '',
     ].filter(Boolean).join(' '));
+  }
+
+  function hasParkingInfo(hospital) {
+    return Number(hospital?.parkingCapacity || 0) > 0 || Boolean(hospital?.parkingFee);
+  }
+
+  function isRecentOpenDate(openDate) {
+    const date = new Date(openDate || '');
+    if (Number.isNaN(date.getTime())) {
+      return false;
+    }
+
+    const diffDays = (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24);
+    return diffDays <= 365 * 3;
   }
 
   function tokenizeQuery(query = '') {

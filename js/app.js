@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     searchResults: $('#search-results'),
     searchResultsList: $('#search-results-list'),
     searchQueryDisplay: $('#search-query-display'),
+    searchIntentSummary: $('#search-intent-summary'),
+    searchRefineBar: $('#search-refine-bar'),
     searchResultCount: $('#search-result-count'),
     departmentGrid: $('#department-grid'),
     regionFilter: $('#region-filter'),
@@ -955,6 +957,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     state.isSearchActive = true;
     ui.searchResults?.classList.add('active');
+    renderSearchIntentSummary(intent);
+    setSearchRefineState(intent);
 
     if (ui.searchQueryDisplay) {
       ui.searchQueryDisplay.textContent = `"${query}"`;
@@ -1068,10 +1072,85 @@ document.addEventListener('DOMContentLoaded', () => {
     return `${current} ${nextLabel}`.trim();
   }
 
+  function buildQuickRefineQuery(currentQuery, filter) {
+    const labelMap = {
+      sat: '토요일',
+      night: '야간',
+      sun: '일요일',
+      parking: '주차',
+      specialist: '전문의',
+      recent: '최근 개원',
+      emergency: '응급',
+    };
+
+    const nextLabel = labelMap[filter] || '';
+    const current = String(currentQuery || '').trim();
+    if (!nextLabel) {
+      return current;
+    }
+    if (!current) {
+      return nextLabel;
+    }
+    if (current.includes(nextLabel)) {
+      return current;
+    }
+    return `${current} ${nextLabel}`.trim();
+  }
+
+  function renderSearchIntentSummary(intent) {
+    if (!ui.searchIntentSummary) {
+      return;
+    }
+
+    const chips = [];
+    if (intent?.region) chips.push(`지역 ${intent.region}`);
+    if (intent?.department && typeof SearchEngine !== 'undefined') {
+      chips.push(`진료과 ${SearchEngine.getDepartmentLabel(intent.department)}`);
+    }
+    if (intent?.saturdayOpen) chips.push('토요일 진료');
+    if (intent?.sundayOpen) chips.push('일요일 진료');
+    if (intent?.nightOpen) chips.push('야간 진료');
+    if (intent?.parkingAvailable) chips.push('주차 가능');
+    if (intent?.specialistOnly) chips.push('전문의');
+    if (intent?.recentOpen) chips.push('최근 개원');
+    if (intent?.hasEmergency) chips.push('응급 진료');
+    if (intent?.keywordText) chips.push(`키워드 ${intent.keywordText}`);
+
+    ui.searchIntentSummary.innerHTML = chips.length > 0
+      ? chips.map((chip) => `<span class="search-intent-chip">${escapeHtml(chip)}</span>`).join('')
+      : '<span class="search-intent-chip">병원명, 지역, 진료과 기준으로 검색 중</span>';
+  }
+
+  function setSearchRefineState(intent) {
+    if (!ui.searchRefineBar) {
+      return;
+    }
+
+    const activeMap = {
+      sat: Boolean(intent?.saturdayOpen),
+      night: Boolean(intent?.nightOpen),
+      sun: Boolean(intent?.sundayOpen),
+      parking: Boolean(intent?.parkingAvailable),
+      specialist: Boolean(intent?.specialistOnly),
+      recent: Boolean(intent?.recentOpen),
+      emergency: Boolean(intent?.hasEmergency),
+    };
+
+    ui.searchRefineBar.querySelectorAll('.search-refine-btn').forEach((button) => {
+      const isActive = Boolean(activeMap[button.dataset.refine || '']);
+      button.classList.toggle('is-active', isActive);
+      button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+  }
+
   function clearSearch() {
     state.isSearchActive = false;
     if (ui.heroSearch) ui.heroSearch.value = '';
     ui.searchResults?.classList.remove('active');
+    if (ui.searchIntentSummary) {
+      ui.searchIntentSummary.innerHTML = '';
+    }
+    setSearchRefineState(null);
     updateMapHospitals(
       typeof SearchEngine !== 'undefined'
         ? SearchEngine.sortHospitals(state.allFetchedHospitals, state.currentSort)
@@ -1133,6 +1212,19 @@ document.addEventListener('DOMContentLoaded', () => {
         ui.heroSearch.value = nextQuery;
         void performSearch();
         $('#search-results')?.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    $$('.search-refine-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!ui.heroSearch) {
+          return;
+        }
+
+        const filter = button.dataset.refine || '';
+        const nextQuery = buildQuickRefineQuery(ui.heroSearch.value, filter);
+        ui.heroSearch.value = nextQuery;
+        void performSearch();
       });
     });
 
