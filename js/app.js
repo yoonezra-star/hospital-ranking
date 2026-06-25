@@ -1023,6 +1023,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (ui.searchResultCount) {
       ui.searchResultCount.innerHTML = '<span class="spinner-inline"></span> 검색 중...';
     }
+    if (ui.searchResultCount) {
+      ui.searchResultCount.innerHTML = '<span class="spinner-inline"></span> 검색 중...';
+    }
     if (ui.searchResultsList) {
       ui.searchResultsList.innerHTML = '';
     }
@@ -1040,6 +1043,13 @@ document.addEventListener('DOMContentLoaded', () => {
       ui.searchResultCount.innerHTML = `총 <strong>${hospitals.length.toLocaleString()}</strong>개 결과${summary ? ` · ${escapeHtml(summary)}` : ''}${operationNotice}`;
     }
 
+    if (ui.searchResultCount) {
+      const resultNotice = intent && (intent.saturdayOpen || intent.sundayOpen || intent.nightOpen)
+        ? ' · 운영시간 확인 병원 기준'
+        : '';
+      ui.searchResultCount.innerHTML = `총 <strong>${hospitals.length.toLocaleString()}</strong>개 결과${summary ? ` · ${escapeHtml(summary)}` : ''}${resultNotice}`;
+    }
+
     if (!ui.searchResultsList) return;
 
     if (hospitals.length === 0) {
@@ -1052,6 +1062,13 @@ document.addEventListener('DOMContentLoaded', () => {
       observeNewElements(ui.searchResultsList);
       updateMapHospitals(hospitals);
       void hydrateHospitalCardDetails(hospitals, ui.searchResultsList, 8);
+    }
+
+    if (hospitals.length === 0 && ui.searchResultsList) {
+      const emptyDescription = summary
+        ? `${summary}${operationNotice ? ' 조건의 운영시간 확인 병원 기준으로 먼저 보여드렸지만' : ' 조건에 맞는'} 병원을 아직 찾지 못했습니다. 다른 지역이나 진료과 조합으로 다시 검색해보세요.`
+        : '다른 키워드로 다시 검색해보세요.';
+      ui.searchResultsList.innerHTML = buildSearchEmptyState(emptyDescription, intent);
     }
 
     syncListingQuery(query);
@@ -1320,6 +1337,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('click', (event) => {
+      const suggestionButton = event.target.closest('.search-empty-chip[data-search-query]');
+      if (suggestionButton) {
+        event.preventDefault();
+        if (ui.heroSearch) {
+          ui.heroSearch.value = suggestionButton.dataset.searchQuery || '';
+          void performSearch();
+        }
+        return;
+      }
+
+      const presetButton = event.target.closest('.search-empty-preset[data-preset-region]');
+      if (presetButton) {
+        event.preventDefault();
+        state.currentFilters.region = presetButton.dataset.presetRegion || 'all';
+        state.currentFilters.department = presetButton.dataset.presetDepartment || 'all';
+        state.currentFilters.type = presetButton.dataset.presetType || 'all';
+        state.currentSort = 'score';
+
+        if (ui.regionFilter) ui.regionFilter.value = state.currentFilters.region;
+        if (ui.typeFilter) ui.typeFilter.value = state.currentFilters.type;
+        if (ui.sortFilter) ui.sortFilter.value = 'score';
+
+        clearSearch();
+        reloadRanking();
+        $('#ranking')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+
       const landingCard = event.target.closest('.landing-card[data-landing-region]');
       if (landingCard) {
         event.preventDefault();
@@ -1396,6 +1441,126 @@ document.addEventListener('DOMContentLoaded', () => {
         <p style="font-size:var(--fs-sm);">${escapeHtml(description)}</p>
       </div>
     `;
+  }
+
+  function buildSearchEmptyState(description, intent) {
+    const suggestions = buildSearchSuggestionQueries(intent);
+    const presets = buildSearchFallbackPresets(intent);
+
+    return `
+      <div class="search-empty-state">
+        <div class="search-empty-head">
+          <p class="search-empty-icon">🔎</p>
+          <h3>검색 결과가 없습니다.</h3>
+          <p>${escapeHtml(description)}</p>
+        </div>
+        <div class="search-empty-sections">
+          <div class="search-empty-group">
+            <h4>다시 검색해보기</h4>
+            <div class="search-empty-chip-list">
+              ${suggestions.map((query) => `
+                <button type="button" class="search-empty-chip" data-search-query="${escapeHtml(query)}">${escapeHtml(query)}</button>
+              `).join('')}
+            </div>
+          </div>
+          <div class="search-empty-group">
+            <h4>바로 목록 보기</h4>
+            <div class="search-empty-preset-list">
+              ${presets.map((preset) => `
+                <button
+                  type="button"
+                  class="search-empty-preset"
+                  data-preset-region="${escapeHtml(preset.region || 'all')}"
+                  data-preset-department="${escapeHtml(preset.department || 'all')}"
+                  data-preset-type="${escapeHtml(preset.type || 'all')}"
+                >
+                  <strong>${escapeHtml(preset.title)}</strong>
+                  <span>${escapeHtml(preset.description)}</span>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function buildSearchSuggestionQueries(intent) {
+    const suggestions = [];
+    const departmentLabel = intent?.department && typeof SearchEngine !== 'undefined'
+      ? SearchEngine.getDepartmentLabel(intent.department)
+      : '';
+    const region = intent?.region || '';
+
+    if (region && departmentLabel) {
+      suggestions.push(`${region} ${departmentLabel}`);
+      suggestions.push(`${region} ${departmentLabel} 토요일`);
+      suggestions.push(`${region} ${departmentLabel} 야간`);
+    } else if (region) {
+      suggestions.push(`${region} 치과`);
+      suggestions.push(`${region} 정형외과`);
+      suggestions.push(`${region} 안과`);
+    } else if (departmentLabel) {
+      suggestions.push(`서울 ${departmentLabel}`);
+      suggestions.push(`경기 ${departmentLabel}`);
+      suggestions.push(`부산 ${departmentLabel}`);
+    }
+
+    suggestions.push('서울 치과');
+    suggestions.push('경기 정형외과 토요일');
+    suggestions.push('서울 소아과 일요일');
+
+    return Array.from(new Set(suggestions.filter(Boolean))).slice(0, 6);
+  }
+
+  function buildSearchFallbackPresets(intent) {
+    const department = intent?.department || 'all';
+    const region = intent?.region || 'all';
+    const departmentLabel = department !== 'all' && typeof SearchEngine !== 'undefined'
+      ? SearchEngine.getDepartmentLabel(department)
+      : '병원';
+
+    const presets = [];
+
+    if (department !== 'all') {
+      presets.push({
+        title: `서울 ${departmentLabel} 목록`,
+        description: '서울 권역에서 먼저 넓게 비교합니다.',
+        region: '서울',
+        department,
+      });
+      presets.push({
+        title: `경기 ${departmentLabel} 목록`,
+        description: '경기 권역 병원을 함께 비교합니다.',
+        region: '경기',
+        department,
+      });
+    }
+
+    if (region !== 'all') {
+      presets.push({
+        title: `${region} 치과 목록`,
+        description: `${region}에서 많이 찾는 치과부터 확인합니다.`,
+        region,
+        department: 'dental',
+      });
+      presets.push({
+        title: `${region} 정형외과 목록`,
+        description: `${region} 정형외과 병원을 바로 봅니다.`,
+        region,
+        department: 'orthopedic',
+      });
+    }
+
+    presets.push({
+      title: '전체 병원 목록',
+      description: '조건을 풀고 전체 목록에서 다시 탐색합니다.',
+      region: 'all',
+      department: 'all',
+      type: 'all',
+    });
+
+    return presets.slice(0, 4);
   }
 
   function formatDate(dateString) {
