@@ -187,9 +187,9 @@ const HospitalAPI = (() => {
       url: item.hospUrl || '',
       score: calcScore(drCount, item.clCdNm),
       reviewCount: calcReviews(drCount),
-      saturdayOpen: false,
-      sundayOpen: false,
-      nightOpen: false,
+      saturdayOpen: null,
+      sundayOpen: null,
+      nightOpen: null,
     };
   }
 

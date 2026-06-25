@@ -107,9 +107,18 @@
         <div class="search-wrapper">
           <div class="search-bar">
             <span class="search-icon">🔍</span>
-            <input type="text" id="hero-search" placeholder="병원명, 지역, 진료과를 검색하세요" autocomplete="off">
+            <input type="text" id="hero-search" placeholder="예: 서울 치과, 강남 피부과 야간, 송파 소아과 일요일" autocomplete="off">
             <button class="search-btn" id="search-btn">검색</button>
           </div>
+        </div>
+
+        <p class="search-helper-text">지역, 진료과, 운영조건을 함께 입력하면 더 빨리 찾을 수 있습니다.</p>
+        <div class="search-helper-chips" aria-label="빠른 검색 예시">
+          <button type="button" class="search-helper-chip" data-search-example="서울 치과">서울 치과</button>
+          <button type="button" class="search-helper-chip" data-search-example="강남 피부과 야간">강남 피부과 야간</button>
+          <button type="button" class="search-helper-chip" data-search-example="송파 소아과 일요일">송파 소아과 일요일</button>
+          <button type="button" class="search-helper-chip" data-search-example="서울 재활의학과">서울 재활의학과</button>
+          <button type="button" class="search-helper-chip" data-search-example="경기 정형외과 토요일">경기 정형외과 토요일</button>
         </div>
 
         <div class="quick-filters">

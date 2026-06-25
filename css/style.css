@@ -341,6 +341,35 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   margin: 0 auto var(--sp-7);
   position: relative;
 }
+.search-helper-text {
+  margin: calc(var(--sp-7) * -1 + 8px) auto var(--sp-3);
+  text-align: center;
+  color: color-mix(in srgb, var(--text-body) 78%, white 22%);
+  font-size: var(--fs-sm);
+}
+.search-helper-chips {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  max-width: 760px;
+  margin: 0 auto var(--sp-5);
+}
+.search-helper-chip {
+  padding: 8px 14px;
+  border-radius: var(--r-full);
+  border: 1px solid rgba(166,124,82,0.22);
+  background: rgba(255,253,248,0.66);
+  color: var(--text-body);
+  font-size: var(--fs-sm);
+  transition: border-color var(--t-fast), background var(--t-fast), transform var(--t-fast), color var(--t-fast);
+}
+.search-helper-chip:hover {
+  background: #fffdf8;
+  color: var(--text-heading);
+  border-color: rgba(104,134,127,0.38);
+  transform: translateY(-1px);
+}
 .search-bar {
   display: flex;
   align-items: center;
@@ -945,10 +974,12 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
 .tag-night { background: #f0eee8; color: #6d5d48; }
 .tag-sun { background: #f6efe3; color: #9a6d2f; }
 .tag-site { background: #ece9e2; color: #564d43; }
+.tag-pending { background: #efe9df; color: #6f665c; }
 [data-theme="dark"] .tag-sat { background: rgba(104,134,127,0.18); }
 [data-theme="dark"] .tag-night { background: rgba(166,124,82,0.18); }
 [data-theme="dark"] .tag-sun { background: rgba(199,139,70,0.20); }
 [data-theme="dark"] .tag-site { background: rgba(160,154,144,0.18); }
+[data-theme="dark"] .tag-pending { background: rgba(160,154,144,0.18); }
 
 .ranking-count {
   font-size: var(--fs-sm);
@@ -1511,6 +1542,9 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   .stat-number { font-size: var(--fs-3xl); }
   
   .search-bar .search-btn { padding: 0 var(--sp-4); }
+  .search-helper-text { margin-top: calc(var(--sp-7) * -1 + 10px); }
+  .search-helper-chips { gap: var(--sp-2); }
+  .search-helper-chip { font-size: var(--fs-xs); padding: 7px 12px; }
   
   .dept-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: var(--sp-3); }
   .dept-card { padding: var(--sp-4) var(--sp-3); }

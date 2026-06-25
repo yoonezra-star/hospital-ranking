@@ -429,6 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (hospital.nightOpen) tags.push('<span class="tag tag-night">야간 진료</span>');
     if (hospital.sundayOpen) tags.push('<span class="tag tag-sun">일요일 진료</span>');
     if (hospital.url) tags.push('<span class="tag tag-site">공식 홈페이지</span>');
+    if (!hasKnownOperationalData(hospital)) tags.push('<span class="tag tag-pending">운영시간 확인 중</span>');
 
     return `
       <article class="hospital-card fade-up" data-hospital-id="${escapeHtml(hospital.id)}">
@@ -516,6 +517,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (hospital.nightOpen) parts.push('야간 진료');
       if (hospital.sundayOpen) parts.push('일요일 진료');
       if (hospital.subway) parts.push(hospital.subway);
+      if (!hasKnownOperationalData(hospital)) parts.push('운영시간 공공데이터 확인 중');
     }
 
     return uniqueStrings(parts).slice(0, 3).join(' / ');
@@ -722,6 +724,14 @@ document.addEventListener('DOMContentLoaded', () => {
     );
   }
 
+  function hasKnownOperationalData(hospital) {
+    if (!hospital) return false;
+    if (hospital.saturdayOpen === true || hospital.saturdayOpen === false) return true;
+    if (hospital.sundayOpen === true || hospital.sundayOpen === false) return true;
+    if (hospital.nightOpen === true || hospital.nightOpen === false) return true;
+    return Boolean(hospital.hours);
+  }
+
   function buildQuickAccessCard(hospital) {
     const href = hospital.id ? `detail.html?id=${encodeURIComponent(hospital.id)}` : '#';
     const type = hospital.department || hospital.type || '병원';
@@ -869,6 +879,10 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    const intent = typeof SearchEngine !== 'undefined'
+      ? SearchEngine.parseSearchIntent(query)
+      : null;
+
     state.isSearchActive = true;
     ui.searchResults?.classList.add('active');
 
@@ -882,17 +896,26 @@ document.addEventListener('DOMContentLoaded', () => {
       ui.searchResultsList.innerHTML = '';
     }
 
-    const result = await HospitalAPI.fetchHospitals({ name: query, limit: 30, preferMock: true });
-    const hospitals = mergeHospitalsWithFallback(result.hospitals);
+    const result = await searchHospitalsByIntent(query, intent);
+    const hospitals = result.hospitals;
+    const summary = typeof SearchEngine !== 'undefined'
+      ? SearchEngine.buildSearchSummary(intent)
+      : '';
+    const operationNotice = intent && (intent.saturdayOpen || intent.sundayOpen || intent.nightOpen)
+      ? ' · 운영시간 확인 병원 기준'
+      : '';
 
     if (ui.searchResultCount) {
-      ui.searchResultCount.innerHTML = `총 <strong>${result.fromMock ? hospitals.length : result.totalCount.toLocaleString()}</strong>개 결과`;
+      ui.searchResultCount.innerHTML = `총 <strong>${hospitals.length.toLocaleString()}</strong>개 결과${summary ? ` · ${escapeHtml(summary)}` : ''}${operationNotice}`;
     }
 
     if (!ui.searchResultsList) return;
 
     if (hospitals.length === 0) {
-      ui.searchResultsList.innerHTML = buildEmptyState('검색 결과가 없습니다.', '다른 키워드로 다시 검색해보세요.');
+      const description = summary
+        ? `${summary}${operationNotice ? ' 조건은 운영시간이 확인된 병원 기준으로 먼저 보여줍니다.' : ' 조건'}에 맞는 병원을 아직 찾지 못했습니다. 다른 지역이나 진료과 조합으로 다시 검색해보세요.`
+        : '다른 키워드로 다시 검색해보세요.';
+      ui.searchResultsList.innerHTML = buildEmptyState('검색 결과가 없습니다.', description);
     } else {
       ui.searchResultsList.innerHTML = hospitals.map((hospital, index) => buildHospitalCard(hospital, index + 1)).join('');
       observeNewElements(ui.searchResultsList);
@@ -902,6 +925,73 @@ document.addEventListener('DOMContentLoaded', () => {
 
     syncListingQuery(query);
     ui.searchResults?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  async function searchHospitalsByIntent(query, intent) {
+    const localSource = dedupeHospitals(getFeaturedHospitalsSource());
+    const localResults = typeof SearchEngine !== 'undefined'
+      ? SearchEngine.query(localSource, { searchText: query, sortBy: state.currentSort, intent })
+      : localSource;
+
+    const apiParams = buildSearchApiParams(intent);
+    let remoteHospitals = [];
+
+    if (apiParams) {
+      const remoteResult = await HospitalAPI.fetchHospitals(apiParams);
+      remoteHospitals = mergeHospitalsWithFallback(remoteResult.hospitals);
+    }
+
+    const combined = dedupeHospitals([...localResults, ...remoteHospitals]);
+    const hospitals = typeof SearchEngine !== 'undefined'
+      ? SearchEngine.query(combined, { searchText: query, sortBy: state.currentSort, intent })
+      : combined;
+
+    return { hospitals };
+  }
+
+  function buildSearchApiParams(intent) {
+    if (!intent) {
+      return null;
+    }
+
+    const params = { limit: 40 };
+
+    if (intent.region) {
+      params.region = intent.region;
+    }
+    if (intent.department) {
+      params.department = intent.department;
+    }
+    if (intent.keywordText) {
+      params.name = intent.keywordText;
+    }
+
+    if (!params.region && !params.department && !params.name) {
+      return null;
+    }
+
+    return params;
+  }
+
+  function buildQuickFilterQuery(currentQuery, filter) {
+    const labelMap = {
+      sat: '토요일',
+      night: '야간',
+      sun: '일요일',
+    };
+
+    const nextLabel = labelMap[filter] || '';
+    const current = String(currentQuery || '').trim();
+    if (!nextLabel) {
+      return current;
+    }
+    if (!current) {
+      return nextLabel;
+    }
+    if (current.includes(nextLabel)) {
+      return current;
+    }
+    return `${current} ${nextLabel}`.trim();
   }
 
   function clearSearch() {
@@ -939,6 +1029,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     ui.clearSearchBtn?.addEventListener('click', clearSearch);
 
+    $$('.search-helper-chip').forEach((button) => {
+      button.addEventListener('click', () => {
+        const example = button.dataset.searchExample || '';
+        if (ui.heroSearch) {
+          ui.heroSearch.value = example;
+        }
+        void performSearch();
+      });
+    });
+
     $$('.quick-filter-btn').forEach((button) => {
       button.addEventListener('click', () => {
         const filter = button.dataset.filter;
@@ -947,11 +1047,18 @@ document.addEventListener('DOMContentLoaded', () => {
           state.currentSort = 'newest';
           if (ui.sortFilter) ui.sortFilter.value = 'newest';
           reloadRanking();
-        } else {
-          alert('토요일, 야간, 일요일 진료 필터는 상세 운영시간 API 연동 후 강화할 예정입니다.');
+          $('#ranking')?.scrollIntoView({ behavior: 'smooth' });
+          return;
         }
 
-        $('#ranking')?.scrollIntoView({ behavior: 'smooth' });
+        if (!ui.heroSearch) {
+          return;
+        }
+
+        const nextQuery = buildQuickFilterQuery(ui.heroSearch.value, filter);
+        ui.heroSearch.value = nextQuery;
+        void performSearch();
+        $('#search-results')?.scrollIntoView({ behavior: 'smooth' });
       });
     });
 
@@ -982,6 +1089,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const keyword = tag.dataset.keyword || '';
         if (ui.heroSearch) {
           ui.heroSearch.value = keyword;
+        } else {
+          return;
         }
         void performSearch();
       });
@@ -1095,9 +1204,9 @@ document.addEventListener('DOMContentLoaded', () => {
       ...fallback,
       ...hospital,
       hours: hospital.hours || fallback?.hours,
-      saturdayOpen: hospital.saturdayOpen || fallback?.saturdayOpen || false,
-      sundayOpen: hospital.sundayOpen || fallback?.sundayOpen || false,
-      nightOpen: hospital.nightOpen || fallback?.nightOpen || false,
+      saturdayOpen: resolveOperationalValue(hospital.saturdayOpen, fallback?.saturdayOpen),
+      sundayOpen: resolveOperationalValue(hospital.sundayOpen, fallback?.sundayOpen),
+      nightOpen: resolveOperationalValue(hospital.nightOpen, fallback?.nightOpen),
       openDate: hospital.openDate || fallback?.openDate || '',
       subway: hospital.subway || fallback?.subway || '',
       parkingCapacity: hospital.parkingCapacity || fallback?.parkingCapacity || 0,
@@ -1107,6 +1216,12 @@ document.addEventListener('DOMContentLoaded', () => {
       bedCount: hospital.bedCount || fallback?.bedCount || 0,
       area: hospital.area || fallback?.area || '',
     };
+  }
+
+  function resolveOperationalValue(primary, fallback) {
+    if (primary === true || primary === false) return primary;
+    if (fallback === true || fallback === false) return fallback;
+    return null;
   }
 
   async function hydrateHospitalCardDetails(hospitals, container, limit = 12) {
