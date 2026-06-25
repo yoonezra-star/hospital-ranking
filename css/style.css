@@ -701,6 +701,21 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   line-height: 1.6;
 }
 
+.hospital-focus-note {
+  margin: 0 0 var(--sp-2);
+  color: var(--text-heading);
+  font-size: var(--fs-sm);
+  line-height: 1.65;
+  font-weight: var(--fw-medium);
+}
+
+.hospital-visit-prep {
+  margin: 0 0 var(--sp-2);
+  color: var(--text-body);
+  font-size: var(--fs-xs);
+  line-height: 1.7;
+}
+
 .hospital-highlights {
   display: flex;
   flex-wrap: wrap;
@@ -733,6 +748,13 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
 
 .hospital-data-summary.is-pending {
   color: var(--text-muted);
+}
+
+.hospital-evidence-summary {
+  margin: 0 0 var(--sp-3);
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+  line-height: 1.7;
 }
 
 /* ===== Department Grid ===== */

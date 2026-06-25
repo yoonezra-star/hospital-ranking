@@ -422,8 +422,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const tags = [];
     const subinfo = buildHospitalSubinfo(hospital);
     const featureNote = buildHospitalFeatureNote(hospital);
+    const focusNote = buildHospitalFocusNote(hospital);
+    const visitPrepNote = buildHospitalVisitPrepNote(hospital);
     const highlightItems = buildHospitalHighlightItems(hospital);
     const dataSummary = buildHospitalDataSummary(hospital);
+    const evidenceSummary = buildHospitalEvidenceSummary(hospital);
 
     if (hospital.saturdayOpen) tags.push('<span class="tag tag-sat">토요일 진료</span>');
     if (hospital.nightOpen) tags.push('<span class="tag tag-night">야간 진료</span>');
@@ -445,7 +448,10 @@ document.addEventListener('DOMContentLoaded', () => {
             ${highlightItems.map((item) => `<span class="hospital-highlight">${escapeHtml(item)}</span>`).join('')}
           </div>
           ${featureNote ? `<p class="hospital-feature-note">${escapeHtml(featureNote)}</p>` : ''}
+          ${focusNote ? `<p class="hospital-focus-note">${escapeHtml(focusNote)}</p>` : ''}
+          ${visitPrepNote ? `<p class="hospital-visit-prep">${escapeHtml(visitPrepNote)}</p>` : ''}
           <p class="hospital-data-summary${dataSummary ? '' : ' is-pending'}" data-hospital-summary>${escapeHtml(dataSummary || '주차, 접수, 운영 정보를 불러오는 중입니다.')}</p>
+          ${evidenceSummary ? `<p class="hospital-evidence-summary">${escapeHtml(evidenceSummary)}</p>` : ''}
           <div class="hospital-meta">
             <div class="meta-item">
               <span class="meta-icon">평점</span>
@@ -481,9 +487,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function buildHospitalHighlightItems(hospital, detailData) {
+    const contentApi = getHospitalContent();
+    const profile = contentApi?.buildHospitalProfile?.(hospital);
     const items = [];
     const parkingText = getHospitalParkingLabel(hospital, detailData);
 
+    if (Array.isArray(profile?.highlightPoints) && profile.highlightPoints.length > 0) {
+      items.push(...profile.highlightPoints.slice(0, 2));
+    }
     if (hospital.subway) items.push(hospital.subway);
     if (parkingText) items.push(parkingText);
     if (Array.isArray(detailData?.emergencySummary) && detailData.emergencySummary.length > 0) {
@@ -495,11 +506,13 @@ document.addEventListener('DOMContentLoaded', () => {
       items.push('최근 개원');
     }
 
-    return items.slice(0, 3);
+    return uniqueStrings(items).slice(0, 4);
   }
 
   function buildHospitalDataSummary(hospital, detailData) {
     const parts = [];
+    const contentApi = getHospitalContent();
+    const profile = contentApi?.buildHospitalProfile?.(hospital);
 
     if (Array.isArray(detailData?.receptionSummary) && detailData.receptionSummary.length > 0) {
       parts.push(...detailData.receptionSummary.slice(0, 2));
@@ -517,6 +530,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (hospital.nightOpen) parts.push('야간 진료');
       if (hospital.sundayOpen) parts.push('일요일 진료');
       if (hospital.subway) parts.push(hospital.subway);
+      if (Array.isArray(profile?.primaryServices) && profile.primaryServices.length > 0) {
+        parts.push(`주요 ${profile.primaryServices[0]}`);
+      }
       if (!hasKnownOperationalData(hospital)) parts.push('운영시간 공공데이터 확인 중');
     }
 
@@ -544,6 +560,60 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     return `주요 진료: ${profile.primaryServices.slice(0, 3).join(', ')}`;
+  }
+
+  function buildHospitalFocusNote(hospital) {
+    const contentApi = getHospitalContent();
+    const profile = contentApi?.buildHospitalProfile?.(hospital);
+    if (!profile?.visitTargets?.length) {
+      return '';
+    }
+
+    return `추천 상황: ${profile.visitTargets.slice(0, 2).join(', ')}`;
+  }
+
+  function buildHospitalVisitPrepNote(hospital) {
+    const contentApi = getHospitalContent();
+    const profile = contentApi?.buildHospitalProfile?.(hospital);
+    if (!profile) {
+      return '';
+    }
+
+    const documents = Array.isArray(profile.documents) ? profile.documents.slice(0, 3) : [];
+    if (documents.length > 0) {
+      return `방문 준비: ${documents.join(', ')}`;
+    }
+
+    if (profile.reservation) {
+      return profile.reservation;
+    }
+
+    return '';
+  }
+
+  function buildHospitalEvidenceSummary(hospital) {
+    const parts = [];
+
+    if (Number(hospital.specialistCount || 0) > 0) {
+      parts.push(`전문의 ${hospital.specialistCount}명`);
+    }
+    if (hospital.subway) {
+      parts.push(hospital.subway);
+    }
+    if (toPositiveNumber(hospital.roomCount) > 0) {
+      parts.push(`진료실 ${hospital.roomCount}개`);
+    }
+    if (toPositiveNumber(hospital.bedCount) > 0) {
+      parts.push(`병상 ${hospital.bedCount}개`);
+    }
+    if (hospital.equipment) {
+      parts.push(`장비 ${String(hospital.equipment).split(',')[0].trim()}`);
+    }
+    if (hospital.openDate) {
+      parts.push(`개원 ${formatDate(hospital.openDate)}`);
+    }
+
+    return uniqueStrings(parts).slice(0, 4).join(' / ');
   }
 
   async function renderReviews() {
@@ -1289,6 +1359,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const highlightItems = buildHospitalHighlightItems(hospital, detailData);
     const summaryText = buildHospitalDataSummary(hospital, detailData);
+    const evidenceText = buildHospitalEvidenceSummary(hospital);
 
     cards.forEach((card) => {
       const highlightNode = card.querySelector('[data-hospital-highlights]');
@@ -1308,6 +1379,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (summaryNode && summaryText) {
         summaryNode.textContent = summaryText;
         summaryNode.classList.remove('is-pending');
+      }
+
+      const evidenceNode = card.querySelector('.hospital-evidence-summary');
+      if (evidenceNode && evidenceText) {
+        evidenceNode.textContent = evidenceText;
       }
     });
   }

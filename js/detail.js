@@ -470,6 +470,7 @@
     setQuickLinks(hospital);
     renderBadges(hospital);
     renderSupplementaryDetails(hospital);
+    renderSnapshotCard(hospital);
     renderComparePoints(hospital);
     renderGuideRecommendations(hospital);
     renderRelatedSearchLinks(hospital);
@@ -570,6 +571,26 @@
     setText('detail-transport', profile.transport || '대중교통과 주차 동선을 방문 전에 확인하세요.');
     setText('detail-accessibility', profile.accessibility || '엘리베이터, 주차, 보호자 대기 공간은 병원에 직접 확인하는 편이 안전합니다.');
     setText('detail-checklist', formatDetailList(profile.checklist, '초진 목적과 증상 시작 시점을 메모해 가면 설명이 빨라집니다.'));
+  }
+
+  function renderSnapshotCard(hospital) {
+    const contentApi = getHospitalContent();
+    const profile = contentApi?.buildHospitalProfile?.(hospital) || buildFallbackHospitalProfile(hospital);
+    const summaryParts = [];
+
+    if (hospital.department) summaryParts.push(hospital.department);
+    if (hospital.type) summaryParts.push(hospital.type);
+    if (Number(hospital.specialistCount || 0) > 0) summaryParts.push(`전문의 ${hospital.specialistCount}명`);
+    if (profile.primaryServices?.length) summaryParts.push(profile.primaryServices.slice(0, 2).join(', '));
+
+    const visitParts = [];
+    if (profile.visitTargets?.length) visitParts.push(profile.visitTargets.slice(0, 2).join(' / '));
+    if (profile.checklist?.length) visitParts.push(profile.checklist[0]);
+
+    setText('detail-snapshot-summary', summaryParts.filter(Boolean).join(' / ') || '병원 핵심 비교 포인트를 정리 중입니다.');
+    setText('detail-snapshot-operation', buildOperationSummarySafe(hospital, detailRuntime.detailData));
+    setText('detail-snapshot-facility', buildEquipmentSummarySafe(hospital, detailRuntime.equipData));
+    setText('detail-snapshot-visit', visitParts.filter(Boolean).join(' / ') || '방문 전에 챙길 포인트를 정리 중입니다.');
   }
 
   function renderGuideRecommendations(hospital) {
@@ -848,6 +869,8 @@
       return;
     }
 
+    const contentApi = getHospitalContent();
+    const profile = contentApi?.buildHospitalProfile?.(hospital) || buildFallbackHospitalProfile(hospital);
     const items = [];
     if (Number(hospital.specialistCount || 0) > 0) items.push(`전문의 ${hospital.specialistCount}명`);
     if (hospital.saturdayOpen) items.push('토요일 진료');
@@ -858,6 +881,12 @@
     if (hospital.department) items.push(hospital.department);
     if (hospital.type) items.push(hospital.type);
     if (hospital.region) items.push(hospital.region);
+    if (hospital.subway) items.push(hospital.subway);
+    if (hospital.parkingCapacity) items.push(`주차 ${hospital.parkingCapacity}대`);
+    if (hospital.parkingFee && !hospital.parkingCapacity) items.push(`주차 ${hospital.parkingFee}`);
+    if (hospital.roomCount) items.push(`진료실 ${hospital.roomCount}개`);
+    if (hospital.bedCount) items.push(`병상 ${hospital.bedCount}개`);
+    if (Array.isArray(profile.highlightPoints)) items.push(...profile.highlightPoints);
 
     const uniqueItems = Array.from(new Set(items.filter(Boolean)));
     if (uniqueItems.length === 0) {
