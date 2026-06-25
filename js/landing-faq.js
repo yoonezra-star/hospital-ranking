@@ -10,6 +10,7 @@
     { href: 'seoul-pediatric.html', region: '서울', department: '소아과', focus: '발열, 기침, 비염, 예방접종, 주말 진료', guideLabel: '증상 체크 가이드' },
     { href: 'seoul-ent.html', region: '서울', department: '이비인후과', focus: '비염, 기침, 목 통증, 귀 증상, 야간 진료', guideLabel: '비염 가이드' },
     { href: 'seoul-orthopedic.html', region: '서울', department: '정형외과', focus: '허리, 무릎, 어깨 통증, 도수치료, 재활', guideLabel: '정형외과 가이드' },
+    { href: 'seoul-pain.html', region: '서울', department: '통증의학과', focus: '허리, 목, 어깨 통증, 주사치료, 재활', guideLabel: '통증 외래 가이드' },
     { href: 'gyeonggi-orthopedic.html', region: '경기', department: '정형외과', focus: '허리, 무릎, 관절 통증', guideLabel: '정형외과 가이드' },
     { href: 'gyeonggi-dental.html', region: '경기', department: '치과', focus: '임플란트, 교정, 보철', guideLabel: '임플란트 가이드' },
     { href: 'busan-ophthalmology.html', region: '부산', department: '안과', focus: '시력검사, 백내장 상담, 안구건조', guideLabel: '시력교정 가이드' },

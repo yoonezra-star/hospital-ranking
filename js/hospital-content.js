@@ -120,6 +120,7 @@
     { title: '서울 피부과 찾기', region: '서울', department: 'dermatology', description: '여드름, 흉터, 색소, 피부염 상담 기준으로 서울 피부과 외래를 빠르게 비교합니다.', badge: '서울 + 피부과' },
     { title: '서울 소아청소년과 찾기', region: '서울', department: 'pediatric', description: '발열, 기침, 비염, 예방접종 기준으로 서울 소아청소년과 외래를 빠르게 비교합니다.', badge: '서울 + 소아청소년과' },
     { title: '서울 이비인후과 찾기', region: '서울', department: 'ent', description: '비염, 기침, 목 통증, 귀 증상 기준으로 서울 이비인후과 외래를 빠르게 비교합니다.', badge: '서울 + 이비인후과' },
+    { title: '서울 통증의학과 찾기', region: '서울', department: 'pain', description: '허리, 목, 어깨 통증과 주사치료, 재활 연계 기준으로 서울 통증의학과를 빠르게 비교합니다.', badge: '서울 + 통증의학과' },
     { title: '경기 치과 찾기', region: '경기', department: 'dental', description: '임플란트, 교정, 보철 상담 기준으로 경기권 치과 목록을 빠르게 비교합니다.', badge: '경기 + 치과' },
     { title: '인천 안과 찾기', region: '인천', department: 'ophthalmology', description: '시력검사, 백내장 상담, 안구건조 증상 중심으로 인천 안과를 비교합니다.', badge: '인천 + 안과' },
     { title: '대전 이비인후과 찾기', region: '대전', department: 'ent', description: '비염, 목 통증, 귀 증상 외래를 대전 지역 기준으로 묶어 탐색합니다.', badge: '대전 + 이비인후과' },
@@ -153,6 +154,15 @@
       departmentIds: ['orthopedic'],
       departmentKeywords: ['정형외과', '도수치료', '무릎'],
       badge: '서울 · 정형외과',
+    },
+    {
+      href: 'seoul-pain.html',
+      title: '서울 통증의학과 찾기',
+      description: '서울 통증의학과를 허리, 목, 어깨 통증과 주사치료 기준으로 비교합니다.',
+      regionKeywords: ['서울'],
+      departmentIds: ['pain'],
+      departmentKeywords: ['통증의학과', '주사치료', '신경통'],
+      badge: '서울 · 통증의학과',
     },
     {
       href: 'gyeonggi-orthopedic.html',
