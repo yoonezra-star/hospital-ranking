@@ -11,6 +11,7 @@
     { href: 'seoul-ent.html', title: '서울 이비인후과 병원찾기', region: '서울', department: '이비인후과', description: '비염, 기침, 목 통증, 귀 증상, 야간 진료 기준으로 서울 이비인후과 흐름을 정리했습니다.' },
     { href: 'seoul-orthopedic.html', title: '서울 정형외과 병원찾기', region: '서울', department: '정형외과', description: '허리, 무릎, 어깨 통증과 도수치료 상담 기준으로 서울 정형외과를 비교합니다.' },
     { href: 'seoul-pain.html', title: '서울 통증의학과 병원찾기', region: '서울', department: '통증의학과', description: '허리, 목, 어깨 통증과 주사치료, 재활 연계 기준으로 서울 통증의학과를 비교합니다.' },
+    { href: 'seoul-rehab.html', title: '서울 재활의학과 병원찾기', region: '서울', department: '재활의학과', description: '도수치료, 운동치료, 회복 외래와 통증 재활 기준으로 서울 재활의학과를 비교합니다.' },
     { href: 'gyeonggi-orthopedic.html', title: '경기 정형외과 병원찾기', region: '경기', department: '정형외과', description: '허리, 무릎, 관절 통증 외래 기준으로 경기 정형외과를 비교합니다.' },
     { href: 'gyeonggi-dental.html', title: '경기 치과 병원찾기', region: '경기', department: '치과', description: '임플란트, 교정, 보철과 주말 외래 기준으로 경기 치과를 비교합니다.' },
     { href: 'busan-ophthalmology.html', title: '부산 안과 병원찾기', region: '부산', department: '안과', description: '시력검사와 안과 상담 기준으로 부산 지역 외래 탐색을 정리했습니다.' },
