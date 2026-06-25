@@ -933,6 +933,10 @@ document.addEventListener('DOMContentLoaded', () => {
       ? SearchEngine.query(localSource, { searchText: query, sortBy: state.currentSort, intent })
       : localSource;
 
+    if (localResults.length > 0) {
+      return { hospitals: localResults, source: 'local' };
+    }
+
     const apiParams = buildSearchApiParams(intent);
     let remoteHospitals = [];
 
@@ -946,7 +950,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ? SearchEngine.query(combined, { searchText: query, sortBy: state.currentSort, intent })
       : combined;
 
-    return { hospitals };
+    return { hospitals, source: 'remote' };
   }
 
   function buildSearchApiParams(intent) {
