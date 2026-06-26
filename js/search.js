@@ -299,6 +299,48 @@ const SearchEngine = (() => {
     switch (sortBy) {
       case 'score':
         return sorted.sort(compareByRankingQuality);
+      case 'open_now':
+        return sorted.sort((a, b) => comparePriorityFlags(
+          sortIsHospitalOpenNow(b),
+          sortIsHospitalOpenNow(a),
+          a,
+          b
+        ));
+      case 'today_available':
+        return sorted.sort((a, b) => comparePriorityFlags(
+          sortIsAvailableToday(b),
+          sortIsAvailableToday(a),
+          a,
+          b
+        ));
+      case 'saturday_first':
+        return sorted.sort((a, b) => comparePriorityFlags(
+          b.saturdayOpen === true,
+          a.saturdayOpen === true,
+          a,
+          b
+        ));
+      case 'night_first':
+        return sorted.sort((a, b) => comparePriorityFlags(
+          b.nightOpen === true,
+          a.nightOpen === true,
+          a,
+          b
+        ));
+      case 'sunday_first':
+        return sorted.sort((a, b) => comparePriorityFlags(
+          b.sundayOpen === true,
+          a.sundayOpen === true,
+          a,
+          b
+        ));
+      case 'emergency_first':
+        return sorted.sort((a, b) => comparePriorityFlags(
+          b.hasEmergency === true,
+          a.hasEmergency === true,
+          a,
+          b
+        ));
       case 'reviews':
         return sorted.sort((a, b) => (b.reviewCount || 0) - (a.reviewCount || 0));
       case 'specialists':
@@ -396,6 +438,95 @@ const SearchEngine = (() => {
       .toLowerCase()
       .replace(/\s+/g, '')
       .replace(/[^\p{L}\p{N}]/gu, '');
+  }
+
+  function comparePriorityFlags(leftPriority, rightPriority, leftHospital, rightHospital) {
+    if (leftPriority !== rightPriority) {
+      return Number(leftPriority) - Number(rightPriority);
+    }
+
+    return compareByRankingQuality(leftHospital, rightHospital);
+  }
+
+  function sortIsHospitalOpenNow(hospital, now = new Date()) {
+    const day = now.getDay();
+    const currentMinutes = (now.getHours() * 60) + now.getMinutes();
+    const hoursValue = sortGetHoursByDay(hospital?.hours, day);
+    const parsedRange = sortParseOperatingRange(hoursValue);
+
+    if (parsedRange) {
+      return currentMinutes >= parsedRange.start && currentMinutes <= parsedRange.end;
+    }
+
+    return sortIsLikelyOpenByFlags(hospital, day, currentMinutes);
+  }
+
+  function sortIsAvailableToday(hospital, now = new Date()) {
+    const day = now.getDay();
+
+    if (day === 0) return Boolean(hospital?.sundayOpen);
+    if (day === 6) return Boolean(hospital?.saturdayOpen);
+
+    return true;
+  }
+
+  function sortGetHoursByDay(hours, day) {
+    if (!hours) return '';
+
+    if (day === 0) return hours.sun || hours.holiday || '';
+    if (day === 6) return hours.sat || '';
+
+    return [hours.mon, hours.tue, hours.wed, hours.thu, hours.fri][day - 1] || '';
+  }
+
+  function sortParseOperatingRange(hoursValue) {
+    if (!hoursValue || sortIsClosedHoursText(hoursValue)) return null;
+
+    const matches = String(hoursValue).match(/(\d{1,2}):(\d{2})/g);
+    if (!matches || matches.length < 2) return null;
+
+    const start = sortParseTimeText(matches[0]);
+    const end = sortParseTimeText(matches[matches.length - 1]);
+    if (start === null || end === null) return null;
+
+    return { start, end };
+  }
+
+  function sortParseTimeText(value) {
+    const match = String(value).match(/(\d{1,2}):(\d{2})/);
+    if (!match) return null;
+
+    return (Number(match[1]) * 60) + Number(match[2]);
+  }
+
+  function sortIsClosedHoursText(hoursValue) {
+    const text = String(hoursValue || '').trim().toLowerCase();
+    return !text || ['휴진', '미진료', '운영안함', '없음', '-', 'closed'].some((keyword) => text.includes(keyword));
+  }
+
+  function sortIsLikelyOpenByFlags(hospital, day, currentMinutes) {
+    const weekdayStart = 9 * 60;
+    const weekdayEnd = 18 * 60;
+    const nightEnd = 21 * 60;
+    const weekendEnd = 13 * 60;
+
+    if (day === 0) {
+      return Boolean(hospital?.sundayOpen) && currentMinutes >= weekdayStart && currentMinutes <= weekendEnd;
+    }
+
+    if (day === 6) {
+      return Boolean(hospital?.saturdayOpen) && currentMinutes >= weekdayStart && currentMinutes <= weekendEnd;
+    }
+
+    if (currentMinutes < weekdayStart || currentMinutes > nightEnd) {
+      return false;
+    }
+
+    if (currentMinutes <= weekdayEnd) {
+      return true;
+    }
+
+    return Boolean(hospital?.nightOpen);
   }
 
   function compareByRankingQuality(a, b) {
