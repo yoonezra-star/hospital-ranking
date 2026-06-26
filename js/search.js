@@ -75,16 +75,29 @@ const SearchEngine = (() => {
     잠실: { region: '서울', district: '송파구' },
     압구정: { region: '서울', district: '강남구' },
     논현: { region: '서울', district: '강남구' },
+    파주: { region: '경기', district: '파주시' },
+    파주시: { region: '경기', district: '파주시' },
+    성남: { region: '경기', district: '성남시' },
+    성남시: { region: '경기', district: '성남시' },
     분당: { region: '경기', district: '분당구' },
     분당구: { region: '경기', district: '분당구' },
+    고양: { region: '경기', district: '고양시' },
+    고양시: { region: '경기', district: '고양시' },
     수원: { region: '경기', district: '수원시' },
     수원시: { region: '경기', district: '수원시' },
+    용인: { region: '경기', district: '용인시' },
+    용인시: { region: '경기', district: '용인시' },
+    화성: { region: '경기', district: '화성시' },
+    화성시: { region: '경기', district: '화성시' },
     일산: { region: '경기', district: '일산동구' },
     일산동구: { region: '경기', district: '일산동구' },
+    일산서구: { region: '경기', district: '일산서구' },
     해운대: { region: '부산', district: '해운대구' },
     해운대구: { region: '부산', district: '해운대구' },
     남동: { region: '인천', district: '남동구' },
     남동구: { region: '인천', district: '남동구' },
+    연수: { region: '인천', district: '연수구' },
+    연수구: { region: '인천', district: '연수구' },
     둔산: { region: '대전', district: '서구' },
   };
 
@@ -101,17 +114,161 @@ const SearchEngine = (() => {
       label: '파주 운정 생활권',
       keywords: ['운정', '동패동', '목동동', '야당동', '다율동', '산내동'],
     },
+    판교: {
+      region: '경기',
+      district: '분당구',
+      label: '성남 판교 생활권',
+      keywords: ['판교', '판교역', '판교역로', '삼평동', '백현동', '운중동', '대장동'],
+    },
+    판교역: {
+      region: '경기',
+      district: '분당구',
+      label: '성남 판교 생활권',
+      keywords: ['판교', '판교역', '판교역로', '삼평동', '백현동', '운중동', '대장동'],
+    },
+    정자: {
+      region: '경기',
+      district: '분당구',
+      label: '성남 정자 생활권',
+      keywords: ['정자', '정자동', '금곡동', '백현동'],
+    },
+    정자동: {
+      region: '경기',
+      district: '분당구',
+      label: '성남 정자 생활권',
+      keywords: ['정자', '정자동', '금곡동', '백현동'],
+    },
+    서현: {
+      region: '경기',
+      district: '분당구',
+      label: '성남 서현 생활권',
+      keywords: ['서현', '서현동', '이매동', '수내동'],
+    },
+    야탑: {
+      region: '경기',
+      district: '분당구',
+      label: '성남 야탑 생활권',
+      keywords: ['야탑', '야탑동', '이매동'],
+    },
+    수내: {
+      region: '경기',
+      district: '분당구',
+      label: '성남 수내 생활권',
+      keywords: ['수내', '수내동', '정자동', '서현동'],
+    },
+    미금: {
+      region: '경기',
+      district: '분당구',
+      label: '성남 미금 생활권',
+      keywords: ['미금', '금곡동', '구미동', '정자동'],
+    },
+    광교: {
+      region: '경기',
+      district: '',
+      label: '광교 생활권',
+      keywords: ['광교', '이의동', '원천동', '하동', '상현동'],
+    },
+    동탄: {
+      region: '경기',
+      district: '화성시',
+      label: '화성 동탄 생활권',
+      keywords: ['동탄', '반송동', '석우동', '청계동', '영천동', '산척동', '오산동'],
+    },
     잠실: {
       region: '서울',
       district: '송파구',
       label: '서울 잠실 생활권',
       keywords: ['잠실', '신천동', '송파동', '방이동'],
     },
+    문정: {
+      region: '서울',
+      district: '송파구',
+      label: '서울 문정 생활권',
+      keywords: ['문정', '문정동', '장지동', '가락동'],
+    },
+    압구정: {
+      region: '서울',
+      district: '강남구',
+      label: '서울 압구정 생활권',
+      keywords: ['압구정', '압구정동', '신사동'],
+    },
+    청담: {
+      region: '서울',
+      district: '강남구',
+      label: '서울 청담 생활권',
+      keywords: ['청담', '청담동', '삼성동'],
+    },
+    역삼: {
+      region: '서울',
+      district: '강남구',
+      label: '서울 역삼 생활권',
+      keywords: ['역삼', '역삼동', '테헤란로', '선릉로'],
+    },
+    대치: {
+      region: '서울',
+      district: '강남구',
+      label: '서울 대치 생활권',
+      keywords: ['대치', '대치동', '도곡동'],
+    },
     여의도: {
       region: '서울',
       district: '영등포구',
       label: '서울 여의도 생활권',
       keywords: ['여의도', '여의도동', '영등포구'],
+    },
+    홍대: {
+      region: '서울',
+      district: '마포구',
+      label: '서울 홍대 생활권',
+      keywords: ['홍대', '홍대입구', '서교동', '동교동', '연남동', '합정동', '상수동'],
+    },
+    홍대입구: {
+      region: '서울',
+      district: '마포구',
+      label: '서울 홍대 생활권',
+      keywords: ['홍대', '홍대입구', '서교동', '동교동', '연남동', '합정동', '상수동'],
+    },
+    합정: {
+      region: '서울',
+      district: '마포구',
+      label: '서울 합정 생활권',
+      keywords: ['합정', '합정동', '서교동', '망원동', '상수동'],
+    },
+    상암: {
+      region: '서울',
+      district: '마포구',
+      label: '서울 상암 생활권',
+      keywords: ['상암', '상암동', '성산동'],
+    },
+    해운대: {
+      region: '부산',
+      district: '해운대구',
+      label: '부산 해운대 생활권',
+      keywords: ['해운대', '우동', '중동', '좌동', '재송동'],
+    },
+    센텀: {
+      region: '부산',
+      district: '해운대구',
+      label: '부산 센텀 생활권',
+      keywords: ['센텀', '우동', '재송동'],
+    },
+    송도: {
+      region: '인천',
+      district: '연수구',
+      label: '인천 송도 생활권',
+      keywords: ['송도', '송도동', '연수구'],
+    },
+    구월: {
+      region: '인천',
+      district: '남동구',
+      label: '인천 구월 생활권',
+      keywords: ['구월', '구월동', '남동구'],
+    },
+    둔산: {
+      region: '대전',
+      district: '서구',
+      label: '대전 둔산 생활권',
+      keywords: ['둔산', '둔산동', '탄방동', '월평동'],
     },
   };
 
@@ -685,7 +842,10 @@ const SearchEngine = (() => {
 
     const regionText = String(hospital?.region || '').trim();
     const districtText = String(hospital?.district || '').trim();
+    const townText = String(hospital?.town || '').trim();
     const addressText = String(hospital?.address || '').trim();
+    const nameText = String(hospital?.name || '').trim();
+    const subwayText = String(hospital?.subway || '').trim();
 
     if (localityEntry.region && regionText && regionText !== localityEntry.region) {
       return false;
@@ -699,7 +859,11 @@ const SearchEngine = (() => {
     }
 
     return (localityEntry.keywords || []).some((keyword) => (
-      districtText.includes(keyword) || addressText.includes(keyword)
+      nameText.includes(keyword) ||
+      districtText.includes(keyword) ||
+      townText.includes(keyword) ||
+      addressText.includes(keyword) ||
+      subwayText.includes(keyword)
     ));
   }
 
