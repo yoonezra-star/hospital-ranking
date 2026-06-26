@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     isSearchActive: false,
     detailSummaryCache: new Map(),
     detailSummaryInflight: new Map(),
+    searchSuggestions: [],
+    activeSearchSuggestionIndex: -1,
   };
 
   const $ = (selector) => document.querySelector(selector);
@@ -21,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     navLinks: $('#nav-links'),
     heroSearch: $('#hero-search'),
     searchBtn: $('#search-btn'),
+    searchSuggestionList: $('#search-suggestions'),
     clearSearchBtn: $('#clear-search'),
     searchResults: $('#search-results'),
     searchResultsList: $('#search-results-list'),
@@ -48,6 +51,25 @@ document.addEventListener('DOMContentLoaded', () => {
     dataSourceNote: $('#data-source-note'),
     reviewsTitle: $('#reviews h2'),
   };
+
+  const SEARCH_AUTOCOMPLETE_ITEMS = [
+    '서울 치과',
+    '강남 치과',
+    '강남 피부과 야간',
+    '서초 정형외과',
+    '송파 소아과',
+    '송파 소아과 일요일',
+    '분당 내과',
+    '마포 치과 주차',
+    '여의도 통증의학과',
+    '서울 재활의학과',
+    '경기 정형외과 토요일',
+    '야간 피부과',
+    '토요일 정형외과',
+    '일요일 소아과',
+    '응급 진료 병원',
+    '주차 가능한 치과',
+  ];
 
   applyInitialRouteState();
 
@@ -1317,6 +1339,121 @@ document.addEventListener('DOMContentLoaded', () => {
     return `${current} ${nextLabel}`.trim();
   }
 
+  function updateSearchSuggestions(query) {
+    const suggestions = buildSearchSuggestions(query);
+    state.searchSuggestions = suggestions;
+    state.activeSearchSuggestionIndex = suggestions.length > 0 ? 0 : -1;
+    renderSearchSuggestions();
+  }
+
+  function buildSearchSuggestions(query = '') {
+    const normalizedQuery = normalizeSuggestionText(query);
+    const source = uniqueStrings(SEARCH_AUTOCOMPLETE_ITEMS);
+
+    if (!normalizedQuery) {
+      return source.slice(0, 6);
+    }
+
+    return source
+      .map((item) => ({ item, score: scoreSearchSuggestion(item, normalizedQuery) }))
+      .filter((entry) => entry.score > 0)
+      .sort((left, right) => right.score - left.score || left.item.localeCompare(right.item, 'ko'))
+      .slice(0, 8)
+      .map((entry) => entry.item);
+  }
+
+  function scoreSearchSuggestion(item, normalizedQuery) {
+    const normalizedItem = normalizeSuggestionText(item);
+    const originalQuery = String(normalizedQuery || '').trim();
+    if (!normalizedItem || !originalQuery) {
+      return 0;
+    }
+
+    if (normalizedItem === originalQuery) {
+      return 200;
+    }
+
+    if (normalizedItem.startsWith(originalQuery)) {
+      return 120;
+    }
+
+    if (normalizedItem.includes(originalQuery)) {
+      return 90;
+    }
+
+    const queryTokens = originalQuery.split(/\s+/).filter(Boolean);
+    const normalizedItemTokens = normalizedItem.split(/\s+/).filter(Boolean);
+    const tokenMatches = queryTokens.filter((token) => normalizedItemTokens.some((part) => part.includes(token))).length;
+    return tokenMatches > 0 ? tokenMatches * 25 : 0;
+  }
+
+  function renderSearchSuggestions() {
+    if (!ui.searchSuggestionList) {
+      return;
+    }
+
+    if (!state.searchSuggestions.length) {
+      ui.searchSuggestionList.hidden = true;
+      ui.searchSuggestionList.innerHTML = '';
+      return;
+    }
+
+    ui.searchSuggestionList.hidden = false;
+    ui.searchSuggestionList.innerHTML = state.searchSuggestions.map((suggestion, index) => `
+      <button
+        type="button"
+        class="search-suggestion-item${index === state.activeSearchSuggestionIndex ? ' is-active' : ''}"
+        data-search-suggestion="${escapeHtml(suggestion)}"
+      >
+        <span class="search-suggestion-prefix">추천</span>
+        <strong>${escapeHtml(suggestion)}</strong>
+      </button>
+    `).join('');
+  }
+
+  function moveSearchSuggestionFocus(direction) {
+    if (!state.searchSuggestions.length) {
+      return;
+    }
+
+    const total = state.searchSuggestions.length;
+    const currentIndex = state.activeSearchSuggestionIndex < 0 ? 0 : state.activeSearchSuggestionIndex;
+    state.activeSearchSuggestionIndex = (currentIndex + direction + total) % total;
+    renderSearchSuggestions();
+  }
+
+  function selectSearchSuggestion(suggestion) {
+    const nextValue = String(suggestion || '').trim();
+    if (!nextValue) {
+      return;
+    }
+
+    if (ui.heroSearch) {
+      ui.heroSearch.value = nextValue;
+      ui.heroSearch.focus();
+    }
+
+    closeSearchSuggestions();
+    void performSearch();
+  }
+
+  function closeSearchSuggestions() {
+    state.searchSuggestions = [];
+    state.activeSearchSuggestionIndex = -1;
+
+    if (ui.searchSuggestionList) {
+      ui.searchSuggestionList.hidden = true;
+      ui.searchSuggestionList.innerHTML = '';
+    }
+  }
+
+  function normalizeSuggestionText(value = '') {
+    return String(value || '')
+      .toLowerCase()
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
   function renderSearchIntentSummary(intent) {
     if (!ui.searchIntentSummary) {
       return;
@@ -1366,6 +1503,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function clearSearch() {
     state.isSearchActive = false;
     if (ui.heroSearch) ui.heroSearch.value = '';
+    closeSearchSuggestions();
     ui.searchResults?.classList.remove('active');
     if (ui.searchIntentSummary) {
       ui.searchIntentSummary.innerHTML = '';
@@ -1395,9 +1533,49 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     ui.heroSearch?.addEventListener('keyup', (event) => {
-      if (event.key === 'Enter') {
-        void performSearch();
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp' || event.key === 'Escape') {
+        return;
       }
+
+      if (event.key === 'Enter') {
+        const activeSuggestion = state.searchSuggestions[state.activeSearchSuggestionIndex];
+        if (activeSuggestion) {
+          selectSearchSuggestion(activeSuggestion);
+          return;
+        }
+
+        void performSearch();
+        closeSearchSuggestions();
+        return;
+      }
+
+      updateSearchSuggestions(ui.heroSearch?.value || '');
+    });
+
+    ui.heroSearch?.addEventListener('keydown', (event) => {
+      if (!state.searchSuggestions.length) {
+        return;
+      }
+
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        moveSearchSuggestionFocus(1);
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        moveSearchSuggestionFocus(-1);
+      } else if (event.key === 'Escape') {
+        closeSearchSuggestions();
+      }
+    });
+
+    ui.heroSearch?.addEventListener('focus', () => {
+      updateSearchSuggestions(ui.heroSearch?.value || '');
+    });
+
+    ui.heroSearch?.addEventListener('blur', () => {
+      window.setTimeout(() => {
+        closeSearchSuggestions();
+      }, 120);
     });
 
     ui.clearSearchBtn?.addEventListener('click', clearSearch);
@@ -1405,11 +1583,24 @@ document.addEventListener('DOMContentLoaded', () => {
     $$('[data-search-example]').forEach((button) => {
       button.addEventListener('click', () => {
         const example = button.dataset.searchExample || '';
-        if (ui.heroSearch) {
-          ui.heroSearch.value = example;
-        }
-        void performSearch();
+        selectSearchSuggestion(example);
       });
+    });
+
+    ui.searchSuggestionList?.addEventListener('mousedown', (event) => {
+      const button = event.target.closest('[data-search-suggestion]');
+      if (!button) {
+        return;
+      }
+
+      event.preventDefault();
+      selectSearchSuggestion(button.dataset.searchSuggestion || '');
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!event.target.closest('.search-wrapper')) {
+        closeSearchSuggestions();
+      }
     });
 
     $$('.quick-filter-btn').forEach((button) => {
