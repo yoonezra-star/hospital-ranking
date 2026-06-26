@@ -51,6 +51,43 @@ const SearchEngine = (() => {
     제주특별자치도: '제주',
   };
 
+  const DISTRICT_ALIASES = {
+    강남: { region: '서울', district: '강남구' },
+    강남구: { region: '서울', district: '강남구' },
+    서초: { region: '서울', district: '서초구' },
+    서초구: { region: '서울', district: '서초구' },
+    송파: { region: '서울', district: '송파구' },
+    송파구: { region: '서울', district: '송파구' },
+    마포: { region: '서울', district: '마포구' },
+    마포구: { region: '서울', district: '마포구' },
+    종로: { region: '서울', district: '종로구' },
+    종로구: { region: '서울', district: '종로구' },
+    중구: { region: '서울', district: '중구' },
+    서대문: { region: '서울', district: '서대문구' },
+    서대문구: { region: '서울', district: '서대문구' },
+    성동: { region: '서울', district: '성동구' },
+    성동구: { region: '서울', district: '성동구' },
+    영등포: { region: '서울', district: '영등포구' },
+    영등포구: { region: '서울', district: '영등포구' },
+    강서: { region: '서울', district: '강서구' },
+    강서구: { region: '서울', district: '강서구' },
+    여의도: { region: '서울', district: '영등포구' },
+    잠실: { region: '서울', district: '송파구' },
+    압구정: { region: '서울', district: '강남구' },
+    논현: { region: '서울', district: '강남구' },
+    분당: { region: '경기', district: '분당구' },
+    분당구: { region: '경기', district: '분당구' },
+    수원: { region: '경기', district: '수원시' },
+    수원시: { region: '경기', district: '수원시' },
+    일산: { region: '경기', district: '일산동구' },
+    일산동구: { region: '경기', district: '일산동구' },
+    해운대: { region: '부산', district: '해운대구' },
+    해운대구: { region: '부산', district: '해운대구' },
+    남동: { region: '인천', district: '남동구' },
+    남동구: { region: '인천', district: '남동구' },
+    둔산: { region: '대전', district: '서구' },
+  };
+
   const DEPARTMENT_ALIASES = {
     내과: 'internal',
     일반내과: 'internal',
@@ -140,6 +177,7 @@ const SearchEngine = (() => {
     const intent = {
       originalQuery: String(query || '').trim(),
       region: '',
+      district: '',
       department: '',
       keywordTokens: [],
       keywordText: '',
@@ -160,6 +198,15 @@ const SearchEngine = (() => {
 
       if (!intent.region && REGION_ALIASES[normalized]) {
         intent.region = REGION_ALIASES[normalized];
+        return;
+      }
+
+      const districtIntent = resolveDistrictIntent(normalized);
+      if (!intent.district && districtIntent) {
+        intent.district = districtIntent.district;
+        if (!intent.region && districtIntent.region) {
+          intent.region = districtIntent.region;
+        }
         return;
       }
 
@@ -190,6 +237,7 @@ const SearchEngine = (() => {
     intent.keywordText = intent.keywordTokens.join(' ').trim();
     intent.isStructured = Boolean(
       intent.region ||
+      intent.district ||
       intent.department ||
       intent.saturdayOpen ||
       intent.sundayOpen ||
@@ -210,6 +258,7 @@ const SearchEngine = (() => {
 
     const parts = [];
     if (intent.region) parts.push(intent.region);
+    if (intent.district) parts.push(intent.district);
     if (intent.department) parts.push(getDepartmentLabel(intent.department));
     if (intent.saturdayOpen) parts.push(OPERATION_LABELS.saturdayOpen);
     if (intent.sundayOpen) parts.push(OPERATION_LABELS.sundayOpen);
@@ -246,6 +295,9 @@ const SearchEngine = (() => {
       result = result.filter((hospital) => (
         hospital.region === filters.region || String(hospital.regionCode || '') === String(filters.region)
       ));
+    }
+    if (filters.district) {
+      result = result.filter((hospital) => matchesDistrict(hospital, filters.district));
     }
 
     if (filters.department && filters.department !== 'all') {
@@ -359,6 +411,7 @@ const SearchEngine = (() => {
     const mergedFilters = {
       ...filters,
       region: filters.region && filters.region !== 'all' ? filters.region : (resolvedIntent.region || filters.region),
+      district: filters.district || resolvedIntent.district || '',
       department: filters.department && filters.department !== 'all'
         ? filters.department
         : (resolvedIntent.department || filters.department),
@@ -527,6 +580,30 @@ const SearchEngine = (() => {
     }
 
     return Boolean(hospital?.nightOpen);
+  }
+
+  function resolveDistrictIntent(token = '') {
+    if (DISTRICT_ALIASES[token]) {
+      return DISTRICT_ALIASES[token];
+    }
+
+    if (/[가-힣]+(구|군|시|동)$/.test(token)) {
+      return { region: '', district: token };
+    }
+
+    return null;
+  }
+
+  function matchesDistrict(hospital, district = '') {
+    if (!district) {
+      return true;
+    }
+
+    const districtText = String(district).trim();
+    const hospitalDistrict = String(hospital?.district || '').trim();
+    const address = String(hospital?.address || '').trim();
+
+    return hospitalDistrict.includes(districtText) || address.includes(districtText);
   }
 
   function compareByRankingQuality(a, b) {
