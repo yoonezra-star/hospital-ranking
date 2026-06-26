@@ -470,6 +470,7 @@
     setQuickLinks(hospital);
     renderBadges(hospital);
     renderSupplementaryDetails(hospital);
+    renderVisitPlanningDigest(hospital);
     renderSnapshotCard(hospital);
     renderComparePoints(hospital);
     renderGuideRecommendations(hospital);
@@ -572,6 +573,57 @@
     setText('detail-transport', profile.transport || '대중교통과 주차 동선을 방문 전에 확인하세요.');
     setText('detail-accessibility', profile.accessibility || '엘리베이터, 주차, 보호자 대기 공간은 병원에 직접 확인하는 편이 안전합니다.');
     setText('detail-checklist', formatDetailList(profile.checklist, '초진 목적과 증상 시작 시점을 메모해 가면 설명이 빨라집니다.'));
+  }
+
+  function renderVisitPlanningDigest(hospital) {
+    const contentApi = getHospitalContent();
+    const profile = contentApi?.buildHospitalProfile?.(hospital) || buildFallbackHospitalProfile(hospital);
+    const detailData = detailRuntime.detailData || {};
+    const symptomParts = [];
+    const intakeParts = [];
+    const parkingParts = [];
+    const flowParts = [];
+
+    if (Array.isArray(profile.visitTargets) && profile.visitTargets.length > 0) {
+      symptomParts.push(...profile.visitTargets.slice(0, 2));
+    }
+    if (Array.isArray(profile.primaryServices) && profile.primaryServices.length > 0) {
+      symptomParts.push(`주요 진료는 ${profile.primaryServices.slice(0, 2).join(', ')} 기준으로 먼저 비교하면 좋습니다.`);
+    }
+
+    if (Array.isArray(detailData.receptionSummary) && detailData.receptionSummary.length > 0) {
+      intakeParts.push(...detailData.receptionSummary.slice(0, 2));
+    }
+    if (profile.reservation) {
+      intakeParts.push(profile.reservation);
+    }
+    if (detailData.lunchWeek) {
+      intakeParts.push(`점심시간은 ${detailData.lunchWeek} 기준으로 한 번 더 확인하세요.`);
+    }
+
+    if (Array.isArray(detailData.parkingSummary) && detailData.parkingSummary.length > 0) {
+      parkingParts.push(...detailData.parkingSummary.slice(0, 2));
+    }
+    if (toPositiveNumber(hospital.parkingCapacity) > 0) {
+      parkingParts.push(`주차 가능 대수는 약 ${hospital.parkingCapacity}대 기준입니다.`);
+    } else if (hospital.parkingFee) {
+      parkingParts.push(`주차 정보는 ${hospital.parkingFee} 기준으로 확인됩니다.`);
+    }
+    if (profile.transport) {
+      parkingParts.push(profile.transport);
+    }
+
+    if (Array.isArray(profile.checklist) && profile.checklist.length > 0) {
+      flowParts.push(...profile.checklist.slice(0, 2));
+    }
+    if (Array.isArray(profile.documents) && profile.documents.length > 0) {
+      flowParts.push(`준비물은 ${profile.documents.slice(0, 2).join(', ')}부터 챙기면 수월합니다.`);
+    }
+
+    setText('detail-symptom-focus', uniqueStrings(symptomParts).slice(0, 3).join(' / ') || '대표 증상과 진료 목적 기준으로 먼저 비교하는 편이 좋습니다.');
+    setText('detail-intake-tip', uniqueStrings(intakeParts).slice(0, 3).join(' / ') || '초진 접수 가능 시간과 필요 서류를 방문 전에 먼저 확인하세요.');
+    setText('detail-parking-tip', uniqueStrings(parkingParts).slice(0, 3).join(' / ') || '주차 가능 여부와 대중교통 동선은 병원에 한 번 더 확인하는 편이 안전합니다.');
+    setText('detail-visit-flow', uniqueStrings(flowParts).slice(0, 3).join(' / ') || '증상 메모와 기존 검사 결과를 챙기고 접수 마감 시간을 먼저 확인하세요.');
   }
 
   function renderSnapshotCard(hospital) {
