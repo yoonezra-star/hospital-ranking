@@ -469,6 +469,7 @@
     setHomepageLink(hospital.url || '');
     setQuickLinks(hospital);
     renderBadges(hospital);
+    renderChoiceSummaryCard(hospital);
     renderSupplementaryDetails(hospital);
     renderVisitPlanningDigest(hospital);
     renderSnapshotCard(hospital);
@@ -560,6 +561,74 @@
       parkingParts.push(hospital.parkingFee);
     }
     setText('detail-parking', parkingParts.join(' / ') || '주차 정보 확인 필요');
+  }
+
+  function renderChoiceSummaryCard(hospital) {
+    const contentApi = getHospitalContent();
+    const profile = contentApi?.buildHospitalProfile?.(hospital) || buildFallbackHospitalProfile(hospital);
+    const detailData = detailRuntime.detailData || {};
+    const summaryParts = [];
+    const compareParts = [];
+    const flowParts = [];
+    const cautionParts = [];
+
+    if (Array.isArray(profile.visitTargets) && profile.visitTargets.length > 0) {
+      summaryParts.push(profile.visitTargets[0]);
+    }
+    if (Array.isArray(profile.primaryServices) && profile.primaryServices.length > 0) {
+      summaryParts.push(`주요 진료는 ${profile.primaryServices.slice(0, 2).join(', ')} 중심으로 먼저 보면 좋습니다.`);
+    }
+    if (Number(hospital.specialistCount || 0) > 0) {
+      summaryParts.push(`전문의 ${hospital.specialistCount}명 기준으로 비교할 수 있습니다.`);
+    }
+
+    if (Number(hospital.score || 0) > 0) compareParts.push(`평점 ${Number(hospital.score).toFixed(1)}`);
+    if (Number(hospital.reviewCount || 0) > 0) compareParts.push(`후기 ${Number(hospital.reviewCount).toLocaleString()}개`);
+    if (hospital.saturdayOpen) compareParts.push('토요일 진료');
+    if (hospital.sundayOpen) compareParts.push('일요일 진료');
+    if (hospital.nightOpen) compareParts.push('야간 진료');
+    if (hospital.equipment) compareParts.push(`장비 ${String(hospital.equipment).split(',')[0].trim()}`);
+    if (toPositiveNumber(hospital.parkingCapacity) > 0) {
+      compareParts.push(`주차 ${hospital.parkingCapacity}대`);
+    } else if (hospital.parkingFee) {
+      compareParts.push(`주차 ${hospital.parkingFee}`);
+    }
+
+    if (Array.isArray(detailData.receptionSummary) && detailData.receptionSummary.length > 0) {
+      flowParts.push(detailData.receptionSummary[0]);
+    } else if (profile.reservation) {
+      flowParts.push(profile.reservation);
+    }
+    if (Array.isArray(profile.documents) && profile.documents.length > 0) {
+      flowParts.push(`준비서류는 ${profile.documents.slice(0, 2).join(', ')} 순으로 먼저 챙기면 됩니다.`);
+    }
+    if (profile.transport) {
+      flowParts.push(profile.transport);
+    } else if (hospital.subway) {
+      flowParts.push(hospital.subway);
+    }
+
+    if (detailData.lunchWeek) {
+      cautionParts.push(`점심시간은 ${detailData.lunchWeek} 기준으로 한 번 더 확인하세요.`);
+    }
+    if (Array.isArray(detailData.parkingSummary) && detailData.parkingSummary.length > 0) {
+      cautionParts.push(detailData.parkingSummary[0]);
+    } else if (toPositiveNumber(hospital.parkingCapacity) > 0) {
+      cautionParts.push(`주차 가능 대수는 약 ${hospital.parkingCapacity}대 기준입니다.`);
+    } else if (hospital.parkingFee) {
+      cautionParts.push(`주차 정보는 ${hospital.parkingFee} 기준으로 확인됩니다.`);
+    }
+    if (Array.isArray(profile.checklist) && profile.checklist.length > 0) {
+      cautionParts.push(profile.checklist[0]);
+    }
+    if (detailRuntime.matchMeta?.summary) {
+      cautionParts.push(detailRuntime.matchMeta.summary);
+    }
+
+    setText('detail-choice-summary', uniqueStrings(summaryParts).slice(0, 3).join(' / ') || '이 병원이 어떤 상황에 잘 맞는지 정리 중입니다.');
+    setText('detail-choice-compare', uniqueStrings(compareParts).slice(0, 4).join(' / ') || '평점, 후기, 운영시간, 장비 정보를 비교 포인트로 정리 중입니다.');
+    setText('detail-choice-flow', uniqueStrings(flowParts).slice(0, 3).join(' / ') || '접수, 준비서류, 이동 동선을 기준으로 내원 흐름을 정리 중입니다.');
+    setText('detail-choice-caution', uniqueStrings(cautionParts).slice(0, 3).join(' / ') || '방문 전 접수 마감과 운영 시간을 한 번 더 확인하는 편이 좋습니다.');
   }
 
   function renderSupplementaryDetails(hospital) {
