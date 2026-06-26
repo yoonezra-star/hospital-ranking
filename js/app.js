@@ -1155,10 +1155,21 @@ document.addEventListener('DOMContentLoaded', () => {
       remoteHospitals = mergeHospitalsWithFallback(remoteResult.hospitals);
     }
 
-    const combined = dedupeHospitals([...localResults, ...remoteHospitals]);
-    const hospitals = typeof SearchEngine !== 'undefined'
+    const combined = dedupeHospitals([...localSource, ...remoteHospitals]);
+    let hospitals = typeof SearchEngine !== 'undefined'
       ? SearchEngine.query(combined, { searchText: query, sortBy: state.currentSort, intent })
       : combined;
+
+    if (!hospitals.length && typeof SearchEngine !== 'undefined') {
+      const relaxedIntent = buildRelaxedSearchIntent(intent);
+      if (relaxedIntent) {
+        hospitals = SearchEngine.query(combined, {
+          searchText: '',
+          sortBy: state.currentSort,
+          intent: relaxedIntent,
+        });
+      }
+    }
 
     return { hospitals, source: 'remote' };
   }
@@ -1176,7 +1187,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (intent.department) {
       params.department = intent.department;
     }
-    if (intent.keywordText) {
+    if (shouldUseKeywordAsHospitalName(intent)) {
       params.name = intent.keywordText;
     }
 
@@ -1185,6 +1196,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     return params;
+  }
+
+  function shouldUseKeywordAsHospitalName(intent) {
+    const keywordText = String(intent?.keywordText || '').trim();
+    if (!keywordText) {
+      return false;
+    }
+
+    const facilityTerms = ['병원', '의원', '치과', '한의원', '클리닉', '메디컬', '센터'];
+    if (facilityTerms.some((term) => keywordText.includes(term))) {
+      return true;
+    }
+
+    if (!intent?.region && !intent?.department) {
+      return true;
+    }
+
+    const tokens = keywordText.split(/\s+/).filter(Boolean);
+    return tokens.length >= 2 && keywordText.length >= 5;
+  }
+
+  function buildRelaxedSearchIntent(intent) {
+    if (!intent?.isStructured) {
+      return null;
+    }
+
+    return {
+      ...intent,
+      originalQuery: '',
+      keywordTokens: [],
+      keywordText: '',
+    };
   }
 
   function buildQuickFilterQuery(currentQuery, filter) {
