@@ -432,6 +432,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusSummary = buildHospitalStatusSummary(hospital);
     const dataSummary = buildHospitalDataSummary(hospital);
     const evidenceSummary = buildHospitalEvidenceSummary(hospital);
+    const decisionSummary = buildHospitalDecisionSummary(hospital);
 
     if (hospital.saturdayOpen) tags.push('<span class="tag tag-sat">토요일 진료</span>');
     if (hospital.nightOpen) tags.push('<span class="tag tag-night">야간 진료</span>');
@@ -459,6 +460,7 @@ document.addEventListener('DOMContentLoaded', () => {
           ${focusNote ? `<p class="hospital-focus-note">${escapeHtml(focusNote)}</p>` : ''}
           ${visitPrepNote ? `<p class="hospital-visit-prep">${escapeHtml(visitPrepNote)}</p>` : ''}
           <p class="hospital-data-summary${dataSummary ? '' : ' is-pending'}" data-hospital-summary>${escapeHtml(dataSummary || '주차, 접수, 운영 정보를 불러오는 중입니다.')}</p>
+          ${decisionSummary ? `<p class="hospital-decision-summary">${escapeHtml(decisionSummary)}</p>` : ''}
           ${evidenceSummary ? `<p class="hospital-evidence-summary">${escapeHtml(evidenceSummary)}</p>` : ''}
           <div class="hospital-meta">
             <div class="meta-item">
@@ -729,6 +731,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     return uniqueStrings(parts).slice(0, 4).join(' / ');
+  }
+
+  function buildHospitalDecisionSummary(hospital) {
+    const parts = [];
+
+    if (hospital.region || hospital.district) {
+      parts.push([hospital.region, hospital.district].filter(Boolean).join(' · '));
+    }
+
+    if (hospital.subway) {
+      parts.push(hospital.subway);
+    }
+
+    if (hospital.openDate) {
+      const openYear = new Date(hospital.openDate).getFullYear();
+      if (Number.isFinite(openYear)) {
+        parts.push(`${openYear}년 개원`);
+      }
+    }
+
+    if (Number(hospital.specialistCount || 0) > 0) {
+      parts.push(`전문의 ${hospital.specialistCount}명`);
+    }
+
+    if (toPositiveNumber(hospital.parkingCapacity) > 0) {
+      parts.push(`주차 ${hospital.parkingCapacity}대`);
+    } else if (hospital.parkingFee) {
+      parts.push(`${hospital.parkingFee} 주차`);
+    }
+
+    if (hospital.nightOpen) {
+      parts.push('야간 진료');
+    } else if (hospital.saturdayOpen) {
+      parts.push('토요 진료');
+    } else if (hospital.sundayOpen) {
+      parts.push('일요 진료');
+    }
+
+    return uniqueStrings(parts).slice(0, 4).join(' · ');
   }
 
   async function renderReviews() {
