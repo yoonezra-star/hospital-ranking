@@ -393,6 +393,8 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   text-align: center;
   color: color-mix(in srgb, var(--text-body) 78%, white 22%);
   font-size: var(--fs-sm);
+  max-width: 560px;
+  line-height: 1.65;
 }
 .search-helper-chips {
   display: flex;
@@ -418,9 +420,9 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   transform: translateY(-1px);
 }
 .search-shortcut-panel {
-  max-width: 920px;
+  max-width: 760px;
   margin: var(--sp-4) auto 0;
-  padding: 16px 18px;
+  padding: 18px 20px;
   border-radius: var(--r-xl);
   border: 1px solid rgba(166,124,82,0.16);
   background: rgba(255,252,246,0.66);
@@ -513,9 +515,11 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   justify-content: center;
   gap: var(--sp-3);
   flex-wrap: wrap;
+  margin-top: var(--sp-5);
 }
 .quick-filter-btn {
-  padding: var(--sp-2) var(--sp-5);
+  min-height: 42px;
+  padding: var(--sp-2) var(--sp-4);
   background: rgba(255,253,248,0.78);
   border: 1px solid rgba(166,124,82,0.18);
   border-radius: var(--r-full);
@@ -595,19 +599,27 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
 .hero-stats {
   display: flex;
   justify-content: center;
-  gap: var(--sp-10);
-  margin-top: var(--sp-9);
+  gap: var(--sp-5);
+  margin-top: var(--sp-8);
+  flex-wrap: wrap;
 }
 .stat-item {
   text-align: center;
+  min-width: 150px;
+  padding: 18px 20px;
+  border-radius: var(--r-lg);
+  border: 1px solid rgba(166,124,82,0.16);
+  background: rgba(255,253,248,0.62);
+  box-shadow: 0 10px 24px rgba(73,55,32,0.05);
 }
 .stat-number {
   display: block;
-  font-size: var(--fs-4xl);
+  font-size: clamp(2rem, 3vw, 2.8rem);
   font-weight: var(--fw-extrabold);
   color: var(--text-heading);
   line-height: 1;
   margin-bottom: var(--sp-1);
+  white-space: nowrap;
 }
 .stat-label {
   font-size: var(--fs-sm);
@@ -2096,7 +2108,8 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   
   .hero { min-height: 480px; }
   .hero h1 { font-size: var(--fs-4xl); }
-  .hero-stats { flex-direction: column; gap: var(--sp-4); }
+  .hero-stats { flex-direction: column; gap: var(--sp-3); }
+  .stat-item { min-width: 0; width: 100%; max-width: 260px; margin: 0 auto; padding: 16px 18px; }
   .stat-number { font-size: var(--fs-3xl); }
   
   .search-bar .search-btn { padding: 0 var(--sp-4); }
