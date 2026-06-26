@@ -66,7 +66,7 @@ const HOSPITALS = [
     id: 101, name: '김흥진치과의원', type: '치과의원', department: '치과',
     departmentId: 'dental', address: '대전광역시 동구 동대전로 81, 5층 (대동) 대동오거리 하나은행건물 5층',
     region: '대전', regionCode: '30', phone: '042-635-2882',
-    score: 4.8, reviewCount: 120, specialistCount: 0, generalDoctorCount: 1,
+    score: 4.1, reviewCount: 48, specialistCount: 0, generalDoctorCount: 1,
     openDate: '2005-05-27', saturdayOpen: true, sundayOpen: false, nightOpen: false,
     lat: 36.3314, lng: 127.4439,
     subway: '대전1호선 대동역 39M',
