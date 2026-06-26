@@ -182,50 +182,7 @@
   }
 
   async function hydrateReviews(hospital) {
-    const api = getHospitalApi();
-    if (!api?.fetchNaverSearch) {
-      return;
-    }
-
-    try {
-      const items = await api.fetchNaverSearch(`${hospital.name} 후기`, 'blog', 5);
-      if (!Array.isArray(items) || items.length === 0) {
-        renderFallbackReviews(hospital);
-        return;
-      }
-
-      if (items.some((item) => item && Object.prototype.hasOwnProperty.call(item, 'query'))) {
-        renderFallbackReviews(hospital);
-        return;
-      }
-
-      const reviewList = document.getElementById('detail-review-list');
-      if (!reviewList) {
-        return;
-      }
-
-      reviewList.innerHTML = items.slice(0, 5).map((item) => {
-        const title = stripTags(item.title || `${hospital.name} 후기`);
-        const description = stripTags(item.description || '리뷰 요약을 확인해 보세요.');
-        const author = item.bloggername || '네이버 블로그';
-        const date = formatPostDate(item.postdate);
-        const link = item.link || `https://search.naver.com/search.naver?query=${encodeURIComponent(`${hospital.name} 후기`)}`;
-
-        return `
-          <a href="${escapeHtml(link)}" target="_blank" rel="noopener" class="detail-review-item fade-up" style="text-decoration:none; display:flex; flex-direction:column; gap:8px;">
-            <div style="display:flex; justify-content:space-between; gap:12px; color:var(--text-muted); font-size:0.85rem;">
-              <span>${escapeHtml(author)}</span>
-              <span>${escapeHtml(date)}</span>
-            </div>
-            <h4 style="font-size:1.05rem; color:var(--text-heading); font-weight:600;">${escapeHtml(title)}</h4>
-            <p style="color:var(--text-body); font-size:0.95rem; line-height:1.6;">${escapeHtml(description)}</p>
-            <div><span class="review-badge" style="background:#03C75A; color:#fff;">네이버 블로그</span></div>
-          </a>
-        `;
-      }).join('');
-    } catch (error) {
-      console.warn('[detail] failed to hydrate reviews:', error);
-    }
+    renderFallbackReviews(hospital);
   }
 
   async function hydrateNearbyHospitals(hospital) {

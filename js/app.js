@@ -925,41 +925,97 @@ document.addEventListener('DOMContentLoaded', () => {
     return fallbackContexts[new Date().getDate() % fallbackContexts.length];
   }
 
+  function buildListingHref({ region = '', department = '', type = '', keyword = '' } = {}) {
+    const params = new URLSearchParams();
+    if (region && region !== 'all') params.set('region', region);
+    if (department && department !== 'all') params.set('department', department);
+    if (type && type !== 'all') params.set('type', type);
+    if (keyword) params.set('keyword', keyword);
+    const query = params.toString();
+    return query ? `index.html?${query}#ranking` : 'index.html#ranking';
+  }
+
+  function buildReviewGuideCards(reviewContext) {
+    const rawQuery = String(ui.heroSearch?.value || '').trim();
+    const region = state.currentFilters.region !== 'all' ? state.currentFilters.region : '';
+    const department = state.currentFilters.department !== 'all' ? getDepartmentNameById(state.currentFilters.department) : '';
+    const typeName = state.currentFilters.type !== 'all' ? getTypeReviewLabel(state.currentFilters.type) : '';
+    const focusLabel = rawQuery || [region, department || typeName].filter(Boolean).join(' ');
+    const compareHref = buildListingHref({
+      region: state.currentFilters.region,
+      department: state.currentFilters.department,
+      type: state.currentFilters.type,
+      keyword: state.isSearchActive ? rawQuery : '',
+    });
+
+    return [
+      {
+        badge: '비교 기준',
+        title: focusLabel ? `${focusLabel} 비교는 무엇부터 볼까?` : '병원 비교는 무엇부터 볼까?',
+        body: `${focusLabel || '병원 선택'}에서는 평점 하나보다 후기 수, 운영시간, 전문의 수, 주차 가능 여부를 함께 보는 편이 안전합니다. 첫 비교는 목록에서 하고, 최종 판단은 상세페이지에서 접수·준비서류·위치 정보를 다시 확인하세요.`,
+        href: compareHref,
+        cta: '목록에서 비교하기',
+      },
+      {
+        badge: '운영 확인',
+        title: '토요·야간 진료는 어떻게 확인할까?',
+        body: '토요일, 야간, 일요일 진료는 병원 선택 이유가 되기 쉽지만 접수 마감 시간은 더 빠를 수 있습니다. 운영 배지는 빠른 필터로 쓰고, 실제 내원 전에는 상세페이지 운영 요약과 전화 문의를 함께 보는 흐름이 좋습니다.',
+        href: 'guide.html',
+        cta: '이용 가이드 보기',
+      },
+      {
+        badge: '준비 서류',
+        title: '초진 전에 무엇을 챙기면 좋을까?',
+        body: '신분증, 복용 중인 약 목록, 기존 검사 결과처럼 기본 준비물은 진료과와 상관없이 자주 필요합니다. 수술 상담이나 영상검사가 예상되면 상세페이지 준비서류와 장비 정보를 같이 확인하는 편이 좋습니다.',
+        href: 'about.html',
+        cta: '운영 기준 보기',
+      },
+      {
+        badge: '데이터 해석',
+        title: '공공데이터와 보강 정보는 어떻게 읽어야 할까?',
+        body: '이 사이트는 공공 병원 데이터와 공개 가능한 보강 정보를 함께 정리합니다. 공공 API 지연 시에도 탐색은 가능하지만, 최종 방문 결정은 병원 고지와 직접 문의를 기준으로 다시 확인하는 쪽이 안전합니다.',
+        href: 'editorial-policy.html',
+        cta: '편집 원칙 보기',
+      },
+      {
+        badge: '후기 해석',
+        title: reviewContext?.title ? `${reviewContext.title}는 어떻게 활용할까?` : '후기 정보는 어떻게 활용할까?',
+        body: '후기는 병원의 분위기와 대기 경험을 파악하는 참고 자료로는 유용하지만, 진료 적합성 자체를 대신하지는 않습니다. 후기 내용은 현재 검색 의도와 함께 읽고, 증상·거리·운영 조건을 먼저 맞추는 편이 좋습니다.',
+        href: compareHref,
+        cta: '현재 조건 다시 보기',
+      },
+      {
+        badge: '정정 요청',
+        title: '정보가 다르면 어떻게 수정 요청할까?',
+        body: '운영시간, 전화번호, 진료과, 위치 정보가 실제와 다르면 문의 페이지나 이메일로 바로 정정 요청을 보낼 수 있습니다. 최신성과 정정 가능성이 분명한 정보 구조일수록 방문자가 더 신뢰하기 쉽습니다.',
+        href: 'contact.html',
+        cta: '문의하기',
+      },
+    ];
+  }
+
   async function renderReviews() {
     if (!ui.reviewsList) return;
 
     ui.reviewsList.innerHTML = '<div class="map-loader"><div class="spinner"></div><p>리뷰 데이터를 불러오는 중입니다...</p></div>';
     const reviewContext = buildReviewSearchContext();
-    const selectedKeyword = reviewContext.query;
 
     if (ui.reviewsTitle) {
-      ui.reviewsTitle.textContent = reviewContext.title;
+      ui.reviewsTitle.textContent = reviewContext.title.replace('실시간 ', '').replace('후기', '선택 가이드').trim();
     }
 
-    const items = await HospitalAPI.fetchNaverSearch(selectedKeyword, 'blog', 6);
-
-    if (items.length === 0) {
-      ui.reviewsList.innerHTML = '<p style="text-align:center; padding:20px; color:var(--text-muted);">리뷰를 불러오지 못했습니다.</p>';
-      return;
-    }
-
-    ui.reviewsList.innerHTML = items.map((item, index) => {
-      const title = stripHtml(item.title || '');
-      const description = stripHtml(item.description || '');
-      const date = formatNaverDate(item.postdate);
-
-      return `
-        <a href="${item.link}" target="_blank" rel="noopener" class="review-card fade-up delay-${index % 3}" style="text-decoration:none; display:flex; flex-direction:column; cursor:pointer;">
-          <div class="review-header" style="margin-bottom:10px;">
-            <span class="review-badge" style="background:#03C75A; color:white;">네이버 블로그</span>
-            <span class="review-hospital" style="font-size:0.85rem; color:var(--text-muted);">${escapeHtml(item.bloggername || '')}</span>
-            <span style="margin-left:auto; font-size:0.8rem; color:var(--text-muted);">${date}</span>
-          </div>
-          <h3 style="font-size:1rem; margin-bottom:8px; color:var(--text-heading); font-weight:600; line-height:1.4;">${escapeHtml(title)}</h3>
-          <p class="review-content" style="flex-grow:1; -webkit-line-clamp:3;">${escapeHtml(description)}</p>
-        </a>
-      `;
-    }).join('');
+    const cards = buildReviewGuideCards(reviewContext);
+    ui.reviewsList.innerHTML = cards.map((item, index) => `
+      <a href="${escapeHtml(item.href)}" class="review-card fade-up delay-${index % 3}" style="text-decoration:none; display:flex; flex-direction:column; cursor:pointer;">
+        <div class="review-header" style="margin-bottom:10px;">
+          <span class="review-badge" style="background:#46685b; color:white;">${escapeHtml(item.badge)}</span>
+          <span class="review-hospital" style="font-size:0.85rem; color:var(--text-muted);">병원찾기 원본 가이드</span>
+        </div>
+        <h3 style="font-size:1rem; margin-bottom:8px; color:var(--text-heading); font-weight:600; line-height:1.4;">${escapeHtml(item.title)}</h3>
+        <p class="review-content" style="flex-grow:1; -webkit-line-clamp:4;">${escapeHtml(item.body)}</p>
+        <span style="margin-top:14px; color:var(--primary); font-size:0.9rem; font-weight:700;">${escapeHtml(item.cta)}</span>
+      </a>
+    `).join('');
 
     observeNewElements(ui.reviewsList);
   }
