@@ -859,16 +859,16 @@ document.addEventListener('DOMContentLoaded', () => {
     ui.reviewsList.innerHTML = '<div class="map-loader"><div class="spinner"></div><p>리뷰 데이터를 불러오는 중입니다...</p></div>';
 
     const keywords = [
-      '임플란트 후기',
-      '수면내시경 후기',
-      '백내장 수술 후기',
-      '안수치료 후기',
-      '라식 수술 후기',
+      '병원 후기',
+      '진료 후기',
+      '내원 후기',
+      '검진 후기',
+      '수술 상담 후기',
     ];
     const selectedKeyword = keywords[Math.floor(Math.random() * keywords.length)];
 
     if (ui.reviewsTitle) {
-      ui.reviewsTitle.textContent = `실시간 ${selectedKeyword.replace(' 후기', '')} 리뷰 후기`;
+      ui.reviewsTitle.textContent = `실시간 ${selectedKeyword.replace(' 후기', '')} 리뷰`;
     }
 
     const items = await HospitalAPI.fetchNaverSearch(selectedKeyword, 'blog', 6);
