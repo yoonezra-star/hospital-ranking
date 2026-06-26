@@ -702,13 +702,45 @@
     return Array.from(new Set((items || []).filter(Boolean)));
   }
 
+  function buildExpandedHospitalFaqs(hospital) {
+    const baseItems = buildHospitalFaqs(hospital);
+    const profile = buildHospitalProfile(hospital);
+    const hospitalLabel = hospital?.name || '이 병원';
+    const specialistLine = Number(hospital?.specialistCount || 0) > 0
+      ? `전문의는 ${hospital.specialistCount}명 기준으로 표시되고 있습니다.`
+      : '전문의 수는 공개 정보 기준으로 추가 확인이 필요할 수 있습니다.';
+    const equipmentLine = hospital?.equipment
+      ? `${String(hospital.equipment).split(',').slice(0, 2).join(', ')} 중심으로 장비 정보를 확인할 수 있습니다.`
+      : '검사 장비와 시설 정보는 상세 페이지에서 함께 확인하는 편이 좋습니다.';
+    const compareLine = [
+      hospital?.score ? `평점 ${hospital.score}` : '',
+      hospital?.reviewCount ? `후기 ${hospital.reviewCount}개` : '',
+      hospital?.region ? `${hospital.region} 권역 비교 가능` : '',
+      hospital?.nightOpen ? '야간 진료 여부 확인' : '',
+      hospital?.saturdayOpen ? '토요일 진료 여부 확인' : '',
+    ].filter(Boolean).join(' / ');
+
+    const extraItems = [
+      {
+        question: `${hospitalLabel}의 전문의 수나 검사 장비는 어떤 기준으로 보면 좋나요?`,
+        answer: `${specialistLine} ${equipmentLine} 수술, 영상검사, 시술 상담이 필요한 경우에는 상세 장비 정보와 진료 범위를 함께 비교하는 편이 좋습니다.`,
+      },
+      {
+        question: `${hospitalLabel}를 다른 병원과 비교할 때 무엇을 먼저 보면 좋나요?`,
+        answer: `${compareLine || '평점, 후기, 운영 시간, 전문의 수'}를 먼저 보고, 그 다음에 ${uniqueList(profile.documents || []).slice(0, 2).join(', ') || '준비물과 이동 동선'}을 확인하면 선택이 훨씬 쉬워집니다.`,
+      },
+    ];
+
+    return [...baseItems, ...extraItems].slice(0, 6);
+  }
+
   window.HospitalContent = {
     buildHospitalProfile,
     buildGuideRecommendations,
     buildRelatedSearchLinks,
     buildRegionalLandingLinks,
     buildOperationalExploreLinks,
-    buildHospitalFaqs,
+    buildHospitalFaqs: buildExpandedHospitalFaqs,
     getRegionalLandingSections,
     getGuideSpotlights,
   };
