@@ -1243,6 +1243,56 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   margin: 0 0 var(--sp-2);
 }
 
+.hospital-trust-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 10px;
+}
+
+.hospital-trust-row-compact {
+  margin-bottom: 8px;
+}
+
+.hospital-trust-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 4px 10px;
+  border-radius: var(--r-full);
+  border: 1px solid transparent;
+  font-size: 0.72rem;
+  font-weight: var(--fw-semibold);
+  letter-spacing: -0.01em;
+}
+
+.hospital-trust-badge.is-high {
+  background: #ecf5ef;
+  color: #3c6756;
+}
+
+.hospital-trust-badge.is-medium {
+  background: #f8f1e6;
+  color: #936a34;
+}
+
+.hospital-trust-badge.is-basic {
+  background: #efebe4;
+  color: #5a5147;
+}
+
+.hospital-trust-badge.is-verified {
+  background: #e7f1f8;
+  color: #315f7c;
+}
+
+.hospital-trust-badge.is-partial,
+.hospital-trust-badge.is-pending {
+  background: color-mix(in srgb, var(--bg-card) 72%, white 28%);
+  color: var(--text-body);
+  border-color: var(--border-default);
+}
+
 .hospital-status-row-compact {
   margin-bottom: 8px;
 }

@@ -1148,7 +1148,7 @@
           <p style="margin:0; color:var(--text-body); line-height:1.7;">정보가 다르면 <a href="contact.html" style="color:var(--primary); font-weight:600;">문의하기</a> 또는 <a href="mailto:replyleaders@naver.com" style="color:var(--primary); font-weight:600;">replyleaders@naver.com</a>으로 보내주시면 검토 후 반영합니다.</p>
         </div>
       </div>
-      <p style="margin:16px 0 0; color:var(--text-muted); line-height:1.7;">최근 확인일: 2026-06-20 · 자세한 운영 기준은 <a href="about.html" style="color:var(--primary); font-weight:600;">사이트 소개</a>, <a href="editorial-policy.html" style="color:var(--primary); font-weight:600;">콘텐츠 편집 원칙</a>, <a href="ad-policy.html" style="color:var(--primary); font-weight:600;">광고 및 제휴 안내</a>에서 확인할 수 있습니다.</p>
+      <p style="margin:16px 0 0; color:var(--text-muted); line-height:1.7;">최근 확인일: 2026-06-26 · 자세한 운영 기준은 <a href="about.html" style="color:var(--primary); font-weight:600;">사이트 소개</a>, <a href="editorial-policy.html" style="color:var(--primary); font-weight:600;">콘텐츠 편집 원칙</a>, <a href="ad-policy.html" style="color:var(--primary); font-weight:600;">광고 및 제휴 안내</a>에서 확인할 수 있습니다.</p>
       <p style="margin:8px 0 0; color:var(--text-muted); line-height:1.7;">증상 악화, 응급 상황, 수술 결정은 이 페이지만으로 판단하지 말고 해당 병원이나 의료진과 직접 상담해 주세요.</p>
     `;
   }
@@ -1436,6 +1436,8 @@
     const homepageButton = document.getElementById('detail-homepage-button');
     const mapLink = document.getElementById('detail-map-link');
     const searchLink = document.getElementById('detail-search-link');
+    const correctionLink = document.getElementById('detail-correction-link');
+    const correctionHint = document.getElementById('detail-correction-hint');
 
     if (phoneLink) {
       if (hospital.phone) {
@@ -1465,6 +1467,16 @@
 
     if (searchLink) {
       searchLink.href = `https://search.naver.com/search.naver?query=${encodeURIComponent(`${hospital.name || '병원'} 후기`)}`;
+    }
+
+    if (correctionLink) {
+      const subject = `[병원찾기 정정 요청] ${hospital.name || '병원'} / 수정 항목`;
+      const body = `${hospital.name || '병원명'}\n페이지 URL: ${window.location.href}\n수정 항목:\n근거 자료:\n`;
+      correctionLink.href = `mailto:replyleaders@naver.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+
+    if (correctionHint) {
+      correctionHint.textContent = `${hospital.name || '이 병원'}의 운영시간, 전화번호, 위치 정보가 실제와 다르면 수정 요청을 보내주시면 검토 후 반영합니다.`;
     }
   }
 

@@ -453,6 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const factItems = buildHospitalFactItems(hospital);
     const statusItems = buildHospitalStatusItems(hospital);
     const statusSummary = buildHospitalStatusSummary(hospital);
+    const trustBadges = buildHospitalTrustBadges(hospital);
     const dataSummary = buildHospitalDataSummary(hospital);
     const evidenceSummary = buildHospitalEvidenceSummary(hospital);
     const decisionSummary = buildHospitalDecisionSummary(hospital);
@@ -473,6 +474,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div class="hospital-address">주소 ${escapeHtml(hospital.address)}</div>
           ${subinfo ? `<div class="hospital-subinfo">${subinfo}</div>` : ''}
+          <div class="hospital-trust-row" data-hospital-trust>${renderHospitalTrustBadges(trustBadges)}</div>
           <div class="hospital-status-row" data-hospital-status>${renderHospitalStatusBadges(statusItems)}</div>
           <p class="hospital-status-summary" data-hospital-status-summary>${escapeHtml(statusSummary)}</p>
           <div class="hospital-highlights" data-hospital-highlights${highlightItems.length ? '' : ' hidden'}>
@@ -751,6 +753,80 @@ document.addEventListener('DOMContentLoaded', () => {
     return hasKnownOperationalData(hospital)
       ? '오늘 운영 정보는 확인되지만 현재 진료 시간은 아닙니다.'
       : '운영 시간 공공데이터를 확인하는 중입니다.';
+  }
+
+  function buildHospitalTrustBadges(hospital, detailData) {
+    const completeness = buildHospitalCompletenessBadge(hospital, detailData);
+    const operation = buildHospitalOperationBadge(hospital, detailData);
+    return [completeness, operation].filter(Boolean);
+  }
+
+  function buildHospitalCompletenessBadge(hospital, detailData) {
+    const checks = [
+      Boolean(hospital?.address),
+      Boolean(hospital?.phone),
+      Boolean(hospital?.url),
+      Boolean(hospital?.subway || hospital?.region || hospital?.district),
+      Boolean(hospital?.openDate),
+      Number(hospital?.reviewCount || 0) > 0 || Number(hospital?.specialistCount || 0) > 0,
+      hasKnownOperationalData(hospital) || hasDetailedHours(detailData),
+      Boolean(getHospitalParkingLabel(hospital, detailData))
+        || Boolean(hospital?.equipment)
+        || toPositiveNumber(hospital?.roomCount) > 0
+        || toPositiveNumber(hospital?.bedCount) > 0,
+    ];
+    const score = checks.filter(Boolean).length;
+
+    if (score >= 7) {
+      return { label: '정보 충실도 높음', className: 'is-high' };
+    }
+    if (score >= 5) {
+      return { label: '정보 충실도 보통', className: 'is-medium' };
+    }
+    return { label: '기본 정보 중심', className: 'is-basic' };
+  }
+
+  function buildHospitalOperationBadge(hospital, detailData) {
+    const hasDetailedOperation = hasDetailedHours(detailData);
+    const hasConfirmedOperation = hasKnownOperationalData(hospital) || hasDetailedOperation;
+    const hasOperationSignals = hasConfirmedOperation
+      || hospital?.saturdayOpen
+      || hospital?.sundayOpen
+      || hospital?.nightOpen
+      || (Array.isArray(detailData?.receptionSummary) && detailData.receptionSummary.length > 0);
+
+    if (hasDetailedOperation) {
+      return { label: '운영시간 상세 확인', className: 'is-verified' };
+    }
+    if (hasConfirmedOperation) {
+      return { label: '운영시간 확인', className: 'is-verified' };
+    }
+    if (hasOperationSignals) {
+      return { label: '운영 일부 확인', className: 'is-partial' };
+    }
+    return { label: '운영 확인중', className: 'is-pending' };
+  }
+
+  function hasDetailedHours(detailData) {
+    const hours = detailData?.hours;
+    if (!hours || typeof hours !== 'object') {
+      return false;
+    }
+
+    return Object.values(hours).some((value) => {
+      const text = String(value || '').trim();
+      return text && !isClosedHoursText(text);
+    });
+  }
+
+  function renderHospitalTrustBadges(items) {
+    if (!Array.isArray(items) || items.length === 0) {
+      return '';
+    }
+
+    return items.map((item) => `
+      <span class="hospital-trust-badge ${escapeHtml(item.className || '')}">${escapeHtml(item.label)}</span>
+    `).join('');
   }
 
   function renderHospitalStatusBadges(items) {
@@ -1223,6 +1299,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const factItems = buildHospitalFactItems(hospital);
     const statusItems = buildHospitalStatusItems(hospital);
     const statusSummary = buildHospitalStatusSummary(hospital);
+    const trustBadges = buildHospitalTrustBadges(hospital);
     const dataSummary = buildHospitalDataSummary(hospital);
 
     if (hospital.score) meta.push(`평점 ${hospital.score}`);
@@ -1238,6 +1315,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <p class="quick-access-address">${escapeHtml(hospital.address || '주소 확인 필요')}</p>
         ${subinfo ? `<div class="quick-access-subinfo">${subinfo}</div>` : ''}
+        <div class="hospital-trust-row hospital-trust-row-compact" data-hospital-trust>${renderHospitalTrustBadges(trustBadges)}</div>
         <div class="hospital-status-row hospital-status-row-compact" data-hospital-status>${renderHospitalStatusBadges(statusItems)}</div>
         <p class="hospital-status-summary hospital-status-summary-compact" data-hospital-status-summary>${escapeHtml(statusSummary)}</p>
         <div class="hospital-highlights quick-access-highlights" data-hospital-highlights${highlightItems.length ? '' : ' hidden'}>
@@ -2261,6 +2339,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const factItems = buildHospitalFactItems(hospital, detailData);
     const statusItems = buildHospitalStatusItems(hospital);
     const statusSummary = buildHospitalStatusSummary(hospital);
+    const trustBadges = buildHospitalTrustBadges(hospital, detailData);
     const summaryText = buildHospitalDataSummary(hospital, detailData);
     const evidenceText = buildHospitalEvidenceSummary(hospital);
     const insightItems = buildHospitalInsightItems(hospital, detailData);
@@ -2304,6 +2383,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const statusNode = card.querySelector('[data-hospital-status]');
       if (statusNode) {
         statusNode.innerHTML = renderHospitalStatusBadges(statusItems);
+      }
+
+      const trustNode = card.querySelector('[data-hospital-trust]');
+      if (trustNode) {
+        trustNode.innerHTML = renderHospitalTrustBadges(trustBadges);
       }
 
       const statusSummaryNode = card.querySelector('[data-hospital-status-summary]');
