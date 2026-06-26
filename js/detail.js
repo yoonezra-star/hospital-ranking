@@ -475,6 +475,7 @@
     renderGuideRecommendations(hospital);
     renderRelatedSearchLinks(hospital);
     renderRegionalLandingLinks(hospital);
+    renderRecommendationCollections(hospital);
     const faqItems = renderHospitalFaqs(hospital);
     renderOperationalExploreLinks(hospital);
     renderTrustDetails(hospital);
@@ -659,6 +660,203 @@
     `).join('');
   }
 
+  function renderRecommendationCollections(hospital) {
+    const similarContainer = ensureSimilarRecommendationContainer();
+    if (similarContainer) {
+      const items = buildSimilarHospitalRecommendations(hospital);
+      renderRecommendationHospitalCards(
+        similarContainer,
+        items,
+        hospital,
+        '같은 진료과 또는 같은 지역에서 비교할 병원을 준비 중입니다.'
+      );
+    }
+
+    const operationalContainer = ensureOperationalRecommendationContainer();
+    if (operationalContainer) {
+      const items = buildOperationalPriorityHospitals(hospital);
+      renderRecommendationHospitalCards(
+        operationalContainer,
+        items,
+        hospital,
+        '토요, 야간, 응급, 주차 기준으로 다시 비교할 병원을 준비 중입니다.'
+      );
+    }
+  }
+
+  function buildSimilarHospitalRecommendations(hospital) {
+    const localList = Array.isArray(getHospitalList()) ? getHospitalList() : [];
+
+    return localList
+      .filter((item) => String(item.id) !== String(hospital.id))
+      .filter((item) => (
+        item.departmentId === hospital.departmentId ||
+        item.region === hospital.region ||
+        item.district === hospital.district
+      ))
+      .map((item) => {
+        let score = 0;
+        const reasons = [];
+
+        if (item.departmentId === hospital.departmentId) {
+          score += 42;
+          reasons.push('같은 진료과');
+        }
+        if (item.region && item.region === hospital.region) {
+          score += 20;
+          reasons.push('같은 지역');
+        }
+        if (item.district && item.district === hospital.district) {
+          score += 12;
+          reasons.push('같은 생활권');
+        }
+        if (item.type && item.type === hospital.type) {
+          score += 6;
+        }
+        if (hospital.saturdayOpen && item.saturdayOpen) {
+          score += 8;
+          reasons.push('토요 진료');
+        }
+        if (hospital.nightOpen && item.nightOpen) {
+          score += 8;
+          reasons.push('야간 진료');
+        }
+        if (hospital.hasEmergency && item.hasEmergency) {
+          score += 8;
+          reasons.push('응급 대응');
+        }
+
+        score += Math.min(Number(item.specialistCount || 0), 8);
+        score += Math.min(Number(item.reviewCount || 0) / 80, 6);
+        score += Number(item.score || 0);
+
+        return {
+          ...item,
+          recommendationReason: uniqueStrings(reasons).slice(0, 3).join(' · ') || '같은 권역 병원 비교',
+          recommendationScore: score,
+        };
+      })
+      .sort((left, right) => (
+        right.recommendationScore - left.recommendationScore ||
+        (right.reviewCount || 0) - (left.reviewCount || 0) ||
+        (right.specialistCount || 0) - (left.specialistCount || 0)
+      ))
+      .slice(0, 4);
+  }
+
+  function buildOperationalPriorityHospitals(hospital) {
+    const localList = Array.isArray(getHospitalList()) ? getHospitalList() : [];
+    const targetFlags = [
+      hospital.saturdayOpen ? 'saturdayOpen' : '',
+      hospital.sundayOpen ? 'sundayOpen' : '',
+      hospital.nightOpen ? 'nightOpen' : '',
+      hospital.hasEmergency ? 'hasEmergency' : '',
+    ].filter(Boolean);
+
+    return localList
+      .filter((item) => String(item.id) !== String(hospital.id))
+      .filter((item) => item.region === hospital.region || item.departmentId === hospital.departmentId)
+      .map((item) => {
+        let score = 0;
+        const reasons = [];
+
+        if (item.region && item.region === hospital.region) {
+          score += 22;
+          reasons.push('같은 지역');
+        }
+        if (item.departmentId === hospital.departmentId) {
+          score += 16;
+          reasons.push('같은 진료과');
+        }
+        if (item.district && item.district === hospital.district) {
+          score += 8;
+        }
+
+        if (targetFlags.length > 0) {
+          targetFlags.forEach((flag) => {
+            if (item[flag]) {
+              score += 16;
+              reasons.push(getOperationalReasonLabel(flag));
+            }
+          });
+        } else {
+          if (item.saturdayOpen) {
+            score += 8;
+            reasons.push('토요 진료');
+          }
+          if (item.nightOpen) {
+            score += 8;
+            reasons.push('야간 진료');
+          }
+          if (item.sundayOpen) {
+            score += 8;
+            reasons.push('일요 진료');
+          }
+        }
+
+        if (item.hasEmergency) {
+          score += 8;
+        }
+        if (toPositiveNumber(item.parkingCapacity) > 0 || item.parkingFee) {
+          score += 6;
+          reasons.push('주차 정보');
+        }
+
+        score += Math.min(Number(item.specialistCount || 0), 6);
+        score += Math.min(Number(item.reviewCount || 0) / 100, 5);
+        score += Number(item.score || 0);
+
+        return {
+          ...item,
+          recommendationReason: uniqueStrings(reasons).slice(0, 3).join(' · ') || '운영 조건 비교',
+          recommendationScore: score,
+        };
+      })
+      .sort((left, right) => (
+        right.recommendationScore - left.recommendationScore ||
+        (right.reviewCount || 0) - (left.reviewCount || 0) ||
+        (right.specialistCount || 0) - (left.specialistCount || 0)
+      ))
+      .slice(0, 4);
+  }
+
+  function renderRecommendationHospitalCards(container, items, hospital, emptyMessage) {
+    if (!container) {
+      return;
+    }
+
+    if (!Array.isArray(items) || items.length === 0) {
+      container.innerHTML = `<p style="margin:0; color:var(--text-muted);">${escapeHtml(emptyMessage)}</p>`;
+      return;
+    }
+
+    container.innerHTML = items.map((item) => {
+      const contentApi = getHospitalContent();
+      const profile = contentApi?.buildHospitalProfile?.(item);
+      const serviceText = Array.isArray(profile?.primaryServices) && profile.primaryServices.length > 0
+        ? profile.primaryServices.slice(0, 2).join(', ')
+        : '';
+      const operationBits = [];
+
+      if (item.saturdayOpen) operationBits.push('토요');
+      if (item.sundayOpen) operationBits.push('일요');
+      if (item.nightOpen) operationBits.push('야간');
+      if (item.hasEmergency) operationBits.push('응급');
+
+      return `
+        <a href="detail.html?id=${encodeURIComponent(item.id)}" style="display:flex; flex-direction:column; gap:8px; padding:16px; border:1px solid var(--border-default); border-radius:12px; text-decoration:none; background:var(--bg-body); color:inherit;">
+          <strong style="font-size:1rem; color:var(--text-heading);">${escapeHtml(item.name)}</strong>
+          <span style="font-size:0.84rem; color:var(--primary); font-weight:700;">${escapeHtml(item.recommendationReason || '추천 비교')}</span>
+          <span style="font-size:0.9rem; color:var(--text-body);">${escapeHtml(item.type || hospital.type || '병원')}</span>
+          <span style="font-size:0.92rem; color:var(--text-body); line-height:1.6;">${escapeHtml(item.address || '주소 정보 확인 필요')}</span>
+          ${serviceText ? `<span style="font-size:0.88rem; color:var(--text-body); line-height:1.6;">핵심 진료: ${escapeHtml(serviceText)}</span>` : ''}
+          <span style="font-size:0.82rem; color:var(--text-muted);">전문의 ${escapeHtml(String(item.specialistCount || 0))}명 / 리뷰 ${escapeHtml(String(item.reviewCount || 0))}개${buildDistanceLabel(hospital, item)}</span>
+          ${operationBits.length > 0 ? `<span style="font-size:0.8rem; color:var(--text-muted);">${escapeHtml(operationBits.join(' · '))}</span>` : ''}
+        </a>
+      `;
+    }).join('');
+  }
+
   function ensureRegionalLandingContainer() {
     const existing = document.getElementById('detail-landing-links');
     if (existing) {
@@ -779,6 +977,57 @@
 
     anchorCard.insertAdjacentElement('afterend', wrapper);
     return wrapper.querySelector('#detail-operational-links');
+  }
+
+  function ensureSimilarRecommendationContainer() {
+    const existing = document.getElementById('detail-similar-hospital-list');
+    if (existing) {
+      return existing;
+    }
+
+    const nearbyContainer = document.getElementById('detail-nearby-list');
+    const anchorCard = nearbyContainer?.closest('.info-card');
+    if (!anchorCard || !anchorCard.parentElement) {
+      return null;
+    }
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'info-card';
+    wrapper.innerHTML = `
+      <h3>비슷한 조건 병원</h3>
+      <div id="detail-similar-hospital-list" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
+        <p style="margin:0; color:var(--text-muted);">같은 진료과와 같은 지역 기준 추천 병원을 정리 중입니다...</p>
+      </div>
+    `;
+
+    anchorCard.insertAdjacentElement('afterend', wrapper);
+    return wrapper.querySelector('#detail-similar-hospital-list');
+  }
+
+  function ensureOperationalRecommendationContainer() {
+    const existing = document.getElementById('detail-operational-hospital-list');
+    if (existing) {
+      return existing;
+    }
+
+    const similarContainer = document.getElementById('detail-similar-hospital-list');
+    const anchorCard = similarContainer?.closest('.info-card')
+      || document.getElementById('detail-nearby-list')?.closest('.info-card');
+    if (!anchorCard || !anchorCard.parentElement) {
+      return null;
+    }
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'info-card';
+    wrapper.innerHTML = `
+      <h3>운영 조건 비교 병원</h3>
+      <div id="detail-operational-hospital-list" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
+        <p style="margin:0; color:var(--text-muted);">토요, 야간, 응급, 주차 기준 추천 병원을 정리 중입니다...</p>
+      </div>
+    `;
+
+    anchorCard.insertAdjacentElement('afterend', wrapper);
+    return wrapper.querySelector('#detail-operational-hospital-list');
   }
 
   function renderTrustDetails(hospital) {
@@ -1450,6 +1699,25 @@
       Math.sin(dLng / 2) * Math.sin(dLng / 2);
 
     return earthRadiusKm * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+  }
+
+  function getOperationalReasonLabel(flag) {
+    switch (flag) {
+      case 'saturdayOpen':
+        return '토요 진료';
+      case 'sundayOpen':
+        return '일요 진료';
+      case 'nightOpen':
+        return '야간 진료';
+      case 'hasEmergency':
+        return '응급 대응';
+      default:
+        return '운영 조건';
+    }
+  }
+
+  function uniqueStrings(items) {
+    return Array.from(new Set((Array.isArray(items) ? items : []).filter(Boolean)));
   }
 
   function createEmptyDetailRuntime() {
