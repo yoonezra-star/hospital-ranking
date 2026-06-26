@@ -136,6 +136,25 @@
 
         <p class="search-helper-text">지역, 진료과, 운영조건을 함께 입력하면 더 빨리 찾을 수 있습니다.</p>
 
+        <div class="hero-location-panel" aria-label="지역 선택형 검색">
+          <div class="hero-location-head">
+            <strong>선택형 지역 검색</strong>
+            <span>광역시도와 시군구, 읍면동을 순서대로 고르면 바로 병원 목록으로 이동합니다.</span>
+          </div>
+          <div class="hero-location-controls">
+            <select class="hero-location-select" id="hero-region-filter">
+              <option value="all">광역시도 선택</option>
+            </select>
+            <select class="hero-location-select" id="hero-district-filter" disabled>
+              <option value="all">시/군/구 선택</option>
+            </select>
+            <select class="hero-location-select" id="hero-town-filter" disabled>
+              <option value="all">읍/면/동 선택</option>
+            </select>
+            <button type="button" class="hero-location-btn" id="hero-location-apply">목록 보기</button>
+          </div>
+        </div>
+
         <div class="search-shortcut-panel" aria-label="생활권 바로 찾기">
           <div class="search-shortcut-group">
             <span class="search-shortcut-label">생활권</span>

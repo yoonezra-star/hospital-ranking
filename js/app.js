@@ -35,6 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
     regionFilter: $('#region-filter'),
     districtFilter: $('#district-filter'),
     townFilter: $('#town-filter'),
+    heroRegionFilter: $('#hero-region-filter'),
+    heroDistrictFilter: $('#hero-district-filter'),
+    heroTownFilter: $('#hero-town-filter'),
+    heroLocationApply: $('#hero-location-apply'),
     typeFilter: $('#type-filter'),
     sortFilter: $('#sort-filter'),
     rankingList: $('#ranking-list'),
@@ -204,20 +208,22 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function populateRegionFilter() {
-    if (!ui.regionFilter || typeof REGIONS === 'undefined') return;
+    if (typeof REGIONS === 'undefined') return;
 
-    REGIONS.forEach((region) => {
-      const option = document.createElement('option');
-      option.value = region.name;
-      option.textContent = region.name;
-      ui.regionFilter.appendChild(option);
+    [ui.regionFilter, ui.heroRegionFilter].filter(Boolean).forEach((select) => {
+      REGIONS.forEach((region) => {
+        const option = document.createElement('option');
+        option.value = region.name;
+        option.textContent = region.name;
+        select.appendChild(option);
+      });
     });
 
     syncFilterControls();
   }
 
   function populateDistrictFilter() {
-    if (!ui.districtFilter) return;
+    if (!ui.districtFilter && !ui.heroDistrictFilter) return;
 
     const districts = getFilterSourceHospitals()
       .filter((hospital) => state.currentFilters.region === 'all' || hospital.region === state.currentFilters.region)
@@ -226,16 +232,20 @@ document.addEventListener('DOMContentLoaded', () => {
       .filter((value, index, array) => array.indexOf(value) === index)
       .sort((left, right) => left.localeCompare(right, 'ko'));
 
-    ui.districtFilter.innerHTML = '<option value="all">시/군/구 선택</option>';
-    districts.forEach((district) => {
-      const option = document.createElement('option');
-      option.value = district;
-      option.textContent = district;
-      ui.districtFilter.appendChild(option);
+    [ui.districtFilter, ui.heroDistrictFilter].filter(Boolean).forEach((select) => {
+      select.innerHTML = '<option value="all">시/군/구 선택</option>';
+      districts.forEach((district) => {
+        const option = document.createElement('option');
+        option.value = district;
+        option.textContent = district;
+        select.appendChild(option);
+      });
     });
 
     const enabled = state.currentFilters.region !== 'all' && districts.length > 0;
-    ui.districtFilter.disabled = !enabled;
+    [ui.districtFilter, ui.heroDistrictFilter].filter(Boolean).forEach((select) => {
+      select.disabled = !enabled;
+    });
     if (!enabled) {
       if (state.currentFilters.region === 'all') {
         state.currentFilters.district = 'all';
@@ -244,11 +254,13 @@ document.addEventListener('DOMContentLoaded', () => {
       state.currentFilters.district = 'all';
     }
 
-    ui.districtFilter.value = districts.includes(state.currentFilters.district) ? state.currentFilters.district : 'all';
+    [ui.districtFilter, ui.heroDistrictFilter].filter(Boolean).forEach((select) => {
+      select.value = districts.includes(state.currentFilters.district) ? state.currentFilters.district : 'all';
+    });
   }
 
   function populateTownFilter() {
-    if (!ui.townFilter) return;
+    if (!ui.townFilter && !ui.heroTownFilter) return;
 
     const towns = getFilterSourceHospitals()
       .filter((hospital) => state.currentFilters.region === 'all' || hospital.region === state.currentFilters.region)
@@ -258,16 +270,20 @@ document.addEventListener('DOMContentLoaded', () => {
       .filter((value, index, array) => array.indexOf(value) === index)
       .sort((left, right) => left.localeCompare(right, 'ko'));
 
-    ui.townFilter.innerHTML = '<option value="all">읍/면/동 선택</option>';
-    towns.forEach((town) => {
-      const option = document.createElement('option');
-      option.value = town;
-      option.textContent = town;
-      ui.townFilter.appendChild(option);
+    [ui.townFilter, ui.heroTownFilter].filter(Boolean).forEach((select) => {
+      select.innerHTML = '<option value="all">읍/면/동 선택</option>';
+      towns.forEach((town) => {
+        const option = document.createElement('option');
+        option.value = town;
+        option.textContent = town;
+        select.appendChild(option);
+      });
     });
 
     const enabled = state.currentFilters.region !== 'all' && state.currentFilters.district !== 'all' && towns.length > 0;
-    ui.townFilter.disabled = !enabled;
+    [ui.townFilter, ui.heroTownFilter].filter(Boolean).forEach((select) => {
+      select.disabled = !enabled;
+    });
     if (!enabled) {
       if (state.currentFilters.district === 'all') {
         state.currentFilters.town = 'all';
@@ -276,7 +292,9 @@ document.addEventListener('DOMContentLoaded', () => {
       state.currentFilters.town = 'all';
     }
 
-    ui.townFilter.value = towns.includes(state.currentFilters.town) ? state.currentFilters.town : 'all';
+    [ui.townFilter, ui.heroTownFilter].filter(Boolean).forEach((select) => {
+      select.value = towns.includes(state.currentFilters.town) ? state.currentFilters.town : 'all';
+    });
   }
 
   function showLoading(show) {
@@ -2147,6 +2165,28 @@ document.addEventListener('DOMContentLoaded', () => {
       reloadRanking();
     });
 
+    ui.heroRegionFilter?.addEventListener('change', () => {
+      state.currentFilters.region = ui.heroRegionFilter.value;
+      state.currentFilters.district = 'all';
+      state.currentFilters.town = 'all';
+      populateDistrictFilter();
+      populateTownFilter();
+    });
+
+    ui.heroDistrictFilter?.addEventListener('change', () => {
+      state.currentFilters.district = ui.heroDistrictFilter.value;
+      state.currentFilters.town = 'all';
+      populateTownFilter();
+    });
+
+    ui.heroTownFilter?.addEventListener('change', () => {
+      state.currentFilters.town = ui.heroTownFilter.value;
+    });
+
+    ui.heroLocationApply?.addEventListener('click', () => {
+      applyHeroLocationFilters();
+    });
+
     ui.typeFilter?.addEventListener('change', () => {
       state.currentFilters.type = ui.typeFilter.value;
       reloadRanking();
@@ -2174,6 +2214,15 @@ document.addEventListener('DOMContentLoaded', () => {
     void loadRankingData(false);
   }
 
+  function applyHeroLocationFilters() {
+    if (ui.heroSearch) {
+      ui.heroSearch.value = '';
+    }
+    clearSearch();
+    reloadRanking();
+    $('#ranking')?.scrollIntoView({ behavior: 'smooth' });
+  }
+
   function applyLandingPreset(card) {
     state.currentFilters.region = card.dataset.landingRegion || 'all';
     state.currentFilters.district = 'all';
@@ -2183,6 +2232,7 @@ document.addEventListener('DOMContentLoaded', () => {
     state.currentSort = 'score';
 
     if (ui.regionFilter) ui.regionFilter.value = state.currentFilters.region;
+    if (ui.heroRegionFilter) ui.heroRegionFilter.value = state.currentFilters.region;
     populateDistrictFilter();
     populateTownFilter();
     if (ui.typeFilter) ui.typeFilter.value = state.currentFilters.type;
@@ -2639,6 +2689,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function syncFilterControls() {
     if (ui.regionFilter) ui.regionFilter.value = state.currentFilters.region;
+    if (ui.heroRegionFilter) ui.heroRegionFilter.value = state.currentFilters.region;
     populateDistrictFilter();
     populateTownFilter();
     if (ui.typeFilter) ui.typeFilter.value = state.currentFilters.type;
