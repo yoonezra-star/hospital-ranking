@@ -1256,7 +1256,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     ui.clearSearchBtn?.addEventListener('click', clearSearch);
 
-    $$('.search-helper-chip').forEach((button) => {
+    $$('[data-search-example]').forEach((button) => {
       button.addEventListener('click', () => {
         const example = button.dataset.searchExample || '';
         if (ui.heroSearch) {

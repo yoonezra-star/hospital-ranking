@@ -836,12 +836,7 @@
       const serviceText = Array.isArray(profile?.primaryServices) && profile.primaryServices.length > 0
         ? profile.primaryServices.slice(0, 2).join(', ')
         : '';
-      const operationBits = [];
-
-      if (item.saturdayOpen) operationBits.push('토요');
-      if (item.sundayOpen) operationBits.push('일요');
-      if (item.nightOpen) operationBits.push('야간');
-      if (item.hasEmergency) operationBits.push('응급');
+      const badgeItems = buildRecommendationBadgeItems(item);
 
       return `
         <a href="detail.html?id=${encodeURIComponent(item.id)}" style="display:flex; flex-direction:column; gap:8px; padding:16px; border:1px solid var(--border-default); border-radius:12px; text-decoration:none; background:var(--bg-body); color:inherit;">
@@ -849,12 +844,34 @@
           <span style="font-size:0.84rem; color:var(--primary); font-weight:700;">${escapeHtml(item.recommendationReason || '추천 비교')}</span>
           <span style="font-size:0.9rem; color:var(--text-body);">${escapeHtml(item.type || hospital.type || '병원')}</span>
           <span style="font-size:0.92rem; color:var(--text-body); line-height:1.6;">${escapeHtml(item.address || '주소 정보 확인 필요')}</span>
+          ${badgeItems.length > 0 ? `<div style="display:flex; flex-wrap:wrap; gap:6px;">${badgeItems.map((badge) => `<span style="display:inline-flex; align-items:center; min-height:24px; padding:3px 9px; border-radius:999px; background:${escapeHtml(badge.background)}; color:${escapeHtml(badge.color)}; font-size:0.74rem; font-weight:700;">${escapeHtml(badge.label)}</span>`).join('')}</div>` : ''}
           ${serviceText ? `<span style="font-size:0.88rem; color:var(--text-body); line-height:1.6;">핵심 진료: ${escapeHtml(serviceText)}</span>` : ''}
           <span style="font-size:0.82rem; color:var(--text-muted);">전문의 ${escapeHtml(String(item.specialistCount || 0))}명 / 리뷰 ${escapeHtml(String(item.reviewCount || 0))}개${buildDistanceLabel(hospital, item)}</span>
-          ${operationBits.length > 0 ? `<span style="font-size:0.8rem; color:var(--text-muted);">${escapeHtml(operationBits.join(' · '))}</span>` : ''}
         </a>
       `;
     }).join('');
+  }
+
+  function buildRecommendationBadgeItems(hospital) {
+    const badges = [];
+
+    if (hospital.saturdayOpen) {
+      badges.push({ label: '토요 진료', background: '#edf4ee', color: '#46685b' });
+    }
+    if (hospital.nightOpen) {
+      badges.push({ label: '야간 진료', background: '#f0eee8', color: '#6d5d48' });
+    }
+    if (hospital.sundayOpen) {
+      badges.push({ label: '일요 진료', background: '#f6efe3', color: '#9a6d2f' });
+    }
+    if (hospital.hasEmergency) {
+      badges.push({ label: '응급 대응', background: '#fce9e6', color: '#a44737' });
+    }
+    if (toPositiveNumber(hospital.parkingCapacity) > 0 || hospital.parkingFee) {
+      badges.push({ label: '주차 정보', background: '#ece9e2', color: '#564d43' });
+    }
+
+    return badges.slice(0, 4);
   }
 
   function ensureRegionalLandingContainer() {
