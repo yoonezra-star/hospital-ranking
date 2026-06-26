@@ -860,24 +860,29 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!ui.currentOpenList || !ui.saturdayOpenList || !ui.nightOpenList || !ui.recentOpenList) return;
 
     const hospitals = getFeaturedHospitalsSource();
-    const liveOpenHospitals = hospitals
-      .filter((hospital) => isHospitalOpenNow(hospital))
-      .sort(compareFeaturedHospitals)
-      .slice(0, 4);
+    const representativeHospitals = getRepresentativeHospitals(hospitals);
+    const liveOpenHospitals = selectOperationalFeaturedHospitals(
+      representativeHospitals,
+      hospitals,
+      (hospital) => isHospitalOpenNow(hospital)
+    );
     const currentOpen = liveOpenHospitals.length
       ? liveOpenHospitals
-      : hospitals
-        .filter((hospital) => isAvailableToday(hospital))
-        .sort(compareFeaturedHospitals)
-        .slice(0, 4);
-    const saturdayOpen = hospitals
-      .filter((hospital) => hospital.saturdayOpen)
-      .sort(compareFeaturedHospitals)
-      .slice(0, 4);
-    const nightOpen = hospitals
-      .filter((hospital) => hospital.nightOpen)
-      .sort(compareFeaturedHospitals)
-      .slice(0, 4);
+      : selectOperationalFeaturedHospitals(
+        representativeHospitals,
+        hospitals,
+        (hospital) => isAvailableToday(hospital)
+      );
+    const saturdayOpen = selectOperationalFeaturedHospitals(
+      representativeHospitals,
+      hospitals,
+      (hospital) => hospital.saturdayOpen
+    );
+    const nightOpen = selectOperationalFeaturedHospitals(
+      representativeHospitals,
+      hospitals,
+      (hospital) => hospital.nightOpen
+    );
     const recentOpen = getRecentOpenHospitals(hospitals).slice(0, 4);
 
     renderQuickAccessList(
@@ -946,6 +951,35 @@ document.addEventListener('DOMContentLoaded', () => {
       .sort((left, right) => new Date(right.openDate) - new Date(left.openDate));
   }
 
+  function getRepresentativeHospitals(hospitals) {
+    const sorted = dedupeHospitals(hospitals).sort(compareFeaturedHospitals);
+    const curated = sorted.filter((hospital) => getFeaturedHospitalTier(hospital) >= 1);
+    if (curated.length >= 8) {
+      return curated;
+    }
+
+    const secondary = sorted.filter((hospital) => getFeaturedHospitalTier(hospital) >= 0.5);
+    return dedupeHospitals([...curated, ...secondary, ...sorted]);
+  }
+
+  function selectOperationalFeaturedHospitals(preferredHospitals, fallbackHospitals, predicate) {
+    const preferred = preferredHospitals
+      .filter((hospital) => predicate(hospital))
+      .sort(compareFeaturedHospitals)
+      .slice(0, 4);
+
+    if (preferred.length >= 4) {
+      return preferred;
+    }
+
+    const fallback = fallbackHospitals
+      .filter((hospital) => predicate(hospital))
+      .sort(compareFeaturedHospitals)
+      .slice(0, 4);
+
+    return preferred.length > 0 ? preferred : fallback;
+  }
+
   function dedupeHospitals(hospitals) {
     const seen = new Set();
     return hospitals.filter((hospital) => {
@@ -965,11 +999,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function compareFeaturedHospitals(left, right) {
     return (
+      getFeaturedHospitalTier(right) - getFeaturedHospitalTier(left) ||
       (right.score || 0) - (left.score || 0) ||
       (right.reviewCount || 0) - (left.reviewCount || 0) ||
       (right.specialistCount || 0) - (left.specialistCount || 0) ||
       String(left.name || '').localeCompare(String(right.name || ''), 'ko')
     );
+  }
+
+  function getFeaturedHospitalTier(hospital) {
+    const typeName = String(hospital?.type || '');
+    const score = Number(hospital?.score || 0);
+    const reviewCount = Number(hospital?.reviewCount || 0);
+    const specialistCount = Number(hospital?.specialistCount || 0);
+
+    if (typeName.includes('상급종합')) return 5;
+    if (typeName.includes('종합병원')) return 4;
+    if (typeName === '병원') return 3;
+    if (specialistCount >= 10) return 2.5;
+    if (specialistCount >= 5 || reviewCount >= 500) return 2;
+    if (reviewCount >= 250 && score >= 4.4) return 1.5;
+    if (reviewCount >= 150 && score >= 4.2) return 1;
+    if (reviewCount >= 80 && score >= 4.0) return 0.5;
+    return 0;
   }
 
   function hasKnownOperationalData(hospital) {
