@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const state = {
-    currentFilters: { region: 'all', department: 'all', type: 'all' },
+    currentFilters: { region: 'all', district: 'all', town: 'all', department: 'all', type: 'all' },
     currentSort: 'score',
     currentPage: 1,
     totalCount: 0,
@@ -33,6 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
     searchResultCount: $('#search-result-count'),
     departmentGrid: $('#department-grid'),
     regionFilter: $('#region-filter'),
+    districtFilter: $('#district-filter'),
+    townFilter: $('#town-filter'),
     typeFilter: $('#type-filter'),
     sortFilter: $('#sort-filter'),
     rankingList: $('#ranking-list'),
@@ -214,6 +216,69 @@ document.addEventListener('DOMContentLoaded', () => {
     syncFilterControls();
   }
 
+  function populateDistrictFilter() {
+    if (!ui.districtFilter) return;
+
+    const districts = getFilterSourceHospitals()
+      .filter((hospital) => state.currentFilters.region === 'all' || hospital.region === state.currentFilters.region)
+      .map((hospital) => String(hospital.district || '').trim())
+      .filter(Boolean)
+      .filter((value, index, array) => array.indexOf(value) === index)
+      .sort((left, right) => left.localeCompare(right, 'ko'));
+
+    ui.districtFilter.innerHTML = '<option value="all">시/군/구 선택</option>';
+    districts.forEach((district) => {
+      const option = document.createElement('option');
+      option.value = district;
+      option.textContent = district;
+      ui.districtFilter.appendChild(option);
+    });
+
+    const enabled = state.currentFilters.region !== 'all' && districts.length > 0;
+    ui.districtFilter.disabled = !enabled;
+    if (!enabled) {
+      if (state.currentFilters.region === 'all') {
+        state.currentFilters.district = 'all';
+      }
+    } else if (!districts.includes(state.currentFilters.district) && state.allFetchedHospitals.length > 0) {
+      state.currentFilters.district = 'all';
+    }
+
+    ui.districtFilter.value = districts.includes(state.currentFilters.district) ? state.currentFilters.district : 'all';
+  }
+
+  function populateTownFilter() {
+    if (!ui.townFilter) return;
+
+    const towns = getFilterSourceHospitals()
+      .filter((hospital) => state.currentFilters.region === 'all' || hospital.region === state.currentFilters.region)
+      .filter((hospital) => state.currentFilters.district === 'all' || hospital.district === state.currentFilters.district)
+      .map((hospital) => String(hospital.town || '').trim())
+      .filter(Boolean)
+      .filter((value, index, array) => array.indexOf(value) === index)
+      .sort((left, right) => left.localeCompare(right, 'ko'));
+
+    ui.townFilter.innerHTML = '<option value="all">읍/면/동 선택</option>';
+    towns.forEach((town) => {
+      const option = document.createElement('option');
+      option.value = town;
+      option.textContent = town;
+      ui.townFilter.appendChild(option);
+    });
+
+    const enabled = state.currentFilters.region !== 'all' && state.currentFilters.district !== 'all' && towns.length > 0;
+    ui.townFilter.disabled = !enabled;
+    if (!enabled) {
+      if (state.currentFilters.district === 'all') {
+        state.currentFilters.town = 'all';
+      }
+    } else if (!towns.includes(state.currentFilters.town) && state.allFetchedHospitals.length > 0) {
+      state.currentFilters.town = 'all';
+    }
+
+    ui.townFilter.value = towns.includes(state.currentFilters.town) ? state.currentFilters.town : 'all';
+  }
+
   function showLoading(show) {
     if (!ui.rankingLoader) return;
     ui.rankingLoader.style.display = show ? 'flex' : 'none';
@@ -222,7 +287,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateLoadMore() {
     if (!ui.loadMoreBtn) return;
 
-    const hasMore = state.isApiAvailable && (state.currentPage * 20 < state.totalCount);
+    const hasLocationDrilldown = state.currentFilters.district !== 'all' || state.currentFilters.town !== 'all';
+    const hasMore = !hasLocationDrilldown && state.isApiAvailable && (state.currentPage * 20 < state.totalCount);
     ui.loadMoreBtn.style.display = hasMore ? 'block' : 'none';
     ui.loadMoreBtn.textContent = `더보기 (${state.allFetchedHospitals.length} / ${state.totalCount.toLocaleString()})`;
   }
@@ -251,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const params = {
       page: state.currentPage,
-      limit: 20,
+      limit: state.currentFilters.district !== 'all' || state.currentFilters.town !== 'all' ? 200 : 20,
       preferMock: true,
     };
 
@@ -267,12 +333,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const result = await HospitalAPI.fetchHospitals(params);
     const mergedHospitals = mergeHospitalsWithFallback(result.hospitals);
+    const filteredHospitals = typeof SearchEngine !== 'undefined'
+      ? SearchEngine.filterHospitals(mergedHospitals, state.currentFilters)
+      : mergedHospitals;
 
     state.isApiAvailable = !result.fromMock;
-    state.totalCount = result.totalCount;
+    state.totalCount = filteredHospitals.length;
     state.allFetchedHospitals = append
-      ? [...state.allFetchedHospitals, ...mergedHospitals]
-      : mergedHospitals;
+      ? [...state.allFetchedHospitals, ...filteredHospitals]
+      : filteredHospitals;
+
+    populateDistrictFilter();
+    populateTownFilter();
 
     const sortedHospitals = typeof SearchEngine !== 'undefined'
       ? SearchEngine.sortHospitals(state.allFetchedHospitals, state.currentSort)
@@ -2056,6 +2128,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     ui.regionFilter?.addEventListener('change', () => {
       state.currentFilters.region = ui.regionFilter.value;
+      state.currentFilters.district = 'all';
+      state.currentFilters.town = 'all';
+      populateDistrictFilter();
+      populateTownFilter();
+      reloadRanking();
+    });
+
+    ui.districtFilter?.addEventListener('change', () => {
+      state.currentFilters.district = ui.districtFilter.value;
+      state.currentFilters.town = 'all';
+      populateTownFilter();
+      reloadRanking();
+    });
+
+    ui.townFilter?.addEventListener('change', () => {
+      state.currentFilters.town = ui.townFilter.value;
       reloadRanking();
     });
 
@@ -2088,11 +2176,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function applyLandingPreset(card) {
     state.currentFilters.region = card.dataset.landingRegion || 'all';
+    state.currentFilters.district = 'all';
+    state.currentFilters.town = 'all';
     state.currentFilters.department = card.dataset.landingDepartment || 'all';
     state.currentFilters.type = card.dataset.landingType || 'all';
     state.currentSort = 'score';
 
     if (ui.regionFilter) ui.regionFilter.value = state.currentFilters.region;
+    populateDistrictFilter();
+    populateTownFilter();
     if (ui.typeFilter) ui.typeFilter.value = state.currentFilters.type;
     if (ui.sortFilter) ui.sortFilter.value = 'score';
 
@@ -2262,9 +2354,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function mergeHospitalWithFallback(hospital, fallback) {
+    const resolvedAddress = hospital.address || fallback?.address || '';
     return {
       ...fallback,
       ...hospital,
+      district: hospital.district || fallback?.district || extractDistrictFromAddress(resolvedAddress),
+      town: hospital.town || fallback?.town || extractTownFromAddress(resolvedAddress),
       hours: hospital.hours || fallback?.hours,
       saturdayOpen: resolveOperationalValue(hospital.saturdayOpen, fallback?.saturdayOpen),
       sundayOpen: resolveOperationalValue(hospital.sundayOpen, fallback?.sundayOpen),
@@ -2284,6 +2379,33 @@ document.addEventListener('DOMContentLoaded', () => {
     if (primary === true || primary === false) return primary;
     if (fallback === true || fallback === false) return fallback;
     return null;
+  }
+
+  function extractDistrictFromAddress(address = '') {
+    const tokens = String(address || '').split(/\s+/).filter(Boolean);
+    const candidates = tokens.filter((token, index) => index > 0 && /(?:시|군|구)$/.test(token));
+    return candidates.length > 0 ? candidates[candidates.length - 1] : '';
+  }
+
+  function extractTownFromAddress(address = '') {
+    const tokens = String(address || '').split(/\s+/).filter(Boolean);
+    const match = tokens.find((token) => /(?:읍|면|동|가|리)$/.test(token));
+    return match || '';
+  }
+
+  function getFilterSourceHospitals() {
+    const fetched = Array.isArray(state.allFetchedHospitals) ? state.allFetchedHospitals : [];
+    const fallback = Array.isArray(HOSPITALS) ? HOSPITALS : [];
+    const combined = mergeHospitalsWithFallback([...fetched, ...fallback]);
+    const seen = new Set();
+    return combined.filter((hospital) => {
+      const key = buildHospitalKey(hospital);
+      if (seen.has(key)) {
+        return false;
+      }
+      seen.add(key);
+      return true;
+    });
   }
 
   async function hydrateHospitalCardDetails(hospitals, container, limit = 12) {
@@ -2485,6 +2607,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const validSorts = new Set(['score', 'reviews', 'specialists', 'newest', 'name']);
 
     const region = params.get('region');
+    const district = params.get('district');
+    const town = params.get('town');
     const department = params.get('department');
     const type = params.get('type');
     const sort = params.get('sort');
@@ -2492,6 +2616,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (region && validRegions.has(region)) {
       state.currentFilters.region = region;
+    }
+    if (district) {
+      state.currentFilters.district = district;
+    }
+    if (town) {
+      state.currentFilters.town = town;
     }
     if (department && validDepartments.has(department)) {
       state.currentFilters.department = department;
@@ -2509,6 +2639,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function syncFilterControls() {
     if (ui.regionFilter) ui.regionFilter.value = state.currentFilters.region;
+    populateDistrictFilter();
+    populateTownFilter();
     if (ui.typeFilter) ui.typeFilter.value = state.currentFilters.type;
     if (ui.sortFilter) ui.sortFilter.value = state.currentSort;
   }
@@ -2516,6 +2648,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function syncListingQuery(keyword = '') {
     const params = new URLSearchParams();
     if (state.currentFilters.region !== 'all') params.set('region', state.currentFilters.region);
+    if (state.currentFilters.district !== 'all') params.set('district', state.currentFilters.district);
+    if (state.currentFilters.town !== 'all') params.set('town', state.currentFilters.town);
     if (state.currentFilters.department !== 'all') params.set('department', state.currentFilters.department);
     if (state.currentFilters.type !== 'all') params.set('type', state.currentFilters.type);
     if (state.currentSort !== 'score') params.set('sort', state.currentSort);

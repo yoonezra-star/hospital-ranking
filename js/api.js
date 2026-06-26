@@ -169,15 +169,17 @@ const HospitalAPI = (() => {
 
   function normalizeHospital(item) {
     const drCount = parseInt(item.drTotCnt, 10) || 0;
+    const address = item.addr || '';
 
     return {
       id: item.ykiho || `h-${Math.random().toString(36).slice(2, 9)}`,
       name: item.yadmNm || '',
       type: item.clCdNm || '',
-      address: item.addr || '',
+      address,
       phone: item.telno || '',
       region: item.sidoCdNm || '',
-      district: item.sgguCdNm || '',
+      district: item.sgguCdNm || extractDistrictFromAddress(address),
+      town: extractTownFromAddress(address),
       departmentId: guessDepartmentId(item.clCdNm),
       department: item.clCdNm || '',
       lat: parseFloat(item.YPos) || 0,
@@ -191,6 +193,18 @@ const HospitalAPI = (() => {
       sundayOpen: null,
       nightOpen: null,
     };
+  }
+
+  function extractDistrictFromAddress(address = '') {
+    const tokens = String(address || '').split(/\s+/).filter(Boolean);
+    const candidates = tokens.filter((token, index) => index > 0 && /(?:시|군|구)$/.test(token));
+    return candidates.length > 0 ? candidates[candidates.length - 1] : '';
+  }
+
+  function extractTownFromAddress(address = '') {
+    const tokens = String(address || '').split(/\s+/).filter(Boolean);
+    const match = tokens.find((token) => /(?:읍|면|동|가|리)$/.test(token));
+    return match || '';
   }
 
   function fmtDate(value) {

@@ -702,8 +702,11 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   display: flex;
   gap: var(--sp-3);
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 .filter-select {
+  min-width: 140px;
   padding: var(--sp-2) var(--sp-4);
   padding-right: var(--sp-8);
   background: var(--bg-card);
@@ -719,6 +722,11 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   transition: border-color var(--t-fast);
 }
 .filter-select:focus { border-color: var(--primary); }
+.filter-select:disabled {
+  opacity: 0.58;
+  cursor: default;
+  background-color: color-mix(in srgb, var(--bg-card) 88%, var(--bg-body) 12%);
+}
 
 /* ===== Quick Access ===== */
 .quick-access-grid {

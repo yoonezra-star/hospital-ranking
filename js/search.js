@@ -341,6 +341,9 @@ const SearchEngine = (() => {
     if (filters.district) {
       result = result.filter((hospital) => matchesDistrict(hospital, filters.district));
     }
+    if (filters.town) {
+      result = result.filter((hospital) => matchesTown(hospital, filters.town));
+    }
     if (filters.locality) {
       result = result.filter((hospital) => matchesLocality(hospital, filters.locality));
     }
@@ -457,6 +460,7 @@ const SearchEngine = (() => {
       ...filters,
       region: filters.region && filters.region !== 'all' ? filters.region : (resolvedIntent.region || filters.region),
       district: filters.district || resolvedIntent.district || '',
+      town: filters.town || '',
       locality: filters.locality || resolvedIntent.locality || '',
       department: filters.department && filters.department !== 'all'
         ? filters.department
@@ -494,6 +498,7 @@ const SearchEngine = (() => {
       hospital?.type,
       hospital?.region,
       hospital?.district,
+      hospital?.town,
       hospital?.phone,
       hospital?.subway,
       hospital?.equipment,
@@ -650,6 +655,17 @@ const SearchEngine = (() => {
     const address = String(hospital?.address || '').trim();
 
     return hospitalDistrict.includes(districtText) || address.includes(districtText);
+  }
+
+  function matchesTown(hospital, town = '') {
+    if (!town) {
+      return true;
+    }
+
+    const townText = String(town).trim();
+    const hospitalTown = String(hospital?.town || '').trim();
+    const address = String(hospital?.address || '').trim();
+    return hospitalTown.includes(townText) || address.includes(townText);
   }
 
   function resolveLocalityIntent(token = '') {
