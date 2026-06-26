@@ -389,7 +389,7 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   font-weight: var(--fw-semibold);
 }
 .search-helper-text {
-  margin: calc(var(--sp-7) * -1 + 8px) auto var(--sp-3);
+  margin: var(--sp-4) auto var(--sp-3);
   text-align: center;
   color: color-mix(in srgb, var(--text-body) 78%, white 22%);
   font-size: var(--fs-sm);
@@ -2100,7 +2100,7 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   .stat-number { font-size: var(--fs-3xl); }
   
   .search-bar .search-btn { padding: 0 var(--sp-4); }
-  .search-helper-text { margin-top: calc(var(--sp-7) * -1 + 10px); }
+  .search-helper-text { margin-top: var(--sp-4); }
   .search-suggestion-list { padding: 10px; gap: 6px; }
   .search-suggestion-item { padding: 9px 10px; }
   .search-helper-chips { gap: var(--sp-2); }

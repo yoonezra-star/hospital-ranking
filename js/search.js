@@ -88,6 +88,33 @@ const SearchEngine = (() => {
     둔산: { region: '대전', district: '서구' },
   };
 
+  const LOCALITY_ALIASES = {
+    교하: {
+      region: '경기',
+      district: '파주시',
+      label: '파주 교하 생활권',
+      keywords: ['교하', '동패동', '문발동', '와동동', '목동동', '야당동', '다율동', '산남동'],
+    },
+    운정: {
+      region: '경기',
+      district: '파주시',
+      label: '파주 운정 생활권',
+      keywords: ['운정', '동패동', '목동동', '야당동', '다율동', '산내동'],
+    },
+    잠실: {
+      region: '서울',
+      district: '송파구',
+      label: '서울 잠실 생활권',
+      keywords: ['잠실', '신천동', '송파동', '방이동'],
+    },
+    여의도: {
+      region: '서울',
+      district: '영등포구',
+      label: '서울 여의도 생활권',
+      keywords: ['여의도', '여의도동', '영등포구'],
+    },
+  };
+
   const DEPARTMENT_ALIASES = {
     내과: 'internal',
     일반내과: 'internal',
@@ -178,6 +205,7 @@ const SearchEngine = (() => {
       originalQuery: String(query || '').trim(),
       region: '',
       district: '',
+      locality: '',
       department: '',
       keywordTokens: [],
       keywordText: '',
@@ -198,6 +226,18 @@ const SearchEngine = (() => {
 
       if (!intent.region && REGION_ALIASES[normalized]) {
         intent.region = REGION_ALIASES[normalized];
+        return;
+      }
+
+      const localityIntent = resolveLocalityIntent(normalized);
+      if (!intent.locality && localityIntent) {
+        intent.locality = localityIntent.label || normalized;
+        if (!intent.region && localityIntent.region) {
+          intent.region = localityIntent.region;
+        }
+        if (!intent.district && localityIntent.district) {
+          intent.district = localityIntent.district;
+        }
         return;
       }
 
@@ -238,6 +278,7 @@ const SearchEngine = (() => {
     intent.isStructured = Boolean(
       intent.region ||
       intent.district ||
+      intent.locality ||
       intent.department ||
       intent.saturdayOpen ||
       intent.sundayOpen ||
@@ -259,6 +300,7 @@ const SearchEngine = (() => {
     const parts = [];
     if (intent.region) parts.push(intent.region);
     if (intent.district) parts.push(intent.district);
+    if (intent.locality && intent.locality !== intent.district) parts.push(intent.locality);
     if (intent.department) parts.push(getDepartmentLabel(intent.department));
     if (intent.saturdayOpen) parts.push(OPERATION_LABELS.saturdayOpen);
     if (intent.sundayOpen) parts.push(OPERATION_LABELS.sundayOpen);
@@ -298,6 +340,9 @@ const SearchEngine = (() => {
     }
     if (filters.district) {
       result = result.filter((hospital) => matchesDistrict(hospital, filters.district));
+    }
+    if (filters.locality) {
+      result = result.filter((hospital) => matchesLocality(hospital, filters.locality));
     }
 
     if (filters.department && filters.department !== 'all') {
@@ -412,6 +457,7 @@ const SearchEngine = (() => {
       ...filters,
       region: filters.region && filters.region !== 'all' ? filters.region : (resolvedIntent.region || filters.region),
       district: filters.district || resolvedIntent.district || '',
+      locality: filters.locality || resolvedIntent.locality || '',
       department: filters.department && filters.department !== 'all'
         ? filters.department
         : (resolvedIntent.department || filters.department),
@@ -604,6 +650,41 @@ const SearchEngine = (() => {
     const address = String(hospital?.address || '').trim();
 
     return hospitalDistrict.includes(districtText) || address.includes(districtText);
+  }
+
+  function resolveLocalityIntent(token = '') {
+    return LOCALITY_ALIASES[token] || null;
+  }
+
+  function matchesLocality(hospital, locality = '') {
+    const localityText = String(locality || '').trim();
+    if (!localityText) {
+      return true;
+    }
+
+    const localityEntry = Object.values(LOCALITY_ALIASES).find((entry) => entry.label === localityText);
+    if (!localityEntry) {
+      return true;
+    }
+
+    const regionText = String(hospital?.region || '').trim();
+    const districtText = String(hospital?.district || '').trim();
+    const addressText = String(hospital?.address || '').trim();
+
+    if (localityEntry.region && regionText && regionText !== localityEntry.region) {
+      return false;
+    }
+
+    if (localityEntry.district) {
+      const districtMatched = districtText.includes(localityEntry.district) || addressText.includes(localityEntry.district);
+      if (!districtMatched) {
+        return false;
+      }
+    }
+
+    return (localityEntry.keywords || []).some((keyword) => (
+      districtText.includes(keyword) || addressText.includes(keyword)
+    ));
   }
 
   function compareByRankingQuality(a, b) {
