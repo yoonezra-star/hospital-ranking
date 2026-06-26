@@ -86,6 +86,50 @@
     .policy-content ul {
       margin-bottom: 1rem;
     }
+    .policy-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .policy-summary-card {
+      padding: 18px 20px;
+      border: 1px solid var(--border-default);
+      border-radius: 16px;
+      background: color-mix(in srgb, var(--bg-body) 82%, white 18%);
+    }
+    .policy-summary-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      color: var(--brand-deep);
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .policy-summary-card h2,
+    .policy-summary-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.08rem;
+      color: var(--text-heading);
+    }
+    .policy-summary-card p,
+    .policy-summary-card li {
+      margin: 0;
+      color: var(--text-body);
+      line-height: 1.75;
+    }
+    .policy-summary-card ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .policy-summary-note {
+      margin-top: 16px;
+      padding: 16px 18px;
+      border-radius: 14px;
+      background: rgba(183, 110, 44, 0.08);
+      color: var(--text-body);
+      line-height: 1.76;
+    }
     @media (max-width: 768px) {
       .policy-page {
         padding-top: 44px;
@@ -93,6 +137,9 @@
       .policy-hero,
       .policy-section {
         padding: 22px 18px;
+      }
+      .policy-summary-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -117,13 +164,44 @@
       <div class="policy-badges">
         <span class="policy-badge">개인정보 처리 기준</span>
         <span class="policy-badge">시행일자 2026-06-17</span>
-        <span class="policy-badge">최종 수정일 2026-06-20</span>
+        <span class="policy-badge">최종 수정일 2026-06-26</span>
       </div>
       <h1 style="font-size: var(--fs-4xl); margin:0 0 14px; color:var(--text-heading);">개인정보처리방침</h1>
       <p style="max-width:760px; color:var(--text-body); line-height:1.82; margin:0;">
         병원찾기가 어떤 정보를 어떤 목적과 기준으로 처리하는지 설명하는 정책 문서입니다.
         문의, 광고, 접속 기록, 위치 검색 기능과 관련한 기본 처리 원칙을 확인할 수 있습니다.
       </p>
+    </section>
+
+    <section class="policy-section" aria-labelledby="privacy-summary-title">
+      <div class="policy-content">
+        <h2 id="privacy-summary-title">개인정보 처리 요약</h2>
+        <div class="policy-summary-grid">
+          <article class="policy-summary-card">
+            <span class="policy-summary-kicker">Minimum Data</span>
+            <h3>필수 범위만 처리합니다</h3>
+            <p>접속 기록, 쿠키, 브라우저 정보처럼 서비스 운영에 필요한 최소 범위 정보만 처리합니다. 문의 접수 시에는 답변에 필요한 연락 정보만 확인합니다.</p>
+          </article>
+          <article class="policy-summary-card">
+            <span class="policy-summary-kicker">Location Search</span>
+            <h3>위치 정보는 검색용으로만 사용합니다</h3>
+            <p>내 주변 병원 찾기 기능에서 사용하는 위치 정보는 실시간 검색 목적에 한해 활용하며, 서버에 장기 보관하지 않습니다.</p>
+          </article>
+          <article class="policy-summary-card">
+            <span class="policy-summary-kicker">Ads & Cookies</span>
+            <h3>광고 쿠키가 적용될 수 있습니다</h3>
+            <p>본 사이트는 구글 애드센스 광고를 사용할 수 있으며, 이에 따라 제3자 쿠키가 광고 노출과 성능 측정에 활용될 수 있습니다.</p>
+          </article>
+          <article class="policy-summary-card">
+            <span class="policy-summary-kicker">Rights</span>
+            <h3>열람·정정·삭제 요청이 가능합니다</h3>
+            <p>개인정보 관련 문의나 정정 요청은 <a href="mailto:replyleaders@naver.com" style="color: var(--primary); text-decoration: underline;">replyleaders@naver.com</a> 또는 <a href="contact.html" style="color: var(--primary); text-decoration: underline;">문의 페이지</a>로 접수할 수 있습니다.</p>
+          </article>
+        </div>
+        <div class="policy-summary-note">
+          브라우저 설정을 통해 쿠키 저장을 거부하거나 삭제할 수 있으며, 구글 맞춤 광고는 <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener" style="color: var(--primary); text-decoration: underline;">광고 설정 페이지</a>에서 직접 관리할 수 있습니다.
+        </div>
+      </div>
     </section>
 
     <section class="policy-section">
