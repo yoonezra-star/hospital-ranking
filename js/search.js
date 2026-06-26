@@ -612,6 +612,11 @@ const SearchEngine = (() => {
       return rankingScoreDiff;
     }
 
+    const infoRichnessDiff = getHospitalInfoRichnessScore(b) - getHospitalInfoRichnessScore(a);
+    if (infoRichnessDiff !== 0) {
+      return infoRichnessDiff;
+    }
+
     const reviewDiff = (b.reviewCount || 0) - (a.reviewCount || 0);
     if (reviewDiff !== 0) {
       return reviewDiff;
@@ -640,8 +645,47 @@ const SearchEngine = (() => {
     const bayesianScore = ((score * reviews) + (priorMean * priorWeight)) / (reviews + priorWeight);
     const specialistBonus = Math.min(specialists / 500, 0.25);
     const typeBonus = getTypePriority(hospital.type) * 0.02;
+    const infoRichnessBonus = getHospitalInfoRichnessScore(hospital) * 0.025;
 
-    return bayesianScore + specialistBonus + typeBonus;
+    return bayesianScore + specialistBonus + typeBonus + infoRichnessBonus;
+  }
+
+  function getHospitalInfoRichnessScore(hospital) {
+    const checks = [
+      Boolean(hospital?.address),
+      Boolean(hospital?.phone),
+      Boolean(hospital?.url),
+      Boolean(hospital?.subway || hospital?.region || hospital?.district),
+      Boolean(hospital?.openDate),
+      Number(hospital?.reviewCount || 0) > 0 || Number(hospital?.specialistCount || 0) > 0,
+      hasOperationalInfo(hospital),
+      hasParkingInfo(hospital)
+        || Boolean(hospital?.equipment)
+        || Number(hospital?.roomCount || 0) > 0
+        || Number(hospital?.bedCount || 0) > 0,
+    ];
+
+    return checks.filter(Boolean).length;
+  }
+
+  function hasOperationalInfo(hospital) {
+    if (!hospital) {
+      return false;
+    }
+
+    if (hospital.saturdayOpen === true || hospital.saturdayOpen === false) return true;
+    if (hospital.sundayOpen === true || hospital.sundayOpen === false) return true;
+    if (hospital.nightOpen === true || hospital.nightOpen === false) return true;
+
+    const hours = hospital.hours;
+    if (!hours || typeof hours !== 'object') {
+      return false;
+    }
+
+    return Object.values(hours).some((value) => {
+      const text = String(value || '').trim();
+      return text && !sortIsClosedHoursText(text);
+    });
   }
 
   function getTypePriority(typeName = '') {

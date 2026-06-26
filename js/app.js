@@ -1256,6 +1256,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function compareFeaturedHospitals(left, right) {
     return (
       getFeaturedHospitalTier(right) - getFeaturedHospitalTier(left) ||
+      getHospitalInfoRichnessScore(right) - getHospitalInfoRichnessScore(left) ||
       (right.score || 0) - (left.score || 0) ||
       (right.reviewCount || 0) - (left.reviewCount || 0) ||
       (right.specialistCount || 0) - (left.specialistCount || 0) ||
@@ -1286,6 +1287,25 @@ document.addEventListener('DOMContentLoaded', () => {
     if (hospital.sundayOpen === true || hospital.sundayOpen === false) return true;
     if (hospital.nightOpen === true || hospital.nightOpen === false) return true;
     return Boolean(hospital.hours);
+  }
+
+  function getHospitalInfoRichnessScore(hospital) {
+    const checks = [
+      Boolean(hospital?.address),
+      Boolean(hospital?.phone),
+      Boolean(hospital?.url),
+      Boolean(hospital?.subway || hospital?.region || hospital?.district),
+      Boolean(hospital?.openDate),
+      Number(hospital?.reviewCount || 0) > 0 || Number(hospital?.specialistCount || 0) > 0,
+      hasKnownOperationalData(hospital),
+      Number(hospital?.parkingCapacity || 0) > 0
+        || Boolean(hospital?.parkingFee)
+        || Boolean(hospital?.equipment)
+        || Number(hospital?.roomCount || 0) > 0
+        || Number(hospital?.bedCount || 0) > 0,
+    ];
+
+    return checks.filter(Boolean).length;
   }
 
   function buildQuickAccessCard(hospital) {
