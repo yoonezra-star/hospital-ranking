@@ -866,6 +866,52 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   line-height: 1.7;
 }
 
+.hospital-insight-list {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 var(--sp-3);
+}
+
+.hospital-insight-list-compact {
+  gap: 8px;
+}
+
+.hospital-insight-item {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  border: 1px solid color-mix(in srgb, var(--border-default) 86%, var(--secondary) 14%);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--bg-card) 92%, white 8%),
+    color-mix(in srgb, var(--bg-body) 88%, white 12%)
+  );
+}
+
+.hospital-insight-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 4px 8px;
+  border-radius: var(--r-full);
+  background: rgba(199, 139, 70, 0.14);
+  color: var(--secondary-dark);
+  font-size: 0.72rem;
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.01em;
+}
+
+.hospital-insight-value {
+  min-width: 0;
+  color: var(--text-body);
+  font-size: var(--fs-xs);
+  line-height: 1.7;
+}
+
 .hospital-highlights {
   display: flex;
   flex-wrap: wrap;
@@ -920,6 +966,15 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
 }
 
 [data-theme="dark"] .hospital-highlight {
+  background: rgba(199, 139, 70, 0.18);
+  color: var(--secondary-light);
+}
+
+[data-theme="dark"] .hospital-insight-item {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+[data-theme="dark"] .hospital-insight-label {
   background: rgba(199, 139, 70, 0.18);
   color: var(--secondary-light);
 }
@@ -1964,6 +2019,8 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   .ranking-grid { grid-template-columns: 1fr; }
   .hospital-card { padding: var(--sp-5); }
   .hospital-fact-grid { grid-template-columns: 1fr; }
+  .hospital-insight-item { grid-template-columns: 1fr; }
+  .hospital-insight-label { justify-self: start; }
   .hospital-fact-item { min-height: auto; }
   .trust-card,
   .faq-card { padding: var(--sp-5); }

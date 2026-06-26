@@ -448,6 +448,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const featureNote = buildHospitalFeatureNote(hospital);
     const focusNote = buildHospitalFocusNote(hospital);
     const visitPrepNote = buildHospitalVisitPrepNote(hospital);
+    const insightItems = buildHospitalInsightItems(hospital);
     const highlightItems = buildHospitalHighlightItems(hospital);
     const factItems = buildHospitalFactItems(hospital);
     const statusItems = buildHospitalStatusItems(hospital);
@@ -481,6 +482,7 @@ document.addEventListener('DOMContentLoaded', () => {
           ${featureNote ? `<p class="hospital-feature-note">${escapeHtml(featureNote)}</p>` : ''}
           ${focusNote ? `<p class="hospital-focus-note">${escapeHtml(focusNote)}</p>` : ''}
           ${visitPrepNote ? `<p class="hospital-visit-prep">${escapeHtml(visitPrepNote)}</p>` : ''}
+          <div class="hospital-insight-list" data-hospital-insights${insightItems.length ? '' : ' hidden'}>${renderHospitalInsightList(insightItems)}</div>
           <p class="hospital-data-summary${dataSummary ? '' : ' is-pending'}" data-hospital-summary>${escapeHtml(dataSummary || '주차, 접수, 운영 정보를 불러오는 중입니다.')}</p>
           ${decisionSummary ? `<p class="hospital-decision-summary">${escapeHtml(decisionSummary)}</p>` : ''}
           ${evidenceSummary ? `<p class="hospital-evidence-summary">${escapeHtml(evidenceSummary)}</p>` : ''}
@@ -623,6 +625,50 @@ document.addEventListener('DOMContentLoaded', () => {
     return '';
   }
 
+  function buildHospitalInsightItems(hospital, detailData) {
+    const contentApi = getHospitalContent();
+    const profile = contentApi?.buildHospitalProfile?.(hospital);
+    const items = [];
+    const receptionText = Array.isArray(detailData?.receptionSummary) && detailData.receptionSummary.length > 0
+      ? detailData.receptionSummary[0]
+      : profile?.reservation;
+    const documentItems = Array.isArray(profile?.documents)
+      ? uniqueStrings(profile.documents).slice(0, 2)
+      : [];
+    const transportItems = [];
+    const parkingText = getHospitalParkingLabel(hospital, detailData);
+
+    if (receptionText) {
+      items.push({ label: '접수', value: receptionText });
+    }
+
+    if (documentItems.length > 0) {
+      items.push({ label: '준비', value: documentItems.join(', ') });
+    }
+
+    if (parkingText) transportItems.push(parkingText);
+    if (profile?.transport) {
+      transportItems.push(profile.transport);
+    } else if (hospital.subway) {
+      transportItems.push(hospital.subway);
+    } else if (hospital.address) {
+      transportItems.push(`${hospital.address} 기준 동선을 확인해보세요.`);
+    }
+
+    if (transportItems.length > 0) {
+      items.push({
+        label: '이동',
+        value: uniqueStrings(transportItems).slice(0, 2).join(' / '),
+      });
+    }
+
+    if (items.length < 3 && Array.isArray(profile?.visitTargets) && profile.visitTargets.length > 0) {
+      items.push({ label: '추천', value: profile.visitTargets[0] });
+    }
+
+    return items.slice(0, 3);
+  }
+
   function buildHospitalFactItems(hospital, detailData) {
     const contentApi = getHospitalContent();
     const profile = contentApi?.buildHospitalProfile?.(hospital);
@@ -726,6 +772,19 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="hospital-fact-item">
         <span class="hospital-fact-label">${escapeHtml(item.label)}</span>
         <strong class="hospital-fact-value">${escapeHtml(item.value)}</strong>
+      </div>
+    `).join('');
+  }
+
+  function renderHospitalInsightList(items) {
+    if (!Array.isArray(items) || items.length === 0) {
+      return '';
+    }
+
+    return items.map((item) => `
+      <div class="hospital-insight-item">
+        <span class="hospital-insight-label">${escapeHtml(item.label)}</span>
+        <span class="hospital-insight-value">${escapeHtml(item.value)}</span>
       </div>
     `).join('');
   }
@@ -1038,6 +1097,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const meta = [];
     const subinfo = buildHospitalSubinfo(hospital);
     const featureNote = buildHospitalFeatureNote(hospital);
+    const insightItems = buildHospitalInsightItems(hospital);
     const highlightItems = buildHospitalHighlightItems(hospital);
     const factItems = buildHospitalFactItems(hospital);
     const statusItems = buildHospitalStatusItems(hospital);
@@ -1064,6 +1124,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="hospital-fact-grid hospital-fact-grid-compact" data-hospital-facts>${renderHospitalFactGrid(factItems)}</div>
         ${featureNote ? `<p class="hospital-feature-note">${escapeHtml(featureNote)}</p>` : ''}
+        <div class="hospital-insight-list hospital-insight-list-compact" data-hospital-insights${insightItems.length ? '' : ' hidden'}>${renderHospitalInsightList(insightItems)}</div>
         <p class="hospital-data-summary quick-access-summary${dataSummary ? '' : ' is-pending'}" data-hospital-summary>${escapeHtml(dataSummary || '주차, 접수, 운영 정보를 불러오는 중입니다.')}</p>
         <div class="quick-access-meta">${meta.map((item) => `<span>${escapeHtml(item)}</span>`).join('')}</div>
       </a>
@@ -1072,6 +1133,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function buildRecentOpenCard(hospital) {
     const highlightItems = buildHospitalHighlightItems(hospital);
+    const insightItems = buildHospitalInsightItems(hospital);
     const dataSummary = buildHospitalDataSummary(hospital);
     const type = hospital.department || hospital.type || '병원';
     const openDate = hospital.openDate ? `개원 ${formatDate(hospital.openDate)}` : '개원일 확인 필요';
@@ -1089,6 +1151,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="hospital-highlights quick-access-highlights" data-hospital-highlights${highlightItems.length ? '' : ' hidden'}>
           ${highlightItems.map((item) => `<span class="hospital-highlight">${escapeHtml(item)}</span>`).join('')}
         </div>
+        <div class="hospital-insight-list hospital-insight-list-compact" data-hospital-insights${insightItems.length ? '' : ' hidden'}>${renderHospitalInsightList(insightItems)}</div>
         <p class="hospital-data-summary quick-access-summary${dataSummary ? '' : ' is-pending'}" data-hospital-summary>${escapeHtml(dataSummary || '주차, 접수, 운영 정보를 불러오는 중입니다.')}</p>
         <div class="quick-access-meta">
           <span>${escapeHtml(openDate)}</span>
@@ -2076,6 +2139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusSummary = buildHospitalStatusSummary(hospital);
     const summaryText = buildHospitalDataSummary(hospital, detailData);
     const evidenceText = buildHospitalEvidenceSummary(hospital);
+    const insightItems = buildHospitalInsightItems(hospital, detailData);
 
     cards.forEach((card) => {
       const highlightNode = card.querySelector('[data-hospital-highlights]');
@@ -2100,6 +2164,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const factsNode = card.querySelector('[data-hospital-facts]');
       if (factsNode) {
         factsNode.innerHTML = renderHospitalFactGrid(factItems);
+      }
+
+      const insightNode = card.querySelector('[data-hospital-insights]');
+      if (insightNode) {
+        if (insightItems.length > 0) {
+          insightNode.hidden = false;
+          insightNode.innerHTML = renderHospitalInsightList(insightItems);
+        } else {
+          insightNode.hidden = true;
+          insightNode.innerHTML = '';
+        }
       }
 
       const statusNode = card.querySelector('[data-hospital-status]');
