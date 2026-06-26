@@ -853,22 +853,87 @@ document.addEventListener('DOMContentLoaded', () => {
     return uniqueStrings(parts).slice(0, 4).join(' · ');
   }
 
+  function getDepartmentNameById(departmentId) {
+    const items = typeof DEPARTMENTS !== 'undefined' ? DEPARTMENTS : [];
+    return items.find((item) => item.id === departmentId)?.name || '';
+  }
+
+  function getTypeReviewLabel(type) {
+    const labelMap = {
+      hospital: '병원',
+      clinic: '의원',
+      dental: '치과',
+      korean: '한의원',
+    };
+    return labelMap[type] || '';
+  }
+
+  function buildReviewSearchContext() {
+    const rawQuery = String(ui.heroSearch?.value || '').trim();
+    if (state.isSearchActive && rawQuery) {
+      const normalizedQuery = rawQuery.replace(/\s*후기$/u, '').trim();
+      return {
+        query: `${normalizedQuery || rawQuery} 후기`,
+        title: `실시간 ${normalizedQuery || rawQuery} 관련 후기`,
+      };
+    }
+
+    const region = state.currentFilters.region !== 'all' ? state.currentFilters.region : '';
+    const departmentName = state.currentFilters.department !== 'all'
+      ? getDepartmentNameById(state.currentFilters.department)
+      : '';
+    const typeName = state.currentFilters.type !== 'all'
+      ? getTypeReviewLabel(state.currentFilters.type)
+      : '';
+
+    if (region && departmentName) {
+      return {
+        query: `${region} ${departmentName} 후기`,
+        title: `실시간 ${region} ${departmentName} 후기`,
+      };
+    }
+
+    if (region && typeName) {
+      return {
+        query: `${region} ${typeName} 후기`,
+        title: `실시간 ${region} ${typeName} 후기`,
+      };
+    }
+
+    if (departmentName) {
+      return {
+        query: `${departmentName} 후기`,
+        title: `실시간 ${departmentName} 후기`,
+      };
+    }
+
+    if (region) {
+      return {
+        query: `${region} 병원 후기`,
+        title: `실시간 ${region} 병원 후기`,
+      };
+    }
+
+    const fallbackContexts = [
+      { query: '병원 후기', title: '실시간 병원 후기' },
+      { query: '진료 후기', title: '실시간 진료 후기' },
+      { query: '내원 후기', title: '실시간 내원 후기' },
+      { query: '검진 후기', title: '실시간 검진 후기' },
+      { query: '수술 상담 후기', title: '실시간 수술 상담 후기' },
+    ];
+
+    return fallbackContexts[new Date().getDate() % fallbackContexts.length];
+  }
+
   async function renderReviews() {
     if (!ui.reviewsList) return;
 
     ui.reviewsList.innerHTML = '<div class="map-loader"><div class="spinner"></div><p>리뷰 데이터를 불러오는 중입니다...</p></div>';
-
-    const keywords = [
-      '병원 후기',
-      '진료 후기',
-      '내원 후기',
-      '검진 후기',
-      '수술 상담 후기',
-    ];
-    const selectedKeyword = keywords[Math.floor(Math.random() * keywords.length)];
+    const reviewContext = buildReviewSearchContext();
+    const selectedKeyword = reviewContext.query;
 
     if (ui.reviewsTitle) {
-      ui.reviewsTitle.textContent = `실시간 ${selectedKeyword.replace(' 후기', '')} 리뷰`;
+      ui.reviewsTitle.textContent = reviewContext.title;
     }
 
     const items = await HospitalAPI.fetchNaverSearch(selectedKeyword, 'blog', 6);
@@ -1254,6 +1319,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     state.isSearchActive = true;
     ui.searchResults?.classList.add('active');
+    void renderReviews();
     renderSearchIntentSummary(intent);
     setSearchRefineState(intent);
 
@@ -1629,6 +1695,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ? SearchEngine.sortHospitals(state.allFetchedHospitals, state.currentSort)
         : [...state.allFetchedHospitals]
     );
+    void renderReviews();
     syncListingQuery();
   }
 
@@ -1861,6 +1928,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function reloadRanking() {
     state.currentPage = 1;
     state.allFetchedHospitals = [];
+    void renderReviews();
     void loadRankingData(false);
   }
 
