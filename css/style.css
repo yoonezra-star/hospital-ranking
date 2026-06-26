@@ -1037,6 +1037,62 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   margin-bottom: var(--sp-3);
   line-height: 1.6;
 }
+
+.hospital-status-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin: 0 0 var(--sp-2);
+}
+
+.hospital-status-row-compact {
+  margin-bottom: 8px;
+}
+
+.hospital-status-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 4px 10px;
+  border-radius: var(--r-full);
+  font-size: 0.74rem;
+  font-weight: var(--fw-semibold);
+  border: 1px solid transparent;
+}
+
+.hospital-status-badge.is-open {
+  background: #edf4ee;
+  color: #46685b;
+}
+
+.hospital-status-badge.is-today {
+  background: #f6efe3;
+  color: #9a6d2f;
+}
+
+.hospital-status-badge.is-closed {
+  background: #ece9e2;
+  color: #564d43;
+}
+
+.hospital-status-badge.is-pending,
+.hospital-status-badge.is-option {
+  background: color-mix(in srgb, var(--bg-card) 72%, white 28%);
+  color: var(--text-body);
+  border-color: var(--border-default);
+}
+
+.hospital-status-summary {
+  margin: 0 0 var(--sp-3);
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+  line-height: 1.7;
+}
+
+.hospital-status-summary-compact {
+  margin-bottom: 10px;
+}
+
 .hospital-meta {
   display: flex;
   align-items: center;

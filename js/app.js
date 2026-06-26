@@ -428,6 +428,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const visitPrepNote = buildHospitalVisitPrepNote(hospital);
     const highlightItems = buildHospitalHighlightItems(hospital);
     const factItems = buildHospitalFactItems(hospital);
+    const statusItems = buildHospitalStatusItems(hospital);
+    const statusSummary = buildHospitalStatusSummary(hospital);
     const dataSummary = buildHospitalDataSummary(hospital);
     const evidenceSummary = buildHospitalEvidenceSummary(hospital);
 
@@ -447,6 +449,8 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div class="hospital-address">주소 ${escapeHtml(hospital.address)}</div>
           ${subinfo ? `<div class="hospital-subinfo">${subinfo}</div>` : ''}
+          <div class="hospital-status-row" data-hospital-status>${renderHospitalStatusBadges(statusItems)}</div>
+          <p class="hospital-status-summary" data-hospital-status-summary>${escapeHtml(statusSummary)}</p>
           <div class="hospital-highlights" data-hospital-highlights${highlightItems.length ? '' : ' hidden'}>
             ${highlightItems.map((item) => `<span class="hospital-highlight">${escapeHtml(item)}</span>`).join('')}
           </div>
@@ -633,6 +637,60 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     return items.filter((item) => item.value);
+  }
+
+  function buildHospitalStatusItems(hospital, now = new Date()) {
+    const items = [];
+    const hoursValue = getHoursByDay(hospital.hours, now.getDay());
+    const hasTodaySchedule = Boolean(parseOperatingRange(hoursValue));
+
+    if (isHospitalOpenNow(hospital, now)) {
+      items.push({ label: '현재 진료중', className: 'is-open' });
+    } else if (hasTodaySchedule || isAvailableToday(hospital, now)) {
+      items.push({ label: '오늘 가능', className: 'is-today' });
+    } else if (hasKnownOperationalData(hospital)) {
+      items.push({ label: '오늘 마감', className: 'is-closed' });
+    } else {
+      items.push({ label: '운영 확인중', className: 'is-pending' });
+    }
+
+    if (hospital.saturdayOpen) items.push({ label: '토요', className: 'is-option' });
+    if (hospital.nightOpen) items.push({ label: '야간', className: 'is-option' });
+    if (hospital.sundayOpen) items.push({ label: '일요', className: 'is-option' });
+
+    return items.slice(0, 4);
+  }
+
+  function buildHospitalStatusSummary(hospital, now = new Date()) {
+    const hoursValue = getHoursByDay(hospital.hours, now.getDay());
+    const hasTodaySchedule = Boolean(parseOperatingRange(hoursValue));
+
+    if (hasTodaySchedule) {
+      return isHospitalOpenNow(hospital, now)
+        ? `오늘 ${hoursValue} 기준 진료 중입니다.`
+        : `오늘 운영 시간 ${hoursValue} 기준으로 확인했습니다.`;
+    }
+
+    if (isAvailableToday(hospital, now)) {
+      if (now.getDay() === 6 && hospital.saturdayOpen) return '오늘 토요일 진료 병원으로 분류됩니다.';
+      if (now.getDay() === 0 && hospital.sundayOpen) return '오늘 일요일 진료 병원으로 분류됩니다.';
+      if (hospital.nightOpen) return '오늘 야간 진료 가능 병원으로 분류됩니다.';
+      return '오늘 진료 가능 여부를 공개 데이터 기준으로 확인했습니다.';
+    }
+
+    return hasKnownOperationalData(hospital)
+      ? '오늘 운영 정보는 확인되지만 현재 진료 시간은 아닙니다.'
+      : '운영 시간 공공데이터를 확인하는 중입니다.';
+  }
+
+  function renderHospitalStatusBadges(items) {
+    if (!Array.isArray(items) || items.length === 0) {
+      return '';
+    }
+
+    return items.map((item) => `
+      <span class="hospital-status-badge ${escapeHtml(item.className || '')}">${escapeHtml(item.label)}</span>
+    `).join('');
   }
 
   function renderHospitalFactGrid(items) {
@@ -867,6 +925,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const featureNote = buildHospitalFeatureNote(hospital);
     const highlightItems = buildHospitalHighlightItems(hospital);
     const factItems = buildHospitalFactItems(hospital);
+    const statusItems = buildHospitalStatusItems(hospital);
+    const statusSummary = buildHospitalStatusSummary(hospital);
     const dataSummary = buildHospitalDataSummary(hospital);
 
     if (hospital.score) meta.push(`평점 ${hospital.score}`);
@@ -882,6 +942,8 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <p class="quick-access-address">${escapeHtml(hospital.address || '주소 확인 필요')}</p>
         ${subinfo ? `<div class="quick-access-subinfo">${subinfo}</div>` : ''}
+        <div class="hospital-status-row hospital-status-row-compact" data-hospital-status>${renderHospitalStatusBadges(statusItems)}</div>
+        <p class="hospital-status-summary hospital-status-summary-compact" data-hospital-status-summary>${escapeHtml(statusSummary)}</p>
         <div class="hospital-highlights quick-access-highlights" data-hospital-highlights${highlightItems.length ? '' : ' hidden'}>
           ${highlightItems.map((item) => `<span class="hospital-highlight">${escapeHtml(item)}</span>`).join('')}
         </div>
@@ -1671,8 +1733,20 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    if (detailData?.hours && !hospital.hours) {
+      hospital.hours = detailData.hours;
+    }
+    if (detailData?.emyDayYn === 'Y' || detailData?.emyNgtYn === 'Y') {
+      hospital.hasEmergency = true;
+    }
+    if (detailData?.hours) {
+      updateHospitalOperationalState(hospital, detailData.hours);
+    }
+
     const highlightItems = buildHospitalHighlightItems(hospital, detailData);
     const factItems = buildHospitalFactItems(hospital, detailData);
+    const statusItems = buildHospitalStatusItems(hospital);
+    const statusSummary = buildHospitalStatusSummary(hospital);
     const summaryText = buildHospitalDataSummary(hospital, detailData);
     const evidenceText = buildHospitalEvidenceSummary(hospital);
 
@@ -1701,10 +1775,35 @@ document.addEventListener('DOMContentLoaded', () => {
         factsNode.innerHTML = renderHospitalFactGrid(factItems);
       }
 
+      const statusNode = card.querySelector('[data-hospital-status]');
+      if (statusNode) {
+        statusNode.innerHTML = renderHospitalStatusBadges(statusItems);
+      }
+
+      const statusSummaryNode = card.querySelector('[data-hospital-status-summary]');
+      if (statusSummaryNode) {
+        statusSummaryNode.textContent = statusSummary;
+      }
+
       const evidenceNode = card.querySelector('.hospital-evidence-summary');
       if (evidenceNode && evidenceText) {
         evidenceNode.textContent = evidenceText;
       }
+    });
+  }
+
+  function updateHospitalOperationalState(hospital, hours) {
+    if (!hospital || !hours) {
+      return;
+    }
+
+    hospital.saturdayOpen = typeof hours.sat === 'string' && hours.sat.includes(':');
+    hospital.sundayOpen = typeof hours.sun === 'string' && hours.sun.includes(':');
+    hospital.nightOpen = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat'].some((key) => {
+      const value = hours[key];
+      if (typeof value !== 'string' || !value.includes('~')) return false;
+      const end = value.split('~')[1]?.trim() || '';
+      return end >= '18:30';
     });
   }
 
