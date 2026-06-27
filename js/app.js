@@ -449,7 +449,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (shouldRenderGroupedRanking()) {
       renderGroupedRankingCards(hospitals);
-      void hydrateHospitalCardDetails(hospitals, ui.rankingList, 12);
+      void hydrateHospitalCardDetails(hospitals, ui.rankingList, 18);
       return;
     }
 
@@ -459,7 +459,7 @@ document.addEventListener('DOMContentLoaded', () => {
       : `총 <strong>${hospitals.length}</strong>개 병원 (샘플 데이터)`;
     ui.rankingList.innerHTML = hospitals.map((hospital, index) => buildHospitalCard(hospital, index + 1)).join('');
     observeNewElements(ui.rankingList);
-    void hydrateHospitalCardDetails(hospitals, ui.rankingList, 12);
+    void hydrateHospitalCardDetails(hospitals, ui.rankingList, 18);
   }
 
   function shouldRenderGroupedRanking() {
@@ -562,7 +562,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="hospital-type-tag">${escapeHtml(hospital.type)}</span>
           </div>
           <div class="hospital-address">주소 ${escapeHtml(hospital.address)}</div>
-          ${subinfo ? `<div class="hospital-subinfo">${subinfo}</div>` : ''}
+          ${subinfo ? `<div class="hospital-subinfo" data-hospital-subinfo>${subinfo}</div>` : ''}
           <div class="hospital-trust-row" data-hospital-trust>${renderHospitalTrustBadges(trustBadges)}</div>
           <div class="hospital-status-row" data-hospital-status>${renderHospitalStatusBadges(statusItems)}</div>
           <p class="hospital-status-summary" data-hospital-status-summary>${escapeHtml(statusSummary)}</p>
@@ -577,7 +577,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <p class="hospital-data-summary${dataSummary ? '' : ' is-pending'}" data-hospital-summary>${escapeHtml(dataSummary || '주차, 접수, 운영 정보를 불러오는 중입니다.')}</p>
           ${decisionSummary ? `<p class="hospital-decision-summary">${escapeHtml(decisionSummary)}</p>` : ''}
           ${evidenceSummary ? `<p class="hospital-evidence-summary">${escapeHtml(evidenceSummary)}</p>` : ''}
-          <div class="hospital-meta">
+          <div class="hospital-meta" data-hospital-meta>
             <div class="meta-item">
               <span class="meta-icon">평점</span>
               <span class="meta-value">${escapeHtml(hospital.score)}</span>
@@ -954,7 +954,7 @@ document.addEventListener('DOMContentLoaded', () => {
     `).join('');
   }
 
-  function buildHospitalEvidenceSummary(hospital) {
+  function buildHospitalEvidenceSummary(hospital, detailData) {
     const parts = [];
 
     if (Number(hospital.specialistCount || 0) > 0) {
@@ -972,6 +972,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (hospital.equipment) {
       parts.push(`장비 ${String(hospital.equipment).split(',')[0].trim()}`);
     }
+    if (Array.isArray(detailData?.receptionSummary) && detailData.receptionSummary.length > 0) {
+      parts.push(detailData.receptionSummary[0]);
+    }
+    if (Array.isArray(detailData?.parkingSummary) && detailData.parkingSummary.length > 0) {
+      parts.push(detailData.parkingSummary[0]);
+    }
     if (hospital.openDate) {
       parts.push(`개원 ${formatDate(hospital.openDate)}`);
     }
@@ -979,7 +985,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return uniqueStrings(parts).slice(0, 4).join(' / ');
   }
 
-  function buildHospitalDecisionSummary(hospital) {
+  function buildHospitalDecisionSummary(hospital, detailData) {
     const parts = [];
 
     if (hospital.region || hospital.district) {
@@ -1005,6 +1011,8 @@ document.addEventListener('DOMContentLoaded', () => {
       parts.push(`주차 ${hospital.parkingCapacity}대`);
     } else if (hospital.parkingFee) {
       parts.push(`${hospital.parkingFee} 주차`);
+    } else if (Array.isArray(detailData?.parkingSummary) && detailData.parkingSummary.length > 0) {
+      parts.push(detailData.parkingSummary[0]);
     }
 
     if (hospital.nightOpen) {
@@ -1015,7 +1023,48 @@ document.addEventListener('DOMContentLoaded', () => {
       parts.push('일요 진료');
     }
 
+    if (Array.isArray(detailData?.emergencySummary) && detailData.emergencySummary.length > 0) {
+      parts.push(detailData.emergencySummary[0]);
+    }
+
     return uniqueStrings(parts).slice(0, 4).join(' · ');
+  }
+
+  function buildHospitalMetaItems(hospital) {
+    const items = [];
+    if (hospital.score) items.push(`평점 ${hospital.score}`);
+    if (hospital.reviewCount) items.push(`리뷰 ${Number(hospital.reviewCount).toLocaleString()}개`);
+    if (hospital.specialistCount) items.push(`전문의 ${Number(hospital.specialistCount).toLocaleString()}명`);
+    if (hospital.phone) items.push(hospital.phone);
+    if (hospital.url) items.push('공식 홈페이지');
+    return items;
+  }
+
+  function renderHospitalMetaItems(items, compact = false) {
+    if (!Array.isArray(items) || items.length === 0) {
+      return '';
+    }
+
+    if (compact) {
+      return items.map((item) => `<span>${escapeHtml(item)}</span>`).join('');
+    }
+
+    return items.map((item) => {
+      const text = String(item);
+      if (text.startsWith('평점 ')) {
+        return `<div class="meta-item"><span class="meta-icon">평점</span><span class="meta-value">${escapeHtml(text.replace('평점 ', ''))}</span></div>`;
+      }
+      if (text.startsWith('리뷰 ')) {
+        return `<div class="meta-item"><span class="meta-icon">리뷰</span><span class="meta-value">${escapeHtml(text.replace('리뷰 ', '').replace('개', ''))}</span><span class="meta-label">개</span></div>`;
+      }
+      if (text.startsWith('전문의 ')) {
+        return `<div class="meta-item"><span class="meta-icon">전문의</span><span class="meta-value">${escapeHtml(text.replace('전문의 ', '').replace('명', ''))}</span><span class="meta-label">명</span></div>`;
+      }
+      if (text === '공식 홈페이지') {
+        return `<div class="meta-item"><span class="meta-icon">홈페이지</span><span class="meta-value">${escapeHtml(text)}</span></div>`;
+      }
+      return `<div class="meta-item"><span class="meta-icon">전화</span><span class="meta-value">${escapeHtml(text)}</span></div>`;
+    }).join('');
   }
 
   function getDepartmentNameById(departmentId) {
@@ -1259,7 +1308,7 @@ document.addEventListener('DOMContentLoaded', () => {
     void hydrateHospitalCardDetails(
       dedupeHospitals([...currentOpen, ...saturdayOpen, ...nightOpen, ...recentOpen]),
       quickAccessSection,
-      12
+      18
     );
   }
 
@@ -1400,7 +1449,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function buildQuickAccessCard(hospital) {
     const href = hospital.id ? `detail.html?id=${encodeURIComponent(hospital.id)}` : '#';
     const type = hospital.department || hospital.type || '병원';
-    const meta = [];
+    const meta = buildHospitalMetaItems(hospital);
     const subinfo = buildHospitalSubinfo(hospital);
     const featureNote = buildHospitalFeatureNote(hospital);
     const insightItems = buildHospitalInsightItems(hospital);
@@ -1411,11 +1460,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const trustBadges = buildHospitalTrustBadges(hospital);
     const dataSummary = buildHospitalDataSummary(hospital);
 
-    if (hospital.score) meta.push(`평점 ${hospital.score}`);
-    if (hospital.reviewCount) meta.push(`리뷰 ${Number(hospital.reviewCount).toLocaleString()}개`);
-    if (hospital.specialistCount) meta.push(`전문의 ${Number(hospital.specialistCount).toLocaleString()}명`);
-    if (hospital.phone) meta.push(hospital.phone);
-
     return `
       <a class="quick-access-item fade-up" href="${href}" data-hospital-id="${escapeHtml(hospital.id)}">
         <div class="quick-access-title-row">
@@ -1423,7 +1467,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <span class="hospital-type-tag">${escapeHtml(type)}</span>
         </div>
         <p class="quick-access-address">${escapeHtml(hospital.address || '주소 확인 필요')}</p>
-        ${subinfo ? `<div class="quick-access-subinfo">${subinfo}</div>` : ''}
+        ${subinfo ? `<div class="quick-access-subinfo" data-hospital-subinfo>${subinfo}</div>` : ''}
         <div class="hospital-trust-row hospital-trust-row-compact" data-hospital-trust>${renderHospitalTrustBadges(trustBadges)}</div>
         <div class="hospital-status-row hospital-status-row-compact" data-hospital-status>${renderHospitalStatusBadges(statusItems)}</div>
         <p class="hospital-status-summary hospital-status-summary-compact" data-hospital-status-summary>${escapeHtml(statusSummary)}</p>
@@ -1434,7 +1478,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ${featureNote ? `<p class="hospital-feature-note">${escapeHtml(featureNote)}</p>` : ''}
         <div class="hospital-insight-list hospital-insight-list-compact" data-hospital-insights${insightItems.length ? '' : ' hidden'}>${renderHospitalInsightList(insightItems)}</div>
         <p class="hospital-data-summary quick-access-summary${dataSummary ? '' : ' is-pending'}" data-hospital-summary>${escapeHtml(dataSummary || '주차, 접수, 운영 정보를 불러오는 중입니다.')}</p>
-        <div class="quick-access-meta">${meta.map((item) => `<span>${escapeHtml(item)}</span>`).join('')}</div>
+        <div class="quick-access-meta" data-hospital-meta>${renderHospitalMetaItems(meta, true)}</div>
       </a>
     `;
   }
@@ -1610,7 +1654,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ui.searchResultsList.innerHTML = hospitals.map((hospital, index) => buildHospitalCard(hospital, index + 1)).join('');
       observeNewElements(ui.searchResultsList);
       updateMapHospitals(hospitals);
-      void hydrateHospitalCardDetails(hospitals, ui.searchResultsList, 8);
+      void hydrateHospitalCardDetails(hospitals, ui.searchResultsList, 12);
     }
 
     if (hospitals.length === 0 && ui.searchResultsList) {
@@ -2614,6 +2658,23 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    if (detailData?.addr) {
+      hospital.address = detailData.addr;
+      hospital.district = hospital.district || extractDistrictFromAddress(detailData.addr);
+      hospital.town = hospital.town || extractTownFromAddress(detailData.addr);
+    }
+    if (detailData?.telno) {
+      hospital.phone = detailData.telno;
+    }
+    if (detailData?.hospUrl) {
+      hospital.url = detailData.hospUrl;
+    }
+    if (detailData?.parkQty) {
+      hospital.parkingCapacity = Number(detailData.parkQty) || hospital.parkingCapacity || 0;
+    }
+    if (detailData?.parkXpnsYn) {
+      hospital.parkingFee = detailData.parkXpnsYn === 'Y' ? '유료' : '무료';
+    }
     if (detailData?.hours && !hospital.hours) {
       hospital.hours = detailData.hours;
     }
@@ -2630,10 +2691,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusSummary = buildHospitalStatusSummary(hospital);
     const trustBadges = buildHospitalTrustBadges(hospital, detailData);
     const summaryText = buildHospitalDataSummary(hospital, detailData);
-    const evidenceText = buildHospitalEvidenceSummary(hospital);
+    const evidenceText = buildHospitalEvidenceSummary(hospital, detailData);
+    const decisionText = buildHospitalDecisionSummary(hospital, detailData);
     const insightItems = buildHospitalInsightItems(hospital, detailData);
+    const subinfoText = buildHospitalSubinfo(hospital);
+    const metaItems = buildHospitalMetaItems(hospital);
 
     cards.forEach((card) => {
+      const addressNode = card.querySelector('.hospital-address, .quick-access-address');
+      if (addressNode && hospital.address) {
+        addressNode.textContent = addressNode.classList.contains('hospital-address')
+          ? `주소 ${hospital.address}`
+          : hospital.address;
+      }
+
+      const subinfoNode = card.querySelector('[data-hospital-subinfo]');
+      if (subinfoNode && subinfoText) {
+        subinfoNode.innerHTML = subinfoText;
+      }
+
       const highlightNode = card.querySelector('[data-hospital-highlights]');
       if (highlightNode) {
         if (highlightItems.length > 0) {
@@ -2687,6 +2763,16 @@ document.addEventListener('DOMContentLoaded', () => {
       const evidenceNode = card.querySelector('.hospital-evidence-summary');
       if (evidenceNode && evidenceText) {
         evidenceNode.textContent = evidenceText;
+      }
+
+      const decisionNode = card.querySelector('.hospital-decision-summary');
+      if (decisionNode && decisionText) {
+        decisionNode.textContent = decisionText;
+      }
+
+      const metaNode = card.querySelector('[data-hospital-meta]');
+      if (metaNode && metaItems.length > 0) {
+        metaNode.innerHTML = renderHospitalMetaItems(metaItems, metaNode.classList.contains('quick-access-meta'));
       }
     });
   }
