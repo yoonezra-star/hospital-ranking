@@ -135,15 +135,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function initCounters() {
     const counters = $$('.stat-number[data-target]');
+    if (!counters.length) return;
+
+    if (typeof IntersectionObserver === 'undefined') {
+      counters.forEach((counter) => animateCounter(counter));
+      return;
+    }
+
+    const hasEnteredViewport = new WeakSet();
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
+        hasEnteredViewport.add(entry.target);
         animateCounter(entry.target);
         observer.unobserve(entry.target);
       });
     }, { threshold: 0.5 });
 
-    counters.forEach((counter) => observer.observe(counter));
+    counters.forEach((counter) => {
+      const rect = counter.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
+      const isVisibleOnLoad = rect.top < viewportHeight && rect.bottom > 0;
+
+      if (isVisibleOnLoad) {
+        hasEnteredViewport.add(counter);
+        animateCounter(counter);
+        return;
+      }
+
+      observer.observe(counter);
+    });
+
+    window.setTimeout(() => {
+      counters.forEach((counter) => {
+        if (hasEnteredViewport.has(counter)) return;
+        counter.textContent = Number(counter.dataset.target || '0').toLocaleString();
+      });
+    }, 2200);
   }
 
   function animateCounter(element) {
