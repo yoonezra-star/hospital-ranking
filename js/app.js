@@ -624,6 +624,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (hospital.subway) items.push(hospital.subway);
     if (parkingText) items.push(parkingText);
+    if (hospital.equipment) items.push(`주요 장비 ${String(hospital.equipment).split(',')[0].trim()}`);
+    if (toPositiveNumber(hospital.bedCount) > 0) items.push(`병상 ${hospital.bedCount}개`);
     if (Array.isArray(detailData?.emergencySummary) && detailData.emergencySummary.length > 0) {
       items.push('응급 안내');
     } else if (hospital.hasEmergency) {
@@ -757,6 +759,17 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    if (
+      items.length < 3
+      && (hospital.equipment || toPositiveNumber(hospital.bedCount) > 0 || hospital.area)
+    ) {
+      const facilityParts = [];
+      if (hospital.equipment) facilityParts.push(String(hospital.equipment).split(',')[0].trim());
+      if (toPositiveNumber(hospital.bedCount) > 0) facilityParts.push(`병상 ${hospital.bedCount}개`);
+      if (hospital.area) facilityParts.push(`면적 ${hospital.area}`);
+      items.push({ label: '시설', value: uniqueStrings(facilityParts).slice(0, 3).join(' / ') });
+    }
+
     if (items.length < 3 && Array.isArray(profile?.visitTargets) && profile.visitTargets.length > 0) {
       items.push({ label: '추천', value: profile.visitTargets[0] });
     }
@@ -778,8 +791,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const facilityItems = [];
     if (parkingText) facilityItems.push(parkingText);
     if (hospital.subway) facilityItems.push(hospital.subway);
+    if (hospital.equipment) facilityItems.push(`장비 ${String(hospital.equipment).split(',')[0].trim()}`);
     if (toPositiveNumber(hospital.roomCount) > 0) facilityItems.push(`진료실 ${hospital.roomCount}개`);
     if (toPositiveNumber(hospital.bedCount) > 0) facilityItems.push(`병상 ${hospital.bedCount}개`);
+    if (hospital.area) facilityItems.push(`면적 ${hospital.area}`);
 
     const items = [
       {
@@ -972,6 +987,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (toPositiveNumber(hospital.bedCount) > 0) {
       parts.push(`병상 ${hospital.bedCount}개`);
+    }
+    if (hospital.area) {
+      parts.push(`면적 ${hospital.area}`);
     }
     if (hospital.equipment) {
       parts.push(`장비 ${String(hospital.equipment).split(',')[0].trim()}`);
