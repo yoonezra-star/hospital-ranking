@@ -1,5 +1,8 @@
 (() => {
   const LANDING_META = [
+    { href: 'endoscopy-clinic.html', region: '전국', department: '내시경 병원', focus: '위·대장·수면내시경, 금식 준비, 검사 목적, 보호자 동행', guideLabel: '내시경 병원 가이드' },
+    { href: 'cataract-clinic.html', region: '전국', department: '백내장 병원', focus: '시력 저하, 검사 이력, 수술 상담, 반복 방문 동선', guideLabel: '백내장 병원 가이드' },
+    { href: 'manual-therapy-clinic.html', region: '전국', department: '도수치료 병원', focus: '허리·목 통증, 촬영 여부, 반복 방문, 토요일 치료 가능성', guideLabel: '도수치료 병원 가이드' },
     { href: 'night-dermatology.html', region: '전국', department: '야간 피부과', focus: '퇴근 후 외래, 접수 마감, 여드름·피부염 상담, 생활권 동선', guideLabel: '야간 피부과 가이드' },
     { href: 'sunday-pediatric.html', region: '전국', department: '일요일 소아과', focus: '휴일 보호자 외래, 발열·기침 상담, 접수 마감, 생활권 이동', guideLabel: '일요일 소아과 가이드' },
     { href: 'womens-checkup-clinic.html', region: '전국', department: '여성검진 병원', focus: '정기 검진, 초음파 상담, 이전 검사 결과, 생활권 반복 방문', guideLabel: '여성검진 병원 가이드' },

@@ -1,5 +1,8 @@
 (() => {
   const LANDING_PAGES = [
+    { href: 'endoscopy-clinic.html', title: '내시경 병원 찾기 가이드', region: '전국', department: '내시경 병원', description: '위내시경, 대장내시경, 수면내시경 상담에서 준비 안내와 검사 목적을 함께 보는 검색 가이드입니다.' },
+    { href: 'cataract-clinic.html', title: '백내장 병원 찾기 가이드', region: '전국', department: '백내장 병원', description: '시력 저하와 검사 이력, 반복 방문 동선까지 같이 보는 백내장 상담 검색 가이드입니다.' },
+    { href: 'manual-therapy-clinic.html', title: '도수치료 병원 찾기 가이드', region: '전국', department: '도수치료 병원', description: '통증 위치, 촬영 여부, 토요일 반복 방문 가능성까지 함께 보는 도수치료 검색 가이드입니다.' },
     { href: 'night-dermatology.html', title: '야간 피부과 찾기 가이드', region: '전국', department: '야간 피부과', description: '퇴근 후 외래, 접수 마감, 일반 진료와 시술 상담 시간을 함께 보는 피부과 검색 가이드입니다.' },
     { href: 'sunday-pediatric.html', title: '일요일 소아과 찾기 가이드', region: '전국', department: '일요일 소아과', description: '휴일 보호자 외래에서 발열, 기침, 중이염 의심처럼 자주 찾는 상황을 기준으로 정리했습니다.' },
     { href: 'womens-checkup-clinic.html', title: '여성검진 병원 찾기 가이드', region: '전국', department: '여성검진 병원', description: '정기 검진, 초음파 상담, 생활권 반복 방문 가능성을 함께 보는 여성검진 검색 가이드입니다.' },

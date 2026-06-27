@@ -175,6 +175,24 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://hospital-ranking.kr/endoscopy-clinic.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hospital-ranking.kr/cataract-clinic.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hospital-ranking.kr/manual-therapy-clinic.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://hospital-ranking.kr/guide-breast-ultrasound.html</loc>
     <lastmod>2026-06-27</lastmod>
     <changefreq>monthly</changefreq>
