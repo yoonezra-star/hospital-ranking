@@ -1,5 +1,8 @@
 (() => {
   const LANDING_META = [
+    { href: 'night-dermatology.html', region: '전국', department: '야간 피부과', focus: '퇴근 후 외래, 접수 마감, 여드름·피부염 상담, 생활권 동선', guideLabel: '야간 피부과 가이드' },
+    { href: 'sunday-pediatric.html', region: '전국', department: '일요일 소아과', focus: '휴일 보호자 외래, 발열·기침 상담, 접수 마감, 생활권 이동', guideLabel: '일요일 소아과 가이드' },
+    { href: 'womens-checkup-clinic.html', region: '전국', department: '여성검진 병원', focus: '정기 검진, 초음파 상담, 이전 검사 결과, 생활권 반복 방문', guideLabel: '여성검진 병원 가이드' },
     { href: 'parking-dental.html', region: '전국', department: '주차 가능한 치과', focus: '차량 이동, 보호자 동행, 주차 편의, 방문 동선', guideLabel: '치과 방문 준비 가이드' },
     { href: 'vaccination-clinic.html', region: '전국', department: '예방접종 병원', focus: '정기 접종, 추가 접종, 보호자 상담, 아이 컨디션 확인', guideLabel: '예방접종 병원 가이드' },
     { href: 'new-openings.html', region: '전국', department: '신규 개원 병원', focus: '최근 개원, 생활권 이동, 첫 방문 동선, 운영 정보 확인', guideLabel: '신규 개원 병원 가이드' },

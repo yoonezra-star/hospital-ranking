@@ -1,5 +1,8 @@
 (() => {
   const LANDING_PAGES = [
+    { href: 'night-dermatology.html', title: '야간 피부과 찾기 가이드', region: '전국', department: '야간 피부과', description: '퇴근 후 외래, 접수 마감, 일반 진료와 시술 상담 시간을 함께 보는 피부과 검색 가이드입니다.' },
+    { href: 'sunday-pediatric.html', title: '일요일 소아과 찾기 가이드', region: '전국', department: '일요일 소아과', description: '휴일 보호자 외래에서 발열, 기침, 중이염 의심처럼 자주 찾는 상황을 기준으로 정리했습니다.' },
+    { href: 'womens-checkup-clinic.html', title: '여성검진 병원 찾기 가이드', region: '전국', department: '여성검진 병원', description: '정기 검진, 초음파 상담, 생활권 반복 방문 가능성을 함께 보는 여성검진 검색 가이드입니다.' },
     { href: 'parking-dental.html', title: '주차 가능한 치과 찾기 가이드', region: '전국', department: '주차 가능한 치과', description: '차량 이동, 보호자 동행, 고령자 방문처럼 주차 편의가 중요한 치과 탐색 기준을 정리했습니다.' },
     { href: 'vaccination-clinic.html', title: '예방접종 병원 찾기 가이드', region: '전국', department: '예방접종 병원', description: '정기 접종, 추가 접종, 보호자 상담처럼 예방접종 검색에서 자주 필요한 기준을 정리했습니다.' },
     { href: 'new-openings.html', title: '신규 개원 병원 찾기 가이드', region: '전국', department: '신규 개원', description: '최근 개원 병원을 찾을 때 생활권, 진료과, 운영 정보까지 함께 보는 흐름을 정리했습니다.' },
