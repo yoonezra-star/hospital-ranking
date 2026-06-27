@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     isSearchActive: false,
     detailSummaryCache: new Map(),
     detailSummaryInflight: new Map(),
+    equipSummaryCache: new Map(),
+    equipSummaryInflight: new Map(),
     searchSuggestions: [],
     activeSearchSuggestionIndex: -1,
   };
@@ -655,6 +657,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (hospital.nightOpen) parts.push('야간 진료');
       if (hospital.sundayOpen) parts.push('일요일 진료');
       if (hospital.subway) parts.push(hospital.subway);
+      if (hospital.equipment) parts.push(`주요 장비 ${String(hospital.equipment).split(',')[0].trim()}`);
+      if (toPositiveNumber(hospital.bedCount) > 0) parts.push(`병상 ${hospital.bedCount}개`);
       if (Array.isArray(profile?.primaryServices) && profile.primaryServices.length > 0) {
         parts.push(`주요 ${profile.primaryServices[0]}`);
       }
@@ -2609,11 +2613,15 @@ document.addEventListener('DOMContentLoaded', () => {
       .slice(0, limit);
 
     await Promise.allSettled(targets.map(async (hospital) => {
-      const detailData = await fetchHospitalDetailSummary(hospital.id);
-      if (!detailData?.found) {
+      const [detailData, equipData] = await Promise.all([
+        fetchHospitalDetailSummary(hospital.id),
+        fetchHospitalEquipSummary(hospital.id),
+      ]);
+
+      if (!detailData?.found && !equipData?.found) {
         return;
       }
-      applyHospitalDetailSummary(container, hospital, detailData);
+      applyHospitalDetailSummary(container, hospital, detailData, equipData);
     }));
   }
 
@@ -2652,7 +2660,38 @@ document.addEventListener('DOMContentLoaded', () => {
     return request;
   }
 
-  function applyHospitalDetailSummary(container, hospital, detailData) {
+  async function fetchHospitalEquipSummary(hospitalId) {
+    if (state.equipSummaryCache.has(hospitalId)) {
+      return state.equipSummaryCache.get(hospitalId);
+    }
+
+    if (state.equipSummaryInflight.has(hospitalId)) {
+      return state.equipSummaryInflight.get(hospitalId);
+    }
+
+    const request = fetch(`/api/hospital-equip?ykiho=${encodeURIComponent(hospitalId)}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`request failed: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        state.equipSummaryCache.set(hospitalId, data);
+        state.equipSummaryInflight.delete(hospitalId);
+        return data;
+      })
+      .catch((error) => {
+        state.equipSummaryInflight.delete(hospitalId);
+        console.warn('[app] failed to hydrate hospital equipment summary:', hospitalId, error);
+        return null;
+      });
+
+    state.equipSummaryInflight.set(hospitalId, request);
+    return request;
+  }
+
+  function applyHospitalDetailSummary(container, hospital, detailData, equipData = null) {
     const cards = getHospitalCards(container, hospital.id);
     if (!cards.length) {
       return;
@@ -2674,6 +2713,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (detailData?.parkXpnsYn) {
       hospital.parkingFee = detailData.parkXpnsYn === 'Y' ? '유료' : '무료';
+    }
+    if (Array.isArray(equipData?.topEquipment) && equipData.topEquipment.length > 0) {
+      hospital.equipment = equipData.topEquipment
+        .slice(0, 3)
+        .map((item) => `${item.name} ${item.count}대`)
+        .join(', ');
+    } else if (Array.isArray(equipData?.equipDetails) && equipData.equipDetails.length > 0) {
+      hospital.equipment = equipData.equipDetails
+        .slice(0, 3)
+        .map((item) => `${item.name} ${item.count}대`)
+        .join(', ');
+    } else if (Array.isArray(equipData?.equips) && equipData.equips.length > 0 && !hospital.equipment) {
+      hospital.equipment = equipData.equips.slice(0, 3).join(', ');
+    }
+    if (equipData?.facility) {
+      const standardBeds = Number(equipData.facility.stdSickbdCnt || 0);
+      const specialBeds = Number(equipData.facility.permSbdCnt || 0);
+      const totalBeds = standardBeds + specialBeds;
+      if (totalBeds > 0) {
+        hospital.bedCount = totalBeds;
+      }
+      if (equipData.facility.totArea) {
+        hospital.area = String(equipData.facility.totArea);
+      }
     }
     if (detailData?.hours && !hospital.hours) {
       hospital.hours = detailData.hours;
