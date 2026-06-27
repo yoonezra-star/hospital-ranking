@@ -1,5 +1,6 @@
 (() => {
   const LANDING_PAGES = [
+    { href: 'new-openings.html', title: '신규 개원 병원 찾기 가이드', region: '전국', department: '신규 개원', description: '최근 개원 병원을 찾을 때 생활권, 진료과, 운영 정보까지 함께 보는 흐름을 정리했습니다.' },
     { href: 'saturday-clinic.html', title: '토요일 진료 병원 찾기 가이드', region: '전국', department: '토요일 진료', description: '주말 외래에서 접수 마감, 생활권, 자주 찾는 진료과 기준으로 병원을 찾는 흐름을 정리했습니다.' },
     { href: 'night-clinic.html', title: '야간 진료 병원 찾기 가이드', region: '전국', department: '야간 진료', description: '퇴근 후 병원 검색에서 중요한 마지막 접수 시간과 실제 진료 범위를 정리한 랜딩입니다.' },
     { href: 'sunday-clinic.html', title: '일요일 진료 병원 찾기 가이드', region: '전국', department: '일요일 진료', description: '휴일 외래에서 자주 찾는 진료과와 빠르게 좁히는 기준을 정리한 설명형 랜딩입니다.' },

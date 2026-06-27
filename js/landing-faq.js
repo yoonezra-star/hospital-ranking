@@ -1,5 +1,6 @@
 (() => {
   const LANDING_META = [
+    { href: 'new-openings.html', region: '전국', department: '신규 개원 병원', focus: '최근 개원, 생활권 이동, 첫 방문 동선, 운영 정보 확인', guideLabel: '신규 개원 병원 가이드' },
     { href: 'saturday-clinic.html', region: '전국', department: '토요일 진료 병원', focus: '주말 외래, 접수 마감, 생활권 이동, 토요일 진료과 비교', guideLabel: '토요일 진료 가이드' },
     { href: 'night-clinic.html', region: '전국', department: '야간 진료 병원', focus: '퇴근 후 외래, 마지막 접수 시간, 야간 운영 범위, 생활권 동선', guideLabel: '야간 진료 가이드' },
     { href: 'sunday-clinic.html', region: '전국', department: '일요일 진료 병원', focus: '휴일 외래, 소아과·내과·이비인후과 비교, 접수 가능 시간', guideLabel: '일요일 진료 가이드' },

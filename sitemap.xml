@@ -139,6 +139,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://hospital-ranking.kr/new-openings.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://hospital-ranking.kr/guide-breast-ultrasound.html</loc>
     <lastmod>2026-06-27</lastmod>
     <changefreq>monthly</changefreq>
