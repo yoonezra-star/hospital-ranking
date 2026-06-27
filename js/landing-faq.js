@@ -1,5 +1,7 @@
 (() => {
   const LANDING_META = [
+    { href: 'parking-dental.html', region: '전국', department: '주차 가능한 치과', focus: '차량 이동, 보호자 동행, 주차 편의, 방문 동선', guideLabel: '치과 방문 준비 가이드' },
+    { href: 'vaccination-clinic.html', region: '전국', department: '예방접종 병원', focus: '정기 접종, 추가 접종, 보호자 상담, 아이 컨디션 확인', guideLabel: '예방접종 병원 가이드' },
     { href: 'new-openings.html', region: '전국', department: '신규 개원 병원', focus: '최근 개원, 생활권 이동, 첫 방문 동선, 운영 정보 확인', guideLabel: '신규 개원 병원 가이드' },
     { href: 'saturday-clinic.html', region: '전국', department: '토요일 진료 병원', focus: '주말 외래, 접수 마감, 생활권 이동, 토요일 진료과 비교', guideLabel: '토요일 진료 가이드' },
     { href: 'night-clinic.html', region: '전국', department: '야간 진료 병원', focus: '퇴근 후 외래, 마지막 접수 시간, 야간 운영 범위, 생활권 동선', guideLabel: '야간 진료 가이드' },
