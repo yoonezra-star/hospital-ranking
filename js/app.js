@@ -1716,6 +1716,17 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    if (!hospitals.length && typeof SearchEngine !== 'undefined') {
+      const areaFallbackIntent = buildAreaFallbackIntent(intent);
+      if (areaFallbackIntent) {
+        hospitals = SearchEngine.query(combined, {
+          searchText: '',
+          sortBy: state.currentSort,
+          intent: areaFallbackIntent,
+        });
+      }
+    }
+
     return {
       hospitals,
       source: remoteHospitals.length > 0 ? 'remote+local' : 'local',
@@ -1735,8 +1746,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (intent.department) {
       params.department = intent.department;
     }
-    if (shouldUseKeywordAsHospitalName(intent)) {
-      params.name = intent.keywordText;
+    const searchApiName = buildSearchApiName(intent);
+    if (searchApiName) {
+      params.name = searchApiName;
     }
 
     if (!params.region && !params.department && !params.name) {
@@ -1764,6 +1776,43 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     return 60;
+  }
+
+  function buildSearchApiName(intent) {
+    if (shouldUseKeywordAsHospitalName(intent)) {
+      return String(intent?.keywordText || '').trim();
+    }
+
+    if (!(intent?.district || intent?.locality)) {
+      return '';
+    }
+
+    const tokens = String(intent?.originalQuery || '')
+      .split(/\s+/)
+      .map((token) => token.trim())
+      .filter(Boolean);
+    if (!tokens.length) {
+      return '';
+    }
+
+    const departmentLabel = intent?.department ? getDepartmentNameById(intent.department) : '';
+    const blocked = new Set([
+      String(intent?.region || '').trim(),
+      String(intent?.district || '').trim(),
+      String(intent?.locality || '').trim(),
+      String(departmentLabel || '').trim(),
+      '토요일',
+      '야간',
+      '일요일',
+      '주차',
+      '가능',
+      '전문의',
+      '응급',
+      '신규',
+      '개원',
+    ].filter(Boolean));
+
+    return tokens.find((token) => !blocked.has(token)) || '';
   }
 
   function shouldUseKeywordAsHospitalName(intent) {
@@ -1797,6 +1846,23 @@ document.addEventListener('DOMContentLoaded', () => {
     return {
       ...intent,
       originalQuery: '',
+      keywordTokens: [],
+      keywordText: '',
+    };
+  }
+
+  function buildAreaFallbackIntent(intent) {
+    if (!intent?.isStructured || !intent?.department) {
+      return null;
+    }
+
+    if (!(intent.locality || intent.district || intent.region)) {
+      return null;
+    }
+
+    return {
+      ...intent,
+      department: '',
       keywordTokens: [],
       keywordText: '',
     };
