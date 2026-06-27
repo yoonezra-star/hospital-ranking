@@ -115,6 +115,30 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://hospital-ranking.kr/guide-breast-ultrasound.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hospital-ranking.kr/guide-incontinence.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hospital-ranking.kr/guide-manual-therapy.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hospital-ranking.kr/guide-chuna.html</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://hospital-ranking.kr/seoul-dental.html</loc>
     <lastmod>2026-06-20</lastmod>
     <changefreq>weekly</changefreq>

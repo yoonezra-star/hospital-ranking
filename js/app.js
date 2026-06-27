@@ -2266,6 +2266,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     $$('.theme-tag').forEach((tag) => {
       tag.addEventListener('click', (event) => {
+        const guideHref = tag.dataset.guideHref || '';
+        if (guideHref) {
+          return;
+        }
+
         event.preventDefault();
         const keyword = tag.dataset.keyword || '';
         if (ui.heroSearch) {
