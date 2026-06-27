@@ -1,5 +1,8 @@
 (() => {
   const LANDING_PAGES = [
+    { href: 'implant-clinic.html', title: '임플란트 치과 찾기 가이드', region: '전국', department: '임플란트 치과', description: '상담 목적, CT 촬영 이력, 반복 방문 동선까지 같이 보는 임플란트 검색 가이드입니다.' },
+    { href: 'lasik-clinic.html', title: '라식 라섹 안과 찾기 가이드', region: '전국', department: '라식 라섹 안과', description: '정밀검사 준비, 렌즈 중단, 반복 방문 가능성을 함께 보는 시력교정 상담 검색 가이드입니다.' },
+    { href: 'urinary-stone-clinic.html', title: '요로결석 병원 찾기 가이드', region: '전국', department: '요로결석 병원', description: '통증 양상, 촬영 여부, 빠른 방문 가능성을 같이 보는 비뇨의학과 상담 검색 가이드입니다.' },
     { href: 'endoscopy-clinic.html', title: '내시경 병원 찾기 가이드', region: '전국', department: '내시경 병원', description: '위내시경, 대장내시경, 수면내시경 상담에서 준비 안내와 검사 목적을 함께 보는 검색 가이드입니다.' },
     { href: 'cataract-clinic.html', title: '백내장 병원 찾기 가이드', region: '전국', department: '백내장 병원', description: '시력 저하와 검사 이력, 반복 방문 동선까지 같이 보는 백내장 상담 검색 가이드입니다.' },
     { href: 'manual-therapy-clinic.html', title: '도수치료 병원 찾기 가이드', region: '전국', department: '도수치료 병원', description: '통증 위치, 촬영 여부, 토요일 반복 방문 가능성까지 함께 보는 도수치료 검색 가이드입니다.' },
