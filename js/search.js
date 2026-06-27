@@ -1002,18 +1002,22 @@ const SearchEngine = (() => {
   }
 
   function getRankingScore(hospital) {
-    const score = hospital.score || 0;
-    const reviews = Math.max(hospital.reviewCount || 0, 0);
-    const specialists = Math.max(hospital.specialistCount || 0, 0);
     const priorMean = 4.3;
     const priorWeight = 500;
+    const numericScore = Number(hospital?.score);
+    const score = Number.isFinite(numericScore) && numericScore > 0
+      ? numericScore
+      : priorMean;
+    const reviews = Math.max(Number(hospital?.reviewCount || 0), 0);
+    const specialists = Math.max(Number(hospital?.specialistCount || 0), 0);
 
     const bayesianScore = ((score * reviews) + (priorMean * priorWeight)) / (reviews + priorWeight);
+    const reviewVolumeBonus = Math.min(reviews / 1000, 0.2);
     const specialistBonus = Math.min(specialists / 500, 0.25);
     const typeBonus = getTypePriority(hospital.type) * 0.02;
     const infoRichnessBonus = getHospitalInfoRichnessScore(hospital) * 0.025;
 
-    return bayesianScore + specialistBonus + typeBonus + infoRichnessBonus;
+    return bayesianScore + reviewVolumeBonus + specialistBonus + typeBonus + infoRichnessBonus;
   }
 
   function getHospitalInfoRichnessScore(hospital) {
