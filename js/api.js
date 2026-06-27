@@ -1,6 +1,6 @@
 /**
- * 蹂묒썝李얘린 - 怨듦났?곗씠??API ?대씪?댁뼵?? * 釉뚮씪?곗??먯꽌??Cloudflare Pages Functions ?꾨줉?쒕쭔 ?ъ슜?쒕떎.
- * ?꾨줉?쒓? 遺덇??섎㈃ 紐⑹뾽 ?곗씠?곕줈 ?덉쟾?섍쾶 ?대갚?쒕떎.
+ * 癰귣쵐?앾㎕?섎┛ - ?⑤벀??怨쀬뵠??API ?????곷섧?? * ?됰슢??怨??癒?퐣??Cloudflare Pages Functions ?袁⑥쨯??뺤춸 ?????뺣뼄.
+ * ?袁⑥쨯??? ?븍뜃???롢늺 筌뤴뫗毓??怨쀬뵠?怨뺤쨮 ??됱읈??띿쓺 ??媛??뺣뼄.
  */
 
 const HospitalAPI = (() => {
@@ -9,23 +9,23 @@ const HospitalAPI = (() => {
   let proxyAvailable = null;
 
   const REGION_CODES = {
-    '?쒖슱': '110000',
-    '遺??: '210000',
-    '?援?: '220000',
-    '?몄쿇': '230000',
-    '愿묒＜': '240000',
-    '???: '250000',
-    '?몄궛': '260000',
-    '?몄쥌': '290000',
-    '寃쎄린': '310000',
-    '媛뺤썝': '320000',
-    '異⑸턿': '330000',
-    '異⑸궓': '340000',
-    '?꾨턿': '350000',
-    '?꾨궓': '360000',
-    '寃쎈턿': '370000',
-    '寃쎈궓': '380000',
-    '?쒖＜': '390000',
+    '??뽰뒻': '110000',
+    '?봔??: '210000',
+    '????: '220000',
+    '?紐꾩퓝': '230000',
+    '?용쵐竊?: '240000',
+    '????: '250000',
+    '?紐꾧텦': '260000',
+    '?紐꾩쪒': '290000',
+    '野껋럡由?: '310000',
+    '揶쏅벡??: '320000',
+    '?겸뫖??: '330000',
+    '?겸뫖沅?: '340000',
+    '?袁⑦꽴': '350000',
+    '?袁④텚': '360000',
+    '野껋럥??: '370000',
+    '野껋럥沅?: '380000',
+    '??뽳폒': '390000',
   };
 
   const DEPT_CODES = {
@@ -196,13 +196,13 @@ const HospitalAPI = (() => {
 
   function extractDistrictFromAddress(address = '') {
     const tokens = String(address || '').split(/\s+/).filter(Boolean);
-    const candidates = tokens.filter((token, index) => index > 0 && /(?:??援?援?$/.test(token));
+    const candidates = tokens.filter((token, index) => index > 0 && /(?:??????$/.test(token));
     return candidates.length > 0 ? candidates[candidates.length - 1] : '';
   }
 
   function extractTownFromAddress(address = '') {
     const tokens = String(address || '').split(/\s+/).filter(Boolean);
-    const match = tokens.find((token) => /(?:??硫???媛|由?$/.test(token));
+    const match = tokens.find((token) => /(?:??筌???揶쎛|??$/.test(token));
     return match || '';
   }
 
@@ -215,11 +215,11 @@ const HospitalAPI = (() => {
   function calcScore(drCount, typeName) {
     let base = 3.8;
 
-    if (typeName?.includes('?곴툒醫낇빀')) {
+    if (typeName?.includes('?怨댄닋?ル굟鍮')) {
       base = 4.5;
-    } else if (typeName?.includes('醫낇빀蹂묒썝')) {
+    } else if (typeName?.includes('?ル굟鍮癰귣쵐??)) {
       base = 4.2;
-    } else if (typeName?.includes('蹂묒썝')) {
+    } else if (typeName?.includes('癰귣쵐??)) {
       base = 4.0;
     }
 
@@ -235,9 +235,9 @@ const HospitalAPI = (() => {
 
   function guessDepartmentId(typeName) {
     if (!typeName) return 'general';
-    if (typeName.includes('移섍낵')) return 'dental';
-    if (typeName.includes('?쒖쓽') || typeName.includes('?쒕갑')) return 'korean';
-    if (typeName.includes('?붿뼇')) return 'general';
+    if (typeName.includes('燁살꼵??)) return 'dental';
+    if (typeName.includes('??뽰벥') || typeName.includes('??뺢컩')) return 'korean';
+    if (typeName.includes('?遺용펶')) return 'general';
     return 'general';
   }
 
@@ -328,24 +328,24 @@ const HospitalAPI = (() => {
     if (!text) return 'general';
 
     const entry = Object.entries({
-      dental: ['移섍낵'],
-      korean: ['?쒖쓽??, '?쒕갑'],
-      orthopedic: ['?뺥삎?멸낵'],
-      ophthalmology: ['?덇낵'],
-      dermatology: ['?쇰?怨?],
-      ent: ['?대퉬?명썑怨?],
-      pediatric: ['?뚯븘泥?냼?꾧낵', '?뚯븘怨?],
-      obgyn: ['?곕??멸낵'],
-      urology: ['鍮꾨눊?섑븰怨?, '鍮꾨눊湲곌낵'],
-      psychiatry: ['?뺤떊嫄닿컯?섑븰怨?, '?뺤떊怨?],
-      plastic: ['?깊삎?멸낵'],
-      neurosurgery: ['?좉꼍?멸낵'],
-      familymed: ['媛?뺤쓽?숆낵'],
-      surgery: ['?멸낵'],
-      pain: ['?듭쬆?섑븰怨?, '留덉랬?듭쬆?섑븰怨?],
-      rehab: ['?ы솢?섑븰怨?],
-      internal: ['?닿낵'],
-      general: ['醫낇빀蹂묒썝', '蹂묒썝'],
+      dental: ['燁살꼵??],
+      korean: ['??뽰벥??, '??뺢컩'],
+      orthopedic: ['?類μ굨?硫몃궢'],
+      ophthalmology: ['??뉖궢'],
+      dermatology: ['?????],
+      ent: ['????紐낆뜎??],
+      pediatric: ['???툡筌???袁㏓궢', '???툡??],
+      obgyn: ['?怨??硫몃궢'],
+      urology: ['??쑬???묐린??, '??쑬?딀묾怨뚮궢'],
+      psychiatry: ['?類ㅻ뻿椰꾨떯而??묐린??, '?類ㅻ뻿??],
+      plastic: ['?源딆굨?硫몃궢'],
+      neurosurgery: ['?醫됯펾?硫몃궢'],
+      familymed: ['揶쎛?類ㅼ벥??녿궢'],
+      surgery: ['?硫몃궢'],
+      pain: ['???쵄??묐린??, '筌띾뜆????쵄??묐린??],
+      rehab: ['?????묐린??],
+      internal: ['??용궢'],
+      general: ['?ル굟鍮癰귣쵐??, '癰귣쵐??],
     }).find(([, keywords]) => keywords.some((keyword) => text.includes(keyword)));
 
     return entry?.[0] || 'general';
@@ -354,35 +354,35 @@ const HospitalAPI = (() => {
   function inferHospitalTypeFromDepartmentId(departmentId = '') {
     switch (departmentId) {
       case 'dental':
-        return '移섍낵?섏썝';
+        return '燁살꼵???륁뜚';
       case 'korean':
-        return '?쒖쓽??;
+        return '??뽰벥??;
       case 'general':
-        return '醫낇빀蹂묒썝';
+        return '?ル굟鍮癰귣쵐??;
       default:
-        return '?섏썝';
+        return '??륁뜚';
     }
   }
 
   function extractRegionFromAddress(address = '') {
     const text = String(address || '').trim();
-    if (text.startsWith('?쒖슱')) return '?쒖슱';
-    if (text.startsWith('寃쎄린')) return '寃쎄린';
-    if (text.startsWith('?몄쿇')) return '?몄쿇';
-    if (text.startsWith('遺??)) return '遺??;
-    if (text.startsWith('?援?)) return '?援?;
-    if (text.startsWith('???)) return '???;
-    if (text.startsWith('愿묒＜')) return '愿묒＜';
-    if (text.startsWith('?몄궛')) return '?몄궛';
-    if (text.startsWith('?몄쥌')) return '?몄쥌';
-    if (text.startsWith('媛뺤썝')) return '媛뺤썝';
-    if (text.startsWith('異⑹껌遺곷룄') || text.startsWith('異⑸턿')) return '異⑸턿';
-    if (text.startsWith('異⑹껌?⑤룄') || text.startsWith('異⑸궓')) return '異⑸궓';
-    if (text.startsWith('?꾨턿') || text.startsWith('?꾨씪遺곷룄')) return '?꾨턿';
-    if (text.startsWith('?꾨궓') || text.startsWith('?꾨씪?⑤룄')) return '?꾨궓';
-    if (text.startsWith('寃쎈턿') || text.startsWith('寃쎌긽遺곷룄')) return '寃쎈턿';
-    if (text.startsWith('寃쎈궓') || text.startsWith('寃쎌긽?⑤룄')) return '寃쎈궓';
-    if (text.startsWith('?쒖＜')) return '?쒖＜';
+    if (text.startsWith('??뽰뒻')) return '??뽰뒻';
+    if (text.startsWith('野껋럡由?)) return '野껋럡由?;
+    if (text.startsWith('?紐꾩퓝')) return '?紐꾩퓝';
+    if (text.startsWith('?봔??)) return '?봔??;
+    if (text.startsWith('????)) return '????;
+    if (text.startsWith('????)) return '????;
+    if (text.startsWith('?용쵐竊?)) return '?용쵐竊?;
+    if (text.startsWith('?紐꾧텦')) return '?紐꾧텦';
+    if (text.startsWith('?紐꾩쪒')) return '?紐꾩쪒';
+    if (text.startsWith('揶쏅벡??)) return '揶쏅벡??;
+    if (text.startsWith('?겸뫗猿뚪겫怨룸즲') || text.startsWith('?겸뫖??)) return '?겸뫖??;
+    if (text.startsWith('?겸뫗猿??ㅻ즲') || text.startsWith('?겸뫖沅?)) return '?겸뫖沅?;
+    if (text.startsWith('?袁⑦꽴') || text.startsWith('?袁⑥뵬?브낮猷?)) return '?袁⑦꽴';
+    if (text.startsWith('?袁④텚') || text.startsWith('?袁⑥뵬??ㅻ즲')) return '?袁④텚';
+    if (text.startsWith('野껋럥??) || text.startsWith('野껋럩湲썽겫怨룸즲')) return '野껋럥??;
+    if (text.startsWith('野껋럥沅?) || text.startsWith('野껋럩湲??ㅻ즲')) return '野껋럥沅?;
+    if (text.startsWith('??뽳폒')) return '??뽳폒';
     return '';
   }
 
@@ -406,10 +406,10 @@ const HospitalAPI = (() => {
   function buildFallbackSearchItems(query, display) {
     const list = getMockHospitalPool().slice(0, display);
     return list.map((hospital, index) => ({
-      title: `${hospital.name} ?댁슜 ?꾧린`,
-      description: `${hospital.address} 湲곗??쇰줈 ?뺣━??諛⑸Ц???붿빟?낅땲?? 吏꾨즺怨쇱? ?꾩튂, 湲곕낯 ?됱젏 ?뺣낫瑜?鍮좊Ⅴ寃??뺤씤?????덉뒿?덈떎.`,
-      bloggername: `蹂묒썝李얘린 note ${index + 1}`,
-      link: `detail.html?postid=${encodeURIComponent(hospital.id)}`,
+      title: `${hospital.name} ??곸뒠 ?袁㏓┛`,
+      description: `${hospital.address} 疫꿸퀣???곗쨮 ?類ｂ봺??獄쎻뫖揆???遺용튋??낅빍?? 筌욊쑬利뷸⑥눘? ?袁⑺뒄, 疫꿸퀡????깆젎 ?類ｋ궖????쥓?ㅵ칰??類ㅼ뵥??????됰뮸??덈뼄.`,
+      bloggername: `癰귣쵐?앾㎕?섎┛ note ${index + 1}`,
+      link: `detail.html?id=${encodeURIComponent(hospital.id)}`,
       postdate: '',
       query,
     }));

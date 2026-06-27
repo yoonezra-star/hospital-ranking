@@ -61,22 +61,22 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const SEARCH_AUTOCOMPLETE_ITEMS = [
-    '?쒖슱 移섍낵',
-    '媛뺣궓 移섍낵',
-    '媛뺣궓 ?쇰?怨??쇨컙',
-    '?쒖큹 ?뺥삎?멸낵',
-    '?≫뙆 ?뚯븘怨?,
-    '?≫뙆 ?뚯븘怨??쇱슂??,
-    '遺꾨떦 ?닿낵',
-    '留덊룷 移섍낵 二쇱감',
-    '?ъ쓽???듭쬆?섑븰怨?,
-    '?쒖슱 ?ы솢?섑븰怨?,
-    '寃쎄린 ?뺥삎?멸낵 ?좎슂??,
-    '?쇨컙 ?쇰?怨?,
-    '?좎슂???뺥삎?멸낵',
-    '?쇱슂???뚯븘怨?,
-    '?묎툒 吏꾨즺 蹂묒썝',
-    '二쇱감 媛?ν븳 移섍낵',
+    '??뽰뒻 燁살꼵??,
+    '揶쏅베沅?燁살꼵??,
+    '揶쏅베沅????????⑥퍢',
+    '??뽱겧 ?類μ굨?硫몃궢',
+    '??ル솁 ???툡??,
+    '??ル솁 ???툡????깆뒄??,
+    '?브쑬????용궢',
+    '筌띾뜇猷?燁살꼵??雅뚯눘媛?,
+    '????????쵄??묐린??,
+    '??뽰뒻 ?????묐린??,
+    '野껋럡由??類μ굨?硫몃궢 ?醫롮뒄??,
+    '??⑥퍢 ?????,
+    '?醫롮뒄???類μ굨?硫몃궢',
+    '??깆뒄?????툡??,
+    '?臾롰닋 筌욊쑬利?癰귣쵐??,
+    '雅뚯눘媛?揶쎛?館釉?燁살꼵??,
   ];
 
   applyInitialRouteState();
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateThemeIcon(theme) {
     if (ui.themeToggle) {
-      ui.themeToggle.textContent = theme === 'dark' ? '?截? : '?뙔';
+      ui.themeToggle.textContent = theme === 'dark' ? '???? : '???;
     }
   }
 
@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!ui.departmentGrid || typeof DEPARTMENTS === 'undefined') return;
 
     ui.departmentGrid.innerHTML = DEPARTMENTS.map((department, index) => `
-      <div class="dept-card fade-up delay-${index % 4}" data-dept-id="${department.id}" tabindex="0" role="button" aria-label="${escapeHtml(department.name)} 蹂묒썝 李얘린">
+      <div class="dept-card fade-up delay-${index % 4}" data-dept-id="${department.id}" tabindex="0" role="button" aria-label="${escapeHtml(department.name)} 癰귣쵐??筌≪뼐由?>
         <div class="dept-icon" style="background:${department.color}15; color:${department.color};">
           ${department.icon}
         </div>
@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .sort((left, right) => left.localeCompare(right, 'ko'));
 
     [ui.districtFilter, ui.heroDistrictFilter].filter(Boolean).forEach((select) => {
-      select.innerHTML = '<option value="all">??援?援??좏깮</option>';
+      select.innerHTML = '<option value="all">???????醫뤾문</option>';
       districts.forEach((district) => {
         const option = document.createElement('option');
         option.value = district;
@@ -301,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .sort((left, right) => left.localeCompare(right, 'ko'));
 
     [ui.townFilter, ui.heroTownFilter].filter(Boolean).forEach((select) => {
-      select.innerHTML = '<option value="all">??硫????좏깮</option>';
+      select.innerHTML = '<option value="all">??筌????醫뤾문</option>';
       towns.forEach((town) => {
         const option = document.createElement('option');
         option.value = town;
@@ -338,25 +338,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const hasLocationDrilldown = state.currentFilters.district !== 'all' || state.currentFilters.town !== 'all';
     const hasMore = !hasLocationDrilldown && state.isApiAvailable && (state.currentPage * 20 < state.totalCount);
     ui.loadMoreBtn.style.display = hasMore ? 'block' : 'none';
-    ui.loadMoreBtn.textContent = `?붾낫湲?(${state.allFetchedHospitals.length} / ${state.totalCount.toLocaleString()})`;
+    ui.loadMoreBtn.textContent = `?遺얜궖疫?(${state.allFetchedHospitals.length} / ${state.totalCount.toLocaleString()})`;
   }
 
   function updateDataBadge(fromMock) {
     if (!ui.dataSourceBadge) return;
 
     if (fromMock) {
-      ui.dataSourceBadge.textContent = '蹂닿컯 ?곗씠???쒖떆';
+      ui.dataSourceBadge.textContent = '癰귣떯而??怨쀬뵠????뽯뻻';
       ui.dataSourceBadge.className = 'data-badge mock';
       if (ui.dataSourceNote) {
-        ui.dataSourceNote.textContent = '?ㅼ떆媛?怨듦났 API媛 吏?곕릺硫?寃?섑븳 蹂닿컯 ?곗씠?곗? ?붿빟 ?뺣낫瑜?癒쇱? 蹂댁뿬以띾땲??';
+        ui.dataSourceNote.textContent = '??쇰뻻揶??⑤벀??API揶쎛 筌왖?怨뺣┷筌?野꺜??묐립 癰귣떯而??怨쀬뵠?怨? ?遺용튋 ?類ｋ궖???믪눘? 癰귣똻肉т빳?얜빍??';
       }
       return;
     }
 
-    ui.dataSourceBadge.textContent = '怨듦났?곗씠???ㅼ떆媛??곕룞';
+    ui.dataSourceBadge.textContent = '?⑤벀??怨쀬뵠????쇰뻻揶??怨뺣짗';
     ui.dataSourceBadge.className = 'data-badge live';
     if (ui.dataSourceNote) {
-      ui.dataSourceNote.textContent = '嫄닿컯蹂댄뿕?ъ궗?됯?????怨듦났 API ?묐떟???곗꽑 諛섏쁺??蹂묒썝 紐⑸줉??蹂댁뿬二쇨퀬 ?덉뒿?덈떎.';
+      ui.dataSourceNote.textContent = '椰꾨떯而?퉪?꾨퓮??沅????????⑤벀??API ?臾먮뼗???怨쀪퐨 獄쏆꼷???癰귣쵐??筌뤴뫖以??癰귣똻肉т틠?⑦???됰뮸??덈뼄.';
     }
   }
 
@@ -422,12 +422,12 @@ document.addEventListener('DOMContentLoaded', () => {
             data-landing-department="${escapeHtml(section.department || '')}"
             data-landing-type="${escapeHtml(section.type || '')}"
           >
-            <span class="landing-card-badge">${escapeHtml(section.badge || '吏??퀎 ?먯깋')}</span>
+            <span class="landing-card-badge">${escapeHtml(section.badge || '筌왖?????癒?퉳')}</span>
             <h3>${escapeHtml(section.title)}</h3>
             <p>${escapeHtml(section.description)}</p>
             <div class="landing-card-footer">
-              <span>?꾪꽣瑜??곸슜??蹂묒썝 紐⑸줉?쇰줈 諛붾줈 ?대룞</span>
-              <span class="landing-card-count">${count.toLocaleString()}怨?/span>
+              <span>?袁り숲???怨몄뒠??癰귣쵐??筌뤴뫖以??곗쨮 獄쏅뗀以???猷?/span>
+              <span class="landing-card-count">${count.toLocaleString()}??/span>
             </div>
           </button>
         `;
@@ -439,12 +439,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const sections = contentApi?.getGuideSpotlights?.() || [];
       ui.guideSpotlightList.innerHTML = sections.map((section, index) => `
         <a href="${escapeHtml(section.href || '#')}" class="landing-card fade-up delay-${index % 3}">
-          <span class="landing-card-badge">${escapeHtml(section.badge || '諛붾줈媛湲?)}</span>
+          <span class="landing-card-badge">${escapeHtml(section.badge || '獄쏅뗀以덂첎?疫?)}</span>
           <h3>${escapeHtml(section.title)}</h3>
           <p>${escapeHtml(section.description)}</p>
           <div class="landing-card-footer">
-            <span>媛?대뱶 ?먮뒗 鍮좊Ⅸ ?먯깋 ?뱀뀡?쇰줈 ?대룞</span>
-            <span class="landing-card-count">?닿린</span>
+            <span>揶쎛??諭??癒?뮉 ??쥓???癒?퉳 ?諭???곗쨮 ??猷?/span>
+            <span class="landing-card-count">??용┛</span>
           </div>
         </a>
       `).join('');
@@ -471,9 +471,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!ui.rankingList || !ui.rankingCount) return;
 
     if (hospitals.length === 0) {
-      ui.rankingCount.innerHTML = '議곌굔??留욌뒗 蹂묒썝??李얠? 紐삵뻽?듬땲??';
+      ui.rankingCount.innerHTML = '鈺곌퀗援??筌띿쉶??癰귣쵐???筌≪뼚? 筌륁궢六??щ빍??';
       ui.rankingList.classList.remove('ranking-group-list');
-      ui.rankingList.innerHTML = buildEmptyState('議곌굔??留욌뒗 蹂묒썝???놁뒿?덈떎.', '?꾪꽣瑜?諛붽씀嫄곕굹 ?ㅻⅨ ?ㅼ썙?쒕줈 ?ㅼ떆 寃?됲빐蹂댁꽭??');
+      ui.rankingList.innerHTML = buildEmptyState('鈺곌퀗援??筌띿쉶??癰귣쵐?????곷뮸??덈뼄.', '?袁り숲??獄쏅떽?椰꾧퀡援???삘뀲 ??쇱뜖??뺤쨮 ??쇰뻻 野꺜??뀀퉸癰귣똻苑??');
       return;
     }
 
@@ -485,8 +485,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     ui.rankingList.classList.remove('ranking-group-list');
     ui.rankingCount.innerHTML = state.isApiAvailable
-      ? `?꾧뎅 <strong>${state.totalCount.toLocaleString()}</strong>媛?蹂묒썝 以?<strong>${hospitals.length}</strong>媛??쒖떆`
-      : `珥?<strong>${hospitals.length}</strong>媛?蹂묒썝 (?섑뵆 ?곗씠??`;
+      ? `?袁㏓럢 <strong>${state.totalCount.toLocaleString()}</strong>揶?癰귣쵐??餓?<strong>${hospitals.length}</strong>揶???뽯뻻`
+      : `??<strong>${hospitals.length}</strong>揶?癰귣쵐??(??묐탣 ?怨쀬뵠??`;
     ui.rankingList.innerHTML = hospitals.map((hospital, index) => buildHospitalCard(hospital, index + 1)).join('');
     observeNewElements(ui.rankingList);
     void hydrateHospitalCardDetails(hospitals, ui.rankingList, 18);
@@ -500,32 +500,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const groups = [
       {
         key: 'hospital',
-        title: '醫낇빀蹂묒썝쨌蹂묒썝',
-        description: '蹂묒썝湲??댁긽 ?섎즺湲곌? 以묒떖 ?뺣젹',
+        title: '?ル굟鍮癰귣쵐?앹쮯癰귣쵐??,
+        description: '癰귣쵐?앮묾???곴맒 ??롮┷疫꿸퀗? 餓λ쵐???類ｌ졊',
         items: hospitals.filter((hospital) => getRankingGroup(hospital) === 'hospital').slice(0, 8),
       },
       {
         key: 'clinic',
-        title: '?섏썝',
-        description: '?숇꽕?섏썝怨??꾨Ц ?대━??,
+        title: '??륁뜚',
+        description: '??뉕퐬??륁뜚???袁ⓓ??????,
         items: hospitals.filter((hospital) => getRankingGroup(hospital) === 'clinic').slice(0, 8),
       },
       {
         key: 'dental',
-        title: '移섍낵',
-        description: '移섍낵?섏썝 諛?移섍낵蹂묒썝',
+        title: '燁살꼵??,
+        description: '燁살꼵???륁뜚 獄?燁살꼵?듣퉪臾믪뜚',
         items: hospitals.filter((hospital) => getRankingGroup(hospital) === 'dental').slice(0, 8),
       },
       {
         key: 'korean',
-        title: '?쒖쓽?먃룻븳諛⑸퀝??,
-        description: '?쒕갑 吏꾨즺 湲곌?',
+        title: '??뽰벥?癒껊；釉녘쳸?명??,
+        description: '??뺢컩 筌욊쑬利?疫꿸퀗?',
         items: hospitals.filter((hospital) => getRankingGroup(hospital) === 'korean').slice(0, 8),
       },
     ].filter((group) => group.items.length > 0);
 
     ui.rankingList.classList.add('ranking-group-list');
-    ui.rankingCount.innerHTML = `蹂묒썝湲됰퀎 ?뱀뀡 <strong>${groups.length}</strong>媛?/ ?꾩껜 <strong>${hospitals.length}</strong>怨?;
+    ui.rankingCount.innerHTML = `癰귣쵐?앮묾?고??諭??<strong>${groups.length}</strong>揶?/ ?袁⑷퍥 <strong>${hospitals.length}</strong>??;
     ui.rankingList.innerHTML = groups.map((group) => `
       <section class="ranking-group fade-up" data-ranking-group="${group.key}">
         <div class="ranking-group-header">
@@ -533,7 +533,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <h3>${group.title}</h3>
             <p>${group.description}</p>
           </div>
-          <span class="ranking-group-count">${group.items.length}怨?/span>
+          <span class="ranking-group-count">${group.items.length}??/span>
         </div>
         <div class="ranking-group-grid">
           ${group.items.map((hospital, index) => buildHospitalCard(hospital, index + 1)).join('')}
@@ -548,10 +548,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const type = hospital.type || '';
     const departmentId = hospital.departmentId || '';
 
-    if (departmentId === 'dental' || type.includes('移섍낵')) return 'dental';
-    if (departmentId === 'korean' || type.includes('?쒖쓽') || type.includes('?쒕갑')) return 'korean';
-    if (type === '?섏썝') return 'clinic';
-    if (type.includes('蹂묒썝') || type.includes('醫낇빀') || departmentId === 'general') return 'hospital';
+    if (departmentId === 'dental' || type.includes('燁살꼵??)) return 'dental';
+    if (departmentId === 'korean' || type.includes('??뽰벥') || type.includes('??뺢컩')) return 'korean';
+    if (type === '??륁뜚') return 'clinic';
+    if (type.includes('癰귣쵐??) || type.includes('?ル굟鍮') || departmentId === 'general') return 'hospital';
     return 'clinic';
   }
 
@@ -577,11 +577,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const evidenceSummary = buildHospitalEvidenceSummary(hospital);
     const decisionSummary = buildHospitalDecisionSummary(hospital);
 
-    if (hospital.saturdayOpen) tags.push('<span class="tag tag-sat">?좎슂??吏꾨즺</span>');
-    if (hospital.nightOpen) tags.push('<span class="tag tag-night">?쇨컙 吏꾨즺</span>');
-    if (hospital.sundayOpen) tags.push('<span class="tag tag-sun">?쇱슂??吏꾨즺</span>');
-    if (hospital.url) tags.push('<span class="tag tag-site">怨듭떇 ?덊럹?댁?</span>');
-    if (!hasKnownOperationalData(hospital)) tags.push('<span class="tag tag-pending">?댁쁺?쒓컙 ?뺤씤 以?/span>');
+    if (hospital.saturdayOpen) tags.push('<span class="tag tag-sat">?醫롮뒄??筌욊쑬利?/span>');
+    if (hospital.nightOpen) tags.push('<span class="tag tag-night">??⑥퍢 筌욊쑬利?/span>');
+    if (hospital.sundayOpen) tags.push('<span class="tag tag-sun">??깆뒄??筌욊쑬利?/span>');
+    if (hospital.url) tags.push('<span class="tag tag-site">?⑤벊????딅읂???</span>');
+    if (!hasKnownOperationalData(hospital)) tags.push('<span class="tag tag-pending">??곸겫??볦퍢 ?類ㅼ뵥 餓?/span>');
 
     return `
       <article class="hospital-card fade-up" data-hospital-id="${escapeHtml(hospital.id)}">
@@ -591,7 +591,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ${escapeHtml(hospital.name)}
             <span class="hospital-type-tag">${escapeHtml(hospital.type)}</span>
           </div>
-          <div class="hospital-address">二쇱냼 ${escapeHtml(hospital.address)}</div>
+          <div class="hospital-address">雅뚯눘??${escapeHtml(hospital.address)}</div>
           ${subinfo ? `<div class="hospital-subinfo" data-hospital-subinfo>${subinfo}</div>` : ''}
           <div class="hospital-trust-row" data-hospital-trust>${renderHospitalTrustBadges(trustBadges)}</div>
           <div class="hospital-status-row" data-hospital-status>${renderHospitalStatusBadges(statusItems)}</div>
@@ -604,21 +604,21 @@ document.addEventListener('DOMContentLoaded', () => {
           ${focusNote ? `<p class="hospital-focus-note">${escapeHtml(focusNote)}</p>` : ''}
           ${visitPrepNote ? `<p class="hospital-visit-prep">${escapeHtml(visitPrepNote)}</p>` : ''}
           <div class="hospital-insight-list" data-hospital-insights${insightItems.length ? '' : ' hidden'}>${renderHospitalInsightList(insightItems)}</div>
-          <p class="hospital-data-summary${dataSummary ? '' : ' is-pending'}" data-hospital-summary>${escapeHtml(dataSummary || '二쇱감, ?묒닔, ?댁쁺 ?뺣낫瑜?遺덈윭?ㅻ뒗 以묒엯?덈떎.')}</p>
+          <p class="hospital-data-summary${dataSummary ? '' : ' is-pending'}" data-hospital-summary>${escapeHtml(dataSummary || '雅뚯눘媛? ?臾믩땾, ??곸겫 ?類ｋ궖???븍뜄???삳뮉 餓λ쵐???덈뼄.')}</p>
           ${decisionSummary ? `<p class="hospital-decision-summary">${escapeHtml(decisionSummary)}</p>` : ''}
           ${evidenceSummary ? `<p class="hospital-evidence-summary">${escapeHtml(evidenceSummary)}</p>` : ''}
           <div class="hospital-meta" data-hospital-meta>
             <div class="meta-item">
-              <span class="meta-icon">?됱젏</span>
+              <span class="meta-icon">??깆젎</span>
               <span class="meta-value">${escapeHtml(hospital.score)}</span>
             </div>
-            ${hospital.reviewCount ? `<div class="meta-item"><span class="meta-icon">由щ럭</span><span class="meta-value">${escapeHtml(Number(hospital.reviewCount).toLocaleString())}</span><span class="meta-label">媛?/span></div>` : ''}
+            ${hospital.reviewCount ? `<div class="meta-item"><span class="meta-icon">?귐됰윮</span><span class="meta-value">${escapeHtml(Number(hospital.reviewCount).toLocaleString())}</span><span class="meta-label">揶?/span></div>` : ''}
             <div class="meta-item">
-              <span class="meta-icon">?꾨Ц??/span>
+              <span class="meta-icon">?袁ⓓ??/span>
               <span class="meta-value">${escapeHtml(hospital.specialistCount || 0)}</span>
-              <span class="meta-label">紐?/span>
+              <span class="meta-label">筌?/span>
             </div>
-            ${hospital.phone ? `<div class="meta-item"><span class="meta-icon">?꾪솕</span><span class="meta-value">${escapeHtml(hospital.phone)}</span></div>` : ''}
+            ${hospital.phone ? `<div class="meta-item"><span class="meta-icon">?袁れ넅</span><span class="meta-value">${escapeHtml(hospital.phone)}</span></div>` : ''}
           </div>
           <div class="score-bar-container">
             <div class="score-bar">
@@ -636,9 +636,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const bits = [];
     const location = [hospital.region, hospital.district].filter(Boolean).join(' / ');
     if (location) bits.push(location);
-    if (hospital.openDate) bits.push(`媛쒖썝 ${formatDate(hospital.openDate)}`);
-    if (hospital.url) bits.push('怨듭떇 ?덊럹?댁?');
-    return bits.map((bit) => escapeHtml(bit)).join(' 쨌 ');
+    if (hospital.openDate) bits.push(`揶쏆뮇??${formatDate(hospital.openDate)}`);
+    if (hospital.url) bits.push('?⑤벊????딅읂???');
+    return bits.map((bit) => escapeHtml(bit)).join(' 夷?');
   }
 
   function buildHospitalHighlightItems(hospital, detailData) {
@@ -652,15 +652,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (hospital.subway) items.push(hospital.subway);
     if (parkingText) items.push(parkingText);
-    if (hospital.equipment) items.push(`二쇱슂 ?λ퉬 ${String(hospital.equipment).split(',')[0].trim()}`);
-    if (toPositiveNumber(hospital.bedCount) > 0) items.push(`蹂묒긽 ${hospital.bedCount}媛?);
+    if (hospital.equipment) items.push(`雅뚯눘???貫??${String(hospital.equipment).split(',')[0].trim()}`);
+    if (toPositiveNumber(hospital.bedCount) > 0) items.push(`癰귣쵐湲?${hospital.bedCount}揶?);
     if (Array.isArray(detailData?.emergencySummary) && detailData.emergencySummary.length > 0) {
-      items.push('?묎툒 ?덈궡');
+      items.push('?臾롰닋 ??덇땀');
     } else if (hospital.hasEmergency) {
-      items.push('?묎툒 吏꾨즺');
+      items.push('?臾롰닋 筌욊쑬利?);
     }
     if (hospital.openDate && isRecentHospital(hospital.openDate)) {
-      items.push('理쒓렐 媛쒖썝');
+      items.push('筌ㅼ뮄??揶쏆뮇??);
     }
 
     return uniqueStrings(items).slice(0, 4);
@@ -683,16 +683,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (parts.length === 0) {
-      if (hospital.saturdayOpen) parts.push('?좎슂??吏꾨즺');
-      if (hospital.nightOpen) parts.push('?쇨컙 吏꾨즺');
-      if (hospital.sundayOpen) parts.push('?쇱슂??吏꾨즺');
+      if (hospital.saturdayOpen) parts.push('?醫롮뒄??筌욊쑬利?);
+      if (hospital.nightOpen) parts.push('??⑥퍢 筌욊쑬利?);
+      if (hospital.sundayOpen) parts.push('??깆뒄??筌욊쑬利?);
       if (hospital.subway) parts.push(hospital.subway);
-      if (hospital.equipment) parts.push(`二쇱슂 ?λ퉬 ${String(hospital.equipment).split(',')[0].trim()}`);
-      if (toPositiveNumber(hospital.bedCount) > 0) parts.push(`蹂묒긽 ${hospital.bedCount}媛?);
+      if (hospital.equipment) parts.push(`雅뚯눘???貫??${String(hospital.equipment).split(',')[0].trim()}`);
+      if (toPositiveNumber(hospital.bedCount) > 0) parts.push(`癰귣쵐湲?${hospital.bedCount}揶?);
       if (Array.isArray(profile?.primaryServices) && profile.primaryServices.length > 0) {
-        parts.push(`二쇱슂 ${profile.primaryServices[0]}`);
+        parts.push(`雅뚯눘??${profile.primaryServices[0]}`);
       }
-      if (!hasKnownOperationalData(hospital)) parts.push('?댁쁺?쒓컙 怨듦났?곗씠???뺤씤 以?);
+      if (!hasKnownOperationalData(hospital)) parts.push('??곸겫??볦퍢 ?⑤벀??怨쀬뵠???類ㅼ뵥 餓?);
     }
 
     return uniqueStrings(parts).slice(0, 3).join(' / ');
@@ -703,10 +703,10 @@ document.addEventListener('DOMContentLoaded', () => {
       return detailData.parkingSummary[0];
     }
     if (toPositiveNumber(hospital.parkingCapacity) > 0) {
-      return `二쇱감 媛??${hospital.parkingCapacity}?`;
+      return `雅뚯눘媛?揶쎛??${hospital.parkingCapacity}??`;
     }
     if (hospital.parkingFee) {
-      return `${hospital.parkingFee} 二쇱감`;
+      return `${hospital.parkingFee} 雅뚯눘媛?;
     }
     return '';
   }
@@ -718,7 +718,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return '';
     }
 
-    return `二쇱슂 吏꾨즺: ${profile.primaryServices.slice(0, 3).join(', ')}`;
+    return `雅뚯눘??筌욊쑬利? ${profile.primaryServices.slice(0, 3).join(', ')}`;
   }
 
   function buildHospitalFocusNote(hospital) {
@@ -728,7 +728,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return '';
     }
 
-    return `異붿쿇 ?곹솴: ${profile.visitTargets.slice(0, 2).join(', ')}`;
+    return `?곕뗄荑??怨뱀넺: ${profile.visitTargets.slice(0, 2).join(', ')}`;
   }
 
   function buildHospitalVisitPrepNote(hospital) {
@@ -740,7 +740,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const documents = Array.isArray(profile.documents) ? profile.documents.slice(0, 3) : [];
     if (documents.length > 0) {
-      return `諛⑸Ц 以鍮? ${documents.join(', ')}`;
+      return `獄쎻뫖揆 餓Β?? ${documents.join(', ')}`;
     }
 
     if (profile.reservation) {
@@ -764,11 +764,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const parkingText = getHospitalParkingLabel(hospital, detailData);
 
     if (receptionText) {
-      items.push({ label: '?묒닔', value: receptionText });
+      items.push({ label: '?臾믩땾', value: receptionText });
     }
 
     if (documentItems.length > 0) {
-      items.push({ label: '以鍮?, value: documentItems.join(', ') });
+      items.push({ label: '餓Β??, value: documentItems.join(', ') });
     }
 
     if (parkingText) transportItems.push(parkingText);
@@ -777,12 +777,12 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (hospital.subway) {
       transportItems.push(hospital.subway);
     } else if (hospital.address) {
-      transportItems.push(`${hospital.address} 湲곗? ?숈꽑???뺤씤?대낫?몄슂.`);
+      transportItems.push(`${hospital.address} 疫꿸퀣? ??덇퐨???類ㅼ뵥????紐꾩뒄.`);
     }
 
     if (transportItems.length > 0) {
       items.push({
-        label: '?대룞',
+        label: '??猷?,
         value: uniqueStrings(transportItems).slice(0, 2).join(' / '),
       });
     }
@@ -793,13 +793,13 @@ document.addEventListener('DOMContentLoaded', () => {
     ) {
       const facilityParts = [];
       if (hospital.equipment) facilityParts.push(String(hospital.equipment).split(',')[0].trim());
-      if (toPositiveNumber(hospital.bedCount) > 0) facilityParts.push(`蹂묒긽 ${hospital.bedCount}媛?);
-      if (hospital.area) facilityParts.push(`硫댁쟻 ${hospital.area}`);
-      items.push({ label: '?쒖꽕', value: uniqueStrings(facilityParts).slice(0, 3).join(' / ') });
+      if (toPositiveNumber(hospital.bedCount) > 0) facilityParts.push(`癰귣쵐湲?${hospital.bedCount}揶?);
+      if (hospital.area) facilityParts.push(`筌롫똻??${hospital.area}`);
+      items.push({ label: '??뽮퐬', value: uniqueStrings(facilityParts).slice(0, 3).join(' / ') });
     }
 
     if (items.length < 3 && Array.isArray(profile?.visitTargets) && profile.visitTargets.length > 0) {
-      items.push({ label: '異붿쿇', value: profile.visitTargets[0] });
+      items.push({ label: '?곕뗄荑?, value: profile.visitTargets[0] });
     }
 
     return items.slice(0, 3);
@@ -811,36 +811,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const parkingText = getHospitalParkingLabel(hospital, detailData);
     const operationItems = [];
 
-    if (hospital.saturdayOpen) operationItems.push('?좎슂??);
-    if (hospital.sundayOpen) operationItems.push('?쇱슂??);
-    if (hospital.nightOpen) operationItems.push('?쇨컙');
-    if (hospital.hasEmergency) operationItems.push('?묎툒');
+    if (hospital.saturdayOpen) operationItems.push('?醫롮뒄??);
+    if (hospital.sundayOpen) operationItems.push('??깆뒄??);
+    if (hospital.nightOpen) operationItems.push('??⑥퍢');
+    if (hospital.hasEmergency) operationItems.push('?臾롰닋');
 
     const facilityItems = [];
     if (parkingText) facilityItems.push(parkingText);
     if (hospital.subway) facilityItems.push(hospital.subway);
-    if (hospital.equipment) facilityItems.push(`?λ퉬 ${String(hospital.equipment).split(',')[0].trim()}`);
-    if (toPositiveNumber(hospital.roomCount) > 0) facilityItems.push(`吏꾨즺??${hospital.roomCount}媛?);
-    if (toPositiveNumber(hospital.bedCount) > 0) facilityItems.push(`蹂묒긽 ${hospital.bedCount}媛?);
-    if (hospital.area) facilityItems.push(`硫댁쟻 ${hospital.area}`);
+    if (hospital.equipment) facilityItems.push(`?貫??${String(hospital.equipment).split(',')[0].trim()}`);
+    if (toPositiveNumber(hospital.roomCount) > 0) facilityItems.push(`筌욊쑬利??${hospital.roomCount}揶?);
+    if (toPositiveNumber(hospital.bedCount) > 0) facilityItems.push(`癰귣쵐湲?${hospital.bedCount}揶?);
+    if (hospital.area) facilityItems.push(`筌롫똻??${hospital.area}`);
 
     const items = [
       {
-        label: '?듭떖 吏꾨즺',
+        label: '???뼎 筌욊쑬利?,
         value: Array.isArray(profile?.primaryServices) && profile.primaryServices.length > 0
           ? profile.primaryServices.slice(0, 2).join(', ')
-          : (hospital.department || hospital.type || '吏꾨즺 ?뺣낫 ?뺤씤 ?꾩슂'),
+          : (hospital.department || hospital.type || '筌욊쑬利??類ｋ궖 ?類ㅼ뵥 ?袁⑹뒄'),
       },
       {
-        label: '諛⑸Ц 以鍮?,
+        label: '獄쎻뫖揆 餓Β??,
         value: Array.isArray(profile?.documents) && profile.documents.length > 0
           ? profile.documents.slice(0, 2).join(', ')
-          : '?좊텇利? 湲곗〈 寃??寃곌낵',
+          : '?醫딇뀋筌? 疫꿸퀣??野꺜??野껉퀗??,
       },
       {
-        label: '?댁쁺쨌?쒖꽕',
+        label: '??곸겫夷??뽮퐬',
         value: uniqueStrings([...operationItems, ...facilityItems]).slice(0, 2).join(' / ')
-          || '?댁쁺 ?뺣낫 ?뺤씤 以?,
+          || '??곸겫 ?類ｋ궖 ?類ㅼ뵥 餓?,
       },
     ];
 
@@ -853,18 +853,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const hasTodaySchedule = Boolean(parseOperatingRange(hoursValue));
 
     if (isHospitalOpenNow(hospital, now)) {
-      items.push({ label: '?꾩옱 吏꾨즺以?, className: 'is-open' });
+      items.push({ label: '?袁⑹삺 筌욊쑬利뷰빳?, className: 'is-open' });
     } else if (hasTodaySchedule || isAvailableToday(hospital, now)) {
-      items.push({ label: '?ㅻ뒛 媛??, className: 'is-today' });
+      items.push({ label: '??삳뮎 揶쎛??, className: 'is-today' });
     } else if (hasKnownOperationalData(hospital)) {
-      items.push({ label: '?ㅻ뒛 留덇컧', className: 'is-closed' });
+      items.push({ label: '??삳뮎 筌띾뜃而?, className: 'is-closed' });
     } else {
-      items.push({ label: '?댁쁺 ?뺤씤以?, className: 'is-pending' });
+      items.push({ label: '??곸겫 ?類ㅼ뵥餓?, className: 'is-pending' });
     }
 
-    if (hospital.saturdayOpen) items.push({ label: '?좎슂', className: 'is-option' });
-    if (hospital.nightOpen) items.push({ label: '?쇨컙', className: 'is-option' });
-    if (hospital.sundayOpen) items.push({ label: '?쇱슂', className: 'is-option' });
+    if (hospital.saturdayOpen) items.push({ label: '?醫롮뒄', className: 'is-option' });
+    if (hospital.nightOpen) items.push({ label: '??⑥퍢', className: 'is-option' });
+    if (hospital.sundayOpen) items.push({ label: '??깆뒄', className: 'is-option' });
 
     return items.slice(0, 4);
   }
@@ -875,20 +875,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (hasTodaySchedule) {
       return isHospitalOpenNow(hospital, now)
-        ? `?ㅻ뒛 ${hoursValue} 湲곗? 吏꾨즺 以묒엯?덈떎.`
-        : `?ㅻ뒛 ?댁쁺 ?쒓컙 ${hoursValue} 湲곗??쇰줈 ?뺤씤?덉뒿?덈떎.`;
+        ? `??삳뮎 ${hoursValue} 疫꿸퀣? 筌욊쑬利?餓λ쵐???덈뼄.`
+        : `??삳뮎 ??곸겫 ??볦퍢 ${hoursValue} 疫꿸퀣???곗쨮 ?類ㅼ뵥??됰뮸??덈뼄.`;
     }
 
     if (isAvailableToday(hospital, now)) {
-      if (now.getDay() === 6 && hospital.saturdayOpen) return '?ㅻ뒛 ?좎슂??吏꾨즺 蹂묒썝?쇰줈 遺꾨쪟?⑸땲??';
-      if (now.getDay() === 0 && hospital.sundayOpen) return '?ㅻ뒛 ?쇱슂??吏꾨즺 蹂묒썝?쇰줈 遺꾨쪟?⑸땲??';
-      if (hospital.nightOpen) return '?ㅻ뒛 ?쇨컙 吏꾨즺 媛??蹂묒썝?쇰줈 遺꾨쪟?⑸땲??';
-      return '?ㅻ뒛 吏꾨즺 媛???щ?瑜?怨듦컻 ?곗씠??湲곗??쇰줈 ?뺤씤?덉뒿?덈떎.';
+      if (now.getDay() === 6 && hospital.saturdayOpen) return '??삳뮎 ?醫롮뒄??筌욊쑬利?癰귣쵐???곗쨮 ?브쑬履??몃빍??';
+      if (now.getDay() === 0 && hospital.sundayOpen) return '??삳뮎 ??깆뒄??筌욊쑬利?癰귣쵐???곗쨮 ?브쑬履??몃빍??';
+      if (hospital.nightOpen) return '??삳뮎 ??⑥퍢 筌욊쑬利?揶쎛??癰귣쵐???곗쨮 ?브쑬履??몃빍??';
+      return '??삳뮎 筌욊쑬利?揶쎛????????⑤벀而??怨쀬뵠??疫꿸퀣???곗쨮 ?類ㅼ뵥??됰뮸??덈뼄.';
     }
 
     return hasKnownOperationalData(hospital)
-      ? '?ㅻ뒛 ?댁쁺 ?뺣낫???뺤씤?섏?留??꾩옱 吏꾨즺 ?쒓컙? ?꾨떃?덈떎.'
-      : '?댁쁺 ?쒓컙 怨듦났?곗씠?곕? ?뺤씤?섎뒗 以묒엯?덈떎.';
+      ? '??삳뮎 ??곸겫 ?類ｋ궖???類ㅼ뵥???筌??袁⑹삺 筌욊쑬利???볦퍢?? ?袁⑤뻸??덈뼄.'
+      : '??곸겫 ??볦퍢 ?⑤벀??怨쀬뵠?怨? ?類ㅼ뵥??롫뮉 餓λ쵐???덈뼄.';
   }
 
   function buildHospitalTrustBadges(hospital, detailData) {
@@ -914,12 +914,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const score = checks.filter(Boolean).length;
 
     if (score >= 7) {
-      return { label: '?뺣낫 異⑹떎???믪쓬', className: 'is-high' };
+      return { label: '?類ｋ궖 ?겸뫗????誘れ벉', className: 'is-high' };
     }
     if (score >= 5) {
-      return { label: '?뺣낫 異⑹떎??蹂댄넻', className: 'is-medium' };
+      return { label: '?類ｋ궖 ?겸뫗???癰귣똾??, className: 'is-medium' };
     }
-    return { label: '湲곕낯 ?뺣낫 以묒떖', className: 'is-basic' };
+    return { label: '疫꿸퀡???類ｋ궖 餓λ쵐??, className: 'is-basic' };
   }
 
   function buildHospitalOperationBadge(hospital, detailData) {
@@ -932,15 +932,15 @@ document.addEventListener('DOMContentLoaded', () => {
       || (Array.isArray(detailData?.receptionSummary) && detailData.receptionSummary.length > 0);
 
     if (hasDetailedOperation) {
-      return { label: '?댁쁺?쒓컙 ?곸꽭 ?뺤씤', className: 'is-verified' };
+      return { label: '??곸겫??볦퍢 ?怨멸쉭 ?類ㅼ뵥', className: 'is-verified' };
     }
     if (hasConfirmedOperation) {
-      return { label: '?댁쁺?쒓컙 ?뺤씤', className: 'is-verified' };
+      return { label: '??곸겫??볦퍢 ?類ㅼ뵥', className: 'is-verified' };
     }
     if (hasOperationSignals) {
-      return { label: '?댁쁺 ?쇰? ?뺤씤', className: 'is-partial' };
+      return { label: '??곸겫 ??? ?類ㅼ뵥', className: 'is-partial' };
     }
-    return { label: '?댁쁺 ?뺤씤以?, className: 'is-pending' };
+    return { label: '??곸겫 ?類ㅼ뵥餓?, className: 'is-pending' };
   }
 
   function hasDetailedHours(detailData) {
@@ -1005,22 +1005,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const parts = [];
 
     if (Number(hospital.specialistCount || 0) > 0) {
-      parts.push(`?꾨Ц??${hospital.specialistCount}紐?);
+      parts.push(`?袁ⓓ??${hospital.specialistCount}筌?);
     }
     if (hospital.subway) {
       parts.push(hospital.subway);
     }
     if (toPositiveNumber(hospital.roomCount) > 0) {
-      parts.push(`吏꾨즺??${hospital.roomCount}媛?);
+      parts.push(`筌욊쑬利??${hospital.roomCount}揶?);
     }
     if (toPositiveNumber(hospital.bedCount) > 0) {
-      parts.push(`蹂묒긽 ${hospital.bedCount}媛?);
+      parts.push(`癰귣쵐湲?${hospital.bedCount}揶?);
     }
     if (hospital.area) {
-      parts.push(`硫댁쟻 ${hospital.area}`);
+      parts.push(`筌롫똻??${hospital.area}`);
     }
     if (hospital.equipment) {
-      parts.push(`?λ퉬 ${String(hospital.equipment).split(',')[0].trim()}`);
+      parts.push(`?貫??${String(hospital.equipment).split(',')[0].trim()}`);
     }
     if (Array.isArray(detailData?.receptionSummary) && detailData.receptionSummary.length > 0) {
       parts.push(detailData.receptionSummary[0]);
@@ -1029,7 +1029,7 @@ document.addEventListener('DOMContentLoaded', () => {
       parts.push(detailData.parkingSummary[0]);
     }
     if (hospital.openDate) {
-      parts.push(`媛쒖썝 ${formatDate(hospital.openDate)}`);
+      parts.push(`揶쏆뮇??${formatDate(hospital.openDate)}`);
     }
 
     return uniqueStrings(parts).slice(0, 4).join(' / ');
@@ -1039,7 +1039,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const parts = [];
 
     if (hospital.region || hospital.district) {
-      parts.push([hospital.region, hospital.district].filter(Boolean).join(' 쨌 '));
+      parts.push([hospital.region, hospital.district].filter(Boolean).join(' 夷?'));
     }
 
     if (hospital.subway) {
@@ -1049,44 +1049,44 @@ document.addEventListener('DOMContentLoaded', () => {
     if (hospital.openDate) {
       const openYear = new Date(hospital.openDate).getFullYear();
       if (Number.isFinite(openYear)) {
-        parts.push(`${openYear}??媛쒖썝`);
+        parts.push(`${openYear}??揶쏆뮇??);
       }
     }
 
     if (Number(hospital.specialistCount || 0) > 0) {
-      parts.push(`?꾨Ц??${hospital.specialistCount}紐?);
+      parts.push(`?袁ⓓ??${hospital.specialistCount}筌?);
     }
 
     if (toPositiveNumber(hospital.parkingCapacity) > 0) {
-      parts.push(`二쇱감 ${hospital.parkingCapacity}?`);
+      parts.push(`雅뚯눘媛?${hospital.parkingCapacity}??`);
     } else if (hospital.parkingFee) {
-      parts.push(`${hospital.parkingFee} 二쇱감`);
+      parts.push(`${hospital.parkingFee} 雅뚯눘媛?);
     } else if (Array.isArray(detailData?.parkingSummary) && detailData.parkingSummary.length > 0) {
       parts.push(detailData.parkingSummary[0]);
     }
 
     if (hospital.nightOpen) {
-      parts.push('?쇨컙 吏꾨즺');
+      parts.push('??⑥퍢 筌욊쑬利?);
     } else if (hospital.saturdayOpen) {
-      parts.push('?좎슂 吏꾨즺');
+      parts.push('?醫롮뒄 筌욊쑬利?);
     } else if (hospital.sundayOpen) {
-      parts.push('?쇱슂 吏꾨즺');
+      parts.push('??깆뒄 筌욊쑬利?);
     }
 
     if (Array.isArray(detailData?.emergencySummary) && detailData.emergencySummary.length > 0) {
       parts.push(detailData.emergencySummary[0]);
     }
 
-    return uniqueStrings(parts).slice(0, 4).join(' 쨌 ');
+    return uniqueStrings(parts).slice(0, 4).join(' 夷?');
   }
 
   function buildHospitalMetaItems(hospital) {
     const items = [];
-    if (hospital.score) items.push(`?됱젏 ${hospital.score}`);
-    if (hospital.reviewCount) items.push(`由щ럭 ${Number(hospital.reviewCount).toLocaleString()}媛?);
-    if (hospital.specialistCount) items.push(`?꾨Ц??${Number(hospital.specialistCount).toLocaleString()}紐?);
+    if (hospital.score) items.push(`??깆젎 ${hospital.score}`);
+    if (hospital.reviewCount) items.push(`?귐됰윮 ${Number(hospital.reviewCount).toLocaleString()}揶?);
+    if (hospital.specialistCount) items.push(`?袁ⓓ??${Number(hospital.specialistCount).toLocaleString()}筌?);
     if (hospital.phone) items.push(hospital.phone);
-    if (hospital.url) items.push('怨듭떇 ?덊럹?댁?');
+    if (hospital.url) items.push('?⑤벊????딅읂???');
     return items;
   }
 
@@ -1101,19 +1101,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return items.map((item) => {
       const text = String(item);
-      if (text.startsWith('?됱젏 ')) {
-        return `<div class="meta-item"><span class="meta-icon">?됱젏</span><span class="meta-value">${escapeHtml(text.replace('?됱젏 ', ''))}</span></div>`;
+      if (text.startsWith('??깆젎 ')) {
+        return `<div class="meta-item"><span class="meta-icon">??깆젎</span><span class="meta-value">${escapeHtml(text.replace('??깆젎 ', ''))}</span></div>`;
       }
-      if (text.startsWith('由щ럭 ')) {
-        return `<div class="meta-item"><span class="meta-icon">由щ럭</span><span class="meta-value">${escapeHtml(text.replace('由щ럭 ', '').replace('媛?, ''))}</span><span class="meta-label">媛?/span></div>`;
+      if (text.startsWith('?귐됰윮 ')) {
+        return `<div class="meta-item"><span class="meta-icon">?귐됰윮</span><span class="meta-value">${escapeHtml(text.replace('?귐됰윮 ', '').replace('揶?, ''))}</span><span class="meta-label">揶?/span></div>`;
       }
-      if (text.startsWith('?꾨Ц??')) {
-        return `<div class="meta-item"><span class="meta-icon">?꾨Ц??/span><span class="meta-value">${escapeHtml(text.replace('?꾨Ц??', '').replace('紐?, ''))}</span><span class="meta-label">紐?/span></div>`;
+      if (text.startsWith('?袁ⓓ??')) {
+        return `<div class="meta-item"><span class="meta-icon">?袁ⓓ??/span><span class="meta-value">${escapeHtml(text.replace('?袁ⓓ??', '').replace('筌?, ''))}</span><span class="meta-label">筌?/span></div>`;
       }
-      if (text === '怨듭떇 ?덊럹?댁?') {
-        return `<div class="meta-item"><span class="meta-icon">?덊럹?댁?</span><span class="meta-value">${escapeHtml(text)}</span></div>`;
+      if (text === '?⑤벊????딅읂???') {
+        return `<div class="meta-item"><span class="meta-icon">??딅읂???</span><span class="meta-value">${escapeHtml(text)}</span></div>`;
       }
-      return `<div class="meta-item"><span class="meta-icon">?꾪솕</span><span class="meta-value">${escapeHtml(text)}</span></div>`;
+      return `<div class="meta-item"><span class="meta-icon">?袁れ넅</span><span class="meta-value">${escapeHtml(text)}</span></div>`;
     }).join('');
   }
 
@@ -1124,10 +1124,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getTypeReviewLabel(type) {
     const labelMap = {
-      hospital: '蹂묒썝',
-      clinic: '?섏썝',
-      dental: '移섍낵',
-      korean: '?쒖쓽??,
+      hospital: '癰귣쵐??,
+      clinic: '??륁뜚',
+      dental: '燁살꼵??,
+      korean: '??뽰벥??,
     };
     return labelMap[type] || '';
   }
@@ -1135,10 +1135,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function buildReviewSearchContext() {
     const rawQuery = String(ui.heroSearch?.value || '').trim();
     if (state.isSearchActive && rawQuery) {
-      const normalizedQuery = rawQuery.replace(/\s*?꾧린$/u, '').trim();
+      const normalizedQuery = rawQuery.replace(/\s*?袁㏓┛$/u, '').trim();
       return {
-        query: `${normalizedQuery || rawQuery} ?꾧린`,
-        title: `?ㅼ떆媛?${normalizedQuery || rawQuery} 愿???꾧린`,
+        query: `${normalizedQuery || rawQuery} ?袁㏓┛`,
+        title: `??쇰뻻揶?${normalizedQuery || rawQuery} ?온???袁㏓┛`,
       };
     }
 
@@ -1152,38 +1152,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (region && departmentName) {
       return {
-        query: `${region} ${departmentName} ?꾧린`,
-        title: `?ㅼ떆媛?${region} ${departmentName} ?꾧린`,
+        query: `${region} ${departmentName} ?袁㏓┛`,
+        title: `??쇰뻻揶?${region} ${departmentName} ?袁㏓┛`,
       };
     }
 
     if (region && typeName) {
       return {
-        query: `${region} ${typeName} ?꾧린`,
-        title: `?ㅼ떆媛?${region} ${typeName} ?꾧린`,
+        query: `${region} ${typeName} ?袁㏓┛`,
+        title: `??쇰뻻揶?${region} ${typeName} ?袁㏓┛`,
       };
     }
 
     if (departmentName) {
       return {
-        query: `${departmentName} ?꾧린`,
-        title: `?ㅼ떆媛?${departmentName} ?꾧린`,
+        query: `${departmentName} ?袁㏓┛`,
+        title: `??쇰뻻揶?${departmentName} ?袁㏓┛`,
       };
     }
 
     if (region) {
       return {
-        query: `${region} 蹂묒썝 ?꾧린`,
-        title: `?ㅼ떆媛?${region} 蹂묒썝 ?꾧린`,
+        query: `${region} 癰귣쵐???袁㏓┛`,
+        title: `??쇰뻻揶?${region} 癰귣쵐???袁㏓┛`,
       };
     }
 
     const fallbackContexts = [
-      { query: '蹂묒썝 ?꾧린', title: '?ㅼ떆媛?蹂묒썝 ?꾧린' },
-      { query: '吏꾨즺 ?꾧린', title: '?ㅼ떆媛?吏꾨즺 ?꾧린' },
-      { query: '?댁썝 ?꾧린', title: '?ㅼ떆媛??댁썝 ?꾧린' },
-      { query: '寃吏??꾧린', title: '?ㅼ떆媛?寃吏??꾧린' },
-      { query: '?섏닠 ?곷떞 ?꾧린', title: '?ㅼ떆媛??섏닠 ?곷떞 ?꾧린' },
+      { query: '癰귣쵐???袁㏓┛', title: '??쇰뻻揶?癰귣쵐???袁㏓┛' },
+      { query: '筌욊쑬利??袁㏓┛', title: '??쇰뻻揶?筌욊쑬利??袁㏓┛' },
+      { query: '??곸뜚 ?袁㏓┛', title: '??쇰뻻揶???곸뜚 ?袁㏓┛' },
+      { query: '野꺜筌??袁㏓┛', title: '??쇰뻻揶?野꺜筌??袁㏓┛' },
+      { query: '??뤿떊 ?怨룸뼖 ?袁㏓┛', title: '??쇰뻻揶???뤿떊 ?怨룸뼖 ?袁㏓┛' },
     ];
 
     return fallbackContexts[new Date().getDate() % fallbackContexts.length];
@@ -1214,46 +1214,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return [
       {
-        badge: '鍮꾧탳 湲곗?',
-        title: focusLabel ? `${focusLabel} 鍮꾧탳??臾댁뾿遺??蹂쇨퉴?` : '蹂묒썝 鍮꾧탳??臾댁뾿遺??蹂쇨퉴?',
-        body: `${focusLabel || '蹂묒썝 ?좏깮'}?먯꽌???됱젏 ?섎굹蹂대떎 ?꾧린 ?? ?댁쁺?쒓컙, ?꾨Ц???? 二쇱감 媛???щ?瑜??④퍡 蹂대뒗 ?몄씠 ?덉쟾?⑸땲?? 泥?鍮꾧탳??紐⑸줉?먯꽌 ?섍퀬, 理쒖쥌 ?먮떒? ?곸꽭?섏씠吏?먯꽌 ?묒닔쨌以鍮꾩꽌瑜샕룹쐞移??뺣낫瑜??ㅼ떆 ?뺤씤?섏꽭??`,
+        badge: '??쑨??疫꿸퀣?',
+        title: focusLabel ? `${focusLabel} ??쑨????얜똻毓욥겫???癰귥눊??` : '癰귣쵐????쑨????얜똻毓욥겫???癰귥눊??',
+        body: `${focusLabel || '癰귣쵐???醫뤾문'}?癒?퐣????깆젎 ??롪돌癰귣????袁㏓┛ ?? ??곸겫??볦퍢, ?袁ⓓ???? 雅뚯눘媛?揶쎛?????????ｍ뜞 癰귣????紐꾩뵠 ??됱읈??몃빍?? 筌???쑨???筌뤴뫖以?癒?퐣 ??랁? 筌ㅼ뮇伊??癒?뼊?? ?怨멸쉭??륁뵠筌왖?癒?퐣 ?臾믩땾夷뚥빳???쑴苑뚨몴?뺣９?욅㎉??類ｋ궖????쇰뻻 ?類ㅼ뵥??뤾쉭??`,
         href: compareHref,
-        cta: '紐⑸줉?먯꽌 鍮꾧탳?섍린',
+        cta: '筌뤴뫖以?癒?퐣 ??쑨???띾┛',
       },
       {
-        badge: '?댁쁺 ?뺤씤',
-        title: '?좎슂쨌?쇨컙 吏꾨즺???대뼸寃??뺤씤?좉퉴?',
-        body: '?좎슂?? ?쇨컙, ?쇱슂??吏꾨즺??蹂묒썝 ?좏깮 ?댁쑀媛 ?섍린 ?쎌?留??묒닔 留덇컧 ?쒓컙? ??鍮좊? ???덉뒿?덈떎. ?댁쁺 諛곗???鍮좊Ⅸ ?꾪꽣濡??곌퀬, ?ㅼ젣 ?댁썝 ?꾩뿉???곸꽭?섏씠吏 ?댁쁺 ?붿빟怨??꾪솕 臾몄쓽瑜??④퍡 蹂대뒗 ?먮쫫??醫뗭뒿?덈떎.',
+        badge: '??곸겫 ?類ㅼ뵥',
+        title: '?醫롮뒄夷??⑥퍢 筌욊쑬利????堉멨칰??類ㅼ뵥?醫됲돱?',
+        body: '?醫롮뒄?? ??⑥퍢, ??깆뒄??筌욊쑬利??癰귣쵐???醫뤾문 ??곸?揶쎛 ??띾┛ ???筌??臾믩땾 筌띾뜃而???볦퍢?? ????쥓? ????됰뮸??덈뼄. ??곸겫 獄쏄퀣?????쥓???袁り숲嚥??怨뚰? ??쇱젫 ??곸뜚 ?袁⑸퓠???怨멸쉭??륁뵠筌왖 ??곸겫 ?遺용튋???袁れ넅 ?얜챷?썹몴???ｍ뜞 癰귣????癒?カ???ル뿭???덈뼄.',
         href: 'guide.html',
-        cta: '?댁슜 媛?대뱶 蹂닿린',
+        cta: '??곸뒠 揶쎛??諭?癰귣떯由?,
       },
       {
-        badge: '以鍮??쒕쪟',
-        title: '珥덉쭊 ?꾩뿉 臾댁뾿??梨숆린硫?醫뗭쓣源?',
-        body: '?좊텇利? 蹂듭슜 以묒씤 ??紐⑸줉, 湲곗〈 寃??寃곌낵泥섎읆 湲곕낯 以鍮꾨Ъ? 吏꾨즺怨쇱? ?곴??놁씠 ?먯＜ ?꾩슂?⑸땲?? ?섏닠 ?곷떞?대굹 ?곸긽寃?ш? ?덉긽?섎㈃ ?곸꽭?섏씠吏 以鍮꾩꽌瑜섏? ?λ퉬 ?뺣낫瑜?媛숈씠 ?뺤씤?섎뒗 ?몄씠 醫뗭뒿?덈떎.',
+        badge: '餓Β????뺤첒',
+        title: '?λ뜆彛??袁⑸퓠 ?얜똻毓??筌?늽由곤쭖??ル뿭?ｆ틦?',
+        body: '?醫딇뀋筌? 癰귣벊??餓λ쵐????筌뤴뫖以? 疫꿸퀣??野꺜??野껉퀗?듸㎗?롮쓥 疫꿸퀡??餓Β??쑬窺?? 筌욊쑬利뷸⑥눘? ?怨???곸뵠 ?癒?폒 ?袁⑹뒄??몃빍?? ??뤿떊 ?怨룸뼖??援??怨멸맒野꺜??? ??됯맒??롢늺 ?怨멸쉭??륁뵠筌왖 餓Β??쑴苑뚨몴?? ?貫???類ｋ궖??揶쏆늿???類ㅼ뵥??롫뮉 ?紐꾩뵠 ?ル뿭???덈뼄.',
         href: 'about.html',
-        cta: '?댁쁺 湲곗? 蹂닿린',
+        cta: '??곸겫 疫꿸퀣? 癰귣떯由?,
       },
       {
-        badge: '?곗씠???댁꽍',
-        title: '怨듦났?곗씠?곗? 蹂닿컯 ?뺣낫???대뼸寃??쎌뼱???좉퉴?',
-        body: '???ъ씠?몃뒗 怨듦났 蹂묒썝 ?곗씠?곗? 怨듦컻 媛?ν븳 蹂닿컯 ?뺣낫瑜??④퍡 ?뺣━?⑸땲?? 怨듦났 API 吏???쒖뿉???먯깋? 媛?ν븯吏留? 理쒖쥌 諛⑸Ц 寃곗젙? 蹂묒썝 怨좎?? 吏곸젒 臾몄쓽瑜?湲곗??쇰줈 ?ㅼ떆 ?뺤씤?섎뒗 履쎌씠 ?덉쟾?⑸땲??',
+        badge: '?怨쀬뵠????곴퐤',
+        title: '?⑤벀??怨쀬뵠?怨? 癰귣떯而??類ｋ궖????堉멨칰???뚮선???醫됲돱?',
+        body: '??????紐껊뮉 ?⑤벀??癰귣쵐???怨쀬뵠?怨? ?⑤벀而?揶쎛?館釉?癰귣떯而??類ｋ궖????ｍ뜞 ?類ｂ봺??몃빍?? ?⑤벀??API 筌왖????뽯퓠???癒?퉳?? 揶쎛?館釉?쭪?筌? 筌ㅼ뮇伊?獄쎻뫖揆 野껉퀣??? 癰귣쵐???⑥쥙??? 筌욊낯???얜챷?썹몴?疫꿸퀣???곗쨮 ??쇰뻻 ?類ㅼ뵥??롫뮉 筌잛럩????됱읈??몃빍??',
         href: 'editorial-policy.html',
-        cta: '?몄쭛 ?먯튃 蹂닿린',
+        cta: '?紐꾩춿 ?癒?뒅 癰귣떯由?,
       },
       {
-        badge: '?꾧린 ?댁꽍',
-        title: reviewContext?.title ? `${reviewContext.title}???대뼸寃??쒖슜?좉퉴?` : '?꾧린 ?뺣낫???대뼸寃??쒖슜?좉퉴?',
-        body: '?꾧린??蹂묒썝??遺꾩쐞湲곗? ?湲?寃쏀뿕???뚯븙?섎뒗 李멸퀬 ?먮즺濡쒕뒗 ?좎슜?섏?留? 吏꾨즺 ?곹빀???먯껜瑜???좏븯吏???딆뒿?덈떎. ?꾧린 ?댁슜? ?꾩옱 寃???섎룄? ?④퍡 ?쎄퀬, 利앹긽쨌嫄곕━쨌?댁쁺 議곌굔??癒쇱? 留욎텛???몄씠 醫뗭뒿?덈떎.',
+        badge: '?袁㏓┛ ??곴퐤',
+        title: reviewContext?.title ? `${reviewContext.title}????堉멨칰???뽰뒠?醫됲돱?` : '?袁㏓┛ ?類ｋ궖????堉멨칰???뽰뒠?醫됲돱?',
+        body: '?袁㏓┛??癰귣쵐????브쑴?욄묾怨? ??疫?野껋?肉?????툢??롫뮉 筌〓㈇???癒?┷嚥≪뮆???醫롮뒠???筌? 筌욊쑬利??怨밸????癒?퍥?????醫뤿릭筌왖????녿뮸??덈뼄. ?袁㏓┛ ??곸뒠?? ?袁⑹삺 野꺜????롫즲?? ??ｍ뜞 ??꾪? 筌앹빘湲쎌쮯椰꾧퀡?곸쮯??곸겫 鈺곌퀗援???믪눘? 筌띿쉸????紐꾩뵠 ?ル뿭???덈뼄.',
         href: compareHref,
-        cta: '?꾩옱 議곌굔 ?ㅼ떆 蹂닿린',
+        cta: '?袁⑹삺 鈺곌퀗援???쇰뻻 癰귣떯由?,
       },
       {
-        badge: '?뺤젙 ?붿껌',
-        title: '?뺣낫媛 ?ㅻⅤ硫??대뼸寃??섏젙 ?붿껌?좉퉴?',
-        body: '?댁쁺?쒓컙, ?꾪솕踰덊샇, 吏꾨즺怨? ?꾩튂 ?뺣낫媛 ?ㅼ젣? ?ㅻⅤ硫?臾몄쓽 ?섏씠吏???대찓?쇰줈 諛붾줈 ?뺤젙 ?붿껌??蹂대궪 ???덉뒿?덈떎. 理쒖떊?깃낵 ?뺤젙 媛?μ꽦??遺꾨챸???뺣낫 援ъ“?쇱닔濡?諛⑸Ц?먭? ???좊ː?섍린 ?쎌뒿?덈떎.',
+        badge: '?類ㅼ젟 ?遺욧퍕',
+        title: '?類ｋ궖揶쎛 ??삘뀮筌???堉멨칰???륁젟 ?遺욧퍕?醫됲돱?',
+        body: '??곸겫??볦퍢, ?袁れ넅甕곕뜇?? 筌욊쑬利뷸? ?袁⑺뒄 ?類ｋ궖揶쎛 ??쇱젫?? ??삘뀮筌??얜챷????륁뵠筌왖????李??곗쨮 獄쏅뗀以??類ㅼ젟 ?遺욧퍕??癰귣?沅?????됰뮸??덈뼄. 筌ㅼ뮇??源껊궢 ?類ㅼ젟 揶쎛?關苑???브쑬梨???類ｋ궖 ?닌듼??깅땾嚥?獄쎻뫖揆?癒? ???醫듚??띾┛ ??뚮뮸??덈뼄.',
         href: 'contact.html',
-        cta: '臾몄쓽?섍린',
+        cta: '?얜챷???띾┛',
       },
     ];
   }
@@ -1261,11 +1261,11 @@ document.addEventListener('DOMContentLoaded', () => {
   async function renderReviews() {
     if (!ui.reviewsList) return;
 
-    ui.reviewsList.innerHTML = '<div class="map-loader"><div class="spinner"></div><p>由щ럭 ?곗씠?곕? 遺덈윭?ㅻ뒗 以묒엯?덈떎...</p></div>';
+    ui.reviewsList.innerHTML = '<div class="map-loader"><div class="spinner"></div><p>?귐됰윮 ?怨쀬뵠?怨? ?븍뜄???삳뮉 餓λ쵐???덈뼄...</p></div>';
     const reviewContext = buildReviewSearchContext();
 
     if (ui.reviewsTitle) {
-      ui.reviewsTitle.textContent = reviewContext.title.replace('?ㅼ떆媛?', '').replace('?꾧린', '?좏깮 媛?대뱶').trim();
+      ui.reviewsTitle.textContent = reviewContext.title.replace('??쇰뻻揶?', '').replace('?袁㏓┛', '?醫뤾문 揶쎛??諭?).trim();
     }
 
     const cards = buildReviewGuideCards(reviewContext);
@@ -1273,7 +1273,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <a href="${escapeHtml(item.href)}" class="review-card fade-up delay-${index % 3}" style="text-decoration:none; display:flex; flex-direction:column; cursor:pointer;">
         <div class="review-header" style="margin-bottom:10px;">
           <span class="review-badge" style="background:#46685b; color:white;">${escapeHtml(item.badge)}</span>
-          <span class="review-hospital" style="font-size:0.85rem; color:var(--text-muted);">蹂묒썝李얘린 ?먮낯 媛?대뱶</span>
+          <span class="review-hospital" style="font-size:0.85rem; color:var(--text-muted);">癰귣쵐?앾㎕?섎┛ ?癒?궚 揶쎛??諭?/span>
         </div>
         <h3 style="font-size:1rem; margin-bottom:8px; color:var(--text-heading); font-weight:600; line-height:1.4;">${escapeHtml(item.title)}</h3>
         <p class="review-content" style="flex-grow:1; -webkit-line-clamp:4;">${escapeHtml(item.body)}</p>
@@ -1292,7 +1292,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <span class="timeline-date">${formatDate(hospital.openDate)}</span>
         <div class="timeline-card">
           <div class="timeline-name">${escapeHtml(hospital.name)} <span class="hospital-type-tag">${escapeHtml(hospital.department)}</span></div>
-          <div class="timeline-addr">?뱧 ${escapeHtml(hospital.address)}</div>
+          <div class="timeline-addr">?諭?${escapeHtml(hospital.address)}</div>
         </div>
       </div>
     `).join('');
@@ -1332,25 +1332,25 @@ document.addEventListener('DOMContentLoaded', () => {
     renderQuickAccessList(
       ui.currentOpenList,
       currentOpen,
-      '?꾩옱 吏꾨즺以묒쑝濡??쒖떆??蹂묒썝???놁뒿?덈떎.',
+      '?袁⑹삺 筌욊쑬利뷰빳臾믪몵嚥???뽯뻻??癰귣쵐?????곷뮸??덈뼄.',
       buildQuickAccessCard
     );
     renderQuickAccessList(
       ui.saturdayOpenList,
       saturdayOpen,
-      '?좎슂??吏꾨즺 蹂묒썝 ?뺣낫瑜?以鍮?以묒엯?덈떎.',
+      '?醫롮뒄??筌욊쑬利?癰귣쵐???類ｋ궖??餓Β??餓λ쵐???덈뼄.',
       buildQuickAccessCard
     );
     renderQuickAccessList(
       ui.nightOpenList,
       nightOpen,
-      '?쇨컙 吏꾨즺 蹂묒썝 ?뺣낫瑜?以鍮?以묒엯?덈떎.',
+      '??⑥퍢 筌욊쑬利?癰귣쵐???類ｋ궖??餓Β??餓λ쵐???덈뼄.',
       buildQuickAccessCard
     );
     renderQuickAccessList(
       ui.recentOpenList,
       recentOpen,
-      '理쒓렐 媛쒖썝 蹂묒썝 ?뺣낫瑜?以鍮?以묒엯?덈떎.',
+      '筌ㅼ뮄??揶쏆뮇??癰귣쵐???類ｋ궖??餓Β??餓λ쵐???덈뼄.',
       buildRecentOpenCard
     );
 
@@ -1458,9 +1458,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const reviewCount = Number(hospital?.reviewCount || 0);
     const specialistCount = Number(hospital?.specialistCount || 0);
 
-    if (typeName.includes('?곴툒醫낇빀')) return 5;
-    if (typeName.includes('醫낇빀蹂묒썝')) return 4;
-    if (typeName === '蹂묒썝') return 3;
+    if (typeName.includes('?怨댄닋?ル굟鍮')) return 5;
+    if (typeName.includes('?ル굟鍮癰귣쵐??)) return 4;
+    if (typeName === '癰귣쵐??) return 3;
     if (specialistCount >= 10) return 2.5;
     if (specialistCount >= 5 || reviewCount >= 500) return 2;
     if (reviewCount >= 250 && score >= 4.4) return 1.5;
@@ -1497,8 +1497,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function buildQuickAccessCard(hospital) {
-    const href = hospital.id ? `detail.html?postid=${encodeURIComponent(hospital.id)}` : '#';
-    const type = hospital.department || hospital.type || '蹂묒썝';
+    const href = hospital.id ? `detail.html?id=${encodeURIComponent(hospital.id)}` : '#';
+    const type = hospital.department || hospital.type || '癰귣쵐??;
     const meta = buildHospitalMetaItems(hospital);
     const subinfo = buildHospitalSubinfo(hospital);
     const featureNote = buildHospitalFeatureNote(hospital);
@@ -1516,7 +1516,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <strong>${escapeHtml(hospital.name)}</strong>
           <span class="hospital-type-tag">${escapeHtml(type)}</span>
         </div>
-        <p class="quick-access-address">${escapeHtml(hospital.address || '二쇱냼 ?뺤씤 ?꾩슂')}</p>
+        <p class="quick-access-address">${escapeHtml(hospital.address || '雅뚯눘???類ㅼ뵥 ?袁⑹뒄')}</p>
         ${subinfo ? `<div class="quick-access-subinfo" data-hospital-subinfo>${subinfo}</div>` : ''}
         <div class="hospital-trust-row hospital-trust-row-compact" data-hospital-trust>${renderHospitalTrustBadges(trustBadges)}</div>
         <div class="hospital-status-row hospital-status-row-compact" data-hospital-status>${renderHospitalStatusBadges(statusItems)}</div>
@@ -1527,7 +1527,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="hospital-fact-grid hospital-fact-grid-compact" data-hospital-facts>${renderHospitalFactGrid(factItems)}</div>
         ${featureNote ? `<p class="hospital-feature-note">${escapeHtml(featureNote)}</p>` : ''}
         <div class="hospital-insight-list hospital-insight-list-compact" data-hospital-insights${insightItems.length ? '' : ' hidden'}>${renderHospitalInsightList(insightItems)}</div>
-        <p class="hospital-data-summary quick-access-summary${dataSummary ? '' : ' is-pending'}" data-hospital-summary>${escapeHtml(dataSummary || '二쇱감, ?묒닔, ?댁쁺 ?뺣낫瑜?遺덈윭?ㅻ뒗 以묒엯?덈떎.')}</p>
+        <p class="hospital-data-summary quick-access-summary${dataSummary ? '' : ' is-pending'}" data-hospital-summary>${escapeHtml(dataSummary || '雅뚯눘媛? ?臾믩땾, ??곸겫 ?類ｋ궖???븍뜄???삳뮉 餓λ쵐???덈뼄.')}</p>
         <div class="quick-access-meta" data-hospital-meta>${renderHospitalMetaItems(meta, true)}</div>
       </a>
     `;
@@ -1537,9 +1537,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const highlightItems = buildHospitalHighlightItems(hospital);
     const insightItems = buildHospitalInsightItems(hospital);
     const dataSummary = buildHospitalDataSummary(hospital);
-    const type = hospital.department || hospital.type || '蹂묒썝';
-    const openDate = hospital.openDate ? `媛쒖썝 ${formatDate(hospital.openDate)}` : '媛쒖썝???뺤씤 ?꾩슂';
-    const address = hospital.address || '二쇱냼 ?뺤씤 ?꾩슂';
+    const type = hospital.department || hospital.type || '癰귣쵐??;
+    const openDate = hospital.openDate ? `揶쏆뮇??${formatDate(hospital.openDate)}` : '揶쏆뮇????類ㅼ뵥 ?袁⑹뒄';
+    const address = hospital.address || '雅뚯눘???類ㅼ뵥 ?袁⑹뒄';
     const location = [hospital.region, hospital.district].filter(Boolean).join(' / ');
 
     return `
@@ -1554,7 +1554,7 @@ document.addEventListener('DOMContentLoaded', () => {
           ${highlightItems.map((item) => `<span class="hospital-highlight">${escapeHtml(item)}</span>`).join('')}
         </div>
         <div class="hospital-insight-list hospital-insight-list-compact" data-hospital-insights${insightItems.length ? '' : ' hidden'}>${renderHospitalInsightList(insightItems)}</div>
-        <p class="hospital-data-summary quick-access-summary${dataSummary ? '' : ' is-pending'}" data-hospital-summary>${escapeHtml(dataSummary || '二쇱감, ?묒닔, ?댁쁺 ?뺣낫瑜?遺덈윭?ㅻ뒗 以묒엯?덈떎.')}</p>
+        <p class="hospital-data-summary quick-access-summary${dataSummary ? '' : ' is-pending'}" data-hospital-summary>${escapeHtml(dataSummary || '雅뚯눘媛? ?臾믩땾, ??곸겫 ?類ｋ궖???븍뜄???삳뮉 餓λ쵐???덈뼄.')}</p>
         <div class="quick-access-meta">
           <span>${escapeHtml(openDate)}</span>
         </div>
@@ -1606,7 +1606,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function isClosedHoursText(hoursValue) {
     const text = String(hoursValue || '').trim().toLowerCase();
-    return !text || ['誘몄쭊猷?, '?댁쭊', '?대Т', '?놁쓬', '-', 'closed'].some((keyword) => text.includes(keyword));
+    return !text || ['沃섎챷彛딁뙴?, '??곸춭', '??龜', '??곸벉', '-', 'closed'].some((keyword) => text.includes(keyword));
   }
 
   function isLikelyOpenByFlags(hospital, day, currentMinutes) {
@@ -1664,10 +1664,10 @@ document.addEventListener('DOMContentLoaded', () => {
       ui.searchQueryDisplay.textContent = `"${query}"`;
     }
     if (ui.searchResultCount) {
-      ui.searchResultCount.innerHTML = '<span class="spinner-inline"></span> 寃??以?..';
+      ui.searchResultCount.innerHTML = '<span class="spinner-inline"></span> 野꺜??餓?..';
     }
     if (ui.searchResultCount) {
-      ui.searchResultCount.innerHTML = '<span class="spinner-inline"></span> 寃??以?..';
+      ui.searchResultCount.innerHTML = '<span class="spinner-inline"></span> 野꺜??餓?..';
     }
     if (ui.searchResultsList) {
       ui.searchResultsList.innerHTML = '';
@@ -1679,27 +1679,27 @@ document.addEventListener('DOMContentLoaded', () => {
       ? SearchEngine.buildSearchSummary(intent)
       : '';
     const operationNotice = intent && (intent.saturdayOpen || intent.sundayOpen || intent.nightOpen)
-      ? ' 쨌 ?댁쁺?쒓컙 ?뺤씤 蹂묒썝 湲곗?'
+      ? ' 夷???곸겫??볦퍢 ?類ㅼ뵥 癰귣쵐??疫꿸퀣?'
       : '';
 
     if (ui.searchResultCount) {
-      ui.searchResultCount.innerHTML = `珥?<strong>${hospitals.length.toLocaleString()}</strong>媛?寃곌낵${summary ? ` 쨌 ${escapeHtml(summary)}` : ''}${operationNotice}`;
+      ui.searchResultCount.innerHTML = `??<strong>${hospitals.length.toLocaleString()}</strong>揶?野껉퀗??{summary ? ` 夷?${escapeHtml(summary)}` : ''}${operationNotice}`;
     }
 
     if (ui.searchResultCount) {
       const resultNotice = intent && (intent.saturdayOpen || intent.sundayOpen || intent.nightOpen)
-        ? ' 쨌 ?댁쁺?쒓컙 ?뺤씤 蹂묒썝 湲곗?'
+        ? ' 夷???곸겫??볦퍢 ?類ㅼ뵥 癰귣쵐??疫꿸퀣?'
         : '';
-      ui.searchResultCount.innerHTML = `珥?<strong>${hospitals.length.toLocaleString()}</strong>媛?寃곌낵${summary ? ` 쨌 ${escapeHtml(summary)}` : ''}${resultNotice}`;
+      ui.searchResultCount.innerHTML = `??<strong>${hospitals.length.toLocaleString()}</strong>揶?野껉퀗??{summary ? ` 夷?${escapeHtml(summary)}` : ''}${resultNotice}`;
     }
 
     if (!ui.searchResultsList) return;
 
     if (hospitals.length === 0) {
       const description = summary
-        ? `${summary}${operationNotice ? ' 議곌굔? ?댁쁺?쒓컙???뺤씤??蹂묒썝 湲곗??쇰줈 癒쇱? 蹂댁뿬以띾땲??' : ' 議곌굔'}??留욌뒗 蹂묒썝???꾩쭅 李얠? 紐삵뻽?듬땲?? ?ㅻⅨ 吏??씠??吏꾨즺怨?議고빀?쇰줈 ?ㅼ떆 寃?됲빐蹂댁꽭??`
-        : '?ㅻⅨ ?ㅼ썙?쒕줈 ?ㅼ떆 寃?됲빐蹂댁꽭??';
-      ui.searchResultsList.innerHTML = buildEmptyState('寃??寃곌낵媛 ?놁뒿?덈떎.', description);
+        ? `${summary}${operationNotice ? ' 鈺곌퀗援?? ??곸겫??볦퍢???類ㅼ뵥??癰귣쵐??疫꿸퀣???곗쨮 ?믪눘? 癰귣똻肉т빳?얜빍??' : ' 鈺곌퀗援?}??筌띿쉶??癰귣쵐????袁⑹춦 筌≪뼚? 筌륁궢六??щ빍?? ??삘뀲 筌왖?????筌욊쑬利뷸?鈺곌퀬鍮??곗쨮 ??쇰뻻 野꺜??뀀퉸癰귣똻苑??`
+        : '??삘뀲 ??쇱뜖??뺤쨮 ??쇰뻻 野꺜??뀀퉸癰귣똻苑??';
+      ui.searchResultsList.innerHTML = buildEmptyState('野꺜??野껉퀗?드첎? ??곷뮸??덈뼄.', description);
     } else {
       ui.searchResultsList.innerHTML = hospitals.map((hospital, index) => buildHospitalCard(hospital, index + 1)).join('');
       observeNewElements(ui.searchResultsList);
@@ -1709,8 +1709,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (hospitals.length === 0 && ui.searchResultsList) {
       const emptyDescription = summary
-        ? `${summary}${operationNotice ? ' 議곌굔???댁쁺?쒓컙 ?뺤씤 蹂묒썝 湲곗??쇰줈 癒쇱? 蹂댁뿬?쒕졇吏留? : ' 議곌굔??留욌뒗'} 蹂묒썝???꾩쭅 李얠? 紐삵뻽?듬땲?? ?ㅻⅨ 吏??씠??吏꾨즺怨?議고빀?쇰줈 ?ㅼ떆 寃?됲빐蹂댁꽭??`
-        : '?ㅻⅨ ?ㅼ썙?쒕줈 ?ㅼ떆 寃?됲빐蹂댁꽭??';
+        ? `${summary}${operationNotice ? ' 鈺곌퀗援????곸겫??볦퍢 ?類ㅼ뵥 癰귣쵐??疫꿸퀣???곗쨮 ?믪눘? 癰귣똻肉??뺤죬筌왖筌? : ' 鈺곌퀗援??筌띿쉶??} 癰귣쵐????袁⑹춦 筌≪뼚? 筌륁궢六??щ빍?? ??삘뀲 筌왖?????筌욊쑬利뷸?鈺곌퀬鍮??곗쨮 ??쇰뻻 野꺜??뀀퉸癰귣똻苑??`
+        : '??삘뀲 ??쇱뜖??뺤쨮 ??쇰뻻 野꺜??뀀퉸癰귣똻苑??';
       ui.searchResultsList.innerHTML = buildSearchEmptyState(emptyDescription, intent);
     }
 
@@ -1829,15 +1829,15 @@ document.addEventListener('DOMContentLoaded', () => {
       String(intent?.district || '').trim(),
       String(intent?.locality || '').trim(),
       String(departmentLabel || '').trim(),
-      '?좎슂??,
-      '?쇨컙',
-      '?쇱슂??,
-      '二쇱감',
-      '媛??,
-      '?꾨Ц??,
-      '?묎툒',
-      '?좉퇋',
-      '媛쒖썝',
+      '?醫롮뒄??,
+      '??⑥퍢',
+      '??깆뒄??,
+      '雅뚯눘媛?,
+      '揶쎛??,
+      '?袁ⓓ??,
+      '?臾롰닋',
+      '?醫됲뇣',
+      '揶쏆뮇??,
     ].filter(Boolean));
 
     return tokens.find((token) => !blocked.has(token)) || '';
@@ -1849,7 +1849,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return false;
     }
 
-    const facilityTerms = ['蹂묒썝', '?섏썝', '移섍낵', '?쒖쓽??, '?대━??, '硫붾뵒而?, '?쇳꽣'];
+    const facilityTerms = ['癰귣쵐??, '??륁뜚', '燁살꼵??, '??뽰벥??, '?????, '筌롫뗀逾믦?, '??녠숲'];
     if (facilityTerms.some((term) => keywordText.includes(term))) {
       return true;
     }
@@ -1898,9 +1898,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function buildQuickFilterQuery(currentQuery, filter) {
     const labelMap = {
-      sat: '?좎슂??,
-      night: '?쇨컙',
-      sun: '?쇱슂??,
+      sat: '?醫롮뒄??,
+      night: '??⑥퍢',
+      sun: '??깆뒄??,
     };
 
     const nextLabel = labelMap[filter] || '';
@@ -1919,13 +1919,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function buildQuickRefineQuery(currentQuery, filter) {
     const labelMap = {
-      sat: '?좎슂??,
-      night: '?쇨컙',
-      sun: '?쇱슂??,
-      parking: '二쇱감',
-      specialist: '?꾨Ц??,
-      recent: '理쒓렐 媛쒖썝',
-      emergency: '?묎툒',
+      sat: '?醫롮뒄??,
+      night: '??⑥퍢',
+      sun: '??깆뒄??,
+      parking: '雅뚯눘媛?,
+      specialist: '?袁ⓓ??,
+      recent: '筌ㅼ뮄??揶쏆뮇??,
+      emergency: '?臾롰닋',
     };
 
     const nextLabel = labelMap[filter] || '';
@@ -2008,7 +2008,7 @@ document.addEventListener('DOMContentLoaded', () => {
         class="search-suggestion-item${index === state.activeSearchSuggestionIndex ? ' is-active' : ''}"
         data-search-suggestion="${escapeHtml(suggestion)}"
       >
-        <span class="search-suggestion-prefix">異붿쿇</span>
+        <span class="search-suggestion-prefix">?곕뗄荑?/span>
         <strong>${escapeHtml(suggestion)}</strong>
       </button>
     `).join('');
@@ -2063,22 +2063,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const chips = [];
-    if (intent?.region) chips.push(`吏??${intent.region}`);
+    if (intent?.region) chips.push(`筌왖??${intent.region}`);
     if (intent?.department && typeof SearchEngine !== 'undefined') {
-      chips.push(`吏꾨즺怨?${SearchEngine.getDepartmentLabel(intent.department)}`);
+      chips.push(`筌욊쑬利뷸?${SearchEngine.getDepartmentLabel(intent.department)}`);
     }
-    if (intent?.saturdayOpen) chips.push('?좎슂??吏꾨즺');
-    if (intent?.sundayOpen) chips.push('?쇱슂??吏꾨즺');
-    if (intent?.nightOpen) chips.push('?쇨컙 吏꾨즺');
-    if (intent?.parkingAvailable) chips.push('二쇱감 媛??);
-    if (intent?.specialistOnly) chips.push('?꾨Ц??);
-    if (intent?.recentOpen) chips.push('理쒓렐 媛쒖썝');
-    if (intent?.hasEmergency) chips.push('?묎툒 吏꾨즺');
-    if (intent?.keywordText) chips.push(`?ㅼ썙??${intent.keywordText}`);
+    if (intent?.saturdayOpen) chips.push('?醫롮뒄??筌욊쑬利?);
+    if (intent?.sundayOpen) chips.push('??깆뒄??筌욊쑬利?);
+    if (intent?.nightOpen) chips.push('??⑥퍢 筌욊쑬利?);
+    if (intent?.parkingAvailable) chips.push('雅뚯눘媛?揶쎛??);
+    if (intent?.specialistOnly) chips.push('?袁ⓓ??);
+    if (intent?.recentOpen) chips.push('筌ㅼ뮄??揶쏆뮇??);
+    if (intent?.hasEmergency) chips.push('?臾롰닋 筌욊쑬利?);
+    if (intent?.keywordText) chips.push(`??쇱뜖??${intent.keywordText}`);
 
     ui.searchIntentSummary.innerHTML = chips.length > 0
       ? chips.map((chip) => `<span class="search-intent-chip">${escapeHtml(chip)}</span>`).join('')
-      : '<span class="search-intent-chip">蹂묒썝紐? 吏?? 吏꾨즺怨?湲곗??쇰줈 寃??以?/span>';
+      : '<span class="search-intent-chip">癰귣쵐?앾쭗? 筌왖?? 筌욊쑬利뷸?疫꿸퀣???곗쨮 野꺜??餓?/span>';
   }
 
   function setSearchRefineState(intent) {
@@ -2323,7 +2323,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const hospitalId = card.dataset.hospitalId;
       if (hospitalId) {
-        window.location.href = `detail.html?postid=${hospitalId}`;
+        window.location.href = `detail.html?id=${hospitalId}`;
       }
     });
 
@@ -2435,7 +2435,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function buildEmptyState(title, description) {
     return `
       <div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-muted);">
-        <p style="font-size:2rem;margin-bottom:12px;">?뵊</p>
+        <p style="font-size:2rem;margin-bottom:12px;">?逾?/p>
         <p>${escapeHtml(title)}</p>
         <p style="font-size:var(--fs-sm);">${escapeHtml(description)}</p>
       </div>
@@ -2449,13 +2449,13 @@ document.addEventListener('DOMContentLoaded', () => {
     return `
       <div class="search-empty-state">
         <div class="search-empty-head">
-          <p class="search-empty-icon">?뵊</p>
-          <h3>寃??寃곌낵媛 ?놁뒿?덈떎.</h3>
+          <p class="search-empty-icon">?逾?/p>
+          <h3>野꺜??野껉퀗?드첎? ??곷뮸??덈뼄.</h3>
           <p>${escapeHtml(description)}</p>
         </div>
         <div class="search-empty-sections">
           <div class="search-empty-group">
-            <h4>?ㅼ떆 寃?됲빐蹂닿린</h4>
+            <h4>??쇰뻻 野꺜??뀀퉸癰귣떯由?/h4>
             <div class="search-empty-chip-list">
               ${suggestions.map((query) => `
                 <button type="button" class="search-empty-chip" data-search-query="${escapeHtml(query)}">${escapeHtml(query)}</button>
@@ -2463,7 +2463,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
           <div class="search-empty-group">
-            <h4>諛붾줈 紐⑸줉 蹂닿린</h4>
+            <h4>獄쏅뗀以?筌뤴뫖以?癰귣떯由?/h4>
             <div class="search-empty-preset-list">
               ${presets.map((preset) => `
                 <button
@@ -2493,21 +2493,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (region && departmentLabel) {
       suggestions.push(`${region} ${departmentLabel}`);
-      suggestions.push(`${region} ${departmentLabel} ?좎슂??);
-      suggestions.push(`${region} ${departmentLabel} ?쇨컙`);
+      suggestions.push(`${region} ${departmentLabel} ?醫롮뒄??);
+      suggestions.push(`${region} ${departmentLabel} ??⑥퍢`);
     } else if (region) {
-      suggestions.push(`${region} 移섍낵`);
-      suggestions.push(`${region} ?뺥삎?멸낵`);
-      suggestions.push(`${region} ?덇낵`);
+      suggestions.push(`${region} 燁살꼵??);
+      suggestions.push(`${region} ?類μ굨?硫몃궢`);
+      suggestions.push(`${region} ??뉖궢`);
     } else if (departmentLabel) {
-      suggestions.push(`?쒖슱 ${departmentLabel}`);
-      suggestions.push(`寃쎄린 ${departmentLabel}`);
-      suggestions.push(`遺??${departmentLabel}`);
+      suggestions.push(`??뽰뒻 ${departmentLabel}`);
+      suggestions.push(`野껋럡由?${departmentLabel}`);
+      suggestions.push(`?봔??${departmentLabel}`);
     }
 
-    suggestions.push('?쒖슱 移섍낵');
-    suggestions.push('寃쎄린 ?뺥삎?멸낵 ?좎슂??);
-    suggestions.push('?쒖슱 ?뚯븘怨??쇱슂??);
+    suggestions.push('??뽰뒻 燁살꼵??);
+    suggestions.push('野껋럡由??類μ굨?硫몃궢 ?醫롮뒄??);
+    suggestions.push('??뽰뒻 ???툡????깆뒄??);
 
     return Array.from(new Set(suggestions.filter(Boolean))).slice(0, 6);
   }
@@ -2517,43 +2517,43 @@ document.addEventListener('DOMContentLoaded', () => {
     const region = intent?.region || 'all';
     const departmentLabel = department !== 'all' && typeof SearchEngine !== 'undefined'
       ? SearchEngine.getDepartmentLabel(department)
-      : '蹂묒썝';
+      : '癰귣쵐??;
 
     const presets = [];
 
     if (department !== 'all') {
       presets.push({
-        title: `?쒖슱 ${departmentLabel} 紐⑸줉`,
-        description: '?쒖슱 沅뚯뿭?먯꽌 癒쇱? ?볤쾶 鍮꾧탳?⑸땲??',
-        region: '?쒖슱',
+        title: `??뽰뒻 ${departmentLabel} 筌뤴뫖以?,
+        description: '??뽰뒻 亦낅슣肉?癒?퐣 ?믪눘? ?蹂ㅼ쓺 ??쑨???몃빍??',
+        region: '??뽰뒻',
         department,
       });
       presets.push({
-        title: `寃쎄린 ${departmentLabel} 紐⑸줉`,
-        description: '寃쎄린 沅뚯뿭 蹂묒썝???④퍡 鍮꾧탳?⑸땲??',
-        region: '寃쎄린',
+        title: `野껋럡由?${departmentLabel} 筌뤴뫖以?,
+        description: '野껋럡由?亦낅슣肉?癰귣쵐?????ｍ뜞 ??쑨???몃빍??',
+        region: '野껋럡由?,
         department,
       });
     }
 
     if (region !== 'all') {
       presets.push({
-        title: `${region} 移섍낵 紐⑸줉`,
-        description: `${region}?먯꽌 留롮씠 李얜뒗 移섍낵遺???뺤씤?⑸땲??`,
+        title: `${region} 燁살꼵??筌뤴뫖以?,
+        description: `${region}?癒?퐣 筌띾‘??筌≪뼔??燁살꼵?들겫????類ㅼ뵥??몃빍??`,
         region,
         department: 'dental',
       });
       presets.push({
-        title: `${region} ?뺥삎?멸낵 紐⑸줉`,
-        description: `${region} ?뺥삎?멸낵 蹂묒썝??諛붾줈 遊낅땲??`,
+        title: `${region} ?類μ굨?硫몃궢 筌뤴뫖以?,
+        description: `${region} ?類μ굨?硫몃궢 癰귣쵐???獄쏅뗀以??딅굝???`,
         region,
         department: 'orthopedic',
       });
     }
 
     presets.push({
-      title: '?꾩껜 蹂묒썝 紐⑸줉',
-      description: '議곌굔???怨??꾩껜 紐⑸줉?먯꽌 ?ㅼ떆 ?먯깋?⑸땲??',
+      title: '?袁⑷퍥 癰귣쵐??筌뤴뫖以?,
+      description: '鈺곌퀗援???????袁⑷퍥 筌뤴뫖以?癒?퐣 ??쇰뻻 ?癒?퉳??몃빍??',
       region: 'all',
       department: 'all',
       type: 'all',
@@ -2616,13 +2616,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function extractDistrictFromAddress(address = '') {
     const tokens = String(address || '').split(/\s+/).filter(Boolean);
-    const candidates = tokens.filter((token, index) => index > 0 && /(?:??援?援?$/.test(token));
+    const candidates = tokens.filter((token, index) => index > 0 && /(?:??????$/.test(token));
     return candidates.length > 0 ? candidates[candidates.length - 1] : '';
   }
 
   function extractTownFromAddress(address = '') {
     const tokens = String(address || '').split(/\s+/).filter(Boolean);
-    const match = tokens.find((token) => /(?:??硫???媛|由?$/.test(token));
+    const match = tokens.find((token) => /(?:??筌???揶쎛|??$/.test(token));
     return match || '';
   }
 
@@ -2675,52 +2675,52 @@ document.addEventListener('DOMContentLoaded', () => {
   function inferDepartmentIdFromText(text = '') {
     const value = String(text || '').trim();
     if (!value) return 'general';
-    if (value.includes('移섍낵')) return 'dental';
-    if (value.includes('?쒖쓽??) || value.includes('?쒕갑')) return 'korean';
-    if (value.includes('?뺥삎?멸낵')) return 'orthopedic';
-    if (value.includes('?덇낵')) return 'ophthalmology';
-    if (value.includes('?쇰?怨?)) return 'dermatology';
-    if (value.includes('?대퉬?명썑怨?)) return 'ent';
-    if (value.includes('?뚯븘泥?냼?꾧낵') || value.includes('?뚯븘怨?)) return 'pediatric';
-    if (value.includes('?곕??멸낵')) return 'obgyn';
-    if (value.includes('鍮꾨눊?섑븰怨?) || value.includes('鍮꾨눊湲곌낵')) return 'urology';
-    if (value.includes('?뺤떊嫄닿컯?섑븰怨?) || value.includes('?뺤떊怨?)) return 'psychiatry';
-    if (value.includes('?깊삎?멸낵')) return 'plastic';
-    if (value.includes('?좉꼍?멸낵')) return 'neurosurgery';
-    if (value.includes('媛?뺤쓽?숆낵')) return 'familymed';
-    if (value.includes('?멸낵')) return 'surgery';
-    if (value.includes('?듭쬆?섑븰怨?) || value.includes('留덉랬?듭쬆?섑븰怨?)) return 'pain';
-    if (value.includes('?ы솢?섑븰怨?)) return 'rehab';
-    if (value.includes('?닿낵')) return 'internal';
+    if (value.includes('燁살꼵??)) return 'dental';
+    if (value.includes('??뽰벥??) || value.includes('??뺢컩')) return 'korean';
+    if (value.includes('?類μ굨?硫몃궢')) return 'orthopedic';
+    if (value.includes('??뉖궢')) return 'ophthalmology';
+    if (value.includes('?????)) return 'dermatology';
+    if (value.includes('????紐낆뜎??)) return 'ent';
+    if (value.includes('???툡筌???袁㏓궢') || value.includes('???툡??)) return 'pediatric';
+    if (value.includes('?怨??硫몃궢')) return 'obgyn';
+    if (value.includes('??쑬???묐린??) || value.includes('??쑬?딀묾怨뚮궢')) return 'urology';
+    if (value.includes('?類ㅻ뻿椰꾨떯而??묐린??) || value.includes('?類ㅻ뻿??)) return 'psychiatry';
+    if (value.includes('?源딆굨?硫몃궢')) return 'plastic';
+    if (value.includes('?醫됯펾?硫몃궢')) return 'neurosurgery';
+    if (value.includes('揶쎛?類ㅼ벥??녿궢')) return 'familymed';
+    if (value.includes('?硫몃궢')) return 'surgery';
+    if (value.includes('???쵄??묐린??) || value.includes('筌띾뜆????쵄??묐린??)) return 'pain';
+    if (value.includes('?????묐린??)) return 'rehab';
+    if (value.includes('??용궢')) return 'internal';
     return 'general';
   }
 
   function inferHospitalTypeFromDepartment(departmentId = '') {
-    if (departmentId === 'dental') return '移섍낵?섏썝';
-    if (departmentId === 'korean') return '?쒖쓽??;
-    if (departmentId === 'general') return '醫낇빀蹂묒썝';
-    return '?섏썝';
+    if (departmentId === 'dental') return '燁살꼵???륁뜚';
+    if (departmentId === 'korean') return '??뽰벥??;
+    if (departmentId === 'general') return '?ル굟鍮癰귣쵐??;
+    return '??륁뜚';
   }
 
   function extractRegionFromAddress(address = '') {
     const text = String(address || '').trim();
-    if (text.startsWith('?쒖슱')) return '?쒖슱';
-    if (text.startsWith('寃쎄린')) return '寃쎄린';
-    if (text.startsWith('?몄쿇')) return '?몄쿇';
-    if (text.startsWith('遺??)) return '遺??;
-    if (text.startsWith('?援?)) return '?援?;
-    if (text.startsWith('???)) return '???;
-    if (text.startsWith('愿묒＜')) return '愿묒＜';
-    if (text.startsWith('?몄궛')) return '?몄궛';
-    if (text.startsWith('?몄쥌')) return '?몄쥌';
-    if (text.startsWith('媛뺤썝')) return '媛뺤썝';
-    if (text.startsWith('異⑹껌遺곷룄') || text.startsWith('異⑸턿')) return '異⑸턿';
-    if (text.startsWith('異⑹껌?⑤룄') || text.startsWith('異⑸궓')) return '異⑸궓';
-    if (text.startsWith('?꾨턿') || text.startsWith('?꾨씪遺곷룄')) return '?꾨턿';
-    if (text.startsWith('?꾨궓') || text.startsWith('?꾨씪?⑤룄')) return '?꾨궓';
-    if (text.startsWith('寃쎈턿') || text.startsWith('寃쎌긽遺곷룄')) return '寃쎈턿';
-    if (text.startsWith('寃쎈궓') || text.startsWith('寃쎌긽?⑤룄')) return '寃쎈궓';
-    if (text.startsWith('?쒖＜')) return '?쒖＜';
+    if (text.startsWith('??뽰뒻')) return '??뽰뒻';
+    if (text.startsWith('野껋럡由?)) return '野껋럡由?;
+    if (text.startsWith('?紐꾩퓝')) return '?紐꾩퓝';
+    if (text.startsWith('?봔??)) return '?봔??;
+    if (text.startsWith('????)) return '????;
+    if (text.startsWith('????)) return '????;
+    if (text.startsWith('?용쵐竊?)) return '?용쵐竊?;
+    if (text.startsWith('?紐꾧텦')) return '?紐꾧텦';
+    if (text.startsWith('?紐꾩쪒')) return '?紐꾩쪒';
+    if (text.startsWith('揶쏅벡??)) return '揶쏅벡??;
+    if (text.startsWith('?겸뫗猿뚪겫怨룸즲') || text.startsWith('?겸뫖??)) return '?겸뫖??;
+    if (text.startsWith('?겸뫗猿??ㅻ즲') || text.startsWith('?겸뫖沅?)) return '?겸뫖沅?;
+    if (text.startsWith('?袁⑦꽴') || text.startsWith('?袁⑥뵬?브낮猷?)) return '?袁⑦꽴';
+    if (text.startsWith('?袁④텚') || text.startsWith('?袁⑥뵬??ㅻ즲')) return '?袁④텚';
+    if (text.startsWith('野껋럥??) || text.startsWith('野껋럩湲썽겫怨룸즲')) return '野껋럥??;
+    if (text.startsWith('野껋럥沅?) || text.startsWith('野껋럩湲??ㅻ즲')) return '野껋럥沅?;
+    if (text.startsWith('??뽳폒')) return '??뽳폒';
     return '';
   }
 
@@ -2848,17 +2848,17 @@ document.addEventListener('DOMContentLoaded', () => {
       hospital.parkingCapacity = Number(detailData.parkQty) || hospital.parkingCapacity || 0;
     }
     if (detailData?.parkXpnsYn) {
-      hospital.parkingFee = detailData.parkXpnsYn === 'Y' ? '?좊즺' : '臾대즺';
+      hospital.parkingFee = detailData.parkXpnsYn === 'Y' ? '?醫딆┷' : '?얜?利?;
     }
     if (Array.isArray(equipData?.topEquipment) && equipData.topEquipment.length > 0) {
       hospital.equipment = equipData.topEquipment
         .slice(0, 3)
-        .map((item) => `${item.name} ${item.count}?`)
+        .map((item) => `${item.name} ${item.count}??`)
         .join(', ');
     } else if (Array.isArray(equipData?.equipDetails) && equipData.equipDetails.length > 0) {
       hospital.equipment = equipData.equipDetails
         .slice(0, 3)
-        .map((item) => `${item.name} ${item.count}?`)
+        .map((item) => `${item.name} ${item.count}??`)
         .join(', ');
     } else if (Array.isArray(equipData?.equips) && equipData.equips.length > 0 && !hospital.equipment) {
       hospital.equipment = equipData.equips.slice(0, 3).join(', ');
@@ -2900,7 +2900,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const addressNode = card.querySelector('.hospital-address, .quick-access-address');
       if (addressNode && hospital.address) {
         addressNode.textContent = addressNode.classList.contains('hospital-address')
-          ? `二쇱냼 ${hospital.address}`
+          ? `雅뚯눘??${hospital.address}`
           : hospital.address;
       }
 
