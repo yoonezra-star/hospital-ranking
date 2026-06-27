@@ -112,7 +112,7 @@ const SearchEngine = (() => {
       region: '경기',
       district: '파주시',
       label: '파주 운정 생활권',
-      keywords: ['운정', '동패동', '목동동', '야당동', '다율동', '산내동'],
+      keywords: ['운정', '목동동', '야당동', '다율동', '산내동'],
     },
     판교: {
       region: '경기',
