@@ -243,7 +243,7 @@ const HospitalAPI = (() => {
   }
 
   function mockFallback(params) {
-    let list = typeof HOSPITALS !== 'undefined' ? [...HOSPITALS] : [];
+    let list = getMockHospitalPool();
 
     if (params.name) {
       const query = params.name.toLowerCase();
@@ -268,6 +268,125 @@ const HospitalAPI = (() => {
     };
   }
 
+  function getMockHospitalPool() {
+    const baseHospitals = Array.isArray(typeof HOSPITALS !== 'undefined' ? HOSPITALS : null)
+      ? HOSPITALS
+      : [];
+    const supplementalHospitals = Array.isArray(typeof NEW_HOSPITALS !== 'undefined' ? NEW_HOSPITALS : null)
+      ? NEW_HOSPITALS.map(normalizeSupplementalHospital)
+      : [];
+    const merged = [...baseHospitals, ...supplementalHospitals];
+    const seen = new Set();
+
+    return merged.filter((hospital) => {
+      const key = [hospital?.name, hospital?.address]
+        .map((value) => String(value || '').trim().toLowerCase())
+        .filter(Boolean)
+        .join('|');
+      if (!key || seen.has(key)) {
+        return false;
+      }
+      seen.add(key);
+      return true;
+    });
+  }
+
+  function normalizeSupplementalHospital(hospital = {}) {
+    const departmentName = String(hospital.department || '').trim();
+    const departmentId = inferDepartmentIdFromName(departmentName);
+    const address = String(hospital.address || '').trim();
+    const region = extractRegionFromAddress(address);
+
+    return {
+      id: hospital.id || `new-${Math.random().toString(36).slice(2, 9)}`,
+      name: String(hospital.name || '').trim(),
+      type: inferHospitalTypeFromDepartmentId(departmentId),
+      department: departmentName,
+      departmentId,
+      address,
+      region,
+      district: extractDistrictFromAddress(address),
+      town: extractTownFromAddress(address),
+      phone: String(hospital.phone || '').trim(),
+      score: Number(hospital.score || 0) || 4.1,
+      reviewCount: Number(hospital.reviewCount || 0) || 0,
+      specialistCount: Number(hospital.specialistCount || 0) || 0,
+      openDate: String(hospital.openDate || '').trim(),
+      saturdayOpen: hospital.saturdayOpen ?? null,
+      sundayOpen: hospital.sundayOpen ?? null,
+      nightOpen: hospital.nightOpen ?? null,
+      lat: Number(hospital.lat || 0) || 0,
+      lng: Number(hospital.lng || 0) || 0,
+      subway: String(hospital.subway || '').trim(),
+      parkingCapacity: Number(hospital.parkingCapacity || 0) || 0,
+      parkingFee: String(hospital.parkingFee || '').trim(),
+      equipment: String(hospital.equipment || '').trim(),
+    };
+  }
+
+  function inferDepartmentIdFromName(name = '') {
+    const text = String(name || '').trim();
+    if (!text) return 'general';
+
+    const entry = Object.entries({
+      dental: ['치과'],
+      korean: ['한의원', '한방'],
+      orthopedic: ['정형외과'],
+      ophthalmology: ['안과'],
+      dermatology: ['피부과'],
+      ent: ['이비인후과'],
+      pediatric: ['소아청소년과', '소아과'],
+      obgyn: ['산부인과'],
+      urology: ['비뇨의학과', '비뇨기과'],
+      psychiatry: ['정신건강의학과', '정신과'],
+      plastic: ['성형외과'],
+      neurosurgery: ['신경외과'],
+      familymed: ['가정의학과'],
+      surgery: ['외과'],
+      pain: ['통증의학과', '마취통증의학과'],
+      rehab: ['재활의학과'],
+      internal: ['내과'],
+      general: ['종합병원', '병원'],
+    }).find(([, keywords]) => keywords.some((keyword) => text.includes(keyword)));
+
+    return entry?.[0] || 'general';
+  }
+
+  function inferHospitalTypeFromDepartmentId(departmentId = '') {
+    switch (departmentId) {
+      case 'dental':
+        return '치과의원';
+      case 'korean':
+        return '한의원';
+      case 'general':
+        return '종합병원';
+      default:
+        return '의원';
+    }
+  }
+
+  function extractRegionFromAddress(address = '') {
+    const text = String(address || '').trim();
+    if (text.startsWith('서울')) return '서울';
+    if (text.startsWith('경기')) return '경기';
+    if (text.startsWith('인천')) return '인천';
+    if (text.startsWith('부산')) return '부산';
+    if (text.startsWith('대구')) return '대구';
+    if (text.startsWith('대전')) return '대전';
+    if (text.startsWith('광주')) return '광주';
+    if (text.startsWith('울산')) return '울산';
+    if (text.startsWith('세종')) return '세종';
+    if (text.startsWith('강원')) return '강원';
+    if (text.startsWith('충청북도') || text.startsWith('충북')) return '충북';
+    if (text.startsWith('충청남도') || text.startsWith('충남')) return '충남';
+    if (text.startsWith('전북') || text.startsWith('전라북도')) return '전북';
+    if (text.startsWith('전남') || text.startsWith('전라남도')) return '전남';
+    if (text.startsWith('경북') || text.startsWith('경상북도')) return '경북';
+    if (text.startsWith('경남') || text.startsWith('경상남도')) return '경남';
+    if (text.startsWith('제주')) return '제주';
+    return '';
+  }
+
   async function fetchNaverSearch(query, type = 'blog', display = 3) {
     try {
       const url = `/api/search?query=${encodeURIComponent(query)}&type=${type}&display=${display}&sort=sim`;
@@ -286,7 +405,7 @@ const HospitalAPI = (() => {
   }
 
   function buildFallbackSearchItems(query, display) {
-    const list = typeof HOSPITALS !== 'undefined' ? HOSPITALS.slice(0, display) : [];
+    const list = getMockHospitalPool().slice(0, display);
     return list.map((hospital, index) => ({
       title: `${hospital.name} 이용 후기`,
       description: `${hospital.address} 기준으로 정리한 방문자 요약입니다. 진료과와 위치, 기본 평점 정보를 빠르게 확인할 수 있습니다.`,
