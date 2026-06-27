@@ -298,6 +298,11 @@ const NEW_HOSPITALS = [
   { id: 113, name: '분당바른정형외과의원',   address: '경기도 성남시 분당구 서현로 192',    openDate: '2018-03-12', department: '정형외과', departmentId: 'orthopedic', reviewCount: 176, specialistCount: 2, saturdayOpen: true, sundayOpen: false, nightOpen: true, parkingCapacity: 40, parkingFee: '건물 주차' },
   { id: 114, name: '운정아이소아청소년과의원', address: '경기도 파주시 목동동 939-3',       openDate: '2017-05-18', department: '소아청소년과', departmentId: 'pediatric', reviewCount: 152, specialistCount: 1, saturdayOpen: true, sundayOpen: false, nightOpen: true, parkingCapacity: 26, parkingFee: '건물 주차' },
   { id: 115, name: '송도밝은안과의원',       address: '인천광역시 연수구 송도동 29-13',     openDate: '2016-08-22', department: '안과', departmentId: 'ophthalmology', reviewCount: 168, specialistCount: 2, saturdayOpen: true, sundayOpen: false, nightOpen: true, parkingCapacity: 34, parkingFee: '건물 주차' },
+  { id: 116, name: '정자연세내과의원',       address: '경기도 성남시 분당구 정자동 15-3',    openDate: '2014-04-09', department: '내과', departmentId: 'internal', reviewCount: 144, specialistCount: 2, saturdayOpen: true, sundayOpen: false, nightOpen: true, parkingCapacity: 22, parkingFee: '건물 주차' },
+  { id: 117, name: '야탑튼튼정형외과의원',   address: '경기도 성남시 분당구 야탑동 367-5',   openDate: '2015-10-21', department: '정형외과', departmentId: 'orthopedic', reviewCount: 158, specialistCount: 2, saturdayOpen: true, sundayOpen: false, nightOpen: true, parkingCapacity: 30, parkingFee: '건물 주차' },
+  { id: 118, name: '센텀푸른안과의원',       address: '부산광역시 해운대구 우동 1519',       openDate: '2017-02-14', department: '안과', departmentId: 'ophthalmology', reviewCount: 149, specialistCount: 2, saturdayOpen: true, sundayOpen: false, nightOpen: true, parkingCapacity: 36, parkingFee: '건물 주차' },
+  { id: 119, name: '청라아이봄소아청소년과의원', address: '인천광역시 서구 청라동 157-12',   openDate: '2018-11-05', department: '소아청소년과', departmentId: 'pediatric', reviewCount: 163, specialistCount: 1, saturdayOpen: true, sundayOpen: false, nightOpen: true, parkingCapacity: 28, parkingFee: '건물 주차' },
+  { id: 120, name: '홍대서울치과의원',       address: '서울특별시 마포구 서교동 358-92',     openDate: '2016-05-16', department: '치과', departmentId: 'dental', reviewCount: 171, specialistCount: 1, saturdayOpen: true, sundayOpen: false, nightOpen: true, parkingCapacity: 18, parkingFee: '건물 주차' },
 ];
 
 // 통계 데이터

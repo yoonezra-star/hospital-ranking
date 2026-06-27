@@ -258,6 +258,12 @@ const SearchEngine = (() => {
       label: '인천 송도 생활권',
       keywords: ['송도', '송도동', '연수구'],
     },
+    청라: {
+      region: '인천',
+      district: '서구',
+      label: '인천 청라 생활권',
+      keywords: ['청라', '청라동', '서구'],
+    },
     구월: {
       region: '인천',
       district: '남동구',
