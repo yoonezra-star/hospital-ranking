@@ -2,28 +2,39 @@
   const NAVER_MAP_DEFAULT_KEYS = ['390058kho4', 'rgd9ajy97r'];
   const NAVER_MAP_STORAGE_KEY = 'NAVER_MAP_KEY';
   const FALLBACK_REVIEW_TEXTS = [
-    '접수 대기 동선이 비교적 안정적이고 진료 안내가 명확한 편입니다.',
-    '의료진 설명이 차분하고 필요한 검사와 다음 단계 안내가 비교적 분명합니다.',
-    '위치와 접근성이 좋아 재방문 후기에서 자주 언급되는 병원입니다.',
-    '야간 또는 토요일 진료 여부는 방문 전 다시 확인하는 편이 안전합니다.',
+    '?묒닔 ?湲??숈꽑??鍮꾧탳???덉젙?곸씠怨?吏꾨즺 ?덈궡媛 紐낇솗???몄엯?덈떎.',
+    '?섎즺吏??ㅻ챸??李⑤텇?섍퀬 ?꾩슂??寃?ъ? ?ㅼ쓬 ?④퀎 ?덈궡媛 鍮꾧탳??遺꾨챸?⑸땲??',
+    '?꾩튂? ?묎렐?깆씠 醫뗭븘 ?щ갑臾??꾧린?먯꽌 ?먯＜ ?멸툒?섎뒗 蹂묒썝?낅땲??',
+    '?쇨컙 ?먮뒗 ?좎슂??吏꾨즺 ?щ???諛⑸Ц ???ㅼ떆 ?뺤씤?섎뒗 ?몄씠 ?덉쟾?⑸땲??',
   ];
   const detailRuntime = createEmptyDetailRuntime();
 
   document.addEventListener('DOMContentLoaded', () => {
-    const hospitalId = new URLSearchParams(window.location.search).get('id');
+    const params = new URLSearchParams(window.location.search);
+    const hospitalId = params.get('postid') || params.get('id');
     if (!hospitalId) {
-      setText('detail-name', '병원 정보를 찾을 수 없습니다.');
+      setText('detail-name', '蹂묒썝 ?뺣낫瑜?李얠쓣 ???놁뒿?덈떎.');
       return;
     }
 
+    normalizeDetailUrl(hospitalId);
+
     void loadHospitalDetail(hospitalId);
   });
+
+  function normalizeDetailUrl(hospitalId) {
+    const expected = `detail.html?postid=${encodeURIComponent(hospitalId)}`;
+    const current = `${window.location.pathname.split('/').pop() || 'detail.html'}${window.location.search || ''}`;
+    if (current !== expected) {
+      window.history.replaceState({}, '', expected);
+    }
+  }
 
   async function loadHospitalDetail(id) {
     try {
       const hospital = await resolveHospital(id);
       if (!hospital) {
-        setText('detail-name', '병원 정보를 찾을 수 없습니다.');
+        setText('detail-name', '蹂묒썝 ?뺣낫瑜?李얠쓣 ???놁뒿?덈떎.');
         return;
       }
 
@@ -31,7 +42,7 @@
       await hydrateDetail(hospital);
     } catch (error) {
       console.error('[detail] failed to load detail page:', error);
-      setText('detail-name', '병원 정보를 불러오지 못했습니다.');
+      setText('detail-name', '蹂묒썝 ?뺣낫瑜?遺덈윭?ㅼ? 紐삵뻽?듬땲??');
     }
   }
 
@@ -53,20 +64,20 @@
   function renderDetail(hospital) {
     window.currentHospitalDetail = hospital;
     resetDetailRuntime();
-    document.title = `${hospital.name} 후기, 평점 및 진료 정보 - 병원찾기`;
+    document.title = `${hospital.name} ?꾧린, ?됱젏 諛?吏꾨즺 ?뺣낫 - 蹂묒썝李얘린`;
     updateMetaDescription(
-      `${hospital.name}의 위치, 연락처, 진료 정보, 후기 요약을 병원찾기에서 확인하세요.`
+      `${hospital.name}???꾩튂, ?곕씫泥? 吏꾨즺 ?뺣낫, ?꾧린 ?붿빟??蹂묒썝李얘린?먯꽌 ?뺤씤?섏꽭??`
     );
 
     refreshHospitalOverview(hospital);
-    setText('detail-emergency', '응급 진료 정보 확인 필요');
-    setText('detail-hours-note', '점심시간 및 접수 안내 확인 중...');
-    setText('detail-duty-note', '공개 데이터 기반 진료 안내 정보를 정리 중입니다.');
-    setText('detail-match-summary', '공공 병원 데이터 매칭 확인 중...');
-    setText('detail-operation-summary', '운영 정보를 정리 중입니다.');
-    setText('detail-location-summary', '위치 기준 정보를 정리 중입니다.');
-    setText('detail-equipment-summary', '장비와 시설 정보를 정리 중입니다.');
-    updateSourceSummary(['기본 병원 정보']);
+    setText('detail-emergency', '?묎툒 吏꾨즺 ?뺣낫 ?뺤씤 ?꾩슂');
+    setText('detail-hours-note', '?먯떖?쒓컙 諛??묒닔 ?덈궡 ?뺤씤 以?..');
+    setText('detail-duty-note', '怨듦컻 ?곗씠??湲곕컲 吏꾨즺 ?덈궡 ?뺣낫瑜??뺣━ 以묒엯?덈떎.');
+    setText('detail-match-summary', '怨듦났 蹂묒썝 ?곗씠??留ㅼ묶 ?뺤씤 以?..');
+    setText('detail-operation-summary', '?댁쁺 ?뺣낫瑜??뺣━ 以묒엯?덈떎.');
+    setText('detail-location-summary', '?꾩튂 湲곗? ?뺣낫瑜??뺣━ 以묒엯?덈떎.');
+    setText('detail-equipment-summary', '?λ퉬? ?쒖꽕 ?뺣낫瑜??뺣━ 以묒엯?덈떎.');
+    updateSourceSummary(['湲곕낯 蹂묒썝 ?뺣낫']);
 
     const subwayWrapper = document.getElementById('detail-subway-wrapper');
     if (subwayWrapper) {
@@ -104,21 +115,21 @@
           mergePublicHospital(hospital, matchedHospital.hospital);
           publicYkiho = matchedHospital.hospital.id;
           matchMeta = matchedHospital.meta;
-          sourceStates.push('기본 병원 API 연동');
+          sourceStates.push('湲곕낯 蹂묒썝 API ?곕룞');
           refreshHospitalOverview(hospital);
         } else {
           matchMeta = {
             status: 'fallback',
-            summary: '공공 병원 데이터 매칭이 없어 현재 보유 정보 기준으로 노출합니다.',
+            summary: '怨듦났 蹂묒썝 ?곗씠??留ㅼ묶???놁뼱 ?꾩옱 蹂댁쑀 ?뺣낫 湲곗??쇰줈 ?몄텧?⑸땲??',
           };
-          sourceStates.push('기본 정보는 보유 데이터 사용');
+          sourceStates.push('湲곕낯 ?뺣낫??蹂댁쑀 ?곗씠???ъ슜');
         }
       } else if (publicYkiho) {
         matchMeta = {
           status: 'direct',
-          summary: `공공 병원 고유코드(${publicYkiho})로 직접 조회했습니다.`,
+          summary: `怨듦났 蹂묒썝 怨좎쑀肄붾뱶(${publicYkiho})濡?吏곸젒 議고쉶?덉뒿?덈떎.`,
         };
-        sourceStates.push('기본 병원 API 연동');
+        sourceStates.push('湲곕낯 蹂묒썝 API ?곕룞');
       }
 
       if (publicYkiho) {
@@ -132,7 +143,7 @@
           detailRuntime.detailData = detailResult.value.data;
           applyDetailData(detailResult.value.data, hospital);
           if (detailResult.value.data?.found === true) {
-            sourceStates.push(buildSourceStateLabelSafe('상세 정보 API', detailResult.value.dataSource));
+            sourceStates.push(buildSourceStateLabelSafe('?곸꽭 ?뺣낫 API', detailResult.value.dataSource));
           }
         }
 
@@ -140,7 +151,7 @@
           detailRuntime.equipData = equipResult.value.data;
           applyEquipData(equipResult.value.data);
           if (equipResult.value.data?.found === true) {
-            sourceStates.push(buildSourceStateLabelSafe('장비 정보 API', equipResult.value.dataSource));
+            sourceStates.push(buildSourceStateLabelSafe('?λ퉬 ?뺣낫 API', equipResult.value.dataSource));
           }
         }
 
@@ -148,7 +159,7 @@
           detailRuntime.hoursData = hoursResult.value.data;
           applyHoursData(hoursResult.value.data, hospital);
           if (hoursResult.value.data?.found === true) {
-            sourceStates.push(buildSourceStateLabelSafe('진료시간 API', hoursResult.value.dataSource));
+            sourceStates.push(buildSourceStateLabelSafe('吏꾨즺?쒓컙 API', hoursResult.value.dataSource));
           }
         }
       } else {
@@ -156,7 +167,7 @@
         detailRuntime.hoursData = hoursData.data;
         applyHoursData(hoursData.data, hospital);
         if (hoursData.data?.found === true) {
-          sourceStates.push(buildSourceStateLabelSafe('진료시간 API', hoursData.dataSource));
+          sourceStates.push(buildSourceStateLabelSafe('吏꾨즺?쒓컙 API', hoursData.dataSource));
         }
       }
     } catch (error) {
@@ -164,10 +175,10 @@
       if (!matchMeta) {
         matchMeta = {
           status: 'error',
-          summary: '공공데이터 상세 연동 중 오류가 발생해 기본 정보를 우선 표시합니다.',
+          summary: '怨듦났?곗씠???곸꽭 ?곕룞 以??ㅻ쪟媛 諛쒖깮??湲곕낯 ?뺣낫瑜??곗꽑 ?쒖떆?⑸땲??',
         };
       }
-      sourceStates.push('공공데이터 상세 연동 실패');
+      sourceStates.push('怨듦났?곗씠???곸꽭 ?곕룞 ?ㅽ뙣');
     }
 
     detailRuntime.matchMeta = matchMeta;
@@ -259,7 +270,7 @@
       console.warn('[detail] live map skipped:', lastError);
       const message = String(lastError.message || '').startsWith('AUTH_FAIL')
         ? buildDetailMapAuthMessage(getMapKeyCandidates())
-        : '실시간 지도를 불러오지 못해 네이버 지도 바로가기로 대체했습니다.';
+        : '?ㅼ떆媛?吏?꾨? 遺덈윭?ㅼ? 紐삵빐 ?ㅼ씠踰?吏??諛붾줈媛湲곕줈 ?泥댄뻽?듬땲??';
       renderMapFallback(hospital, message);
     }
   }
@@ -288,10 +299,10 @@
       : [];
     if (parkingItems.length === 0) {
       if (detailData.parkXpnsYn) {
-        parkingItems.push(detailData.parkXpnsYn === 'Y' ? '유료 주차' : '무료 주차');
+        parkingItems.push(detailData.parkXpnsYn === 'Y' ? '?좊즺 二쇱감' : '臾대즺 二쇱감');
       }
       if (detailData.parkQty) {
-        parkingItems.push(`주차 가능 대수 ${detailData.parkQty}`);
+        parkingItems.push(`二쇱감 媛?????${detailData.parkQty}`);
       }
       if (detailData.parkEtc) {
         parkingItems.push(detailData.parkEtc);
@@ -305,9 +316,9 @@
       ? detailData.emergencySummary.filter(Boolean)
       : [];
     if (emergencyItems.length === 0) {
-      if (detailData.emyDayYn === 'Y') emergencyItems.push('주간 응급 진료 가능');
-      if (detailData.emyNgtYn === 'Y') emergencyItems.push('야간 응급 진료 가능');
-      if (detailData.emyDayTelNo1) emergencyItems.push(`응급 문의 ${detailData.emyDayTelNo1}`);
+      if (detailData.emyDayYn === 'Y') emergencyItems.push('二쇨컙 ?묎툒 吏꾨즺 媛??);
+      if (detailData.emyNgtYn === 'Y') emergencyItems.push('?쇨컙 ?묎툒 吏꾨즺 媛??);
+      if (detailData.emyDayTelNo1) emergencyItems.push(`?묎툒 臾몄쓽 ${detailData.emyDayTelNo1}`);
     }
     if (emergencyItems.length > 0) {
       setText('detail-emergency', emergencyItems.join(' / '));
@@ -318,17 +329,17 @@
       ? detailData.receptionSummary.filter(Boolean)
       : [];
     if (noteItems.length === 0) {
-      if (detailData.rcvWeek) noteItems.push(`평일 접수 ${detailData.rcvWeek}`);
-      if (detailData.rcvSat) noteItems.push(`토요일 접수 ${detailData.rcvSat}`);
-      if (detailData.lunchWeek) noteItems.push(`점심시간 ${detailData.lunchWeek}`);
+      if (detailData.rcvWeek) noteItems.push(`?됱씪 ?묒닔 ${detailData.rcvWeek}`);
+      if (detailData.rcvSat) noteItems.push(`?좎슂???묒닔 ${detailData.rcvSat}`);
+      if (detailData.lunchWeek) noteItems.push(`?먯떖?쒓컙 ${detailData.lunchWeek}`);
     }
     if (noteItems.length > 0) {
       setText('detail-hours-note', noteItems.join(' / '));
     }
 
     const detailNotes = [];
-    if (detailData.ykiho) detailNotes.push(`HIRA 코드 ${detailData.ykiho}`);
-    if (detailData.hospUrl || hospital.url) detailNotes.push('공식 홈페이지 정보 확인');
+    if (detailData.ykiho) detailNotes.push(`HIRA 肄붾뱶 ${detailData.ykiho}`);
+    if (detailData.hospUrl || hospital.url) detailNotes.push('怨듭떇 ?덊럹?댁? ?뺣낫 ?뺤씤');
     if (parkingItems.length > 0) detailNotes.push(parkingItems[0]);
     if (detailNotes.length > 0) {
       setText('detail-duty-note', detailNotes.join(' / '));
@@ -344,8 +355,8 @@
 
     const facility = equipData.facility || {};
     const roomParts = [];
-    if (toPositiveNumber(facility.stdSickbdCnt) > 0) roomParts.push(`일반 병상 ${facility.stdSickbdCnt}`);
-    if (toPositiveNumber(facility.permSbdCnt) > 0) roomParts.push(`특수 병상 ${facility.permSbdCnt}`);
+    if (toPositiveNumber(facility.stdSickbdCnt) > 0) roomParts.push(`?쇰컲 蹂묒긽 ${facility.stdSickbdCnt}`);
+    if (toPositiveNumber(facility.permSbdCnt) > 0) roomParts.push(`?뱀닔 蹂묒긽 ${facility.permSbdCnt}`);
     if (roomParts.length > 0) {
       setText('detail-room-bed', roomParts.join(' / '));
     }
@@ -359,7 +370,7 @@
         'detail-equipment',
         equipData.equipDetails
           .slice(0, 10)
-          .map((item) => `${item.name} ${item.count}대`)
+          .map((item) => `${item.name} ${item.count}?`)
           .join(', ')
       );
     } else if (Array.isArray(equipData.equips) && equipData.equips.length > 0) {
@@ -369,7 +380,7 @@
     if (Array.isArray(equipData.topEquipment) && equipData.topEquipment.length > 0) {
       const topSummary = equipData.topEquipment
         .slice(0, 4)
-        .map((item) => `${item.name} ${item.count}대`)
+        .map((item) => `${item.name} ${item.count}?`)
         .join(', ');
       setText('detail-equipment-summary', topSummary);
     } else if (Array.isArray(equipData.facilitySummary) && equipData.facilitySummary.length > 0) {
@@ -413,11 +424,11 @@
     const score = Number(hospital.score || 0);
     const reviewCount = Number(hospital.reviewCount || hospital.reviews || 0);
 
-    setText('detail-name', hospital.name || '병원명 확인 필요');
-    setText('detail-type', hospital.type || '병원');
-    setText('detail-address', hospital.address || '주소 정보 없음');
-    setText('detail-department', hospital.department || '진료과 확인 필요');
-    setText('detail-score', `평점 ${score.toFixed(1)}`);
+    setText('detail-name', hospital.name || '蹂묒썝紐??뺤씤 ?꾩슂');
+    setText('detail-type', hospital.type || '蹂묒썝');
+    setText('detail-address', hospital.address || '二쇱냼 ?뺣낫 ?놁쓬');
+    setText('detail-department', hospital.department || '吏꾨즺怨??뺤씤 ?꾩슂');
+    setText('detail-score', `?됱젏 ${score.toFixed(1)}`);
     setText('detail-reviews', formatNumber(reviewCount));
     setText('detail-phone', hospital.phone || '-');
     setText('detail-doctor', buildDoctorText(hospital));
@@ -445,16 +456,16 @@
   function renderBadges(hospital) {
     const badges = [];
     if (Number(hospital.specialistCount || 0) > 0) {
-      badges.push({ label: '전문의 운영', background: '#e0f2fe', color: '#0369a1' });
+      badges.push({ label: '?꾨Ц???댁쁺', background: '#e0f2fe', color: '#0369a1' });
     }
     if (hospital.saturdayOpen) {
-      badges.push({ label: '토요일 진료', background: '#dcfce7', color: '#166534' });
+      badges.push({ label: '?좎슂??吏꾨즺', background: '#dcfce7', color: '#166534' });
     }
     if (hospital.nightOpen) {
-      badges.push({ label: '야간 진료', background: '#fef3c7', color: '#92400e' });
+      badges.push({ label: '?쇨컙 吏꾨즺', background: '#fef3c7', color: '#92400e' });
     }
     if (hospital.hasEmergency) {
-      badges.push({ label: '응급 진료', background: '#fee2e2', color: '#b91c1c' });
+      badges.push({ label: '?묎툒 吏꾨즺', background: '#fee2e2', color: '#b91c1c' });
     }
     if (hospital.type) {
       badges.push({ label: hospital.type, background: '#e2e8f0', color: '#334155' });
@@ -479,14 +490,14 @@
     }
 
     const rows = [
-      ['월요일', hours?.mon || '-'],
-      ['화요일', hours?.tue || '-'],
-      ['수요일', hours?.wed || '-'],
-      ['목요일', hours?.thu || '-'],
-      ['금요일', hours?.fri || '-'],
-      ['토요일', hours?.sat || '-'],
-      ['일요일', hours?.sun || '미진료'],
-      ['공휴일', hours?.holiday || '미진료'],
+      ['?붿슂??, hours?.mon || '-'],
+      ['?붿슂??, hours?.tue || '-'],
+      ['?섏슂??, hours?.wed || '-'],
+      ['紐⑹슂??, hours?.thu || '-'],
+      ['湲덉슂??, hours?.fri || '-'],
+      ['?좎슂??, hours?.sat || '-'],
+      ['?쇱슂??, hours?.sun || '誘몄쭊猷?],
+      ['怨듯쑕??, hours?.holiday || '誘몄쭊猷?],
     ];
 
     target.innerHTML = rows.map(([label, value]) => `
@@ -501,23 +512,23 @@
 
     if (roomCount > 0 || bedCount > 0) {
       const parts = [];
-      if (roomCount > 0) parts.push(`입원실 ${roomCount}`);
-      if (bedCount > 0) parts.push(`병상 ${bedCount}`);
+      if (roomCount > 0) parts.push(`?낆썝??${roomCount}`);
+      if (bedCount > 0) parts.push(`蹂묒긽 ${bedCount}`);
       setText('detail-room-bed', parts.join(' / '));
     } else {
-      setText('detail-room-bed', '병상 정보 확인 필요');
+      setText('detail-room-bed', '蹂묒긽 ?뺣낫 ?뺤씤 ?꾩슂');
     }
 
-    setText('detail-area', hospital.area || '면적 정보 확인 필요');
-    setText('detail-equipment', hospital.equipment || '장비 정보 확인 필요');
+    setText('detail-area', hospital.area || '硫댁쟻 ?뺣낫 ?뺤씤 ?꾩슂');
+    setText('detail-equipment', hospital.equipment || '?λ퉬 ?뺣낫 ?뺤씤 ?꾩슂');
 
     if (toPositiveNumber(hospital.parkingCapacity) > 0) {
-      parkingParts.push(`주차 가능 ${hospital.parkingCapacity}대`);
+      parkingParts.push(`二쇱감 媛??${hospital.parkingCapacity}?`);
     }
     if (hospital.parkingFee) {
       parkingParts.push(hospital.parkingFee);
     }
-    setText('detail-parking', parkingParts.join(' / ') || '주차 정보 확인 필요');
+    setText('detail-parking', parkingParts.join(' / ') || '二쇱감 ?뺣낫 ?뺤씤 ?꾩슂');
   }
 
   function renderChoiceSummaryCard(hospital) {
@@ -533,22 +544,22 @@
       summaryParts.push(profile.visitTargets[0]);
     }
     if (Array.isArray(profile.primaryServices) && profile.primaryServices.length > 0) {
-      summaryParts.push(`주요 진료는 ${profile.primaryServices.slice(0, 2).join(', ')} 중심으로 먼저 보면 좋습니다.`);
+      summaryParts.push(`二쇱슂 吏꾨즺??${profile.primaryServices.slice(0, 2).join(', ')} 以묒떖?쇰줈 癒쇱? 蹂대㈃ 醫뗭뒿?덈떎.`);
     }
     if (Number(hospital.specialistCount || 0) > 0) {
-      summaryParts.push(`전문의 ${hospital.specialistCount}명 기준으로 비교할 수 있습니다.`);
+      summaryParts.push(`?꾨Ц??${hospital.specialistCount}紐?湲곗??쇰줈 鍮꾧탳?????덉뒿?덈떎.`);
     }
 
-    if (Number(hospital.score || 0) > 0) compareParts.push(`평점 ${Number(hospital.score).toFixed(1)}`);
-    if (Number(hospital.reviewCount || 0) > 0) compareParts.push(`후기 ${Number(hospital.reviewCount).toLocaleString()}개`);
-    if (hospital.saturdayOpen) compareParts.push('토요일 진료');
-    if (hospital.sundayOpen) compareParts.push('일요일 진료');
-    if (hospital.nightOpen) compareParts.push('야간 진료');
-    if (hospital.equipment) compareParts.push(`장비 ${String(hospital.equipment).split(',')[0].trim()}`);
+    if (Number(hospital.score || 0) > 0) compareParts.push(`?됱젏 ${Number(hospital.score).toFixed(1)}`);
+    if (Number(hospital.reviewCount || 0) > 0) compareParts.push(`?꾧린 ${Number(hospital.reviewCount).toLocaleString()}媛?);
+    if (hospital.saturdayOpen) compareParts.push('?좎슂??吏꾨즺');
+    if (hospital.sundayOpen) compareParts.push('?쇱슂??吏꾨즺');
+    if (hospital.nightOpen) compareParts.push('?쇨컙 吏꾨즺');
+    if (hospital.equipment) compareParts.push(`?λ퉬 ${String(hospital.equipment).split(',')[0].trim()}`);
     if (toPositiveNumber(hospital.parkingCapacity) > 0) {
-      compareParts.push(`주차 ${hospital.parkingCapacity}대`);
+      compareParts.push(`二쇱감 ${hospital.parkingCapacity}?`);
     } else if (hospital.parkingFee) {
-      compareParts.push(`주차 ${hospital.parkingFee}`);
+      compareParts.push(`二쇱감 ${hospital.parkingFee}`);
     }
 
     if (Array.isArray(detailData.receptionSummary) && detailData.receptionSummary.length > 0) {
@@ -557,7 +568,7 @@
       flowParts.push(profile.reservation);
     }
     if (Array.isArray(profile.documents) && profile.documents.length > 0) {
-      flowParts.push(`준비서류는 ${profile.documents.slice(0, 2).join(', ')} 순으로 먼저 챙기면 됩니다.`);
+      flowParts.push(`以鍮꾩꽌瑜섎뒗 ${profile.documents.slice(0, 2).join(', ')} ?쒖쑝濡?癒쇱? 梨숆린硫??⑸땲??`);
     }
     if (profile.transport) {
       flowParts.push(profile.transport);
@@ -566,14 +577,14 @@
     }
 
     if (detailData.lunchWeek) {
-      cautionParts.push(`점심시간은 ${detailData.lunchWeek} 기준으로 한 번 더 확인하세요.`);
+      cautionParts.push(`?먯떖?쒓컙? ${detailData.lunchWeek} 湲곗??쇰줈 ??踰????뺤씤?섏꽭??`);
     }
     if (Array.isArray(detailData.parkingSummary) && detailData.parkingSummary.length > 0) {
       cautionParts.push(detailData.parkingSummary[0]);
     } else if (toPositiveNumber(hospital.parkingCapacity) > 0) {
-      cautionParts.push(`주차 가능 대수는 약 ${hospital.parkingCapacity}대 기준입니다.`);
+      cautionParts.push(`二쇱감 媛????섎뒗 ??${hospital.parkingCapacity}? 湲곗??낅땲??`);
     } else if (hospital.parkingFee) {
-      cautionParts.push(`주차 정보는 ${hospital.parkingFee} 기준으로 확인됩니다.`);
+      cautionParts.push(`二쇱감 ?뺣낫??${hospital.parkingFee} 湲곗??쇰줈 ?뺤씤?⑸땲??`);
     }
     if (Array.isArray(profile.checklist) && profile.checklist.length > 0) {
       cautionParts.push(profile.checklist[0]);
@@ -582,23 +593,23 @@
       cautionParts.push(detailRuntime.matchMeta.summary);
     }
 
-    setText('detail-choice-summary', uniqueStrings(summaryParts).slice(0, 3).join(' / ') || '이 병원이 어떤 상황에 잘 맞는지 정리 중입니다.');
-    setText('detail-choice-compare', uniqueStrings(compareParts).slice(0, 4).join(' / ') || '평점, 후기, 운영시간, 장비 정보를 비교 포인트로 정리 중입니다.');
-    setText('detail-choice-flow', uniqueStrings(flowParts).slice(0, 3).join(' / ') || '접수, 준비서류, 이동 동선을 기준으로 내원 흐름을 정리 중입니다.');
-    setText('detail-choice-caution', uniqueStrings(cautionParts).slice(0, 3).join(' / ') || '방문 전 접수 마감과 운영 시간을 한 번 더 확인하는 편이 좋습니다.');
+    setText('detail-choice-summary', uniqueStrings(summaryParts).slice(0, 3).join(' / ') || '??蹂묒썝???대뼡 ?곹솴????留욌뒗吏 ?뺣━ 以묒엯?덈떎.');
+    setText('detail-choice-compare', uniqueStrings(compareParts).slice(0, 4).join(' / ') || '?됱젏, ?꾧린, ?댁쁺?쒓컙, ?λ퉬 ?뺣낫瑜?鍮꾧탳 ?ъ씤?몃줈 ?뺣━ 以묒엯?덈떎.');
+    setText('detail-choice-flow', uniqueStrings(flowParts).slice(0, 3).join(' / ') || '?묒닔, 以鍮꾩꽌瑜? ?대룞 ?숈꽑??湲곗??쇰줈 ?댁썝 ?먮쫫???뺣━ 以묒엯?덈떎.');
+    setText('detail-choice-caution', uniqueStrings(cautionParts).slice(0, 3).join(' / ') || '諛⑸Ц ???묒닔 留덇컧怨??댁쁺 ?쒓컙????踰????뺤씤?섎뒗 ?몄씠 醫뗭뒿?덈떎.');
   }
 
   function renderSupplementaryDetails(hospital) {
     const contentApi = getHospitalContent();
     const profile = contentApi?.buildHospitalProfile?.(hospital) || buildFallbackHospitalProfile(hospital);
 
-    setText('detail-primary-services', formatDetailList(profile.primaryServices, '주요 진료 정보를 준비 중입니다.'));
-    setText('detail-visit-targets', formatDetailList(profile.visitTargets, '어떤 상황에 잘 맞는지 정리 중입니다.'));
-    setText('detail-documents', formatDetailList(profile.documents, '신분증과 기존 검사 결과를 먼저 챙기는 편이 좋습니다.'));
-    setText('detail-reservation', profile.reservation || '방문 전 접수 시간과 필요한 서류를 먼저 확인하세요.');
-    setText('detail-transport', profile.transport || '대중교통과 주차 동선을 방문 전에 확인하세요.');
-    setText('detail-accessibility', profile.accessibility || '엘리베이터, 주차, 보호자 대기 공간은 병원에 직접 확인하는 편이 안전합니다.');
-    setText('detail-checklist', formatDetailList(profile.checklist, '초진 목적과 증상 시작 시점을 메모해 가면 설명이 빨라집니다.'));
+    setText('detail-primary-services', formatDetailList(profile.primaryServices, '二쇱슂 吏꾨즺 ?뺣낫瑜?以鍮?以묒엯?덈떎.'));
+    setText('detail-visit-targets', formatDetailList(profile.visitTargets, '?대뼡 ?곹솴????留욌뒗吏 ?뺣━ 以묒엯?덈떎.'));
+    setText('detail-documents', formatDetailList(profile.documents, '?좊텇利앷낵 湲곗〈 寃??寃곌낵瑜?癒쇱? 梨숆린???몄씠 醫뗭뒿?덈떎.'));
+    setText('detail-reservation', profile.reservation || '諛⑸Ц ???묒닔 ?쒓컙怨??꾩슂???쒕쪟瑜?癒쇱? ?뺤씤?섏꽭??');
+    setText('detail-transport', profile.transport || '?以묎탳?듦낵 二쇱감 ?숈꽑??諛⑸Ц ?꾩뿉 ?뺤씤?섏꽭??');
+    setText('detail-accessibility', profile.accessibility || '?섎━踰좎씠?? 二쇱감, 蹂댄샇???湲?怨듦컙? 蹂묒썝??吏곸젒 ?뺤씤?섎뒗 ?몄씠 ?덉쟾?⑸땲??');
+    setText('detail-checklist', formatDetailList(profile.checklist, '珥덉쭊 紐⑹쟻怨?利앹긽 ?쒖옉 ?쒖젏??硫붾え??媛硫??ㅻ챸??鍮⑤씪吏묐땲??'));
   }
 
   function renderVisitPlanningDigest(hospital) {
@@ -614,7 +625,7 @@
       symptomParts.push(...profile.visitTargets.slice(0, 2));
     }
     if (Array.isArray(profile.primaryServices) && profile.primaryServices.length > 0) {
-      symptomParts.push(`주요 진료는 ${profile.primaryServices.slice(0, 2).join(', ')} 기준으로 먼저 비교하면 좋습니다.`);
+      symptomParts.push(`二쇱슂 吏꾨즺??${profile.primaryServices.slice(0, 2).join(', ')} 湲곗??쇰줈 癒쇱? 鍮꾧탳?섎㈃ 醫뗭뒿?덈떎.`);
     }
 
     if (Array.isArray(detailData.receptionSummary) && detailData.receptionSummary.length > 0) {
@@ -624,16 +635,16 @@
       intakeParts.push(profile.reservation);
     }
     if (detailData.lunchWeek) {
-      intakeParts.push(`점심시간은 ${detailData.lunchWeek} 기준으로 한 번 더 확인하세요.`);
+      intakeParts.push(`?먯떖?쒓컙? ${detailData.lunchWeek} 湲곗??쇰줈 ??踰????뺤씤?섏꽭??`);
     }
 
     if (Array.isArray(detailData.parkingSummary) && detailData.parkingSummary.length > 0) {
       parkingParts.push(...detailData.parkingSummary.slice(0, 2));
     }
     if (toPositiveNumber(hospital.parkingCapacity) > 0) {
-      parkingParts.push(`주차 가능 대수는 약 ${hospital.parkingCapacity}대 기준입니다.`);
+      parkingParts.push(`二쇱감 媛????섎뒗 ??${hospital.parkingCapacity}? 湲곗??낅땲??`);
     } else if (hospital.parkingFee) {
-      parkingParts.push(`주차 정보는 ${hospital.parkingFee} 기준으로 확인됩니다.`);
+      parkingParts.push(`二쇱감 ?뺣낫??${hospital.parkingFee} 湲곗??쇰줈 ?뺤씤?⑸땲??`);
     }
     if (profile.transport) {
       parkingParts.push(profile.transport);
@@ -643,13 +654,13 @@
       flowParts.push(...profile.checklist.slice(0, 2));
     }
     if (Array.isArray(profile.documents) && profile.documents.length > 0) {
-      flowParts.push(`준비물은 ${profile.documents.slice(0, 2).join(', ')}부터 챙기면 수월합니다.`);
+      flowParts.push(`以鍮꾨Ъ? ${profile.documents.slice(0, 2).join(', ')}遺??梨숆린硫??섏썡?⑸땲??`);
     }
 
-    setText('detail-symptom-focus', uniqueStrings(symptomParts).slice(0, 3).join(' / ') || '대표 증상과 진료 목적 기준으로 먼저 비교하는 편이 좋습니다.');
-    setText('detail-intake-tip', uniqueStrings(intakeParts).slice(0, 3).join(' / ') || '초진 접수 가능 시간과 필요 서류를 방문 전에 먼저 확인하세요.');
-    setText('detail-parking-tip', uniqueStrings(parkingParts).slice(0, 3).join(' / ') || '주차 가능 여부와 대중교통 동선은 병원에 한 번 더 확인하는 편이 안전합니다.');
-    setText('detail-visit-flow', uniqueStrings(flowParts).slice(0, 3).join(' / ') || '증상 메모와 기존 검사 결과를 챙기고 접수 마감 시간을 먼저 확인하세요.');
+    setText('detail-symptom-focus', uniqueStrings(symptomParts).slice(0, 3).join(' / ') || '???利앹긽怨?吏꾨즺 紐⑹쟻 湲곗??쇰줈 癒쇱? 鍮꾧탳?섎뒗 ?몄씠 醫뗭뒿?덈떎.');
+    setText('detail-intake-tip', uniqueStrings(intakeParts).slice(0, 3).join(' / ') || '珥덉쭊 ?묒닔 媛???쒓컙怨??꾩슂 ?쒕쪟瑜?諛⑸Ц ?꾩뿉 癒쇱? ?뺤씤?섏꽭??');
+    setText('detail-parking-tip', uniqueStrings(parkingParts).slice(0, 3).join(' / ') || '二쇱감 媛???щ?? ?以묎탳???숈꽑? 蹂묒썝????踰????뺤씤?섎뒗 ?몄씠 ?덉쟾?⑸땲??');
+    setText('detail-visit-flow', uniqueStrings(flowParts).slice(0, 3).join(' / ') || '利앹긽 硫붾え? 湲곗〈 寃??寃곌낵瑜?梨숆린怨??묒닔 留덇컧 ?쒓컙??癒쇱? ?뺤씤?섏꽭??');
   }
 
   function renderSnapshotCard(hospital) {
@@ -659,17 +670,17 @@
 
     if (hospital.department) summaryParts.push(hospital.department);
     if (hospital.type) summaryParts.push(hospital.type);
-    if (Number(hospital.specialistCount || 0) > 0) summaryParts.push(`전문의 ${hospital.specialistCount}명`);
+    if (Number(hospital.specialistCount || 0) > 0) summaryParts.push(`?꾨Ц??${hospital.specialistCount}紐?);
     if (profile.primaryServices?.length) summaryParts.push(profile.primaryServices.slice(0, 2).join(', '));
 
     const visitParts = [];
     if (profile.visitTargets?.length) visitParts.push(profile.visitTargets.slice(0, 2).join(' / '));
     if (profile.checklist?.length) visitParts.push(profile.checklist[0]);
 
-    setText('detail-snapshot-summary', summaryParts.filter(Boolean).join(' / ') || '병원 핵심 비교 포인트를 정리 중입니다.');
+    setText('detail-snapshot-summary', summaryParts.filter(Boolean).join(' / ') || '蹂묒썝 ?듭떖 鍮꾧탳 ?ъ씤?몃? ?뺣━ 以묒엯?덈떎.');
     setText('detail-snapshot-operation', buildOperationSummarySafe(hospital, detailRuntime.detailData));
     setText('detail-snapshot-facility', buildEquipmentSummarySafe(hospital, detailRuntime.equipData));
-    setText('detail-snapshot-visit', visitParts.filter(Boolean).join(' / ') || '방문 전에 챙길 포인트를 정리 중입니다.');
+    setText('detail-snapshot-visit', visitParts.filter(Boolean).join(' / ') || '諛⑸Ц ?꾩뿉 梨숆만 ?ъ씤?몃? ?뺣━ 以묒엯?덈떎.');
   }
 
   function renderGuideRecommendations(hospital) {
@@ -681,7 +692,7 @@
     const contentApi = getHospitalContent();
     const guides = contentApi?.buildGuideRecommendations?.(hospital) || [];
     if (!guides.length) {
-      container.innerHTML = '<p style="margin:0; color:var(--text-muted);">관련 가이드를 준비 중입니다.</p>';
+      container.innerHTML = '<p style="margin:0; color:var(--text-muted);">愿??媛?대뱶瑜?以鍮?以묒엯?덈떎.</p>';
       return;
     }
 
@@ -689,7 +700,7 @@
       <a href="${escapeHtml(guide.href)}" style="display:flex; flex-direction:column; gap:8px; padding:16px; border:1px solid var(--border-default); border-radius:12px; text-decoration:none; background:var(--bg-body); color:inherit;">
         <strong style="font-size:1rem; color:var(--text-heading);">${escapeHtml(guide.title)}</strong>
         <span style="font-size:0.93rem; color:var(--text-body); line-height:1.6;">${escapeHtml(guide.description)}</span>
-        <span style="font-size:0.82rem; color:var(--primary); font-weight:600;">가이드 열기</span>
+        <span style="font-size:0.82rem; color:var(--primary); font-weight:600;">媛?대뱶 ?닿린</span>
       </a>
     `).join('');
   }
@@ -703,7 +714,7 @@
     const contentApi = getHospitalContent();
     const links = contentApi?.buildRelatedSearchLinks?.(hospital) || [];
     if (!links.length) {
-      container.innerHTML = '<p style="margin:0; color:var(--text-muted);">관련 탐색 링크를 준비 중입니다.</p>';
+      container.innerHTML = '<p style="margin:0; color:var(--text-muted);">愿???먯깋 留곹겕瑜?以鍮?以묒엯?덈떎.</p>';
       return;
     }
 
@@ -711,7 +722,7 @@
       <a href="${escapeHtml(link.href)}" style="display:flex; flex-direction:column; gap:8px; padding:16px; border:1px solid var(--border-default); border-radius:12px; text-decoration:none; background:var(--bg-body); color:inherit;">
         <strong style="font-size:1rem; color:var(--text-heading);">${escapeHtml(link.title)}</strong>
         <span style="font-size:0.93rem; color:var(--text-body); line-height:1.6;">${escapeHtml(link.description)}</span>
-        <span style="font-size:0.82rem; color:var(--primary); font-weight:600;">목록으로 이동</span>
+        <span style="font-size:0.82rem; color:var(--primary); font-weight:600;">紐⑸줉?쇰줈 ?대룞</span>
       </a>
     `).join('');
   }
@@ -725,7 +736,7 @@
     const contentApi = getHospitalContent();
     const links = contentApi?.buildRegionalLandingLinks?.(hospital) || [];
     if (!links.length) {
-      container.innerHTML = '<p style="margin:0; color:var(--text-muted);">지역별 병원 페이지를 준비 중입니다.</p>';
+      container.innerHTML = '<p style="margin:0; color:var(--text-muted);">吏??퀎 蹂묒썝 ?섏씠吏瑜?以鍮?以묒엯?덈떎.</p>';
       return;
     }
 
@@ -733,7 +744,7 @@
       <a href="${escapeHtml(link.href)}" style="display:flex; flex-direction:column; gap:8px; padding:16px; border:1px solid var(--border-default); border-radius:12px; text-decoration:none; background:var(--bg-body); color:inherit;">
         <strong style="font-size:1rem; color:var(--text-heading);">${escapeHtml(link.title)}</strong>
         <span style="font-size:0.93rem; color:var(--text-body); line-height:1.6;">${escapeHtml(link.description)}</span>
-        <span style="font-size:0.82rem; color:var(--primary); font-weight:600;">${escapeHtml(link.badge || '지역 페이지')}</span>
+        <span style="font-size:0.82rem; color:var(--primary); font-weight:600;">${escapeHtml(link.badge || '吏???섏씠吏')}</span>
       </a>
     `).join('');
   }
@@ -746,7 +757,7 @@
         similarContainer,
         items,
         hospital,
-        '같은 진료과 또는 같은 지역에서 비교할 병원을 준비 중입니다.'
+        '媛숈? 吏꾨즺怨??먮뒗 媛숈? 吏??뿉??鍮꾧탳??蹂묒썝??以鍮?以묒엯?덈떎.'
       );
     }
 
@@ -757,7 +768,7 @@
         operationalContainer,
         items,
         hospital,
-        '토요, 야간, 응급, 주차 기준으로 다시 비교할 병원을 준비 중입니다.'
+        '?좎슂, ?쇨컙, ?묎툒, 二쇱감 湲곗??쇰줈 ?ㅼ떆 鍮꾧탳??蹂묒썝??以鍮?以묒엯?덈떎.'
       );
     }
   }
@@ -778,30 +789,30 @@
 
         if (item.departmentId === hospital.departmentId) {
           score += 42;
-          reasons.push('같은 진료과');
+          reasons.push('媛숈? 吏꾨즺怨?);
         }
         if (item.region && item.region === hospital.region) {
           score += 20;
-          reasons.push('같은 지역');
+          reasons.push('媛숈? 吏??);
         }
         if (item.district && item.district === hospital.district) {
           score += 12;
-          reasons.push('같은 생활권');
+          reasons.push('媛숈? ?앺솢沅?);
         }
         if (item.type && item.type === hospital.type) {
           score += 6;
         }
         if (hospital.saturdayOpen && item.saturdayOpen) {
           score += 8;
-          reasons.push('토요 진료');
+          reasons.push('?좎슂 吏꾨즺');
         }
         if (hospital.nightOpen && item.nightOpen) {
           score += 8;
-          reasons.push('야간 진료');
+          reasons.push('?쇨컙 吏꾨즺');
         }
         if (hospital.hasEmergency && item.hasEmergency) {
           score += 8;
-          reasons.push('응급 대응');
+          reasons.push('?묎툒 ???);
         }
 
         score += Math.min(Number(item.specialistCount || 0), 8);
@@ -810,7 +821,7 @@
 
         return {
           ...item,
-          recommendationReason: uniqueStrings(reasons).slice(0, 3).join(' · ') || '같은 권역 병원 비교',
+          recommendationReason: uniqueStrings(reasons).slice(0, 3).join(' 쨌 ') || '媛숈? 沅뚯뿭 蹂묒썝 鍮꾧탳',
           recommendationScore: score,
         };
       })
@@ -840,11 +851,11 @@
 
         if (item.region && item.region === hospital.region) {
           score += 22;
-          reasons.push('같은 지역');
+          reasons.push('媛숈? 吏??);
         }
         if (item.departmentId === hospital.departmentId) {
           score += 16;
-          reasons.push('같은 진료과');
+          reasons.push('媛숈? 吏꾨즺怨?);
         }
         if (item.district && item.district === hospital.district) {
           score += 8;
@@ -860,15 +871,15 @@
         } else {
           if (item.saturdayOpen) {
             score += 8;
-            reasons.push('토요 진료');
+            reasons.push('?좎슂 吏꾨즺');
           }
           if (item.nightOpen) {
             score += 8;
-            reasons.push('야간 진료');
+            reasons.push('?쇨컙 吏꾨즺');
           }
           if (item.sundayOpen) {
             score += 8;
-            reasons.push('일요 진료');
+            reasons.push('?쇱슂 吏꾨즺');
           }
         }
 
@@ -877,7 +888,7 @@
         }
         if (toPositiveNumber(item.parkingCapacity) > 0 || item.parkingFee) {
           score += 6;
-          reasons.push('주차 정보');
+          reasons.push('二쇱감 ?뺣낫');
         }
 
         score += Math.min(Number(item.specialistCount || 0), 6);
@@ -886,7 +897,7 @@
 
         return {
           ...item,
-          recommendationReason: uniqueStrings(reasons).slice(0, 3).join(' · ') || '운영 조건 비교',
+          recommendationReason: uniqueStrings(reasons).slice(0, 3).join(' 쨌 ') || '?댁쁺 議곌굔 鍮꾧탳',
           recommendationScore: score,
         };
       })
@@ -917,14 +928,14 @@
       const badgeItems = buildRecommendationBadgeItems(item);
 
       return `
-        <a href="detail.html?id=${encodeURIComponent(item.id)}" style="display:flex; flex-direction:column; gap:8px; padding:16px; border:1px solid var(--border-default); border-radius:12px; text-decoration:none; background:var(--bg-body); color:inherit;">
+        <a href="detail.html?postid=${encodeURIComponent(item.id)}" style="display:flex; flex-direction:column; gap:8px; padding:16px; border:1px solid var(--border-default); border-radius:12px; text-decoration:none; background:var(--bg-body); color:inherit;">
           <strong style="font-size:1rem; color:var(--text-heading);">${escapeHtml(item.name)}</strong>
-          <span style="font-size:0.84rem; color:var(--primary); font-weight:700;">${escapeHtml(item.recommendationReason || '추천 비교')}</span>
-          <span style="font-size:0.9rem; color:var(--text-body);">${escapeHtml(item.type || hospital.type || '병원')}</span>
-          <span style="font-size:0.92rem; color:var(--text-body); line-height:1.6;">${escapeHtml(item.address || '주소 정보 확인 필요')}</span>
+          <span style="font-size:0.84rem; color:var(--primary); font-weight:700;">${escapeHtml(item.recommendationReason || '異붿쿇 鍮꾧탳')}</span>
+          <span style="font-size:0.9rem; color:var(--text-body);">${escapeHtml(item.type || hospital.type || '蹂묒썝')}</span>
+          <span style="font-size:0.92rem; color:var(--text-body); line-height:1.6;">${escapeHtml(item.address || '二쇱냼 ?뺣낫 ?뺤씤 ?꾩슂')}</span>
           ${badgeItems.length > 0 ? `<div style="display:flex; flex-wrap:wrap; gap:6px;">${badgeItems.map((badge) => `<span style="display:inline-flex; align-items:center; min-height:24px; padding:3px 9px; border-radius:999px; background:${escapeHtml(badge.background)}; color:${escapeHtml(badge.color)}; font-size:0.74rem; font-weight:700;">${escapeHtml(badge.label)}</span>`).join('')}</div>` : ''}
-          ${serviceText ? `<span style="font-size:0.88rem; color:var(--text-body); line-height:1.6;">핵심 진료: ${escapeHtml(serviceText)}</span>` : ''}
-          <span style="font-size:0.82rem; color:var(--text-muted);">전문의 ${escapeHtml(String(item.specialistCount || 0))}명 / 리뷰 ${escapeHtml(String(item.reviewCount || 0))}개${buildDistanceLabel(hospital, item)}</span>
+          ${serviceText ? `<span style="font-size:0.88rem; color:var(--text-body); line-height:1.6;">?듭떖 吏꾨즺: ${escapeHtml(serviceText)}</span>` : ''}
+          <span style="font-size:0.82rem; color:var(--text-muted);">?꾨Ц??${escapeHtml(String(item.specialistCount || 0))}紐?/ 由щ럭 ${escapeHtml(String(item.reviewCount || 0))}媛?{buildDistanceLabel(hospital, item)}</span>
         </a>
       `;
     }).join('');
@@ -934,19 +945,19 @@
     const badges = [];
 
     if (hospital.saturdayOpen) {
-      badges.push({ label: '토요 진료', background: '#edf4ee', color: '#46685b' });
+      badges.push({ label: '?좎슂 吏꾨즺', background: '#edf4ee', color: '#46685b' });
     }
     if (hospital.nightOpen) {
-      badges.push({ label: '야간 진료', background: '#f0eee8', color: '#6d5d48' });
+      badges.push({ label: '?쇨컙 吏꾨즺', background: '#f0eee8', color: '#6d5d48' });
     }
     if (hospital.sundayOpen) {
-      badges.push({ label: '일요 진료', background: '#f6efe3', color: '#9a6d2f' });
+      badges.push({ label: '?쇱슂 吏꾨즺', background: '#f6efe3', color: '#9a6d2f' });
     }
     if (hospital.hasEmergency) {
-      badges.push({ label: '응급 대응', background: '#fce9e6', color: '#a44737' });
+      badges.push({ label: '?묎툒 ???, background: '#fce9e6', color: '#a44737' });
     }
     if (toPositiveNumber(hospital.parkingCapacity) > 0 || hospital.parkingFee) {
-      badges.push({ label: '주차 정보', background: '#ece9e2', color: '#564d43' });
+      badges.push({ label: '二쇱감 ?뺣낫', background: '#ece9e2', color: '#564d43' });
     }
 
     return badges.slice(0, 4);
@@ -967,9 +978,9 @@
     const wrapper = document.createElement('div');
     wrapper.className = 'info-card';
     wrapper.innerHTML = `
-      <h3>지역 랜딩 페이지</h3>
+      <h3>吏???쒕뵫 ?섏씠吏</h3>
       <div id="detail-landing-links" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
-        <p style="margin:0; color:var(--text-muted);">같은 지역 기준으로 정리한 랜딩 페이지를 불러오는 중입니다...</p>
+        <p style="margin:0; color:var(--text-muted);">媛숈? 吏??湲곗??쇰줈 ?뺣━???쒕뵫 ?섏씠吏瑜?遺덈윭?ㅻ뒗 以묒엯?덈떎...</p>
       </div>
     `;
 
@@ -986,7 +997,7 @@
     const contentApi = getHospitalContent();
     const items = contentApi?.buildHospitalFaqs?.(hospital) || [];
     if (!items.length) {
-      container.innerHTML = '<p style="margin:0; color:var(--text-muted);">방문 전 자주 묻는 질문을 준비 중입니다.</p>';
+      container.innerHTML = '<p style="margin:0; color:var(--text-muted);">諛⑸Ц ???먯＜ 臾삳뒗 吏덈Ц??以鍮?以묒엯?덈떎.</p>';
       return [];
     }
 
@@ -1009,7 +1020,7 @@
     const contentApi = getHospitalContent();
     const links = contentApi?.buildOperationalExploreLinks?.(hospital) || [];
     if (!links.length) {
-      container.innerHTML = '<p style="margin:0; color:var(--text-muted);">운영 조건별 추천 탐색을 준비 중입니다.</p>';
+      container.innerHTML = '<p style="margin:0; color:var(--text-muted);">?댁쁺 議곌굔蹂?異붿쿇 ?먯깋??以鍮?以묒엯?덈떎.</p>';
       return;
     }
 
@@ -1017,7 +1028,7 @@
       <a href="${escapeHtml(link.href)}" style="display:flex; flex-direction:column; gap:8px; padding:16px; border:1px solid var(--border-default); border-radius:12px; text-decoration:none; background:var(--bg-body); color:inherit;">
         <strong style="font-size:1rem; color:var(--text-heading);">${escapeHtml(link.title)}</strong>
         <span style="font-size:0.93rem; color:var(--text-body); line-height:1.6;">${escapeHtml(link.description)}</span>
-        <span style="font-size:0.82rem; color:var(--primary); font-weight:600;">${escapeHtml(link.badge || '추천 탐색')}</span>
+        <span style="font-size:0.82rem; color:var(--primary); font-weight:600;">${escapeHtml(link.badge || '異붿쿇 ?먯깋')}</span>
       </a>
     `).join('');
   }
@@ -1038,9 +1049,9 @@
     const wrapper = document.createElement('div');
     wrapper.className = 'info-card';
     wrapper.innerHTML = `
-      <h3>병원 방문 FAQ</h3>
+      <h3>蹂묒썝 諛⑸Ц FAQ</h3>
       <div id="detail-faq-list" style="display:flex; flex-direction:column; gap:12px;">
-        <p style="margin:0; color:var(--text-muted);">병원 방문 전 자주 묻는 질문을 불러오는 중입니다...</p>
+        <p style="margin:0; color:var(--text-muted);">蹂묒썝 諛⑸Ц ???먯＜ 臾삳뒗 吏덈Ц??遺덈윭?ㅻ뒗 以묒엯?덈떎...</p>
       </div>
     `;
 
@@ -1064,9 +1075,9 @@
     const wrapper = document.createElement('div');
     wrapper.className = 'info-card';
     wrapper.innerHTML = `
-      <h3>운영 조건별 추천 탐색</h3>
+      <h3>?댁쁺 議곌굔蹂?異붿쿇 ?먯깋</h3>
       <div id="detail-operational-links" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
-        <p style="margin:0; color:var(--text-muted);">토요일 진료, 야간 진료, 주차 정보 기준의 추천 경로를 불러오는 중입니다...</p>
+        <p style="margin:0; color:var(--text-muted);">?좎슂??吏꾨즺, ?쇨컙 吏꾨즺, 二쇱감 ?뺣낫 湲곗???異붿쿇 寃쎈줈瑜?遺덈윭?ㅻ뒗 以묒엯?덈떎...</p>
       </div>
     `;
 
@@ -1089,9 +1100,9 @@
     const wrapper = document.createElement('div');
     wrapper.className = 'info-card';
     wrapper.innerHTML = `
-      <h3>비슷한 조건 병원</h3>
+      <h3>鍮꾩듂??議곌굔 蹂묒썝</h3>
       <div id="detail-similar-hospital-list" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
-        <p style="margin:0; color:var(--text-muted);">같은 진료과와 같은 지역 기준 추천 병원을 정리 중입니다...</p>
+        <p style="margin:0; color:var(--text-muted);">媛숈? 吏꾨즺怨쇱? 媛숈? 吏??湲곗? 異붿쿇 蹂묒썝???뺣━ 以묒엯?덈떎...</p>
       </div>
     `;
 
@@ -1115,9 +1126,9 @@
     const wrapper = document.createElement('div');
     wrapper.className = 'info-card';
     wrapper.innerHTML = `
-      <h3>운영 조건 비교 병원</h3>
+      <h3>?댁쁺 議곌굔 鍮꾧탳 蹂묒썝</h3>
       <div id="detail-operational-hospital-list" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
-        <p style="margin:0; color:var(--text-muted);">토요, 야간, 응급, 주차 기준 추천 병원을 정리 중입니다...</p>
+        <p style="margin:0; color:var(--text-muted);">?좎슂, ?쇨컙, ?묎툒, 二쇱감 湲곗? 異붿쿇 蹂묒썝???뺣━ 以묒엯?덈떎...</p>
       </div>
     `;
 
@@ -1131,25 +1142,25 @@
       return;
     }
 
-    const regionText = hospital?.region || '해당 지역';
-    const departmentText = hospital?.department || hospital?.type || '병원';
+    const regionText = hospital?.region || '?대떦 吏??;
+    const departmentText = hospital?.department || hospital?.type || '蹂묒썝';
     container.innerHTML = `
       <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
         <div style="padding:16px; border:1px solid var(--border-default); border-radius:12px; background:var(--bg-body);">
-          <strong style="display:block; margin-bottom:8px; color:var(--text-heading);">데이터 기준</strong>
-          <p style="margin:0; color:var(--text-body); line-height:1.7;">이 페이지는 공개 데이터와 병원 안내 기준으로 ${regionText} ${departmentText} 정보를 참고용으로 정리한 화면입니다.</p>
+          <strong style="display:block; margin-bottom:8px; color:var(--text-heading);">?곗씠??湲곗?</strong>
+          <p style="margin:0; color:var(--text-body); line-height:1.7;">???섏씠吏??怨듦컻 ?곗씠?곗? 蹂묒썝 ?덈궡 湲곗??쇰줈 ${regionText} ${departmentText} ?뺣낫瑜?李멸퀬?⑹쑝濡??뺣━???붾㈃?낅땲??</p>
         </div>
         <div style="padding:16px; border:1px solid var(--border-default); border-radius:12px; background:var(--bg-body);">
-          <strong style="display:block; margin-bottom:8px; color:var(--text-heading);">운영 확인</strong>
-          <p style="margin:0; color:var(--text-body); line-height:1.7;">접수 마감, 검사 포함 여부, 비용, 보호자 동행 필요 여부는 방문 전 병원에 직접 확인하는 편이 안전합니다.</p>
+          <strong style="display:block; margin-bottom:8px; color:var(--text-heading);">?댁쁺 ?뺤씤</strong>
+          <p style="margin:0; color:var(--text-body); line-height:1.7;">?묒닔 留덇컧, 寃???ы븿 ?щ?, 鍮꾩슜, 蹂댄샇???숉뻾 ?꾩슂 ?щ???諛⑸Ц ??蹂묒썝??吏곸젒 ?뺤씤?섎뒗 ?몄씠 ?덉쟾?⑸땲??</p>
         </div>
         <div style="padding:16px; border:1px solid var(--border-default); border-radius:12px; background:var(--bg-body);">
-          <strong style="display:block; margin-bottom:8px; color:var(--text-heading);">수정 요청</strong>
-          <p style="margin:0; color:var(--text-body); line-height:1.7;">정보가 다르면 <a href="contact.html" style="color:var(--primary); font-weight:600;">문의하기</a> 또는 <a href="mailto:replyleaders@naver.com" style="color:var(--primary); font-weight:600;">replyleaders@naver.com</a>으로 보내주시면 검토 후 반영합니다.</p>
+          <strong style="display:block; margin-bottom:8px; color:var(--text-heading);">?섏젙 ?붿껌</strong>
+          <p style="margin:0; color:var(--text-body); line-height:1.7;">?뺣낫媛 ?ㅻⅤ硫?<a href="contact.html" style="color:var(--primary); font-weight:600;">臾몄쓽?섍린</a> ?먮뒗 <a href="mailto:replyleaders@naver.com" style="color:var(--primary); font-weight:600;">replyleaders@naver.com</a>?쇰줈 蹂대궡二쇱떆硫?寃????諛섏쁺?⑸땲??</p>
         </div>
       </div>
-      <p style="margin:16px 0 0; color:var(--text-muted); line-height:1.7;">최근 확인일: 2026-06-26 · 자세한 운영 기준은 <a href="about.html" style="color:var(--primary); font-weight:600;">사이트 소개</a>, <a href="editorial-policy.html" style="color:var(--primary); font-weight:600;">콘텐츠 편집 원칙</a>, <a href="ad-policy.html" style="color:var(--primary); font-weight:600;">광고 및 제휴 안내</a>에서 확인할 수 있습니다.</p>
-      <p style="margin:8px 0 0; color:var(--text-muted); line-height:1.7;">증상 악화, 응급 상황, 수술 결정은 이 페이지만으로 판단하지 말고 해당 병원이나 의료진과 직접 상담해 주세요.</p>
+      <p style="margin:16px 0 0; color:var(--text-muted); line-height:1.7;">理쒓렐 ?뺤씤?? 2026-06-26 쨌 ?먯꽭???댁쁺 湲곗?? <a href="about.html" style="color:var(--primary); font-weight:600;">?ъ씠???뚭컻</a>, <a href="editorial-policy.html" style="color:var(--primary); font-weight:600;">肄섑뀗痢??몄쭛 ?먯튃</a>, <a href="ad-policy.html" style="color:var(--primary); font-weight:600;">愿묎퀬 諛??쒗쑕 ?덈궡</a>?먯꽌 ?뺤씤?????덉뒿?덈떎.</p>
+      <p style="margin:8px 0 0; color:var(--text-muted); line-height:1.7;">利앹긽 ?낇솕, ?묎툒 ?곹솴, ?섏닠 寃곗젙? ???섏씠吏留뚯쑝濡??먮떒?섏? 留먭퀬 ?대떦 蹂묒썝?대굹 ?섎즺吏꾧낵 吏곸젒 ?곷떞??二쇱꽭??</p>
     `;
   }
 
@@ -1169,9 +1180,9 @@
     const wrapper = document.createElement('div');
     wrapper.className = 'info-card';
     wrapper.innerHTML = `
-      <h3>이 페이지를 보는 기준</h3>
+      <h3>???섏씠吏瑜?蹂대뒗 湲곗?</h3>
       <div id="detail-trust-details">
-        <p style="margin:0; color:var(--text-muted);">데이터 기준과 운영 확인 방법을 불러오는 중입니다...</p>
+        <p style="margin:0; color:var(--text-muted);">?곗씠??湲곗?怨??댁쁺 ?뺤씤 諛⑸쾿??遺덈윭?ㅻ뒗 以묒엯?덈떎...</p>
       </div>
     `;
 
@@ -1181,23 +1192,23 @@
 
   function buildFallbackHospitalProfile(hospital) {
     const services = [];
-    if (hospital.department) services.push(`${hospital.department} 외래`);
-    if (hospital.type) services.push(`${hospital.type} 진료`);
+    if (hospital.department) services.push(`${hospital.department} ?몃옒`);
+    if (hospital.type) services.push(`${hospital.type} 吏꾨즺`);
     if (hospital.equipment) services.push(String(hospital.equipment).split(',')[0].trim());
 
-    const documents = ['신분증'];
-    if (hospital.reviewCount) documents.push('기존 검사 결과 또는 복용약 목록');
+    const documents = ['?좊텇利?];
+    if (hospital.reviewCount) documents.push('湲곗〈 寃??寃곌낵 ?먮뒗 蹂듭슜??紐⑸줉');
 
-    const checklist = ['증상 시작 시점과 현재 불편을 메모해 가세요.'];
-    if (hospital.phone) checklist.push('방문 전 접수 가능 시간과 휴진 여부를 전화로 확인하세요.');
+    const checklist = ['利앹긽 ?쒖옉 ?쒖젏怨??꾩옱 遺덊렪??硫붾え??媛?몄슂.'];
+    if (hospital.phone) checklist.push('諛⑸Ц ???묒닔 媛???쒓컙怨??댁쭊 ?щ?瑜??꾪솕濡??뺤씤?섏꽭??');
 
     return {
       primaryServices: services,
-      visitTargets: ['초진 진료 전 기본 정보를 미리 확인하려는 경우'],
+      visitTargets: ['珥덉쭊 吏꾨즺 ??湲곕낯 ?뺣낫瑜?誘몃━ ?뺤씤?섎젮??寃쎌슦'],
       documents,
-      reservation: '초진 접수 가능 시간과 점심시간을 먼저 확인하는 편이 좋습니다.',
-      transport: hospital.address || '방문 전 이동 동선을 확인하세요.',
-      accessibility: '주차와 병원 건물 편의 시설은 방문 전에 병원에 직접 확인하세요.',
+      reservation: '珥덉쭊 ?묒닔 媛???쒓컙怨??먯떖?쒓컙??癒쇱? ?뺤씤?섎뒗 ?몄씠 醫뗭뒿?덈떎.',
+      transport: hospital.address || '諛⑸Ц ???대룞 ?숈꽑???뺤씤?섏꽭??',
+      accessibility: '二쇱감? 蹂묒썝 嫄대Ъ ?몄쓽 ?쒖꽕? 諛⑸Ц ?꾩뿉 蹂묒썝??吏곸젒 ?뺤씤?섏꽭??',
       checklist,
     };
   }
@@ -1216,25 +1227,25 @@
     const contentApi = getHospitalContent();
     const profile = contentApi?.buildHospitalProfile?.(hospital) || buildFallbackHospitalProfile(hospital);
     const items = [];
-    if (Number(hospital.specialistCount || 0) > 0) items.push(`전문의 ${hospital.specialistCount}명`);
-    if (hospital.saturdayOpen) items.push('토요일 진료');
-    if (hospital.sundayOpen) items.push('일요일 진료');
-    if (hospital.nightOpen) items.push('야간 진료');
-    if (hospital.hasEmergency) items.push('응급 진료');
-    if (hospital.url) items.push('공식 홈페이지 제공');
+    if (Number(hospital.specialistCount || 0) > 0) items.push(`?꾨Ц??${hospital.specialistCount}紐?);
+    if (hospital.saturdayOpen) items.push('?좎슂??吏꾨즺');
+    if (hospital.sundayOpen) items.push('?쇱슂??吏꾨즺');
+    if (hospital.nightOpen) items.push('?쇨컙 吏꾨즺');
+    if (hospital.hasEmergency) items.push('?묎툒 吏꾨즺');
+    if (hospital.url) items.push('怨듭떇 ?덊럹?댁? ?쒓났');
     if (hospital.department) items.push(hospital.department);
     if (hospital.type) items.push(hospital.type);
     if (hospital.region) items.push(hospital.region);
     if (hospital.subway) items.push(hospital.subway);
-    if (hospital.parkingCapacity) items.push(`주차 ${hospital.parkingCapacity}대`);
-    if (hospital.parkingFee && !hospital.parkingCapacity) items.push(`주차 ${hospital.parkingFee}`);
-    if (hospital.roomCount) items.push(`진료실 ${hospital.roomCount}개`);
-    if (hospital.bedCount) items.push(`병상 ${hospital.bedCount}개`);
+    if (hospital.parkingCapacity) items.push(`二쇱감 ${hospital.parkingCapacity}?`);
+    if (hospital.parkingFee && !hospital.parkingCapacity) items.push(`二쇱감 ${hospital.parkingFee}`);
+    if (hospital.roomCount) items.push(`吏꾨즺??${hospital.roomCount}媛?);
+    if (hospital.bedCount) items.push(`蹂묒긽 ${hospital.bedCount}媛?);
     if (Array.isArray(profile.highlightPoints)) items.push(...profile.highlightPoints);
 
     const uniqueItems = Array.from(new Set(items.filter(Boolean)));
     if (uniqueItems.length === 0) {
-      target.innerHTML = '<span style="color:var(--text-muted);">비교 포인트를 준비 중입니다...</span>';
+      target.innerHTML = '<span style="color:var(--text-muted);">鍮꾧탳 ?ъ씤?몃? 以鍮?以묒엯?덈떎...</span>';
       return;
     }
 
@@ -1255,7 +1266,7 @@
     reviewList.innerHTML = dynamicSummaries.map((item, index) => `
       <article class="detail-review-item fade-up" style="display:flex; flex-direction:column; gap:8px;">
         <div style="display:flex; justify-content:space-between; gap:12px; color:var(--text-muted); font-size:0.85rem;">
-          <span>병원찾기 note ${index + 1}</span>
+          <span>蹂묒썝李얘린 note ${index + 1}</span>
           <span>${escapeHtml(item.meta)}</span>
         </div>
         <h4 style="font-size:1.05rem; color:var(--text-heading); font-weight:600;">${escapeHtml(item.title)}</h4>
@@ -1277,19 +1288,19 @@
     const mapImage = hospital.mapImage
       ? `
         <div style="width:100%; max-width:640px; margin:0 auto 14px; border-radius:10px; overflow:hidden; border:1px solid var(--border-default); background:var(--bg-body);">
-          <img src="${escapeHtml(hospital.mapImage)}" alt="${escapeHtml(hospital.name || '병원')} 위치 미리보기" style="display:block; width:100%; height:auto;">
+          <img src="${escapeHtml(hospital.mapImage)}" alt="${escapeHtml(hospital.name || '蹂묒썝')} ?꾩튂 誘몃━蹂닿린" style="display:block; width:100%; height:auto;">
         </div>
       `
       : '';
 
     container.innerHTML = `
       <div class="map-setup-box" style="padding:20px; text-align:center; border:1px solid var(--border-default); border-radius:8px; background:var(--bg-card); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; height:100%;">
-        <span style="font-size:2rem;">📍</span>
-        <h3 style="margin:0; color:var(--text-heading);">${escapeHtml(hospital.name || '병원 위치')}</h3>
-        <p style="margin:0; color:var(--text-body); line-height:1.6;">${escapeHtml(hospital.address || '주소 정보 없음')}</p>
+        <span style="font-size:2rem;">?뱧</span>
+        <h3 style="margin:0; color:var(--text-heading);">${escapeHtml(hospital.name || '蹂묒썝 ?꾩튂')}</h3>
+        <p style="margin:0; color:var(--text-body); line-height:1.6;">${escapeHtml(hospital.address || '二쇱냼 ?뺣낫 ?놁쓬')}</p>
         ${note}
         ${mapImage}
-        <a href="https://map.naver.com/v5/search/${encodeURIComponent(hospital.name || hospital.address || '병원')}" target="_blank" rel="noopener" style="padding:10px 14px; background:var(--primary); color:#fff; border-radius:6px; text-decoration:none; font-weight:700;">네이버 지도에서 열기</a>
+        <a href="https://map.naver.com/v5/search/${encodeURIComponent(hospital.name || hospital.address || '蹂묒썝')}" target="_blank" rel="noopener" style="padding:10px 14px; background:var(--primary); color:#fff; border-radius:6px; text-decoration:none; font-weight:700;">?ㅼ씠踰?吏?꾩뿉???닿린</a>
       </div>
     `;
   }
@@ -1301,7 +1312,7 @@
     }
 
     if (!Array.isArray(items) || items.length === 0) {
-      container.innerHTML = '<p style="margin:0; color:var(--text-muted);">주변 비교 병원 정보를 아직 찾지 못했습니다.</p>';
+      container.innerHTML = '<p style="margin:0; color:var(--text-muted);">二쇰? 鍮꾧탳 蹂묒썝 ?뺣낫瑜??꾩쭅 李얠? 紐삵뻽?듬땲??</p>';
       return;
     }
 
@@ -1313,12 +1324,12 @@
         : '';
 
       return `
-      <a href="detail.html?id=${encodeURIComponent(item.id)}" style="display:flex; flex-direction:column; gap:8px; padding:16px; border:1px solid var(--border-default); border-radius:12px; text-decoration:none; background:var(--bg-body); color:inherit;">
+      <a href="detail.html?postid=${encodeURIComponent(item.id)}" style="display:flex; flex-direction:column; gap:8px; padding:16px; border:1px solid var(--border-default); border-radius:12px; text-decoration:none; background:var(--bg-body); color:inherit;">
         <strong style="font-size:1rem; color:var(--text-heading);">${escapeHtml(item.name)}</strong>
-        <span style="font-size:0.9rem; color:var(--primary); font-weight:600;">${escapeHtml(item.type || hospital.type || '병원')}</span>
-        <span style="font-size:0.92rem; color:var(--text-body); line-height:1.5;">${escapeHtml(item.address || '주소 정보 확인 필요')}</span>
-        ${serviceText ? `<span style="font-size:0.88rem; color:var(--text-body); line-height:1.5;">주요 진료: ${escapeHtml(serviceText)}</span>` : ''}
-        <span style="font-size:0.82rem; color:var(--text-muted);">전문의 ${escapeHtml(String(item.specialistCount || 0))}명 / 리뷰 ${escapeHtml(String(item.reviewCount || 0))}개${buildDistanceLabel(hospital, item)}</span>
+        <span style="font-size:0.9rem; color:var(--primary); font-weight:600;">${escapeHtml(item.type || hospital.type || '蹂묒썝')}</span>
+        <span style="font-size:0.92rem; color:var(--text-body); line-height:1.5;">${escapeHtml(item.address || '二쇱냼 ?뺣낫 ?뺤씤 ?꾩슂')}</span>
+        ${serviceText ? `<span style="font-size:0.88rem; color:var(--text-body); line-height:1.5;">二쇱슂 吏꾨즺: ${escapeHtml(serviceText)}</span>` : ''}
+        <span style="font-size:0.82rem; color:var(--text-muted);">?꾨Ц??${escapeHtml(String(item.specialistCount || 0))}紐?/ 由щ럭 ${escapeHtml(String(item.reviewCount || 0))}媛?{buildDistanceLabel(hospital, item)}</span>
       </a>
     `;
     }).join('');
@@ -1364,7 +1375,7 @@
     }
 
     if (!hospital.address || !window.naver.maps.Service?.geocode) {
-      renderMapFallback(hospital, '좌표 정보가 없어 네이버 지도 바로가기를 표시합니다.');
+      renderMapFallback(hospital, '醫뚰몴 ?뺣낫媛 ?놁뼱 ?ㅼ씠踰?吏??諛붾줈媛湲곕? ?쒖떆?⑸땲??');
       return;
     }
 
@@ -1375,7 +1386,7 @@
         return;
       }
 
-      renderMapFallback(hospital, '주소 좌표를 찾지 못해 네이버 지도 바로가기를 표시합니다.');
+      renderMapFallback(hospital, '二쇱냼 醫뚰몴瑜?李얠? 紐삵빐 ?ㅼ씠踰?吏??諛붾줈媛湲곕? ?쒖떆?⑸땲??');
     });
   }
 
@@ -1462,21 +1473,21 @@
     }
 
     if (mapLink) {
-      mapLink.href = `https://map.naver.com/v5/search/${encodeURIComponent(hospital.name || hospital.address || '병원')}`;
+      mapLink.href = `https://map.naver.com/v5/search/${encodeURIComponent(hospital.name || hospital.address || '蹂묒썝')}`;
     }
 
     if (searchLink) {
-      searchLink.href = `https://search.naver.com/search.naver?query=${encodeURIComponent(`${hospital.name || '병원'} 후기`)}`;
+      searchLink.href = `https://search.naver.com/search.naver?query=${encodeURIComponent(`${hospital.name || '蹂묒썝'} ?꾧린`)}`;
     }
 
     if (correctionLink) {
-      const subject = `[병원찾기 정정 요청] ${hospital.name || '병원'} / 수정 항목`;
-      const body = `${hospital.name || '병원명'}\n페이지 URL: ${window.location.href}\n수정 항목:\n근거 자료:\n`;
+      const subject = `[蹂묒썝李얘린 ?뺤젙 ?붿껌] ${hospital.name || '蹂묒썝'} / ?섏젙 ??ぉ`;
+      const body = `${hospital.name || '蹂묒썝紐?}\n?섏씠吏 URL: ${window.location.href}\n?섏젙 ??ぉ:\n洹쇨굅 ?먮즺:\n`;
       correctionLink.href = `mailto:replyleaders@naver.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     }
 
     if (correctionHint) {
-      correctionHint.textContent = `${hospital.name || '이 병원'}의 운영시간, 전화번호, 위치 정보가 실제와 다르면 수정 요청을 보내주시면 검토 후 반영합니다.`;
+      correctionHint.textContent = `${hospital.name || '??蹂묒썝'}???댁쁺?쒓컙, ?꾪솕踰덊샇, ?꾩튂 ?뺣낫媛 ?ㅼ젣? ?ㅻⅤ硫??섏젙 ?붿껌??蹂대궡二쇱떆硫?寃????諛섏쁺?⑸땲??`;
     }
   }
 
@@ -1487,14 +1498,14 @@
     }
 
     const uniqueItems = Array.from(new Set((items || []).filter(Boolean)));
-    target.textContent = uniqueItems.length > 0 ? uniqueItems.join(' / ') : '공공데이터 연동 상태 확인 중';
+    target.textContent = uniqueItems.length > 0 ? uniqueItems.join(' / ') : '怨듦났?곗씠???곕룞 ?곹깭 ?뺤씤 以?;
   }
 
   function buildSourceStateLabelSafe(label, dataSource) {
     if (dataSource === 'stale-cache') {
-      return `${label} (캐시 보강)`;
+      return `${label} (罹먯떆 蹂닿컯)`;
     }
-    return `${label} (실시간)`;
+    return `${label} (?ㅼ떆媛?`;
   }
 
   function buildPublicCodeSummarySafe(detailData, hoursData) {
@@ -1505,30 +1516,30 @@
     if (hoursData?.hpid) {
       codes.push(`NEMC ${hoursData.hpid}`);
     }
-    return codes.length > 0 ? `기준 코드 ${codes.join(' / ')}` : '';
+    return codes.length > 0 ? `湲곗? 肄붾뱶 ${codes.join(' / ')}` : '';
   }
 
   function buildOperationSummarySafe(hospital, detailData) {
     const parts = [];
 
-    if (hospital.saturdayOpen) parts.push('토요일 진료');
-    if (hospital.sundayOpen) parts.push('일요일 진료');
-    if (hospital.nightOpen) parts.push('야간 진료');
-    if (hospital.hasEmergency) parts.push('응급 진료 가능');
+    if (hospital.saturdayOpen) parts.push('?좎슂??吏꾨즺');
+    if (hospital.sundayOpen) parts.push('?쇱슂??吏꾨즺');
+    if (hospital.nightOpen) parts.push('?쇨컙 吏꾨즺');
+    if (hospital.hasEmergency) parts.push('?묎툒 吏꾨즺 媛??);
 
     if (Array.isArray(detailData?.receptionSummary) && detailData.receptionSummary.length > 0) {
       parts.push(...detailData.receptionSummary.slice(0, 3));
     } else {
-      if (detailData?.rcvWeek) parts.push(`평일 접수 ${detailData.rcvWeek}`);
-      if (detailData?.rcvSat) parts.push(`토요일 접수 ${detailData.rcvSat}`);
-      if (detailData?.lunchWeek) parts.push(`점심시간 ${detailData.lunchWeek}`);
+      if (detailData?.rcvWeek) parts.push(`?됱씪 ?묒닔 ${detailData.rcvWeek}`);
+      if (detailData?.rcvSat) parts.push(`?좎슂???묒닔 ${detailData.rcvSat}`);
+      if (detailData?.lunchWeek) parts.push(`?먯떖?쒓컙 ${detailData.lunchWeek}`);
     }
 
     if (Array.isArray(detailData?.parkingSummary) && detailData.parkingSummary.length > 0) {
       parts.push(detailData.parkingSummary[0]);
     }
 
-    return parts.length > 0 ? parts.join(' / ') : '운영 요약 정보 확인 필요';
+    return parts.length > 0 ? parts.join(' / ') : '?댁쁺 ?붿빟 ?뺣낫 ?뺤씤 ?꾩슂';
   }
 
   function buildLocationSummarySafe(hospital, hoursData) {
@@ -1536,7 +1547,7 @@
     const regionText = buildRegionText(hospital);
     const coordinateText = buildCoordinateLabel(hospital.lat, hospital.lng);
 
-    if (regionText && !regionText.includes('확인')) {
+    if (regionText && !regionText.includes('?뺤씤')) {
       parts.push(regionText);
     }
     if (hospital.subway) {
@@ -1549,19 +1560,19 @@
       parts.push(coordinateText);
     }
     if (hoursData?.dutyMapimg || hospital.mapImage) {
-      parts.push('지도 기준 정보 연동');
+      parts.push('吏??湲곗? ?뺣낫 ?곕룞');
     }
 
-    return parts.length > 0 ? parts.join(' / ') : (hospital.address || '위치 기준 정보 확인 필요');
+    return parts.length > 0 ? parts.join(' / ') : (hospital.address || '?꾩튂 湲곗? ?뺣낫 ?뺤씤 ?꾩슂');
   }
 
   function buildEquipmentSummarySafe(hospital, equipData) {
     const parts = [];
     const facility = equipData?.facility || {};
     const equipmentItems = Array.isArray(equipData?.topEquipment) && equipData.topEquipment.length > 0
-      ? equipData.topEquipment.slice(0, 4).map((item) => `${item.name} ${item.count}대`)
+      ? equipData.topEquipment.slice(0, 4).map((item) => `${item.name} ${item.count}?`)
       : Array.isArray(equipData?.equipDetails) && equipData.equipDetails.length > 0
-        ? equipData.equipDetails.slice(0, 4).map((item) => `${item.name} ${item.count}대`)
+        ? equipData.equipDetails.slice(0, 4).map((item) => `${item.name} ${item.count}?`)
         : Array.isArray(equipData?.equips) && equipData.equips.length > 0
           ? equipData.equips.slice(0, 4)
           : [];
@@ -1573,28 +1584,28 @@
     }
 
     const roomBedParts = [];
-    if (toPositiveNumber(facility.stdSickbdCnt) > 0) roomBedParts.push(`일반 병상 ${facility.stdSickbdCnt}`);
-    if (toPositiveNumber(facility.permSbdCnt) > 0) roomBedParts.push(`특수 병상 ${facility.permSbdCnt}`);
+    if (toPositiveNumber(facility.stdSickbdCnt) > 0) roomBedParts.push(`?쇰컲 蹂묒긽 ${facility.stdSickbdCnt}`);
+    if (toPositiveNumber(facility.permSbdCnt) > 0) roomBedParts.push(`?뱀닔 蹂묒긽 ${facility.permSbdCnt}`);
     if (roomBedParts.length === 0) {
-      if (toPositiveNumber(hospital.roomCount) > 0) roomBedParts.push(`입원실 ${hospital.roomCount}`);
-      if (toPositiveNumber(hospital.bedCount) > 0) roomBedParts.push(`병상 ${hospital.bedCount}`);
+      if (toPositiveNumber(hospital.roomCount) > 0) roomBedParts.push(`?낆썝??${hospital.roomCount}`);
+      if (toPositiveNumber(hospital.bedCount) > 0) roomBedParts.push(`蹂묒긽 ${hospital.bedCount}`);
     }
     if (roomBedParts.length > 0) {
       parts.push(roomBedParts.join(' / '));
     }
 
     if (facility.totArea) {
-      parts.push(`면적 ${facility.totArea}`);
+      parts.push(`硫댁쟻 ${facility.totArea}`);
     } else if (hospital.area) {
       parts.push(hospital.area);
     }
 
-    return parts.length > 0 ? parts.join(' / ') : '장비와 시설 정보 확인 필요';
+    return parts.length > 0 ? parts.join(' / ') : '?λ퉬? ?쒖꽕 ?뺣낫 ?뺤씤 ?꾩슂';
   }
 
   function renderPublicDigest(hospital) {
     const matchSummary = detailRuntime.matchMeta?.summary
-      || '공공 병원 데이터 매칭 정보를 정리 중입니다.';
+      || '怨듦났 蹂묒썝 ?곗씠??留ㅼ묶 ?뺣낫瑜??뺣━ 以묒엯?덈떎.';
     const operationSummary = buildOperationSummarySafe(hospital, detailRuntime.detailData);
     const locationSummary = buildLocationSummarySafe(hospital, detailRuntime.hoursData);
     const equipmentSummary = buildEquipmentSummarySafe(hospital, detailRuntime.equipData);
@@ -1633,37 +1644,37 @@
 
         if (itemName === targetName) {
           score += 140;
-          reasons.push('이름 정확히 일치');
+          reasons.push('?대쫫 ?뺥솗???쇱튂');
         } else if (itemLooseName === targetLooseName) {
           score += 120;
-          reasons.push('이름 정규화 일치');
+          reasons.push('?대쫫 ?뺢퇋???쇱튂');
         } else if ((targetLooseName && itemLooseName.includes(targetLooseName)) || (itemLooseName && targetLooseName.includes(itemLooseName))) {
           score += 80;
-          reasons.push('이름 부분 일치');
+          reasons.push('?대쫫 遺遺??쇱튂');
         } else if (nameOverlap >= 2) {
           score += 55;
-          reasons.push(`이름 핵심어 ${nameOverlap}개 일치`);
+          reasons.push(`?대쫫 ?듭떖??${nameOverlap}媛??쇱튂`);
         }
 
         if (addressOverlap > 0) {
           score += Math.min(addressOverlap * 12, 36);
-          reasons.push(`주소 핵심어 ${addressOverlap}개 일치`);
+          reasons.push(`二쇱냼 ?듭떖??${addressOverlap}媛??쇱튂`);
         }
         if (hospital.region && item.region === hospital.region) {
           score += 20;
-          reasons.push('지역 일치');
+          reasons.push('吏???쇱튂');
         }
         if (hospital.district && item.district === hospital.district) {
           score += 18;
-          reasons.push('세부 지역 일치');
+          reasons.push('?몃? 吏???쇱튂');
         }
         if (hospital.type && item.type === hospital.type) {
           score += 10;
-          reasons.push('병원 유형 일치');
+          reasons.push('蹂묒썝 ?좏삎 ?쇱튂');
         }
         if (hospital.departmentId && item.departmentId === hospital.departmentId) {
           score += 8;
-          reasons.push('진료 분류 일치');
+          reasons.push('吏꾨즺 遺꾨쪟 ?쇱튂');
         }
 
         return {
@@ -1693,7 +1704,7 @@
         hospital: top.item,
         meta: {
           status: 'matched',
-          summary: `공공 병원 데이터 매칭 완료 · ${top.reasons.slice(0, 3).join(' / ')}`,
+          summary: `怨듦났 蹂묒썝 ?곗씠??留ㅼ묶 ?꾨즺 쨌 ${top.reasons.slice(0, 3).join(' / ')}`,
         },
       };
     } catch (error) {
@@ -1745,17 +1756,17 @@
   function buildDoctorText(hospital) {
     const parts = [];
     if (toPositiveNumber(hospital.specialistCount) > 0) {
-      parts.push(`전문의 ${hospital.specialistCount}명`);
+      parts.push(`?꾨Ц??${hospital.specialistCount}紐?);
     }
     if (toPositiveNumber(hospital.generalDoctorCount) > 0) {
-      parts.push(`일반의 ${hospital.generalDoctorCount}명`);
+      parts.push(`?쇰컲??${hospital.generalDoctorCount}紐?);
     }
-    return parts.join(', ') || '의료진 정보 확인 필요';
+    return parts.join(', ') || '?섎즺吏??뺣낫 ?뺤씤 ?꾩슂';
   }
 
   function buildOpenDateText(openDate) {
     if (!openDate) {
-      return '개원일 정보 없음';
+      return '媛쒖썝???뺣낫 ?놁쓬';
     }
 
     const date = new Date(openDate);
@@ -1767,12 +1778,12 @@
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
-    return `${year}.${month}.${day} (${years}년차)`;
+    return `${year}.${month}.${day} (${years}?꾩감)`;
   }
 
   function buildRegionText(hospital) {
     const parts = [hospital.region, hospital.district].filter(Boolean);
-    return parts.length > 0 ? parts.join(' / ') : '지역 정보 확인 중';
+    return parts.length > 0 ? parts.join(' / ') : '吏???뺣낫 ?뺤씤 以?;
   }
 
   function buildDistanceLabel(originHospital, targetHospital) {
@@ -1781,9 +1792,9 @@
       return '';
     }
     if (distanceKm < 1) {
-      return ` / 약 ${Math.round(distanceKm * 1000)}m`;
+      return ` / ??${Math.round(distanceKm * 1000)}m`;
     }
-    return ` / 약 ${distanceKm.toFixed(1)}km`;
+    return ` / ??${distanceKm.toFixed(1)}km`;
   }
 
   function calculateDistanceKm(originHospital, targetHospital) {
@@ -1811,15 +1822,15 @@
   function getOperationalReasonLabel(flag) {
     switch (flag) {
       case 'saturdayOpen':
-        return '토요 진료';
+        return '?좎슂 吏꾨즺';
       case 'sundayOpen':
-        return '일요 진료';
+        return '?쇱슂 吏꾨즺';
       case 'nightOpen':
-        return '야간 진료';
+        return '?쇨컙 吏꾨즺';
       case 'hasEmergency':
-        return '응급 대응';
+        return '?묎툒 ???;
       default:
-        return '운영 조건';
+        return '?댁쁺 議곌굔';
     }
   }
 
@@ -1843,23 +1854,23 @@
 
   function buildSourceStateLabel(label, dataSource) {
     if (dataSource === 'stale-cache') {
-      return `${label} (캐시 보강)`;
+      return `${label} (罹먯떆 蹂닿컯)`;
     }
-    return `${label} (실시간)`;
+    return `${label} (?ㅼ떆媛?`;
   }
 
   function buildOperationSummary(hospital, detailData) {
     const parts = [];
 
-    if (hospital.saturdayOpen) parts.push('토요일 진료');
-    if (hospital.sundayOpen) parts.push('일요일 진료');
-    if (hospital.nightOpen) parts.push('야간 진료');
-    if (hospital.hasEmergency) parts.push('응급 진료 가능');
-    if (detailData?.rcvWeek) parts.push(`평일 접수 ${detailData.rcvWeek}`);
-    if (detailData?.rcvSat) parts.push(`토요일 접수 ${detailData.rcvSat}`);
-    if (detailData?.lunchWeek) parts.push(`점심시간 ${detailData.lunchWeek}`);
+    if (hospital.saturdayOpen) parts.push('?좎슂??吏꾨즺');
+    if (hospital.sundayOpen) parts.push('?쇱슂??吏꾨즺');
+    if (hospital.nightOpen) parts.push('?쇨컙 吏꾨즺');
+    if (hospital.hasEmergency) parts.push('?묎툒 吏꾨즺 媛??);
+    if (detailData?.rcvWeek) parts.push(`?됱씪 ?묒닔 ${detailData.rcvWeek}`);
+    if (detailData?.rcvSat) parts.push(`?좎슂???묒닔 ${detailData.rcvSat}`);
+    if (detailData?.lunchWeek) parts.push(`?먯떖?쒓컙 ${detailData.lunchWeek}`);
 
-    return parts.length > 0 ? parts.join(' / ') : '운영 요약 정보 확인 필요';
+    return parts.length > 0 ? parts.join(' / ') : '?댁쁺 ?붿빟 ?뺣낫 ?뺤씤 ?꾩슂';
   }
 
   function buildLocationSummary(hospital, hoursData) {
@@ -1867,7 +1878,7 @@
     const regionText = buildRegionText(hospital);
     const coordinateText = buildCoordinateLabel(hospital.lat, hospital.lng);
 
-    if (regionText && regionText !== '지역 정보 확인 중') {
+    if (regionText && regionText !== '吏???뺣낫 ?뺤씤 以?) {
       parts.push(regionText);
     }
     if (hospital.subway) {
@@ -1877,17 +1888,17 @@
       parts.push(coordinateText);
     }
     if (hoursData?.dutyMapimg || hospital.mapImage) {
-      parts.push('지도 이미지 연동');
+      parts.push('吏???대?吏 ?곕룞');
     }
 
-    return parts.length > 0 ? parts.join(' / ') : (hospital.address || '위치 기준 정보 확인 필요');
+    return parts.length > 0 ? parts.join(' / ') : (hospital.address || '?꾩튂 湲곗? ?뺣낫 ?뺤씤 ?꾩슂');
   }
 
   function buildEquipmentSummary(hospital, equipData) {
     const parts = [];
     const facility = equipData?.facility || {};
     const equipmentItems = Array.isArray(equipData?.equipDetails) && equipData.equipDetails.length > 0
-      ? equipData.equipDetails.slice(0, 4).map((item) => `${item.name} ${item.count}대`)
+      ? equipData.equipDetails.slice(0, 4).map((item) => `${item.name} ${item.count}?`)
       : Array.isArray(equipData?.equips) && equipData.equips.length > 0
         ? equipData.equips.slice(0, 4)
         : [];
@@ -1899,23 +1910,23 @@
     }
 
     const roomBedParts = [];
-    if (toPositiveNumber(facility.stdSickbdCnt) > 0) roomBedParts.push(`일반 병상 ${facility.stdSickbdCnt}`);
-    if (toPositiveNumber(facility.permSbdCnt) > 0) roomBedParts.push(`특수 병상 ${facility.permSbdCnt}`);
+    if (toPositiveNumber(facility.stdSickbdCnt) > 0) roomBedParts.push(`?쇰컲 蹂묒긽 ${facility.stdSickbdCnt}`);
+    if (toPositiveNumber(facility.permSbdCnt) > 0) roomBedParts.push(`?뱀닔 蹂묒긽 ${facility.permSbdCnt}`);
     if (roomBedParts.length === 0) {
-      if (toPositiveNumber(hospital.roomCount) > 0) roomBedParts.push(`입원실 ${hospital.roomCount}`);
-      if (toPositiveNumber(hospital.bedCount) > 0) roomBedParts.push(`병상 ${hospital.bedCount}`);
+      if (toPositiveNumber(hospital.roomCount) > 0) roomBedParts.push(`?낆썝??${hospital.roomCount}`);
+      if (toPositiveNumber(hospital.bedCount) > 0) roomBedParts.push(`蹂묒긽 ${hospital.bedCount}`);
     }
     if (roomBedParts.length > 0) {
       parts.push(roomBedParts.join(' / '));
     }
 
     if (facility.totArea) {
-      parts.push(`면적 ${facility.totArea}`);
+      parts.push(`硫댁쟻 ${facility.totArea}`);
     } else if (hospital.area) {
       parts.push(hospital.area);
     }
 
-    return parts.length > 0 ? parts.join(' / ') : '장비와 시설 정보 확인 필요';
+    return parts.length > 0 ? parts.join(' / ') : '?λ퉬? ?쒖꽕 ?뺣낫 ?뺤씤 ?꾩슂';
   }
 
   function buildFallbackReviewSummaries(hospital) {
@@ -1926,33 +1937,33 @@
 
     return [
       {
-        title: `${hospital.name} 운영 포인트`,
+        title: `${hospital.name} ?댁쁺 ?ъ씤??,
         body: truncateText(
-          operationSummary !== '운영 요약 정보 확인 필요' ? operationSummary : FALLBACK_REVIEW_TEXTS[0],
+          operationSummary !== '?댁쁺 ?붿빟 ?뺣낫 ?뺤씤 ?꾩슂' ? operationSummary : FALLBACK_REVIEW_TEXTS[0],
           120
         ),
-        meta: '운영 요약',
-        badge: '운영 체크',
+        meta: '?댁쁺 ?붿빟',
+        badge: '?댁쁺 泥댄겕',
       },
       {
-        title: `${hospital.name} 방문 동선`,
+        title: `${hospital.name} 諛⑸Ц ?숈꽑`,
         body: truncateText(
-          locationSummary !== '위치 기준 정보 확인 필요'
+          locationSummary !== '?꾩튂 湲곗? ?뺣낫 ?뺤씤 ?꾩슂'
             ? `${hospital.address || ''} / ${locationSummary}`
             : FALLBACK_REVIEW_TEXTS[2],
           140
         ),
-        meta: '위치 기준',
-        badge: '방문 체크',
+        meta: '?꾩튂 湲곗?',
+        badge: '諛⑸Ц 泥댄겕',
       },
       {
-        title: `${hospital.name} 규모와 장비`,
+        title: `${hospital.name} 洹쒕え? ?λ퉬`,
         body: truncateText(
-          `${doctorText} / ${equipmentSummary !== '장비와 시설 정보 확인 필요' ? equipmentSummary : FALLBACK_REVIEW_TEXTS[1]}`,
+          `${doctorText} / ${equipmentSummary !== '?λ퉬? ?쒖꽕 ?뺣낫 ?뺤씤 ?꾩슂' ? equipmentSummary : FALLBACK_REVIEW_TEXTS[1]}`,
           140
         ),
-        meta: '시설 요약',
-        badge: '시설 체크',
+        meta: '?쒖꽕 ?붿빟',
+        badge: '?쒖꽕 泥댄겕',
       },
     ];
   }
@@ -1963,7 +1974,7 @@
     if (!Number.isFinite(parsedLat) || !Number.isFinite(parsedLng) || parsedLat <= 0 || parsedLng <= 0) {
       return '';
     }
-    return `좌표 ${parsedLat.toFixed(6)}, ${parsedLng.toFixed(6)}`;
+    return `醫뚰몴 ${parsedLat.toFixed(6)}, ${parsedLng.toFixed(6)}`;
   }
 
   function normalizeCompareText(value) {
@@ -1974,7 +1985,7 @@
     return String(value || '')
       .toLowerCase()
       .replace(/\([^)]*\)/g, ' ')
-      .replace(/[^0-9a-zA-Z가-힣]/g, '');
+      .replace(/[^0-9a-zA-Z媛-??/g, '');
   }
 
   function extractTextTokens(value) {
@@ -1991,8 +2002,8 @@
   function extractAddressTokens(value) {
     return extractTextTokens(
       String(value || '')
-        .replace(/\d+층/g, ' ')
-        .replace(/\d+호/g, ' ')
+        .replace(/\d+痢?g, ' ')
+        .replace(/\d+??g, ' ')
         .replace(/[()]/g, ' ')
     ).slice(0, 10);
   }
@@ -2011,13 +2022,13 @@
     if (text.length <= maxLength) {
       return text;
     }
-    return `${text.slice(0, maxLength - 1).trim()}…`;
+    return `${text.slice(0, maxLength - 1).trim()}??;
   }
 
   function formatPostDate(postDate) {
     const value = String(postDate || '').trim();
     if (!/^\d{8}$/.test(value)) {
-      return '최근 후기';
+      return '理쒓렐 ?꾧린';
     }
     return `${value.slice(0, 4)}.${value.slice(4, 6)}.${value.slice(6, 8)}`;
   }
@@ -2189,7 +2200,7 @@
 
   function buildDetailMapAuthMessage(candidateKeys) {
     const keyLabel = Array.from(new Set(candidateKeys.filter(Boolean))).join(', ');
-    return `네이버 지도 인증이 실패했습니다. Naver Cloud Maps에서 사용 중인 Key ID(${keyLabel})에 https://hospital-ranking.kr 와 https://www.hospital-ranking.kr 를 등록했는지 확인해 주세요.`;
+    return `?ㅼ씠踰?吏???몄쬆???ㅽ뙣?덉뒿?덈떎. Naver Cloud Maps?먯꽌 ?ъ슜 以묒씤 Key ID(${keyLabel})??https://hospital-ranking.kr ? https://www.hospital-ranking.kr 瑜??깅줉?덈뒗吏 ?뺤씤??二쇱꽭??`;
   }
 })();
 

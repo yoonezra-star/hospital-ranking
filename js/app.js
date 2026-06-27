@@ -61,22 +61,22 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const SEARCH_AUTOCOMPLETE_ITEMS = [
-    '서울 치과',
-    '강남 치과',
-    '강남 피부과 야간',
-    '서초 정형외과',
-    '송파 소아과',
-    '송파 소아과 일요일',
-    '분당 내과',
-    '마포 치과 주차',
-    '여의도 통증의학과',
-    '서울 재활의학과',
-    '경기 정형외과 토요일',
-    '야간 피부과',
-    '토요일 정형외과',
-    '일요일 소아과',
-    '응급 진료 병원',
-    '주차 가능한 치과',
+    '?쒖슱 移섍낵',
+    '媛뺣궓 移섍낵',
+    '媛뺣궓 ?쇰?怨??쇨컙',
+    '?쒖큹 ?뺥삎?멸낵',
+    '?≫뙆 ?뚯븘怨?,
+    '?≫뙆 ?뚯븘怨??쇱슂??,
+    '遺꾨떦 ?닿낵',
+    '留덊룷 移섍낵 二쇱감',
+    '?ъ쓽???듭쬆?섑븰怨?,
+    '?쒖슱 ?ы솢?섑븰怨?,
+    '寃쎄린 ?뺥삎?멸낵 ?좎슂??,
+    '?쇨컙 ?쇰?怨?,
+    '?좎슂???뺥삎?멸낵',
+    '?쇱슂???뚯븘怨?,
+    '?묎툒 吏꾨즺 蹂묒썝',
+    '二쇱감 媛?ν븳 移섍낵',
   ];
 
   applyInitialRouteState();
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateThemeIcon(theme) {
     if (ui.themeToggle) {
-      ui.themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+      ui.themeToggle.textContent = theme === 'dark' ? '?截? : '?뙔';
     }
   }
 
@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!ui.departmentGrid || typeof DEPARTMENTS === 'undefined') return;
 
     ui.departmentGrid.innerHTML = DEPARTMENTS.map((department, index) => `
-      <div class="dept-card fade-up delay-${index % 4}" data-dept-id="${department.id}" tabindex="0" role="button" aria-label="${escapeHtml(department.name)} 병원 찾기">
+      <div class="dept-card fade-up delay-${index % 4}" data-dept-id="${department.id}" tabindex="0" role="button" aria-label="${escapeHtml(department.name)} 蹂묒썝 李얘린">
         <div class="dept-icon" style="background:${department.color}15; color:${department.color};">
           ${department.icon}
         </div>
@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .sort((left, right) => left.localeCompare(right, 'ko'));
 
     [ui.districtFilter, ui.heroDistrictFilter].filter(Boolean).forEach((select) => {
-      select.innerHTML = '<option value="all">시/군/구 선택</option>';
+      select.innerHTML = '<option value="all">??援?援??좏깮</option>';
       districts.forEach((district) => {
         const option = document.createElement('option');
         option.value = district;
@@ -301,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .sort((left, right) => left.localeCompare(right, 'ko'));
 
     [ui.townFilter, ui.heroTownFilter].filter(Boolean).forEach((select) => {
-      select.innerHTML = '<option value="all">읍/면/동 선택</option>';
+      select.innerHTML = '<option value="all">??硫????좏깮</option>';
       towns.forEach((town) => {
         const option = document.createElement('option');
         option.value = town;
@@ -338,25 +338,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const hasLocationDrilldown = state.currentFilters.district !== 'all' || state.currentFilters.town !== 'all';
     const hasMore = !hasLocationDrilldown && state.isApiAvailable && (state.currentPage * 20 < state.totalCount);
     ui.loadMoreBtn.style.display = hasMore ? 'block' : 'none';
-    ui.loadMoreBtn.textContent = `더보기 (${state.allFetchedHospitals.length} / ${state.totalCount.toLocaleString()})`;
+    ui.loadMoreBtn.textContent = `?붾낫湲?(${state.allFetchedHospitals.length} / ${state.totalCount.toLocaleString()})`;
   }
 
   function updateDataBadge(fromMock) {
     if (!ui.dataSourceBadge) return;
 
     if (fromMock) {
-      ui.dataSourceBadge.textContent = '보강 데이터 표시';
+      ui.dataSourceBadge.textContent = '蹂닿컯 ?곗씠???쒖떆';
       ui.dataSourceBadge.className = 'data-badge mock';
       if (ui.dataSourceNote) {
-        ui.dataSourceNote.textContent = '실시간 공공 API가 지연되면 검수한 보강 데이터와 요약 정보를 먼저 보여줍니다.';
+        ui.dataSourceNote.textContent = '?ㅼ떆媛?怨듦났 API媛 吏?곕릺硫?寃?섑븳 蹂닿컯 ?곗씠?곗? ?붿빟 ?뺣낫瑜?癒쇱? 蹂댁뿬以띾땲??';
       }
       return;
     }
 
-    ui.dataSourceBadge.textContent = '공공데이터 실시간 연동';
+    ui.dataSourceBadge.textContent = '怨듦났?곗씠???ㅼ떆媛??곕룞';
     ui.dataSourceBadge.className = 'data-badge live';
     if (ui.dataSourceNote) {
-      ui.dataSourceNote.textContent = '건강보험심사평가원 등 공공 API 응답을 우선 반영해 병원 목록을 보여주고 있습니다.';
+      ui.dataSourceNote.textContent = '嫄닿컯蹂댄뿕?ъ궗?됯?????怨듦났 API ?묐떟???곗꽑 諛섏쁺??蹂묒썝 紐⑸줉??蹂댁뿬二쇨퀬 ?덉뒿?덈떎.';
     }
   }
 
@@ -422,12 +422,12 @@ document.addEventListener('DOMContentLoaded', () => {
             data-landing-department="${escapeHtml(section.department || '')}"
             data-landing-type="${escapeHtml(section.type || '')}"
           >
-            <span class="landing-card-badge">${escapeHtml(section.badge || '지역별 탐색')}</span>
+            <span class="landing-card-badge">${escapeHtml(section.badge || '吏??퀎 ?먯깋')}</span>
             <h3>${escapeHtml(section.title)}</h3>
             <p>${escapeHtml(section.description)}</p>
             <div class="landing-card-footer">
-              <span>필터를 적용해 병원 목록으로 바로 이동</span>
-              <span class="landing-card-count">${count.toLocaleString()}곳</span>
+              <span>?꾪꽣瑜??곸슜??蹂묒썝 紐⑸줉?쇰줈 諛붾줈 ?대룞</span>
+              <span class="landing-card-count">${count.toLocaleString()}怨?/span>
             </div>
           </button>
         `;
@@ -439,12 +439,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const sections = contentApi?.getGuideSpotlights?.() || [];
       ui.guideSpotlightList.innerHTML = sections.map((section, index) => `
         <a href="${escapeHtml(section.href || '#')}" class="landing-card fade-up delay-${index % 3}">
-          <span class="landing-card-badge">${escapeHtml(section.badge || '바로가기')}</span>
+          <span class="landing-card-badge">${escapeHtml(section.badge || '諛붾줈媛湲?)}</span>
           <h3>${escapeHtml(section.title)}</h3>
           <p>${escapeHtml(section.description)}</p>
           <div class="landing-card-footer">
-            <span>가이드 또는 빠른 탐색 섹션으로 이동</span>
-            <span class="landing-card-count">열기</span>
+            <span>媛?대뱶 ?먮뒗 鍮좊Ⅸ ?먯깋 ?뱀뀡?쇰줈 ?대룞</span>
+            <span class="landing-card-count">?닿린</span>
           </div>
         </a>
       `).join('');
@@ -471,9 +471,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!ui.rankingList || !ui.rankingCount) return;
 
     if (hospitals.length === 0) {
-      ui.rankingCount.innerHTML = '조건에 맞는 병원을 찾지 못했습니다.';
+      ui.rankingCount.innerHTML = '議곌굔??留욌뒗 蹂묒썝??李얠? 紐삵뻽?듬땲??';
       ui.rankingList.classList.remove('ranking-group-list');
-      ui.rankingList.innerHTML = buildEmptyState('조건에 맞는 병원이 없습니다.', '필터를 바꾸거나 다른 키워드로 다시 검색해보세요.');
+      ui.rankingList.innerHTML = buildEmptyState('議곌굔??留욌뒗 蹂묒썝???놁뒿?덈떎.', '?꾪꽣瑜?諛붽씀嫄곕굹 ?ㅻⅨ ?ㅼ썙?쒕줈 ?ㅼ떆 寃?됲빐蹂댁꽭??');
       return;
     }
 
@@ -485,8 +485,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     ui.rankingList.classList.remove('ranking-group-list');
     ui.rankingCount.innerHTML = state.isApiAvailable
-      ? `전국 <strong>${state.totalCount.toLocaleString()}</strong>개 병원 중 <strong>${hospitals.length}</strong>개 표시`
-      : `총 <strong>${hospitals.length}</strong>개 병원 (샘플 데이터)`;
+      ? `?꾧뎅 <strong>${state.totalCount.toLocaleString()}</strong>媛?蹂묒썝 以?<strong>${hospitals.length}</strong>媛??쒖떆`
+      : `珥?<strong>${hospitals.length}</strong>媛?蹂묒썝 (?섑뵆 ?곗씠??`;
     ui.rankingList.innerHTML = hospitals.map((hospital, index) => buildHospitalCard(hospital, index + 1)).join('');
     observeNewElements(ui.rankingList);
     void hydrateHospitalCardDetails(hospitals, ui.rankingList, 18);
@@ -500,32 +500,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const groups = [
       {
         key: 'hospital',
-        title: '종합병원·병원',
-        description: '병원급 이상 의료기관 중심 정렬',
+        title: '醫낇빀蹂묒썝쨌蹂묒썝',
+        description: '蹂묒썝湲??댁긽 ?섎즺湲곌? 以묒떖 ?뺣젹',
         items: hospitals.filter((hospital) => getRankingGroup(hospital) === 'hospital').slice(0, 8),
       },
       {
         key: 'clinic',
-        title: '의원',
-        description: '동네의원과 전문 클리닉',
+        title: '?섏썝',
+        description: '?숇꽕?섏썝怨??꾨Ц ?대━??,
         items: hospitals.filter((hospital) => getRankingGroup(hospital) === 'clinic').slice(0, 8),
       },
       {
         key: 'dental',
-        title: '치과',
-        description: '치과의원 및 치과병원',
+        title: '移섍낵',
+        description: '移섍낵?섏썝 諛?移섍낵蹂묒썝',
         items: hospitals.filter((hospital) => getRankingGroup(hospital) === 'dental').slice(0, 8),
       },
       {
         key: 'korean',
-        title: '한의원·한방병원',
-        description: '한방 진료 기관',
+        title: '?쒖쓽?먃룻븳諛⑸퀝??,
+        description: '?쒕갑 吏꾨즺 湲곌?',
         items: hospitals.filter((hospital) => getRankingGroup(hospital) === 'korean').slice(0, 8),
       },
     ].filter((group) => group.items.length > 0);
 
     ui.rankingList.classList.add('ranking-group-list');
-    ui.rankingCount.innerHTML = `병원급별 섹션 <strong>${groups.length}</strong>개 / 전체 <strong>${hospitals.length}</strong>곳`;
+    ui.rankingCount.innerHTML = `蹂묒썝湲됰퀎 ?뱀뀡 <strong>${groups.length}</strong>媛?/ ?꾩껜 <strong>${hospitals.length}</strong>怨?;
     ui.rankingList.innerHTML = groups.map((group) => `
       <section class="ranking-group fade-up" data-ranking-group="${group.key}">
         <div class="ranking-group-header">
@@ -533,7 +533,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <h3>${group.title}</h3>
             <p>${group.description}</p>
           </div>
-          <span class="ranking-group-count">${group.items.length}곳</span>
+          <span class="ranking-group-count">${group.items.length}怨?/span>
         </div>
         <div class="ranking-group-grid">
           ${group.items.map((hospital, index) => buildHospitalCard(hospital, index + 1)).join('')}
@@ -548,10 +548,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const type = hospital.type || '';
     const departmentId = hospital.departmentId || '';
 
-    if (departmentId === 'dental' || type.includes('치과')) return 'dental';
-    if (departmentId === 'korean' || type.includes('한의') || type.includes('한방')) return 'korean';
-    if (type === '의원') return 'clinic';
-    if (type.includes('병원') || type.includes('종합') || departmentId === 'general') return 'hospital';
+    if (departmentId === 'dental' || type.includes('移섍낵')) return 'dental';
+    if (departmentId === 'korean' || type.includes('?쒖쓽') || type.includes('?쒕갑')) return 'korean';
+    if (type === '?섏썝') return 'clinic';
+    if (type.includes('蹂묒썝') || type.includes('醫낇빀') || departmentId === 'general') return 'hospital';
     return 'clinic';
   }
 
@@ -577,11 +577,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const evidenceSummary = buildHospitalEvidenceSummary(hospital);
     const decisionSummary = buildHospitalDecisionSummary(hospital);
 
-    if (hospital.saturdayOpen) tags.push('<span class="tag tag-sat">토요일 진료</span>');
-    if (hospital.nightOpen) tags.push('<span class="tag tag-night">야간 진료</span>');
-    if (hospital.sundayOpen) tags.push('<span class="tag tag-sun">일요일 진료</span>');
-    if (hospital.url) tags.push('<span class="tag tag-site">공식 홈페이지</span>');
-    if (!hasKnownOperationalData(hospital)) tags.push('<span class="tag tag-pending">운영시간 확인 중</span>');
+    if (hospital.saturdayOpen) tags.push('<span class="tag tag-sat">?좎슂??吏꾨즺</span>');
+    if (hospital.nightOpen) tags.push('<span class="tag tag-night">?쇨컙 吏꾨즺</span>');
+    if (hospital.sundayOpen) tags.push('<span class="tag tag-sun">?쇱슂??吏꾨즺</span>');
+    if (hospital.url) tags.push('<span class="tag tag-site">怨듭떇 ?덊럹?댁?</span>');
+    if (!hasKnownOperationalData(hospital)) tags.push('<span class="tag tag-pending">?댁쁺?쒓컙 ?뺤씤 以?/span>');
 
     return `
       <article class="hospital-card fade-up" data-hospital-id="${escapeHtml(hospital.id)}">
@@ -591,7 +591,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ${escapeHtml(hospital.name)}
             <span class="hospital-type-tag">${escapeHtml(hospital.type)}</span>
           </div>
-          <div class="hospital-address">주소 ${escapeHtml(hospital.address)}</div>
+          <div class="hospital-address">二쇱냼 ${escapeHtml(hospital.address)}</div>
           ${subinfo ? `<div class="hospital-subinfo" data-hospital-subinfo>${subinfo}</div>` : ''}
           <div class="hospital-trust-row" data-hospital-trust>${renderHospitalTrustBadges(trustBadges)}</div>
           <div class="hospital-status-row" data-hospital-status>${renderHospitalStatusBadges(statusItems)}</div>
@@ -604,21 +604,21 @@ document.addEventListener('DOMContentLoaded', () => {
           ${focusNote ? `<p class="hospital-focus-note">${escapeHtml(focusNote)}</p>` : ''}
           ${visitPrepNote ? `<p class="hospital-visit-prep">${escapeHtml(visitPrepNote)}</p>` : ''}
           <div class="hospital-insight-list" data-hospital-insights${insightItems.length ? '' : ' hidden'}>${renderHospitalInsightList(insightItems)}</div>
-          <p class="hospital-data-summary${dataSummary ? '' : ' is-pending'}" data-hospital-summary>${escapeHtml(dataSummary || '주차, 접수, 운영 정보를 불러오는 중입니다.')}</p>
+          <p class="hospital-data-summary${dataSummary ? '' : ' is-pending'}" data-hospital-summary>${escapeHtml(dataSummary || '二쇱감, ?묒닔, ?댁쁺 ?뺣낫瑜?遺덈윭?ㅻ뒗 以묒엯?덈떎.')}</p>
           ${decisionSummary ? `<p class="hospital-decision-summary">${escapeHtml(decisionSummary)}</p>` : ''}
           ${evidenceSummary ? `<p class="hospital-evidence-summary">${escapeHtml(evidenceSummary)}</p>` : ''}
           <div class="hospital-meta" data-hospital-meta>
             <div class="meta-item">
-              <span class="meta-icon">평점</span>
+              <span class="meta-icon">?됱젏</span>
               <span class="meta-value">${escapeHtml(hospital.score)}</span>
             </div>
-            ${hospital.reviewCount ? `<div class="meta-item"><span class="meta-icon">리뷰</span><span class="meta-value">${escapeHtml(Number(hospital.reviewCount).toLocaleString())}</span><span class="meta-label">개</span></div>` : ''}
+            ${hospital.reviewCount ? `<div class="meta-item"><span class="meta-icon">由щ럭</span><span class="meta-value">${escapeHtml(Number(hospital.reviewCount).toLocaleString())}</span><span class="meta-label">媛?/span></div>` : ''}
             <div class="meta-item">
-              <span class="meta-icon">전문의</span>
+              <span class="meta-icon">?꾨Ц??/span>
               <span class="meta-value">${escapeHtml(hospital.specialistCount || 0)}</span>
-              <span class="meta-label">명</span>
+              <span class="meta-label">紐?/span>
             </div>
-            ${hospital.phone ? `<div class="meta-item"><span class="meta-icon">전화</span><span class="meta-value">${escapeHtml(hospital.phone)}</span></div>` : ''}
+            ${hospital.phone ? `<div class="meta-item"><span class="meta-icon">?꾪솕</span><span class="meta-value">${escapeHtml(hospital.phone)}</span></div>` : ''}
           </div>
           <div class="score-bar-container">
             <div class="score-bar">
@@ -636,9 +636,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const bits = [];
     const location = [hospital.region, hospital.district].filter(Boolean).join(' / ');
     if (location) bits.push(location);
-    if (hospital.openDate) bits.push(`개원 ${formatDate(hospital.openDate)}`);
-    if (hospital.url) bits.push('공식 홈페이지');
-    return bits.map((bit) => escapeHtml(bit)).join(' · ');
+    if (hospital.openDate) bits.push(`媛쒖썝 ${formatDate(hospital.openDate)}`);
+    if (hospital.url) bits.push('怨듭떇 ?덊럹?댁?');
+    return bits.map((bit) => escapeHtml(bit)).join(' 쨌 ');
   }
 
   function buildHospitalHighlightItems(hospital, detailData) {
@@ -652,15 +652,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (hospital.subway) items.push(hospital.subway);
     if (parkingText) items.push(parkingText);
-    if (hospital.equipment) items.push(`주요 장비 ${String(hospital.equipment).split(',')[0].trim()}`);
-    if (toPositiveNumber(hospital.bedCount) > 0) items.push(`병상 ${hospital.bedCount}개`);
+    if (hospital.equipment) items.push(`二쇱슂 ?λ퉬 ${String(hospital.equipment).split(',')[0].trim()}`);
+    if (toPositiveNumber(hospital.bedCount) > 0) items.push(`蹂묒긽 ${hospital.bedCount}媛?);
     if (Array.isArray(detailData?.emergencySummary) && detailData.emergencySummary.length > 0) {
-      items.push('응급 안내');
+      items.push('?묎툒 ?덈궡');
     } else if (hospital.hasEmergency) {
-      items.push('응급 진료');
+      items.push('?묎툒 吏꾨즺');
     }
     if (hospital.openDate && isRecentHospital(hospital.openDate)) {
-      items.push('최근 개원');
+      items.push('理쒓렐 媛쒖썝');
     }
 
     return uniqueStrings(items).slice(0, 4);
@@ -683,16 +683,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (parts.length === 0) {
-      if (hospital.saturdayOpen) parts.push('토요일 진료');
-      if (hospital.nightOpen) parts.push('야간 진료');
-      if (hospital.sundayOpen) parts.push('일요일 진료');
+      if (hospital.saturdayOpen) parts.push('?좎슂??吏꾨즺');
+      if (hospital.nightOpen) parts.push('?쇨컙 吏꾨즺');
+      if (hospital.sundayOpen) parts.push('?쇱슂??吏꾨즺');
       if (hospital.subway) parts.push(hospital.subway);
-      if (hospital.equipment) parts.push(`주요 장비 ${String(hospital.equipment).split(',')[0].trim()}`);
-      if (toPositiveNumber(hospital.bedCount) > 0) parts.push(`병상 ${hospital.bedCount}개`);
+      if (hospital.equipment) parts.push(`二쇱슂 ?λ퉬 ${String(hospital.equipment).split(',')[0].trim()}`);
+      if (toPositiveNumber(hospital.bedCount) > 0) parts.push(`蹂묒긽 ${hospital.bedCount}媛?);
       if (Array.isArray(profile?.primaryServices) && profile.primaryServices.length > 0) {
-        parts.push(`주요 ${profile.primaryServices[0]}`);
+        parts.push(`二쇱슂 ${profile.primaryServices[0]}`);
       }
-      if (!hasKnownOperationalData(hospital)) parts.push('운영시간 공공데이터 확인 중');
+      if (!hasKnownOperationalData(hospital)) parts.push('?댁쁺?쒓컙 怨듦났?곗씠???뺤씤 以?);
     }
 
     return uniqueStrings(parts).slice(0, 3).join(' / ');
@@ -703,10 +703,10 @@ document.addEventListener('DOMContentLoaded', () => {
       return detailData.parkingSummary[0];
     }
     if (toPositiveNumber(hospital.parkingCapacity) > 0) {
-      return `주차 가능 ${hospital.parkingCapacity}대`;
+      return `二쇱감 媛??${hospital.parkingCapacity}?`;
     }
     if (hospital.parkingFee) {
-      return `${hospital.parkingFee} 주차`;
+      return `${hospital.parkingFee} 二쇱감`;
     }
     return '';
   }
@@ -718,7 +718,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return '';
     }
 
-    return `주요 진료: ${profile.primaryServices.slice(0, 3).join(', ')}`;
+    return `二쇱슂 吏꾨즺: ${profile.primaryServices.slice(0, 3).join(', ')}`;
   }
 
   function buildHospitalFocusNote(hospital) {
@@ -728,7 +728,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return '';
     }
 
-    return `추천 상황: ${profile.visitTargets.slice(0, 2).join(', ')}`;
+    return `異붿쿇 ?곹솴: ${profile.visitTargets.slice(0, 2).join(', ')}`;
   }
 
   function buildHospitalVisitPrepNote(hospital) {
@@ -740,7 +740,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const documents = Array.isArray(profile.documents) ? profile.documents.slice(0, 3) : [];
     if (documents.length > 0) {
-      return `방문 준비: ${documents.join(', ')}`;
+      return `諛⑸Ц 以鍮? ${documents.join(', ')}`;
     }
 
     if (profile.reservation) {
@@ -764,11 +764,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const parkingText = getHospitalParkingLabel(hospital, detailData);
 
     if (receptionText) {
-      items.push({ label: '접수', value: receptionText });
+      items.push({ label: '?묒닔', value: receptionText });
     }
 
     if (documentItems.length > 0) {
-      items.push({ label: '준비', value: documentItems.join(', ') });
+      items.push({ label: '以鍮?, value: documentItems.join(', ') });
     }
 
     if (parkingText) transportItems.push(parkingText);
@@ -777,12 +777,12 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (hospital.subway) {
       transportItems.push(hospital.subway);
     } else if (hospital.address) {
-      transportItems.push(`${hospital.address} 기준 동선을 확인해보세요.`);
+      transportItems.push(`${hospital.address} 湲곗? ?숈꽑???뺤씤?대낫?몄슂.`);
     }
 
     if (transportItems.length > 0) {
       items.push({
-        label: '이동',
+        label: '?대룞',
         value: uniqueStrings(transportItems).slice(0, 2).join(' / '),
       });
     }
@@ -793,13 +793,13 @@ document.addEventListener('DOMContentLoaded', () => {
     ) {
       const facilityParts = [];
       if (hospital.equipment) facilityParts.push(String(hospital.equipment).split(',')[0].trim());
-      if (toPositiveNumber(hospital.bedCount) > 0) facilityParts.push(`병상 ${hospital.bedCount}개`);
-      if (hospital.area) facilityParts.push(`면적 ${hospital.area}`);
-      items.push({ label: '시설', value: uniqueStrings(facilityParts).slice(0, 3).join(' / ') });
+      if (toPositiveNumber(hospital.bedCount) > 0) facilityParts.push(`蹂묒긽 ${hospital.bedCount}媛?);
+      if (hospital.area) facilityParts.push(`硫댁쟻 ${hospital.area}`);
+      items.push({ label: '?쒖꽕', value: uniqueStrings(facilityParts).slice(0, 3).join(' / ') });
     }
 
     if (items.length < 3 && Array.isArray(profile?.visitTargets) && profile.visitTargets.length > 0) {
-      items.push({ label: '추천', value: profile.visitTargets[0] });
+      items.push({ label: '異붿쿇', value: profile.visitTargets[0] });
     }
 
     return items.slice(0, 3);
@@ -811,36 +811,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const parkingText = getHospitalParkingLabel(hospital, detailData);
     const operationItems = [];
 
-    if (hospital.saturdayOpen) operationItems.push('토요일');
-    if (hospital.sundayOpen) operationItems.push('일요일');
-    if (hospital.nightOpen) operationItems.push('야간');
-    if (hospital.hasEmergency) operationItems.push('응급');
+    if (hospital.saturdayOpen) operationItems.push('?좎슂??);
+    if (hospital.sundayOpen) operationItems.push('?쇱슂??);
+    if (hospital.nightOpen) operationItems.push('?쇨컙');
+    if (hospital.hasEmergency) operationItems.push('?묎툒');
 
     const facilityItems = [];
     if (parkingText) facilityItems.push(parkingText);
     if (hospital.subway) facilityItems.push(hospital.subway);
-    if (hospital.equipment) facilityItems.push(`장비 ${String(hospital.equipment).split(',')[0].trim()}`);
-    if (toPositiveNumber(hospital.roomCount) > 0) facilityItems.push(`진료실 ${hospital.roomCount}개`);
-    if (toPositiveNumber(hospital.bedCount) > 0) facilityItems.push(`병상 ${hospital.bedCount}개`);
-    if (hospital.area) facilityItems.push(`면적 ${hospital.area}`);
+    if (hospital.equipment) facilityItems.push(`?λ퉬 ${String(hospital.equipment).split(',')[0].trim()}`);
+    if (toPositiveNumber(hospital.roomCount) > 0) facilityItems.push(`吏꾨즺??${hospital.roomCount}媛?);
+    if (toPositiveNumber(hospital.bedCount) > 0) facilityItems.push(`蹂묒긽 ${hospital.bedCount}媛?);
+    if (hospital.area) facilityItems.push(`硫댁쟻 ${hospital.area}`);
 
     const items = [
       {
-        label: '핵심 진료',
+        label: '?듭떖 吏꾨즺',
         value: Array.isArray(profile?.primaryServices) && profile.primaryServices.length > 0
           ? profile.primaryServices.slice(0, 2).join(', ')
-          : (hospital.department || hospital.type || '진료 정보 확인 필요'),
+          : (hospital.department || hospital.type || '吏꾨즺 ?뺣낫 ?뺤씤 ?꾩슂'),
       },
       {
-        label: '방문 준비',
+        label: '諛⑸Ц 以鍮?,
         value: Array.isArray(profile?.documents) && profile.documents.length > 0
           ? profile.documents.slice(0, 2).join(', ')
-          : '신분증, 기존 검사 결과',
+          : '?좊텇利? 湲곗〈 寃??寃곌낵',
       },
       {
-        label: '운영·시설',
+        label: '?댁쁺쨌?쒖꽕',
         value: uniqueStrings([...operationItems, ...facilityItems]).slice(0, 2).join(' / ')
-          || '운영 정보 확인 중',
+          || '?댁쁺 ?뺣낫 ?뺤씤 以?,
       },
     ];
 
@@ -853,18 +853,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const hasTodaySchedule = Boolean(parseOperatingRange(hoursValue));
 
     if (isHospitalOpenNow(hospital, now)) {
-      items.push({ label: '현재 진료중', className: 'is-open' });
+      items.push({ label: '?꾩옱 吏꾨즺以?, className: 'is-open' });
     } else if (hasTodaySchedule || isAvailableToday(hospital, now)) {
-      items.push({ label: '오늘 가능', className: 'is-today' });
+      items.push({ label: '?ㅻ뒛 媛??, className: 'is-today' });
     } else if (hasKnownOperationalData(hospital)) {
-      items.push({ label: '오늘 마감', className: 'is-closed' });
+      items.push({ label: '?ㅻ뒛 留덇컧', className: 'is-closed' });
     } else {
-      items.push({ label: '운영 확인중', className: 'is-pending' });
+      items.push({ label: '?댁쁺 ?뺤씤以?, className: 'is-pending' });
     }
 
-    if (hospital.saturdayOpen) items.push({ label: '토요', className: 'is-option' });
-    if (hospital.nightOpen) items.push({ label: '야간', className: 'is-option' });
-    if (hospital.sundayOpen) items.push({ label: '일요', className: 'is-option' });
+    if (hospital.saturdayOpen) items.push({ label: '?좎슂', className: 'is-option' });
+    if (hospital.nightOpen) items.push({ label: '?쇨컙', className: 'is-option' });
+    if (hospital.sundayOpen) items.push({ label: '?쇱슂', className: 'is-option' });
 
     return items.slice(0, 4);
   }
@@ -875,20 +875,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (hasTodaySchedule) {
       return isHospitalOpenNow(hospital, now)
-        ? `오늘 ${hoursValue} 기준 진료 중입니다.`
-        : `오늘 운영 시간 ${hoursValue} 기준으로 확인했습니다.`;
+        ? `?ㅻ뒛 ${hoursValue} 湲곗? 吏꾨즺 以묒엯?덈떎.`
+        : `?ㅻ뒛 ?댁쁺 ?쒓컙 ${hoursValue} 湲곗??쇰줈 ?뺤씤?덉뒿?덈떎.`;
     }
 
     if (isAvailableToday(hospital, now)) {
-      if (now.getDay() === 6 && hospital.saturdayOpen) return '오늘 토요일 진료 병원으로 분류됩니다.';
-      if (now.getDay() === 0 && hospital.sundayOpen) return '오늘 일요일 진료 병원으로 분류됩니다.';
-      if (hospital.nightOpen) return '오늘 야간 진료 가능 병원으로 분류됩니다.';
-      return '오늘 진료 가능 여부를 공개 데이터 기준으로 확인했습니다.';
+      if (now.getDay() === 6 && hospital.saturdayOpen) return '?ㅻ뒛 ?좎슂??吏꾨즺 蹂묒썝?쇰줈 遺꾨쪟?⑸땲??';
+      if (now.getDay() === 0 && hospital.sundayOpen) return '?ㅻ뒛 ?쇱슂??吏꾨즺 蹂묒썝?쇰줈 遺꾨쪟?⑸땲??';
+      if (hospital.nightOpen) return '?ㅻ뒛 ?쇨컙 吏꾨즺 媛??蹂묒썝?쇰줈 遺꾨쪟?⑸땲??';
+      return '?ㅻ뒛 吏꾨즺 媛???щ?瑜?怨듦컻 ?곗씠??湲곗??쇰줈 ?뺤씤?덉뒿?덈떎.';
     }
 
     return hasKnownOperationalData(hospital)
-      ? '오늘 운영 정보는 확인되지만 현재 진료 시간은 아닙니다.'
-      : '운영 시간 공공데이터를 확인하는 중입니다.';
+      ? '?ㅻ뒛 ?댁쁺 ?뺣낫???뺤씤?섏?留??꾩옱 吏꾨즺 ?쒓컙? ?꾨떃?덈떎.'
+      : '?댁쁺 ?쒓컙 怨듦났?곗씠?곕? ?뺤씤?섎뒗 以묒엯?덈떎.';
   }
 
   function buildHospitalTrustBadges(hospital, detailData) {
@@ -914,12 +914,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const score = checks.filter(Boolean).length;
 
     if (score >= 7) {
-      return { label: '정보 충실도 높음', className: 'is-high' };
+      return { label: '?뺣낫 異⑹떎???믪쓬', className: 'is-high' };
     }
     if (score >= 5) {
-      return { label: '정보 충실도 보통', className: 'is-medium' };
+      return { label: '?뺣낫 異⑹떎??蹂댄넻', className: 'is-medium' };
     }
-    return { label: '기본 정보 중심', className: 'is-basic' };
+    return { label: '湲곕낯 ?뺣낫 以묒떖', className: 'is-basic' };
   }
 
   function buildHospitalOperationBadge(hospital, detailData) {
@@ -932,15 +932,15 @@ document.addEventListener('DOMContentLoaded', () => {
       || (Array.isArray(detailData?.receptionSummary) && detailData.receptionSummary.length > 0);
 
     if (hasDetailedOperation) {
-      return { label: '운영시간 상세 확인', className: 'is-verified' };
+      return { label: '?댁쁺?쒓컙 ?곸꽭 ?뺤씤', className: 'is-verified' };
     }
     if (hasConfirmedOperation) {
-      return { label: '운영시간 확인', className: 'is-verified' };
+      return { label: '?댁쁺?쒓컙 ?뺤씤', className: 'is-verified' };
     }
     if (hasOperationSignals) {
-      return { label: '운영 일부 확인', className: 'is-partial' };
+      return { label: '?댁쁺 ?쇰? ?뺤씤', className: 'is-partial' };
     }
-    return { label: '운영 확인중', className: 'is-pending' };
+    return { label: '?댁쁺 ?뺤씤以?, className: 'is-pending' };
   }
 
   function hasDetailedHours(detailData) {
@@ -1005,22 +1005,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const parts = [];
 
     if (Number(hospital.specialistCount || 0) > 0) {
-      parts.push(`전문의 ${hospital.specialistCount}명`);
+      parts.push(`?꾨Ц??${hospital.specialistCount}紐?);
     }
     if (hospital.subway) {
       parts.push(hospital.subway);
     }
     if (toPositiveNumber(hospital.roomCount) > 0) {
-      parts.push(`진료실 ${hospital.roomCount}개`);
+      parts.push(`吏꾨즺??${hospital.roomCount}媛?);
     }
     if (toPositiveNumber(hospital.bedCount) > 0) {
-      parts.push(`병상 ${hospital.bedCount}개`);
+      parts.push(`蹂묒긽 ${hospital.bedCount}媛?);
     }
     if (hospital.area) {
-      parts.push(`면적 ${hospital.area}`);
+      parts.push(`硫댁쟻 ${hospital.area}`);
     }
     if (hospital.equipment) {
-      parts.push(`장비 ${String(hospital.equipment).split(',')[0].trim()}`);
+      parts.push(`?λ퉬 ${String(hospital.equipment).split(',')[0].trim()}`);
     }
     if (Array.isArray(detailData?.receptionSummary) && detailData.receptionSummary.length > 0) {
       parts.push(detailData.receptionSummary[0]);
@@ -1029,7 +1029,7 @@ document.addEventListener('DOMContentLoaded', () => {
       parts.push(detailData.parkingSummary[0]);
     }
     if (hospital.openDate) {
-      parts.push(`개원 ${formatDate(hospital.openDate)}`);
+      parts.push(`媛쒖썝 ${formatDate(hospital.openDate)}`);
     }
 
     return uniqueStrings(parts).slice(0, 4).join(' / ');
@@ -1039,7 +1039,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const parts = [];
 
     if (hospital.region || hospital.district) {
-      parts.push([hospital.region, hospital.district].filter(Boolean).join(' · '));
+      parts.push([hospital.region, hospital.district].filter(Boolean).join(' 쨌 '));
     }
 
     if (hospital.subway) {
@@ -1049,44 +1049,44 @@ document.addEventListener('DOMContentLoaded', () => {
     if (hospital.openDate) {
       const openYear = new Date(hospital.openDate).getFullYear();
       if (Number.isFinite(openYear)) {
-        parts.push(`${openYear}년 개원`);
+        parts.push(`${openYear}??媛쒖썝`);
       }
     }
 
     if (Number(hospital.specialistCount || 0) > 0) {
-      parts.push(`전문의 ${hospital.specialistCount}명`);
+      parts.push(`?꾨Ц??${hospital.specialistCount}紐?);
     }
 
     if (toPositiveNumber(hospital.parkingCapacity) > 0) {
-      parts.push(`주차 ${hospital.parkingCapacity}대`);
+      parts.push(`二쇱감 ${hospital.parkingCapacity}?`);
     } else if (hospital.parkingFee) {
-      parts.push(`${hospital.parkingFee} 주차`);
+      parts.push(`${hospital.parkingFee} 二쇱감`);
     } else if (Array.isArray(detailData?.parkingSummary) && detailData.parkingSummary.length > 0) {
       parts.push(detailData.parkingSummary[0]);
     }
 
     if (hospital.nightOpen) {
-      parts.push('야간 진료');
+      parts.push('?쇨컙 吏꾨즺');
     } else if (hospital.saturdayOpen) {
-      parts.push('토요 진료');
+      parts.push('?좎슂 吏꾨즺');
     } else if (hospital.sundayOpen) {
-      parts.push('일요 진료');
+      parts.push('?쇱슂 吏꾨즺');
     }
 
     if (Array.isArray(detailData?.emergencySummary) && detailData.emergencySummary.length > 0) {
       parts.push(detailData.emergencySummary[0]);
     }
 
-    return uniqueStrings(parts).slice(0, 4).join(' · ');
+    return uniqueStrings(parts).slice(0, 4).join(' 쨌 ');
   }
 
   function buildHospitalMetaItems(hospital) {
     const items = [];
-    if (hospital.score) items.push(`평점 ${hospital.score}`);
-    if (hospital.reviewCount) items.push(`리뷰 ${Number(hospital.reviewCount).toLocaleString()}개`);
-    if (hospital.specialistCount) items.push(`전문의 ${Number(hospital.specialistCount).toLocaleString()}명`);
+    if (hospital.score) items.push(`?됱젏 ${hospital.score}`);
+    if (hospital.reviewCount) items.push(`由щ럭 ${Number(hospital.reviewCount).toLocaleString()}媛?);
+    if (hospital.specialistCount) items.push(`?꾨Ц??${Number(hospital.specialistCount).toLocaleString()}紐?);
     if (hospital.phone) items.push(hospital.phone);
-    if (hospital.url) items.push('공식 홈페이지');
+    if (hospital.url) items.push('怨듭떇 ?덊럹?댁?');
     return items;
   }
 
@@ -1101,19 +1101,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return items.map((item) => {
       const text = String(item);
-      if (text.startsWith('평점 ')) {
-        return `<div class="meta-item"><span class="meta-icon">평점</span><span class="meta-value">${escapeHtml(text.replace('평점 ', ''))}</span></div>`;
+      if (text.startsWith('?됱젏 ')) {
+        return `<div class="meta-item"><span class="meta-icon">?됱젏</span><span class="meta-value">${escapeHtml(text.replace('?됱젏 ', ''))}</span></div>`;
       }
-      if (text.startsWith('리뷰 ')) {
-        return `<div class="meta-item"><span class="meta-icon">리뷰</span><span class="meta-value">${escapeHtml(text.replace('리뷰 ', '').replace('개', ''))}</span><span class="meta-label">개</span></div>`;
+      if (text.startsWith('由щ럭 ')) {
+        return `<div class="meta-item"><span class="meta-icon">由щ럭</span><span class="meta-value">${escapeHtml(text.replace('由щ럭 ', '').replace('媛?, ''))}</span><span class="meta-label">媛?/span></div>`;
       }
-      if (text.startsWith('전문의 ')) {
-        return `<div class="meta-item"><span class="meta-icon">전문의</span><span class="meta-value">${escapeHtml(text.replace('전문의 ', '').replace('명', ''))}</span><span class="meta-label">명</span></div>`;
+      if (text.startsWith('?꾨Ц??')) {
+        return `<div class="meta-item"><span class="meta-icon">?꾨Ц??/span><span class="meta-value">${escapeHtml(text.replace('?꾨Ц??', '').replace('紐?, ''))}</span><span class="meta-label">紐?/span></div>`;
       }
-      if (text === '공식 홈페이지') {
-        return `<div class="meta-item"><span class="meta-icon">홈페이지</span><span class="meta-value">${escapeHtml(text)}</span></div>`;
+      if (text === '怨듭떇 ?덊럹?댁?') {
+        return `<div class="meta-item"><span class="meta-icon">?덊럹?댁?</span><span class="meta-value">${escapeHtml(text)}</span></div>`;
       }
-      return `<div class="meta-item"><span class="meta-icon">전화</span><span class="meta-value">${escapeHtml(text)}</span></div>`;
+      return `<div class="meta-item"><span class="meta-icon">?꾪솕</span><span class="meta-value">${escapeHtml(text)}</span></div>`;
     }).join('');
   }
 
@@ -1124,10 +1124,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getTypeReviewLabel(type) {
     const labelMap = {
-      hospital: '병원',
-      clinic: '의원',
-      dental: '치과',
-      korean: '한의원',
+      hospital: '蹂묒썝',
+      clinic: '?섏썝',
+      dental: '移섍낵',
+      korean: '?쒖쓽??,
     };
     return labelMap[type] || '';
   }
@@ -1135,10 +1135,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function buildReviewSearchContext() {
     const rawQuery = String(ui.heroSearch?.value || '').trim();
     if (state.isSearchActive && rawQuery) {
-      const normalizedQuery = rawQuery.replace(/\s*후기$/u, '').trim();
+      const normalizedQuery = rawQuery.replace(/\s*?꾧린$/u, '').trim();
       return {
-        query: `${normalizedQuery || rawQuery} 후기`,
-        title: `실시간 ${normalizedQuery || rawQuery} 관련 후기`,
+        query: `${normalizedQuery || rawQuery} ?꾧린`,
+        title: `?ㅼ떆媛?${normalizedQuery || rawQuery} 愿???꾧린`,
       };
     }
 
@@ -1152,38 +1152,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (region && departmentName) {
       return {
-        query: `${region} ${departmentName} 후기`,
-        title: `실시간 ${region} ${departmentName} 후기`,
+        query: `${region} ${departmentName} ?꾧린`,
+        title: `?ㅼ떆媛?${region} ${departmentName} ?꾧린`,
       };
     }
 
     if (region && typeName) {
       return {
-        query: `${region} ${typeName} 후기`,
-        title: `실시간 ${region} ${typeName} 후기`,
+        query: `${region} ${typeName} ?꾧린`,
+        title: `?ㅼ떆媛?${region} ${typeName} ?꾧린`,
       };
     }
 
     if (departmentName) {
       return {
-        query: `${departmentName} 후기`,
-        title: `실시간 ${departmentName} 후기`,
+        query: `${departmentName} ?꾧린`,
+        title: `?ㅼ떆媛?${departmentName} ?꾧린`,
       };
     }
 
     if (region) {
       return {
-        query: `${region} 병원 후기`,
-        title: `실시간 ${region} 병원 후기`,
+        query: `${region} 蹂묒썝 ?꾧린`,
+        title: `?ㅼ떆媛?${region} 蹂묒썝 ?꾧린`,
       };
     }
 
     const fallbackContexts = [
-      { query: '병원 후기', title: '실시간 병원 후기' },
-      { query: '진료 후기', title: '실시간 진료 후기' },
-      { query: '내원 후기', title: '실시간 내원 후기' },
-      { query: '검진 후기', title: '실시간 검진 후기' },
-      { query: '수술 상담 후기', title: '실시간 수술 상담 후기' },
+      { query: '蹂묒썝 ?꾧린', title: '?ㅼ떆媛?蹂묒썝 ?꾧린' },
+      { query: '吏꾨즺 ?꾧린', title: '?ㅼ떆媛?吏꾨즺 ?꾧린' },
+      { query: '?댁썝 ?꾧린', title: '?ㅼ떆媛??댁썝 ?꾧린' },
+      { query: '寃吏??꾧린', title: '?ㅼ떆媛?寃吏??꾧린' },
+      { query: '?섏닠 ?곷떞 ?꾧린', title: '?ㅼ떆媛??섏닠 ?곷떞 ?꾧린' },
     ];
 
     return fallbackContexts[new Date().getDate() % fallbackContexts.length];
@@ -1214,46 +1214,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return [
       {
-        badge: '비교 기준',
-        title: focusLabel ? `${focusLabel} 비교는 무엇부터 볼까?` : '병원 비교는 무엇부터 볼까?',
-        body: `${focusLabel || '병원 선택'}에서는 평점 하나보다 후기 수, 운영시간, 전문의 수, 주차 가능 여부를 함께 보는 편이 안전합니다. 첫 비교는 목록에서 하고, 최종 판단은 상세페이지에서 접수·준비서류·위치 정보를 다시 확인하세요.`,
+        badge: '鍮꾧탳 湲곗?',
+        title: focusLabel ? `${focusLabel} 鍮꾧탳??臾댁뾿遺??蹂쇨퉴?` : '蹂묒썝 鍮꾧탳??臾댁뾿遺??蹂쇨퉴?',
+        body: `${focusLabel || '蹂묒썝 ?좏깮'}?먯꽌???됱젏 ?섎굹蹂대떎 ?꾧린 ?? ?댁쁺?쒓컙, ?꾨Ц???? 二쇱감 媛???щ?瑜??④퍡 蹂대뒗 ?몄씠 ?덉쟾?⑸땲?? 泥?鍮꾧탳??紐⑸줉?먯꽌 ?섍퀬, 理쒖쥌 ?먮떒? ?곸꽭?섏씠吏?먯꽌 ?묒닔쨌以鍮꾩꽌瑜샕룹쐞移??뺣낫瑜??ㅼ떆 ?뺤씤?섏꽭??`,
         href: compareHref,
-        cta: '목록에서 비교하기',
+        cta: '紐⑸줉?먯꽌 鍮꾧탳?섍린',
       },
       {
-        badge: '운영 확인',
-        title: '토요·야간 진료는 어떻게 확인할까?',
-        body: '토요일, 야간, 일요일 진료는 병원 선택 이유가 되기 쉽지만 접수 마감 시간은 더 빠를 수 있습니다. 운영 배지는 빠른 필터로 쓰고, 실제 내원 전에는 상세페이지 운영 요약과 전화 문의를 함께 보는 흐름이 좋습니다.',
+        badge: '?댁쁺 ?뺤씤',
+        title: '?좎슂쨌?쇨컙 吏꾨즺???대뼸寃??뺤씤?좉퉴?',
+        body: '?좎슂?? ?쇨컙, ?쇱슂??吏꾨즺??蹂묒썝 ?좏깮 ?댁쑀媛 ?섍린 ?쎌?留??묒닔 留덇컧 ?쒓컙? ??鍮좊? ???덉뒿?덈떎. ?댁쁺 諛곗???鍮좊Ⅸ ?꾪꽣濡??곌퀬, ?ㅼ젣 ?댁썝 ?꾩뿉???곸꽭?섏씠吏 ?댁쁺 ?붿빟怨??꾪솕 臾몄쓽瑜??④퍡 蹂대뒗 ?먮쫫??醫뗭뒿?덈떎.',
         href: 'guide.html',
-        cta: '이용 가이드 보기',
+        cta: '?댁슜 媛?대뱶 蹂닿린',
       },
       {
-        badge: '준비 서류',
-        title: '초진 전에 무엇을 챙기면 좋을까?',
-        body: '신분증, 복용 중인 약 목록, 기존 검사 결과처럼 기본 준비물은 진료과와 상관없이 자주 필요합니다. 수술 상담이나 영상검사가 예상되면 상세페이지 준비서류와 장비 정보를 같이 확인하는 편이 좋습니다.',
+        badge: '以鍮??쒕쪟',
+        title: '珥덉쭊 ?꾩뿉 臾댁뾿??梨숆린硫?醫뗭쓣源?',
+        body: '?좊텇利? 蹂듭슜 以묒씤 ??紐⑸줉, 湲곗〈 寃??寃곌낵泥섎읆 湲곕낯 以鍮꾨Ъ? 吏꾨즺怨쇱? ?곴??놁씠 ?먯＜ ?꾩슂?⑸땲?? ?섏닠 ?곷떞?대굹 ?곸긽寃?ш? ?덉긽?섎㈃ ?곸꽭?섏씠吏 以鍮꾩꽌瑜섏? ?λ퉬 ?뺣낫瑜?媛숈씠 ?뺤씤?섎뒗 ?몄씠 醫뗭뒿?덈떎.',
         href: 'about.html',
-        cta: '운영 기준 보기',
+        cta: '?댁쁺 湲곗? 蹂닿린',
       },
       {
-        badge: '데이터 해석',
-        title: '공공데이터와 보강 정보는 어떻게 읽어야 할까?',
-        body: '이 사이트는 공공 병원 데이터와 공개 가능한 보강 정보를 함께 정리합니다. 공공 API 지연 시에도 탐색은 가능하지만, 최종 방문 결정은 병원 고지와 직접 문의를 기준으로 다시 확인하는 쪽이 안전합니다.',
+        badge: '?곗씠???댁꽍',
+        title: '怨듦났?곗씠?곗? 蹂닿컯 ?뺣낫???대뼸寃??쎌뼱???좉퉴?',
+        body: '???ъ씠?몃뒗 怨듦났 蹂묒썝 ?곗씠?곗? 怨듦컻 媛?ν븳 蹂닿컯 ?뺣낫瑜??④퍡 ?뺣━?⑸땲?? 怨듦났 API 吏???쒖뿉???먯깋? 媛?ν븯吏留? 理쒖쥌 諛⑸Ц 寃곗젙? 蹂묒썝 怨좎?? 吏곸젒 臾몄쓽瑜?湲곗??쇰줈 ?ㅼ떆 ?뺤씤?섎뒗 履쎌씠 ?덉쟾?⑸땲??',
         href: 'editorial-policy.html',
-        cta: '편집 원칙 보기',
+        cta: '?몄쭛 ?먯튃 蹂닿린',
       },
       {
-        badge: '후기 해석',
-        title: reviewContext?.title ? `${reviewContext.title}는 어떻게 활용할까?` : '후기 정보는 어떻게 활용할까?',
-        body: '후기는 병원의 분위기와 대기 경험을 파악하는 참고 자료로는 유용하지만, 진료 적합성 자체를 대신하지는 않습니다. 후기 내용은 현재 검색 의도와 함께 읽고, 증상·거리·운영 조건을 먼저 맞추는 편이 좋습니다.',
+        badge: '?꾧린 ?댁꽍',
+        title: reviewContext?.title ? `${reviewContext.title}???대뼸寃??쒖슜?좉퉴?` : '?꾧린 ?뺣낫???대뼸寃??쒖슜?좉퉴?',
+        body: '?꾧린??蹂묒썝??遺꾩쐞湲곗? ?湲?寃쏀뿕???뚯븙?섎뒗 李멸퀬 ?먮즺濡쒕뒗 ?좎슜?섏?留? 吏꾨즺 ?곹빀???먯껜瑜???좏븯吏???딆뒿?덈떎. ?꾧린 ?댁슜? ?꾩옱 寃???섎룄? ?④퍡 ?쎄퀬, 利앹긽쨌嫄곕━쨌?댁쁺 議곌굔??癒쇱? 留욎텛???몄씠 醫뗭뒿?덈떎.',
         href: compareHref,
-        cta: '현재 조건 다시 보기',
+        cta: '?꾩옱 議곌굔 ?ㅼ떆 蹂닿린',
       },
       {
-        badge: '정정 요청',
-        title: '정보가 다르면 어떻게 수정 요청할까?',
-        body: '운영시간, 전화번호, 진료과, 위치 정보가 실제와 다르면 문의 페이지나 이메일로 바로 정정 요청을 보낼 수 있습니다. 최신성과 정정 가능성이 분명한 정보 구조일수록 방문자가 더 신뢰하기 쉽습니다.',
+        badge: '?뺤젙 ?붿껌',
+        title: '?뺣낫媛 ?ㅻⅤ硫??대뼸寃??섏젙 ?붿껌?좉퉴?',
+        body: '?댁쁺?쒓컙, ?꾪솕踰덊샇, 吏꾨즺怨? ?꾩튂 ?뺣낫媛 ?ㅼ젣? ?ㅻⅤ硫?臾몄쓽 ?섏씠吏???대찓?쇰줈 諛붾줈 ?뺤젙 ?붿껌??蹂대궪 ???덉뒿?덈떎. 理쒖떊?깃낵 ?뺤젙 媛?μ꽦??遺꾨챸???뺣낫 援ъ“?쇱닔濡?諛⑸Ц?먭? ???좊ː?섍린 ?쎌뒿?덈떎.',
         href: 'contact.html',
-        cta: '문의하기',
+        cta: '臾몄쓽?섍린',
       },
     ];
   }
@@ -1261,11 +1261,11 @@ document.addEventListener('DOMContentLoaded', () => {
   async function renderReviews() {
     if (!ui.reviewsList) return;
 
-    ui.reviewsList.innerHTML = '<div class="map-loader"><div class="spinner"></div><p>리뷰 데이터를 불러오는 중입니다...</p></div>';
+    ui.reviewsList.innerHTML = '<div class="map-loader"><div class="spinner"></div><p>由щ럭 ?곗씠?곕? 遺덈윭?ㅻ뒗 以묒엯?덈떎...</p></div>';
     const reviewContext = buildReviewSearchContext();
 
     if (ui.reviewsTitle) {
-      ui.reviewsTitle.textContent = reviewContext.title.replace('실시간 ', '').replace('후기', '선택 가이드').trim();
+      ui.reviewsTitle.textContent = reviewContext.title.replace('?ㅼ떆媛?', '').replace('?꾧린', '?좏깮 媛?대뱶').trim();
     }
 
     const cards = buildReviewGuideCards(reviewContext);
@@ -1273,7 +1273,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <a href="${escapeHtml(item.href)}" class="review-card fade-up delay-${index % 3}" style="text-decoration:none; display:flex; flex-direction:column; cursor:pointer;">
         <div class="review-header" style="margin-bottom:10px;">
           <span class="review-badge" style="background:#46685b; color:white;">${escapeHtml(item.badge)}</span>
-          <span class="review-hospital" style="font-size:0.85rem; color:var(--text-muted);">병원찾기 원본 가이드</span>
+          <span class="review-hospital" style="font-size:0.85rem; color:var(--text-muted);">蹂묒썝李얘린 ?먮낯 媛?대뱶</span>
         </div>
         <h3 style="font-size:1rem; margin-bottom:8px; color:var(--text-heading); font-weight:600; line-height:1.4;">${escapeHtml(item.title)}</h3>
         <p class="review-content" style="flex-grow:1; -webkit-line-clamp:4;">${escapeHtml(item.body)}</p>
@@ -1292,7 +1292,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <span class="timeline-date">${formatDate(hospital.openDate)}</span>
         <div class="timeline-card">
           <div class="timeline-name">${escapeHtml(hospital.name)} <span class="hospital-type-tag">${escapeHtml(hospital.department)}</span></div>
-          <div class="timeline-addr">📍 ${escapeHtml(hospital.address)}</div>
+          <div class="timeline-addr">?뱧 ${escapeHtml(hospital.address)}</div>
         </div>
       </div>
     `).join('');
@@ -1332,25 +1332,25 @@ document.addEventListener('DOMContentLoaded', () => {
     renderQuickAccessList(
       ui.currentOpenList,
       currentOpen,
-      '현재 진료중으로 표시할 병원이 없습니다.',
+      '?꾩옱 吏꾨즺以묒쑝濡??쒖떆??蹂묒썝???놁뒿?덈떎.',
       buildQuickAccessCard
     );
     renderQuickAccessList(
       ui.saturdayOpenList,
       saturdayOpen,
-      '토요일 진료 병원 정보를 준비 중입니다.',
+      '?좎슂??吏꾨즺 蹂묒썝 ?뺣낫瑜?以鍮?以묒엯?덈떎.',
       buildQuickAccessCard
     );
     renderQuickAccessList(
       ui.nightOpenList,
       nightOpen,
-      '야간 진료 병원 정보를 준비 중입니다.',
+      '?쇨컙 吏꾨즺 蹂묒썝 ?뺣낫瑜?以鍮?以묒엯?덈떎.',
       buildQuickAccessCard
     );
     renderQuickAccessList(
       ui.recentOpenList,
       recentOpen,
-      '최근 개원 병원 정보를 준비 중입니다.',
+      '理쒓렐 媛쒖썝 蹂묒썝 ?뺣낫瑜?以鍮?以묒엯?덈떎.',
       buildRecentOpenCard
     );
 
@@ -1458,9 +1458,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const reviewCount = Number(hospital?.reviewCount || 0);
     const specialistCount = Number(hospital?.specialistCount || 0);
 
-    if (typeName.includes('상급종합')) return 5;
-    if (typeName.includes('종합병원')) return 4;
-    if (typeName === '병원') return 3;
+    if (typeName.includes('?곴툒醫낇빀')) return 5;
+    if (typeName.includes('醫낇빀蹂묒썝')) return 4;
+    if (typeName === '蹂묒썝') return 3;
     if (specialistCount >= 10) return 2.5;
     if (specialistCount >= 5 || reviewCount >= 500) return 2;
     if (reviewCount >= 250 && score >= 4.4) return 1.5;
@@ -1497,8 +1497,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function buildQuickAccessCard(hospital) {
-    const href = hospital.id ? `detail.html?id=${encodeURIComponent(hospital.id)}` : '#';
-    const type = hospital.department || hospital.type || '병원';
+    const href = hospital.id ? `detail.html?postid=${encodeURIComponent(hospital.id)}` : '#';
+    const type = hospital.department || hospital.type || '蹂묒썝';
     const meta = buildHospitalMetaItems(hospital);
     const subinfo = buildHospitalSubinfo(hospital);
     const featureNote = buildHospitalFeatureNote(hospital);
@@ -1516,7 +1516,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <strong>${escapeHtml(hospital.name)}</strong>
           <span class="hospital-type-tag">${escapeHtml(type)}</span>
         </div>
-        <p class="quick-access-address">${escapeHtml(hospital.address || '주소 확인 필요')}</p>
+        <p class="quick-access-address">${escapeHtml(hospital.address || '二쇱냼 ?뺤씤 ?꾩슂')}</p>
         ${subinfo ? `<div class="quick-access-subinfo" data-hospital-subinfo>${subinfo}</div>` : ''}
         <div class="hospital-trust-row hospital-trust-row-compact" data-hospital-trust>${renderHospitalTrustBadges(trustBadges)}</div>
         <div class="hospital-status-row hospital-status-row-compact" data-hospital-status>${renderHospitalStatusBadges(statusItems)}</div>
@@ -1527,7 +1527,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="hospital-fact-grid hospital-fact-grid-compact" data-hospital-facts>${renderHospitalFactGrid(factItems)}</div>
         ${featureNote ? `<p class="hospital-feature-note">${escapeHtml(featureNote)}</p>` : ''}
         <div class="hospital-insight-list hospital-insight-list-compact" data-hospital-insights${insightItems.length ? '' : ' hidden'}>${renderHospitalInsightList(insightItems)}</div>
-        <p class="hospital-data-summary quick-access-summary${dataSummary ? '' : ' is-pending'}" data-hospital-summary>${escapeHtml(dataSummary || '주차, 접수, 운영 정보를 불러오는 중입니다.')}</p>
+        <p class="hospital-data-summary quick-access-summary${dataSummary ? '' : ' is-pending'}" data-hospital-summary>${escapeHtml(dataSummary || '二쇱감, ?묒닔, ?댁쁺 ?뺣낫瑜?遺덈윭?ㅻ뒗 以묒엯?덈떎.')}</p>
         <div class="quick-access-meta" data-hospital-meta>${renderHospitalMetaItems(meta, true)}</div>
       </a>
     `;
@@ -1537,9 +1537,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const highlightItems = buildHospitalHighlightItems(hospital);
     const insightItems = buildHospitalInsightItems(hospital);
     const dataSummary = buildHospitalDataSummary(hospital);
-    const type = hospital.department || hospital.type || '병원';
-    const openDate = hospital.openDate ? `개원 ${formatDate(hospital.openDate)}` : '개원일 확인 필요';
-    const address = hospital.address || '주소 확인 필요';
+    const type = hospital.department || hospital.type || '蹂묒썝';
+    const openDate = hospital.openDate ? `媛쒖썝 ${formatDate(hospital.openDate)}` : '媛쒖썝???뺤씤 ?꾩슂';
+    const address = hospital.address || '二쇱냼 ?뺤씤 ?꾩슂';
     const location = [hospital.region, hospital.district].filter(Boolean).join(' / ');
 
     return `
@@ -1554,7 +1554,7 @@ document.addEventListener('DOMContentLoaded', () => {
           ${highlightItems.map((item) => `<span class="hospital-highlight">${escapeHtml(item)}</span>`).join('')}
         </div>
         <div class="hospital-insight-list hospital-insight-list-compact" data-hospital-insights${insightItems.length ? '' : ' hidden'}>${renderHospitalInsightList(insightItems)}</div>
-        <p class="hospital-data-summary quick-access-summary${dataSummary ? '' : ' is-pending'}" data-hospital-summary>${escapeHtml(dataSummary || '주차, 접수, 운영 정보를 불러오는 중입니다.')}</p>
+        <p class="hospital-data-summary quick-access-summary${dataSummary ? '' : ' is-pending'}" data-hospital-summary>${escapeHtml(dataSummary || '二쇱감, ?묒닔, ?댁쁺 ?뺣낫瑜?遺덈윭?ㅻ뒗 以묒엯?덈떎.')}</p>
         <div class="quick-access-meta">
           <span>${escapeHtml(openDate)}</span>
         </div>
@@ -1606,7 +1606,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function isClosedHoursText(hoursValue) {
     const text = String(hoursValue || '').trim().toLowerCase();
-    return !text || ['미진료', '휴진', '휴무', '없음', '-', 'closed'].some((keyword) => text.includes(keyword));
+    return !text || ['誘몄쭊猷?, '?댁쭊', '?대Т', '?놁쓬', '-', 'closed'].some((keyword) => text.includes(keyword));
   }
 
   function isLikelyOpenByFlags(hospital, day, currentMinutes) {
@@ -1664,10 +1664,10 @@ document.addEventListener('DOMContentLoaded', () => {
       ui.searchQueryDisplay.textContent = `"${query}"`;
     }
     if (ui.searchResultCount) {
-      ui.searchResultCount.innerHTML = '<span class="spinner-inline"></span> 검색 중...';
+      ui.searchResultCount.innerHTML = '<span class="spinner-inline"></span> 寃??以?..';
     }
     if (ui.searchResultCount) {
-      ui.searchResultCount.innerHTML = '<span class="spinner-inline"></span> 검색 중...';
+      ui.searchResultCount.innerHTML = '<span class="spinner-inline"></span> 寃??以?..';
     }
     if (ui.searchResultsList) {
       ui.searchResultsList.innerHTML = '';
@@ -1679,27 +1679,27 @@ document.addEventListener('DOMContentLoaded', () => {
       ? SearchEngine.buildSearchSummary(intent)
       : '';
     const operationNotice = intent && (intent.saturdayOpen || intent.sundayOpen || intent.nightOpen)
-      ? ' · 운영시간 확인 병원 기준'
+      ? ' 쨌 ?댁쁺?쒓컙 ?뺤씤 蹂묒썝 湲곗?'
       : '';
 
     if (ui.searchResultCount) {
-      ui.searchResultCount.innerHTML = `총 <strong>${hospitals.length.toLocaleString()}</strong>개 결과${summary ? ` · ${escapeHtml(summary)}` : ''}${operationNotice}`;
+      ui.searchResultCount.innerHTML = `珥?<strong>${hospitals.length.toLocaleString()}</strong>媛?寃곌낵${summary ? ` 쨌 ${escapeHtml(summary)}` : ''}${operationNotice}`;
     }
 
     if (ui.searchResultCount) {
       const resultNotice = intent && (intent.saturdayOpen || intent.sundayOpen || intent.nightOpen)
-        ? ' · 운영시간 확인 병원 기준'
+        ? ' 쨌 ?댁쁺?쒓컙 ?뺤씤 蹂묒썝 湲곗?'
         : '';
-      ui.searchResultCount.innerHTML = `총 <strong>${hospitals.length.toLocaleString()}</strong>개 결과${summary ? ` · ${escapeHtml(summary)}` : ''}${resultNotice}`;
+      ui.searchResultCount.innerHTML = `珥?<strong>${hospitals.length.toLocaleString()}</strong>媛?寃곌낵${summary ? ` 쨌 ${escapeHtml(summary)}` : ''}${resultNotice}`;
     }
 
     if (!ui.searchResultsList) return;
 
     if (hospitals.length === 0) {
       const description = summary
-        ? `${summary}${operationNotice ? ' 조건은 운영시간이 확인된 병원 기준으로 먼저 보여줍니다.' : ' 조건'}에 맞는 병원을 아직 찾지 못했습니다. 다른 지역이나 진료과 조합으로 다시 검색해보세요.`
-        : '다른 키워드로 다시 검색해보세요.';
-      ui.searchResultsList.innerHTML = buildEmptyState('검색 결과가 없습니다.', description);
+        ? `${summary}${operationNotice ? ' 議곌굔? ?댁쁺?쒓컙???뺤씤??蹂묒썝 湲곗??쇰줈 癒쇱? 蹂댁뿬以띾땲??' : ' 議곌굔'}??留욌뒗 蹂묒썝???꾩쭅 李얠? 紐삵뻽?듬땲?? ?ㅻⅨ 吏??씠??吏꾨즺怨?議고빀?쇰줈 ?ㅼ떆 寃?됲빐蹂댁꽭??`
+        : '?ㅻⅨ ?ㅼ썙?쒕줈 ?ㅼ떆 寃?됲빐蹂댁꽭??';
+      ui.searchResultsList.innerHTML = buildEmptyState('寃??寃곌낵媛 ?놁뒿?덈떎.', description);
     } else {
       ui.searchResultsList.innerHTML = hospitals.map((hospital, index) => buildHospitalCard(hospital, index + 1)).join('');
       observeNewElements(ui.searchResultsList);
@@ -1709,8 +1709,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (hospitals.length === 0 && ui.searchResultsList) {
       const emptyDescription = summary
-        ? `${summary}${operationNotice ? ' 조건의 운영시간 확인 병원 기준으로 먼저 보여드렸지만' : ' 조건에 맞는'} 병원을 아직 찾지 못했습니다. 다른 지역이나 진료과 조합으로 다시 검색해보세요.`
-        : '다른 키워드로 다시 검색해보세요.';
+        ? `${summary}${operationNotice ? ' 議곌굔???댁쁺?쒓컙 ?뺤씤 蹂묒썝 湲곗??쇰줈 癒쇱? 蹂댁뿬?쒕졇吏留? : ' 議곌굔??留욌뒗'} 蹂묒썝???꾩쭅 李얠? 紐삵뻽?듬땲?? ?ㅻⅨ 吏??씠??吏꾨즺怨?議고빀?쇰줈 ?ㅼ떆 寃?됲빐蹂댁꽭??`
+        : '?ㅻⅨ ?ㅼ썙?쒕줈 ?ㅼ떆 寃?됲빐蹂댁꽭??';
       ui.searchResultsList.innerHTML = buildSearchEmptyState(emptyDescription, intent);
     }
 
@@ -1829,15 +1829,15 @@ document.addEventListener('DOMContentLoaded', () => {
       String(intent?.district || '').trim(),
       String(intent?.locality || '').trim(),
       String(departmentLabel || '').trim(),
-      '토요일',
-      '야간',
-      '일요일',
-      '주차',
-      '가능',
-      '전문의',
-      '응급',
-      '신규',
-      '개원',
+      '?좎슂??,
+      '?쇨컙',
+      '?쇱슂??,
+      '二쇱감',
+      '媛??,
+      '?꾨Ц??,
+      '?묎툒',
+      '?좉퇋',
+      '媛쒖썝',
     ].filter(Boolean));
 
     return tokens.find((token) => !blocked.has(token)) || '';
@@ -1849,7 +1849,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return false;
     }
 
-    const facilityTerms = ['병원', '의원', '치과', '한의원', '클리닉', '메디컬', '센터'];
+    const facilityTerms = ['蹂묒썝', '?섏썝', '移섍낵', '?쒖쓽??, '?대━??, '硫붾뵒而?, '?쇳꽣'];
     if (facilityTerms.some((term) => keywordText.includes(term))) {
       return true;
     }
@@ -1898,9 +1898,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function buildQuickFilterQuery(currentQuery, filter) {
     const labelMap = {
-      sat: '토요일',
-      night: '야간',
-      sun: '일요일',
+      sat: '?좎슂??,
+      night: '?쇨컙',
+      sun: '?쇱슂??,
     };
 
     const nextLabel = labelMap[filter] || '';
@@ -1919,13 +1919,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function buildQuickRefineQuery(currentQuery, filter) {
     const labelMap = {
-      sat: '토요일',
-      night: '야간',
-      sun: '일요일',
-      parking: '주차',
-      specialist: '전문의',
-      recent: '최근 개원',
-      emergency: '응급',
+      sat: '?좎슂??,
+      night: '?쇨컙',
+      sun: '?쇱슂??,
+      parking: '二쇱감',
+      specialist: '?꾨Ц??,
+      recent: '理쒓렐 媛쒖썝',
+      emergency: '?묎툒',
     };
 
     const nextLabel = labelMap[filter] || '';
@@ -2008,7 +2008,7 @@ document.addEventListener('DOMContentLoaded', () => {
         class="search-suggestion-item${index === state.activeSearchSuggestionIndex ? ' is-active' : ''}"
         data-search-suggestion="${escapeHtml(suggestion)}"
       >
-        <span class="search-suggestion-prefix">추천</span>
+        <span class="search-suggestion-prefix">異붿쿇</span>
         <strong>${escapeHtml(suggestion)}</strong>
       </button>
     `).join('');
@@ -2063,22 +2063,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const chips = [];
-    if (intent?.region) chips.push(`지역 ${intent.region}`);
+    if (intent?.region) chips.push(`吏??${intent.region}`);
     if (intent?.department && typeof SearchEngine !== 'undefined') {
-      chips.push(`진료과 ${SearchEngine.getDepartmentLabel(intent.department)}`);
+      chips.push(`吏꾨즺怨?${SearchEngine.getDepartmentLabel(intent.department)}`);
     }
-    if (intent?.saturdayOpen) chips.push('토요일 진료');
-    if (intent?.sundayOpen) chips.push('일요일 진료');
-    if (intent?.nightOpen) chips.push('야간 진료');
-    if (intent?.parkingAvailable) chips.push('주차 가능');
-    if (intent?.specialistOnly) chips.push('전문의');
-    if (intent?.recentOpen) chips.push('최근 개원');
-    if (intent?.hasEmergency) chips.push('응급 진료');
-    if (intent?.keywordText) chips.push(`키워드 ${intent.keywordText}`);
+    if (intent?.saturdayOpen) chips.push('?좎슂??吏꾨즺');
+    if (intent?.sundayOpen) chips.push('?쇱슂??吏꾨즺');
+    if (intent?.nightOpen) chips.push('?쇨컙 吏꾨즺');
+    if (intent?.parkingAvailable) chips.push('二쇱감 媛??);
+    if (intent?.specialistOnly) chips.push('?꾨Ц??);
+    if (intent?.recentOpen) chips.push('理쒓렐 媛쒖썝');
+    if (intent?.hasEmergency) chips.push('?묎툒 吏꾨즺');
+    if (intent?.keywordText) chips.push(`?ㅼ썙??${intent.keywordText}`);
 
     ui.searchIntentSummary.innerHTML = chips.length > 0
       ? chips.map((chip) => `<span class="search-intent-chip">${escapeHtml(chip)}</span>`).join('')
-      : '<span class="search-intent-chip">병원명, 지역, 진료과 기준으로 검색 중</span>';
+      : '<span class="search-intent-chip">蹂묒썝紐? 吏?? 吏꾨즺怨?湲곗??쇰줈 寃??以?/span>';
   }
 
   function setSearchRefineState(intent) {
@@ -2323,7 +2323,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const hospitalId = card.dataset.hospitalId;
       if (hospitalId) {
-        window.location.href = `detail.html?id=${hospitalId}`;
+        window.location.href = `detail.html?postid=${hospitalId}`;
       }
     });
 
@@ -2435,7 +2435,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function buildEmptyState(title, description) {
     return `
       <div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-muted);">
-        <p style="font-size:2rem;margin-bottom:12px;">🔎</p>
+        <p style="font-size:2rem;margin-bottom:12px;">?뵊</p>
         <p>${escapeHtml(title)}</p>
         <p style="font-size:var(--fs-sm);">${escapeHtml(description)}</p>
       </div>
@@ -2449,13 +2449,13 @@ document.addEventListener('DOMContentLoaded', () => {
     return `
       <div class="search-empty-state">
         <div class="search-empty-head">
-          <p class="search-empty-icon">🔎</p>
-          <h3>검색 결과가 없습니다.</h3>
+          <p class="search-empty-icon">?뵊</p>
+          <h3>寃??寃곌낵媛 ?놁뒿?덈떎.</h3>
           <p>${escapeHtml(description)}</p>
         </div>
         <div class="search-empty-sections">
           <div class="search-empty-group">
-            <h4>다시 검색해보기</h4>
+            <h4>?ㅼ떆 寃?됲빐蹂닿린</h4>
             <div class="search-empty-chip-list">
               ${suggestions.map((query) => `
                 <button type="button" class="search-empty-chip" data-search-query="${escapeHtml(query)}">${escapeHtml(query)}</button>
@@ -2463,7 +2463,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
           <div class="search-empty-group">
-            <h4>바로 목록 보기</h4>
+            <h4>諛붾줈 紐⑸줉 蹂닿린</h4>
             <div class="search-empty-preset-list">
               ${presets.map((preset) => `
                 <button
@@ -2493,21 +2493,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (region && departmentLabel) {
       suggestions.push(`${region} ${departmentLabel}`);
-      suggestions.push(`${region} ${departmentLabel} 토요일`);
-      suggestions.push(`${region} ${departmentLabel} 야간`);
+      suggestions.push(`${region} ${departmentLabel} ?좎슂??);
+      suggestions.push(`${region} ${departmentLabel} ?쇨컙`);
     } else if (region) {
-      suggestions.push(`${region} 치과`);
-      suggestions.push(`${region} 정형외과`);
-      suggestions.push(`${region} 안과`);
+      suggestions.push(`${region} 移섍낵`);
+      suggestions.push(`${region} ?뺥삎?멸낵`);
+      suggestions.push(`${region} ?덇낵`);
     } else if (departmentLabel) {
-      suggestions.push(`서울 ${departmentLabel}`);
-      suggestions.push(`경기 ${departmentLabel}`);
-      suggestions.push(`부산 ${departmentLabel}`);
+      suggestions.push(`?쒖슱 ${departmentLabel}`);
+      suggestions.push(`寃쎄린 ${departmentLabel}`);
+      suggestions.push(`遺??${departmentLabel}`);
     }
 
-    suggestions.push('서울 치과');
-    suggestions.push('경기 정형외과 토요일');
-    suggestions.push('서울 소아과 일요일');
+    suggestions.push('?쒖슱 移섍낵');
+    suggestions.push('寃쎄린 ?뺥삎?멸낵 ?좎슂??);
+    suggestions.push('?쒖슱 ?뚯븘怨??쇱슂??);
 
     return Array.from(new Set(suggestions.filter(Boolean))).slice(0, 6);
   }
@@ -2517,43 +2517,43 @@ document.addEventListener('DOMContentLoaded', () => {
     const region = intent?.region || 'all';
     const departmentLabel = department !== 'all' && typeof SearchEngine !== 'undefined'
       ? SearchEngine.getDepartmentLabel(department)
-      : '병원';
+      : '蹂묒썝';
 
     const presets = [];
 
     if (department !== 'all') {
       presets.push({
-        title: `서울 ${departmentLabel} 목록`,
-        description: '서울 권역에서 먼저 넓게 비교합니다.',
-        region: '서울',
+        title: `?쒖슱 ${departmentLabel} 紐⑸줉`,
+        description: '?쒖슱 沅뚯뿭?먯꽌 癒쇱? ?볤쾶 鍮꾧탳?⑸땲??',
+        region: '?쒖슱',
         department,
       });
       presets.push({
-        title: `경기 ${departmentLabel} 목록`,
-        description: '경기 권역 병원을 함께 비교합니다.',
-        region: '경기',
+        title: `寃쎄린 ${departmentLabel} 紐⑸줉`,
+        description: '寃쎄린 沅뚯뿭 蹂묒썝???④퍡 鍮꾧탳?⑸땲??',
+        region: '寃쎄린',
         department,
       });
     }
 
     if (region !== 'all') {
       presets.push({
-        title: `${region} 치과 목록`,
-        description: `${region}에서 많이 찾는 치과부터 확인합니다.`,
+        title: `${region} 移섍낵 紐⑸줉`,
+        description: `${region}?먯꽌 留롮씠 李얜뒗 移섍낵遺???뺤씤?⑸땲??`,
         region,
         department: 'dental',
       });
       presets.push({
-        title: `${region} 정형외과 목록`,
-        description: `${region} 정형외과 병원을 바로 봅니다.`,
+        title: `${region} ?뺥삎?멸낵 紐⑸줉`,
+        description: `${region} ?뺥삎?멸낵 蹂묒썝??諛붾줈 遊낅땲??`,
         region,
         department: 'orthopedic',
       });
     }
 
     presets.push({
-      title: '전체 병원 목록',
-      description: '조건을 풀고 전체 목록에서 다시 탐색합니다.',
+      title: '?꾩껜 蹂묒썝 紐⑸줉',
+      description: '議곌굔???怨??꾩껜 紐⑸줉?먯꽌 ?ㅼ떆 ?먯깋?⑸땲??',
       region: 'all',
       department: 'all',
       type: 'all',
@@ -2616,13 +2616,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function extractDistrictFromAddress(address = '') {
     const tokens = String(address || '').split(/\s+/).filter(Boolean);
-    const candidates = tokens.filter((token, index) => index > 0 && /(?:시|군|구)$/.test(token));
+    const candidates = tokens.filter((token, index) => index > 0 && /(?:??援?援?$/.test(token));
     return candidates.length > 0 ? candidates[candidates.length - 1] : '';
   }
 
   function extractTownFromAddress(address = '') {
     const tokens = String(address || '').split(/\s+/).filter(Boolean);
-    const match = tokens.find((token) => /(?:읍|면|동|가|리)$/.test(token));
+    const match = tokens.find((token) => /(?:??硫???媛|由?$/.test(token));
     return match || '';
   }
 
@@ -2675,52 +2675,52 @@ document.addEventListener('DOMContentLoaded', () => {
   function inferDepartmentIdFromText(text = '') {
     const value = String(text || '').trim();
     if (!value) return 'general';
-    if (value.includes('치과')) return 'dental';
-    if (value.includes('한의원') || value.includes('한방')) return 'korean';
-    if (value.includes('정형외과')) return 'orthopedic';
-    if (value.includes('안과')) return 'ophthalmology';
-    if (value.includes('피부과')) return 'dermatology';
-    if (value.includes('이비인후과')) return 'ent';
-    if (value.includes('소아청소년과') || value.includes('소아과')) return 'pediatric';
-    if (value.includes('산부인과')) return 'obgyn';
-    if (value.includes('비뇨의학과') || value.includes('비뇨기과')) return 'urology';
-    if (value.includes('정신건강의학과') || value.includes('정신과')) return 'psychiatry';
-    if (value.includes('성형외과')) return 'plastic';
-    if (value.includes('신경외과')) return 'neurosurgery';
-    if (value.includes('가정의학과')) return 'familymed';
-    if (value.includes('외과')) return 'surgery';
-    if (value.includes('통증의학과') || value.includes('마취통증의학과')) return 'pain';
-    if (value.includes('재활의학과')) return 'rehab';
-    if (value.includes('내과')) return 'internal';
+    if (value.includes('移섍낵')) return 'dental';
+    if (value.includes('?쒖쓽??) || value.includes('?쒕갑')) return 'korean';
+    if (value.includes('?뺥삎?멸낵')) return 'orthopedic';
+    if (value.includes('?덇낵')) return 'ophthalmology';
+    if (value.includes('?쇰?怨?)) return 'dermatology';
+    if (value.includes('?대퉬?명썑怨?)) return 'ent';
+    if (value.includes('?뚯븘泥?냼?꾧낵') || value.includes('?뚯븘怨?)) return 'pediatric';
+    if (value.includes('?곕??멸낵')) return 'obgyn';
+    if (value.includes('鍮꾨눊?섑븰怨?) || value.includes('鍮꾨눊湲곌낵')) return 'urology';
+    if (value.includes('?뺤떊嫄닿컯?섑븰怨?) || value.includes('?뺤떊怨?)) return 'psychiatry';
+    if (value.includes('?깊삎?멸낵')) return 'plastic';
+    if (value.includes('?좉꼍?멸낵')) return 'neurosurgery';
+    if (value.includes('媛?뺤쓽?숆낵')) return 'familymed';
+    if (value.includes('?멸낵')) return 'surgery';
+    if (value.includes('?듭쬆?섑븰怨?) || value.includes('留덉랬?듭쬆?섑븰怨?)) return 'pain';
+    if (value.includes('?ы솢?섑븰怨?)) return 'rehab';
+    if (value.includes('?닿낵')) return 'internal';
     return 'general';
   }
 
   function inferHospitalTypeFromDepartment(departmentId = '') {
-    if (departmentId === 'dental') return '치과의원';
-    if (departmentId === 'korean') return '한의원';
-    if (departmentId === 'general') return '종합병원';
-    return '의원';
+    if (departmentId === 'dental') return '移섍낵?섏썝';
+    if (departmentId === 'korean') return '?쒖쓽??;
+    if (departmentId === 'general') return '醫낇빀蹂묒썝';
+    return '?섏썝';
   }
 
   function extractRegionFromAddress(address = '') {
     const text = String(address || '').trim();
-    if (text.startsWith('서울')) return '서울';
-    if (text.startsWith('경기')) return '경기';
-    if (text.startsWith('인천')) return '인천';
-    if (text.startsWith('부산')) return '부산';
-    if (text.startsWith('대구')) return '대구';
-    if (text.startsWith('대전')) return '대전';
-    if (text.startsWith('광주')) return '광주';
-    if (text.startsWith('울산')) return '울산';
-    if (text.startsWith('세종')) return '세종';
-    if (text.startsWith('강원')) return '강원';
-    if (text.startsWith('충청북도') || text.startsWith('충북')) return '충북';
-    if (text.startsWith('충청남도') || text.startsWith('충남')) return '충남';
-    if (text.startsWith('전북') || text.startsWith('전라북도')) return '전북';
-    if (text.startsWith('전남') || text.startsWith('전라남도')) return '전남';
-    if (text.startsWith('경북') || text.startsWith('경상북도')) return '경북';
-    if (text.startsWith('경남') || text.startsWith('경상남도')) return '경남';
-    if (text.startsWith('제주')) return '제주';
+    if (text.startsWith('?쒖슱')) return '?쒖슱';
+    if (text.startsWith('寃쎄린')) return '寃쎄린';
+    if (text.startsWith('?몄쿇')) return '?몄쿇';
+    if (text.startsWith('遺??)) return '遺??;
+    if (text.startsWith('?援?)) return '?援?;
+    if (text.startsWith('???)) return '???;
+    if (text.startsWith('愿묒＜')) return '愿묒＜';
+    if (text.startsWith('?몄궛')) return '?몄궛';
+    if (text.startsWith('?몄쥌')) return '?몄쥌';
+    if (text.startsWith('媛뺤썝')) return '媛뺤썝';
+    if (text.startsWith('異⑹껌遺곷룄') || text.startsWith('異⑸턿')) return '異⑸턿';
+    if (text.startsWith('異⑹껌?⑤룄') || text.startsWith('異⑸궓')) return '異⑸궓';
+    if (text.startsWith('?꾨턿') || text.startsWith('?꾨씪遺곷룄')) return '?꾨턿';
+    if (text.startsWith('?꾨궓') || text.startsWith('?꾨씪?⑤룄')) return '?꾨궓';
+    if (text.startsWith('寃쎈턿') || text.startsWith('寃쎌긽遺곷룄')) return '寃쎈턿';
+    if (text.startsWith('寃쎈궓') || text.startsWith('寃쎌긽?⑤룄')) return '寃쎈궓';
+    if (text.startsWith('?쒖＜')) return '?쒖＜';
     return '';
   }
 
@@ -2848,17 +2848,17 @@ document.addEventListener('DOMContentLoaded', () => {
       hospital.parkingCapacity = Number(detailData.parkQty) || hospital.parkingCapacity || 0;
     }
     if (detailData?.parkXpnsYn) {
-      hospital.parkingFee = detailData.parkXpnsYn === 'Y' ? '유료' : '무료';
+      hospital.parkingFee = detailData.parkXpnsYn === 'Y' ? '?좊즺' : '臾대즺';
     }
     if (Array.isArray(equipData?.topEquipment) && equipData.topEquipment.length > 0) {
       hospital.equipment = equipData.topEquipment
         .slice(0, 3)
-        .map((item) => `${item.name} ${item.count}대`)
+        .map((item) => `${item.name} ${item.count}?`)
         .join(', ');
     } else if (Array.isArray(equipData?.equipDetails) && equipData.equipDetails.length > 0) {
       hospital.equipment = equipData.equipDetails
         .slice(0, 3)
-        .map((item) => `${item.name} ${item.count}대`)
+        .map((item) => `${item.name} ${item.count}?`)
         .join(', ');
     } else if (Array.isArray(equipData?.equips) && equipData.equips.length > 0 && !hospital.equipment) {
       hospital.equipment = equipData.equips.slice(0, 3).join(', ');
@@ -2900,7 +2900,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const addressNode = card.querySelector('.hospital-address, .quick-access-address');
       if (addressNode && hospital.address) {
         addressNode.textContent = addressNode.classList.contains('hospital-address')
-          ? `주소 ${hospital.address}`
+          ? `二쇱냼 ${hospital.address}`
           : hospital.address;
       }
 

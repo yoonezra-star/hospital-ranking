@@ -388,7 +388,11 @@ const MapModule = (() => {
 })();
 
 function bootstrapMapModule() {
-  if (window.location.pathname.includes('detail.html') || window.location.search.includes('id=')) {
+  if (
+    window.location.pathname.includes('detail.html')
+    || window.location.search.includes('postid=')
+    || window.location.search.includes('id=')
+  ) {
     return;
   }
   MapModule.init();

@@ -1,7 +1,6 @@
 /**
- * 병원찾기 - 공공데이터 API 클라이언트
- * 브라우저에서는 Cloudflare Pages Functions 프록시만 사용한다.
- * 프록시가 불가하면 목업 데이터로 안전하게 폴백한다.
+ * 蹂묒썝李얘린 - 怨듦났?곗씠??API ?대씪?댁뼵?? * 釉뚮씪?곗??먯꽌??Cloudflare Pages Functions ?꾨줉?쒕쭔 ?ъ슜?쒕떎.
+ * ?꾨줉?쒓? 遺덇??섎㈃ 紐⑹뾽 ?곗씠?곕줈 ?덉쟾?섍쾶 ?대갚?쒕떎.
  */
 
 const HospitalAPI = (() => {
@@ -10,23 +9,23 @@ const HospitalAPI = (() => {
   let proxyAvailable = null;
 
   const REGION_CODES = {
-    '서울': '110000',
-    '부산': '210000',
-    '대구': '220000',
-    '인천': '230000',
-    '광주': '240000',
-    '대전': '250000',
-    '울산': '260000',
-    '세종': '290000',
-    '경기': '310000',
-    '강원': '320000',
-    '충북': '330000',
-    '충남': '340000',
-    '전북': '350000',
-    '전남': '360000',
-    '경북': '370000',
-    '경남': '380000',
-    '제주': '390000',
+    '?쒖슱': '110000',
+    '遺??: '210000',
+    '?援?: '220000',
+    '?몄쿇': '230000',
+    '愿묒＜': '240000',
+    '???: '250000',
+    '?몄궛': '260000',
+    '?몄쥌': '290000',
+    '寃쎄린': '310000',
+    '媛뺤썝': '320000',
+    '異⑸턿': '330000',
+    '異⑸궓': '340000',
+    '?꾨턿': '350000',
+    '?꾨궓': '360000',
+    '寃쎈턿': '370000',
+    '寃쎈궓': '380000',
+    '?쒖＜': '390000',
   };
 
   const DEPT_CODES = {
@@ -197,13 +196,13 @@ const HospitalAPI = (() => {
 
   function extractDistrictFromAddress(address = '') {
     const tokens = String(address || '').split(/\s+/).filter(Boolean);
-    const candidates = tokens.filter((token, index) => index > 0 && /(?:시|군|구)$/.test(token));
+    const candidates = tokens.filter((token, index) => index > 0 && /(?:??援?援?$/.test(token));
     return candidates.length > 0 ? candidates[candidates.length - 1] : '';
   }
 
   function extractTownFromAddress(address = '') {
     const tokens = String(address || '').split(/\s+/).filter(Boolean);
-    const match = tokens.find((token) => /(?:읍|면|동|가|리)$/.test(token));
+    const match = tokens.find((token) => /(?:??硫???媛|由?$/.test(token));
     return match || '';
   }
 
@@ -216,11 +215,11 @@ const HospitalAPI = (() => {
   function calcScore(drCount, typeName) {
     let base = 3.8;
 
-    if (typeName?.includes('상급종합')) {
+    if (typeName?.includes('?곴툒醫낇빀')) {
       base = 4.5;
-    } else if (typeName?.includes('종합병원')) {
+    } else if (typeName?.includes('醫낇빀蹂묒썝')) {
       base = 4.2;
-    } else if (typeName?.includes('병원')) {
+    } else if (typeName?.includes('蹂묒썝')) {
       base = 4.0;
     }
 
@@ -236,9 +235,9 @@ const HospitalAPI = (() => {
 
   function guessDepartmentId(typeName) {
     if (!typeName) return 'general';
-    if (typeName.includes('치과')) return 'dental';
-    if (typeName.includes('한의') || typeName.includes('한방')) return 'korean';
-    if (typeName.includes('요양')) return 'general';
+    if (typeName.includes('移섍낵')) return 'dental';
+    if (typeName.includes('?쒖쓽') || typeName.includes('?쒕갑')) return 'korean';
+    if (typeName.includes('?붿뼇')) return 'general';
     return 'general';
   }
 
@@ -329,24 +328,24 @@ const HospitalAPI = (() => {
     if (!text) return 'general';
 
     const entry = Object.entries({
-      dental: ['치과'],
-      korean: ['한의원', '한방'],
-      orthopedic: ['정형외과'],
-      ophthalmology: ['안과'],
-      dermatology: ['피부과'],
-      ent: ['이비인후과'],
-      pediatric: ['소아청소년과', '소아과'],
-      obgyn: ['산부인과'],
-      urology: ['비뇨의학과', '비뇨기과'],
-      psychiatry: ['정신건강의학과', '정신과'],
-      plastic: ['성형외과'],
-      neurosurgery: ['신경외과'],
-      familymed: ['가정의학과'],
-      surgery: ['외과'],
-      pain: ['통증의학과', '마취통증의학과'],
-      rehab: ['재활의학과'],
-      internal: ['내과'],
-      general: ['종합병원', '병원'],
+      dental: ['移섍낵'],
+      korean: ['?쒖쓽??, '?쒕갑'],
+      orthopedic: ['?뺥삎?멸낵'],
+      ophthalmology: ['?덇낵'],
+      dermatology: ['?쇰?怨?],
+      ent: ['?대퉬?명썑怨?],
+      pediatric: ['?뚯븘泥?냼?꾧낵', '?뚯븘怨?],
+      obgyn: ['?곕??멸낵'],
+      urology: ['鍮꾨눊?섑븰怨?, '鍮꾨눊湲곌낵'],
+      psychiatry: ['?뺤떊嫄닿컯?섑븰怨?, '?뺤떊怨?],
+      plastic: ['?깊삎?멸낵'],
+      neurosurgery: ['?좉꼍?멸낵'],
+      familymed: ['媛?뺤쓽?숆낵'],
+      surgery: ['?멸낵'],
+      pain: ['?듭쬆?섑븰怨?, '留덉랬?듭쬆?섑븰怨?],
+      rehab: ['?ы솢?섑븰怨?],
+      internal: ['?닿낵'],
+      general: ['醫낇빀蹂묒썝', '蹂묒썝'],
     }).find(([, keywords]) => keywords.some((keyword) => text.includes(keyword)));
 
     return entry?.[0] || 'general';
@@ -355,35 +354,35 @@ const HospitalAPI = (() => {
   function inferHospitalTypeFromDepartmentId(departmentId = '') {
     switch (departmentId) {
       case 'dental':
-        return '치과의원';
+        return '移섍낵?섏썝';
       case 'korean':
-        return '한의원';
+        return '?쒖쓽??;
       case 'general':
-        return '종합병원';
+        return '醫낇빀蹂묒썝';
       default:
-        return '의원';
+        return '?섏썝';
     }
   }
 
   function extractRegionFromAddress(address = '') {
     const text = String(address || '').trim();
-    if (text.startsWith('서울')) return '서울';
-    if (text.startsWith('경기')) return '경기';
-    if (text.startsWith('인천')) return '인천';
-    if (text.startsWith('부산')) return '부산';
-    if (text.startsWith('대구')) return '대구';
-    if (text.startsWith('대전')) return '대전';
-    if (text.startsWith('광주')) return '광주';
-    if (text.startsWith('울산')) return '울산';
-    if (text.startsWith('세종')) return '세종';
-    if (text.startsWith('강원')) return '강원';
-    if (text.startsWith('충청북도') || text.startsWith('충북')) return '충북';
-    if (text.startsWith('충청남도') || text.startsWith('충남')) return '충남';
-    if (text.startsWith('전북') || text.startsWith('전라북도')) return '전북';
-    if (text.startsWith('전남') || text.startsWith('전라남도')) return '전남';
-    if (text.startsWith('경북') || text.startsWith('경상북도')) return '경북';
-    if (text.startsWith('경남') || text.startsWith('경상남도')) return '경남';
-    if (text.startsWith('제주')) return '제주';
+    if (text.startsWith('?쒖슱')) return '?쒖슱';
+    if (text.startsWith('寃쎄린')) return '寃쎄린';
+    if (text.startsWith('?몄쿇')) return '?몄쿇';
+    if (text.startsWith('遺??)) return '遺??;
+    if (text.startsWith('?援?)) return '?援?;
+    if (text.startsWith('???)) return '???;
+    if (text.startsWith('愿묒＜')) return '愿묒＜';
+    if (text.startsWith('?몄궛')) return '?몄궛';
+    if (text.startsWith('?몄쥌')) return '?몄쥌';
+    if (text.startsWith('媛뺤썝')) return '媛뺤썝';
+    if (text.startsWith('異⑹껌遺곷룄') || text.startsWith('異⑸턿')) return '異⑸턿';
+    if (text.startsWith('異⑹껌?⑤룄') || text.startsWith('異⑸궓')) return '異⑸궓';
+    if (text.startsWith('?꾨턿') || text.startsWith('?꾨씪遺곷룄')) return '?꾨턿';
+    if (text.startsWith('?꾨궓') || text.startsWith('?꾨씪?⑤룄')) return '?꾨궓';
+    if (text.startsWith('寃쎈턿') || text.startsWith('寃쎌긽遺곷룄')) return '寃쎈턿';
+    if (text.startsWith('寃쎈궓') || text.startsWith('寃쎌긽?⑤룄')) return '寃쎈궓';
+    if (text.startsWith('?쒖＜')) return '?쒖＜';
     return '';
   }
 
@@ -407,10 +406,10 @@ const HospitalAPI = (() => {
   function buildFallbackSearchItems(query, display) {
     const list = getMockHospitalPool().slice(0, display);
     return list.map((hospital, index) => ({
-      title: `${hospital.name} 이용 후기`,
-      description: `${hospital.address} 기준으로 정리한 방문자 요약입니다. 진료과와 위치, 기본 평점 정보를 빠르게 확인할 수 있습니다.`,
-      bloggername: `병원찾기 note ${index + 1}`,
-      link: `detail.html?id=${encodeURIComponent(hospital.id)}`,
+      title: `${hospital.name} ?댁슜 ?꾧린`,
+      description: `${hospital.address} 湲곗??쇰줈 ?뺣━??諛⑸Ц???붿빟?낅땲?? 吏꾨즺怨쇱? ?꾩튂, 湲곕낯 ?됱젏 ?뺣낫瑜?鍮좊Ⅴ寃??뺤씤?????덉뒿?덈떎.`,
+      bloggername: `蹂묒썝李얘린 note ${index + 1}`,
+      link: `detail.html?postid=${encodeURIComponent(hospital.id)}`,
       postdate: '',
       query,
     }));
