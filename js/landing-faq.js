@@ -1,5 +1,8 @@
 (() => {
   const LANDING_META = [
+    { href: 'saturday-clinic.html', region: '전국', department: '토요일 진료 병원', focus: '주말 외래, 접수 마감, 생활권 이동, 토요일 진료과 비교', guideLabel: '토요일 진료 가이드' },
+    { href: 'night-clinic.html', region: '전국', department: '야간 진료 병원', focus: '퇴근 후 외래, 마지막 접수 시간, 야간 운영 범위, 생활권 동선', guideLabel: '야간 진료 가이드' },
+    { href: 'sunday-clinic.html', region: '전국', department: '일요일 진료 병원', focus: '휴일 외래, 소아과·내과·이비인후과 비교, 접수 가능 시간', guideLabel: '일요일 진료 가이드' },
     { href: 'seoul-dental.html', region: '서울', department: '치과', focus: '임플란트, 교정, 보철', guideLabel: '임플란트 가이드' },
     { href: 'seoul-ophthalmology.html', region: '서울', department: '안과', focus: '시력검사, 백내장 상담, 안구건조', guideLabel: '시력교정 가이드' },
     { href: 'seoul-internal.html', region: '서울', department: '내과', focus: '건강검진 상담, 소화기 증상, 만성질환 추적', guideLabel: '만성질환 가이드' },
