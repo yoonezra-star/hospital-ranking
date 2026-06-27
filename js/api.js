@@ -293,7 +293,7 @@ const HospitalAPI = (() => {
 
   function normalizeSupplementalHospital(hospital = {}) {
     const departmentName = String(hospital.department || '').trim();
-    const departmentId = inferDepartmentIdFromName(departmentName);
+    const departmentId = String(hospital.departmentId || '').trim() || inferDepartmentIdFromName(departmentName);
     const address = String(hospital.address || '').trim();
     const region = extractRegionFromAddress(address);
 

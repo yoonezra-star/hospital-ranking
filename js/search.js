@@ -506,7 +506,12 @@ const SearchEngine = (() => {
     }
 
     if (filters.department && filters.department !== 'all') {
-      result = result.filter((hospital) => hospital.departmentId === filters.department);
+      const departmentLabel = getDepartmentLabel(filters.department);
+      result = result.filter((hospital) => {
+        const departmentText = String(hospital?.department || '').trim();
+        return hospital.departmentId === filters.department
+          || (departmentLabel && departmentText.includes(departmentLabel));
+      });
     }
 
     if (filters.type && filters.type !== 'all') {

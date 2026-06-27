@@ -283,19 +283,21 @@ const HOSPITALS = [
 
 
 const NEW_HOSPITALS = [
-  { id: 101, name: '판교디지털내과의원',     address: '경기도 성남시 분당구 판교역로 230', openDate: '2026-06-15', department: '내과', reviewCount: 86, specialistCount: 2, saturdayOpen: true, sundayOpen: false, nightOpen: true, parkingCapacity: 32, parkingFee: '건물 주차' },
+  { id: 101, name: '판교디지털내과의원',     address: '경기도 성남시 분당구 판교역로 230', openDate: '2026-06-15', department: '내과', departmentId: 'internal', reviewCount: 86, specialistCount: 2, saturdayOpen: true, sundayOpen: false, nightOpen: true, parkingCapacity: 32, parkingFee: '건물 주차' },
   { id: 102, name: '서초리더스365의원',      address: '서울특별시 서초구 서초대로 262',    openDate: '2026-06-12', department: '가정의학과' },
   { id: 103, name: '일산밝은안과의원',       address: '경기도 고양시 일산서구 일산로 512', openDate: '2026-06-10', department: '안과' },
-  { id: 104, name: '해운대좋은치과의원',     address: '부산광역시 해운대구 해운대로 623',  openDate: '2026-06-08', department: '치과', reviewCount: 94, saturdayOpen: true, sundayOpen: false, nightOpen: true, parkingCapacity: 38, parkingFee: '건물 주차' },
+  { id: 104, name: '해운대좋은치과의원',     address: '부산광역시 해운대구 해운대로 623',  openDate: '2026-06-08', department: '치과', departmentId: 'dental', reviewCount: 94, saturdayOpen: true, sundayOpen: false, nightOpen: true, parkingCapacity: 38, parkingFee: '건물 주차' },
   { id: 105, name: '연세밝은미래소아청소년과', address: '서울특별시 송파구 잠실로 195',     openDate: '2026-06-06', department: '소아청소년과' },
   { id: 106, name: '대전온정형외과의원',     address: '대전광역시 유성구 대학로 99',       openDate: '2026-06-04', department: '정형외과' },
   { id: 107, name: '인천마음숲정신건강의학과', address: '인천광역시 남동구 구월로 131',     openDate: '2026-06-02', department: '정신건강의학과' },
   { id: 108, name: '강남뉴페이스성형외과',   address: '서울특별시 강남구 논현로 831',      openDate: '2026-05-30', department: '성형외과' },
-  { id: 109, name: '교하하나의원',           address: '경기도 파주시 동패동 1695-1',       openDate: '2001-08-01', department: '내과, 소아청소년과, 신경외과, 외과, 정형외과', reviewCount: 164, specialistCount: 1, saturdayOpen: true, sundayOpen: false, nightOpen: false, parkingCapacity: 18, parkingFee: '무료' },
-  { id: 110, name: '교하본정형외과의원',     address: '경기도 파주시 동패동 1694-2',       openDate: '2011-12-01', department: '정형외과', reviewCount: 138, specialistCount: 1, saturdayOpen: true, sundayOpen: false, nightOpen: false, parkingCapacity: 24, parkingFee: '무료' },
-  { id: 111, name: '교하굿모닝치과의원',     address: '경기도 파주시 와동동 1302-5',       openDate: '2010-07-01', department: '치과', reviewCount: 121, saturdayOpen: true, sundayOpen: false, nightOpen: false, parkingCapacity: 28, parkingFee: '건물 주차' },
-  { id: 112, name: '교하연세이비인후과의원', address: '경기도 파주시 동패동 1694-3',       openDate: '2006-09-01', department: '이비인후과', reviewCount: 118, specialistCount: 1, saturdayOpen: true, sundayOpen: false, nightOpen: false, parkingCapacity: 20, parkingFee: '무료' },
-  { id: 113, name: '분당바른정형외과의원',   address: '경기도 성남시 분당구 서현로 192',    openDate: '2018-03-12', department: '정형외과', reviewCount: 176, specialistCount: 2, saturdayOpen: true, sundayOpen: false, nightOpen: true, parkingCapacity: 40, parkingFee: '건물 주차' },
+  { id: 109, name: '교하하나의원',           address: '경기도 파주시 동패동 1695-1',       openDate: '2001-08-01', department: '내과, 소아청소년과, 신경외과, 외과, 정형외과', departmentId: 'internal', reviewCount: 164, specialistCount: 1, saturdayOpen: true, sundayOpen: false, nightOpen: false, parkingCapacity: 18, parkingFee: '무료' },
+  { id: 110, name: '교하본정형외과의원',     address: '경기도 파주시 동패동 1694-2',       openDate: '2011-12-01', department: '정형외과', departmentId: 'orthopedic', reviewCount: 138, specialistCount: 1, saturdayOpen: true, sundayOpen: false, nightOpen: false, parkingCapacity: 24, parkingFee: '무료' },
+  { id: 111, name: '교하굿모닝치과의원',     address: '경기도 파주시 와동동 1302-5',       openDate: '2010-07-01', department: '치과', departmentId: 'dental', reviewCount: 121, saturdayOpen: true, sundayOpen: false, nightOpen: false, parkingCapacity: 28, parkingFee: '건물 주차' },
+  { id: 112, name: '교하연세이비인후과의원', address: '경기도 파주시 동패동 1694-3',       openDate: '2006-09-01', department: '이비인후과', departmentId: 'ent', reviewCount: 118, specialistCount: 1, saturdayOpen: true, sundayOpen: false, nightOpen: false, parkingCapacity: 20, parkingFee: '무료' },
+  { id: 113, name: '분당바른정형외과의원',   address: '경기도 성남시 분당구 서현로 192',    openDate: '2018-03-12', department: '정형외과', departmentId: 'orthopedic', reviewCount: 176, specialistCount: 2, saturdayOpen: true, sundayOpen: false, nightOpen: true, parkingCapacity: 40, parkingFee: '건물 주차' },
+  { id: 114, name: '운정아이소아청소년과의원', address: '경기도 파주시 목동동 939-3',       openDate: '2017-05-18', department: '소아청소년과', departmentId: 'pediatric', reviewCount: 152, specialistCount: 1, saturdayOpen: true, sundayOpen: false, nightOpen: true, parkingCapacity: 26, parkingFee: '건물 주차' },
+  { id: 115, name: '송도밝은안과의원',       address: '인천광역시 연수구 송도동 29-13',     openDate: '2016-08-22', department: '안과', departmentId: 'ophthalmology', reviewCount: 168, specialistCount: 2, saturdayOpen: true, sundayOpen: false, nightOpen: true, parkingCapacity: 34, parkingFee: '건물 주차' },
 ];
 
 // 통계 데이터

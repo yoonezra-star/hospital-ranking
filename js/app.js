@@ -2607,7 +2607,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function normalizeSupplementalHospital(hospital = {}) {
     const address = String(hospital.address || '').trim();
     const department = String(hospital.department || '').trim();
-    const departmentId = inferDepartmentIdFromText(department);
+    const departmentId = String(hospital.departmentId || '').trim() || inferDepartmentIdFromText(department);
 
     return {
       id: hospital.id || `new-${Math.random().toString(36).slice(2, 9)}`,
