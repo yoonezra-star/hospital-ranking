@@ -1,5 +1,8 @@
 (() => {
   const LANDING_META = [
+    { href: 'gangnam-lasik.html', region: '강남', department: '라식 안과', focus: '정밀검사 준비, 렌즈 중단, 강남 생활권, 반복 방문', guideLabel: '강남 라식 안과 가이드' },
+    { href: 'songpa-womens-checkup.html', region: '송파', department: '여성검진 병원', focus: '송파 생활권 반복 방문, 여성검진 목적, 이전 검사 결과, 초음파 상담', guideLabel: '송파 여성검진 가이드' },
+    { href: 'saturday-implant.html', region: '전국', department: '토요일 임플란트 치과', focus: '토요일 접수 마감, CT 상담, 반복 방문, 주차 동선', guideLabel: '토요일 임플란트 가이드' },
     { href: 'implant-clinic.html', region: '전국', department: '임플란트 치과', focus: '임플란트 상담, CT 촬영, 반복 방문, 토요일 상담 가능성', guideLabel: '임플란트 치과 가이드' },
     { href: 'lasik-clinic.html', region: '전국', department: '라식 라섹 안과', focus: '정밀검사 준비, 렌즈 중단, 시력교정 상담, 반복 방문', guideLabel: '라식 라섹 안과 가이드' },
     { href: 'urinary-stone-clinic.html', region: '전국', department: '요로결석 병원', focus: '옆구리 통증, 촬영 여부, 빠른 방문, 비뇨의학과 상담', guideLabel: '요로결석 병원 가이드' },
