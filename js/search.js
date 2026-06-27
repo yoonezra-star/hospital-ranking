@@ -634,7 +634,101 @@ const SearchEngine = (() => {
     let result = searchHospitals(searchText, hospitals, resolvedIntent);
     result = filterHospitals(result, mergedFilters);
     result = sortHospitals(result, sortBy);
+
+    if (shouldBoostSearchRelevance(searchText, resolvedIntent)) {
+      result = sortSearchResultsByRelevance(result, resolvedIntent, searchText);
+    }
+
     return result;
+  }
+
+  function shouldBoostSearchRelevance(searchText = '', intent = null) {
+    return Boolean(String(searchText || '').trim() || intent?.isStructured || intent?.keywordText);
+  }
+
+  function sortSearchResultsByRelevance(hospitals, intent, searchText = '') {
+    return [...hospitals].sort((left, right) => (
+      getSearchRelevanceScore(right, intent, searchText)
+      - getSearchRelevanceScore(left, intent, searchText)
+    ));
+  }
+
+  function getSearchRelevanceScore(hospital, intent, searchText = '') {
+    let score = 0;
+
+    const keywordText = String(intent?.keywordText || '').trim();
+    const keywordTokens = Array.isArray(intent?.keywordTokens) && intent.keywordTokens.length > 0
+      ? intent.keywordTokens
+      : tokenizeQuery(searchText);
+    const normalizedKeyword = normalizeText(keywordText);
+    const normalizedName = normalizeText(hospital?.name);
+    const normalizedAddress = normalizeText(hospital?.address);
+    const normalizedDistrict = normalizeText(hospital?.district);
+    const normalizedTown = normalizeText(hospital?.town);
+    const normalizedSubway = normalizeText(hospital?.subway);
+
+    if (intent?.region && String(hospital?.region || '').trim() === intent.region) {
+      score += 18;
+    }
+
+    if (intent?.district && matchesDistrict(hospital, intent.district)) {
+      score += 30;
+    }
+
+    if (intent?.locality && matchesLocality(hospital, intent.locality)) {
+      score += 48;
+    }
+
+    if (intent?.department && hospital?.departmentId === intent.department) {
+      score += 20;
+    }
+
+    if (intent?.saturdayOpen && hospital?.saturdayOpen === true) score += 8;
+    if (intent?.sundayOpen && hospital?.sundayOpen === true) score += 8;
+    if (intent?.nightOpen && hospital?.nightOpen === true) score += 8;
+    if (intent?.parkingAvailable && hasParkingInfo(hospital)) score += 6;
+    if (intent?.specialistOnly && Number(hospital?.specialistCount || 0) > 0) score += 6;
+    if (intent?.recentOpen && isRecentOpenDate(hospital?.openDate)) score += 6;
+    if (intent?.hasEmergency && hospital?.hasEmergency === true) score += 6;
+
+    if (normalizedKeyword) {
+      if (normalizedName === normalizedKeyword) {
+        score += 180;
+      } else if (normalizedName.startsWith(normalizedKeyword)) {
+        score += 130;
+      } else if (normalizedName.includes(normalizedKeyword)) {
+        score += 92;
+      }
+
+      if (normalizedDistrict === normalizedKeyword || normalizedTown === normalizedKeyword) {
+        score += 36;
+      } else if (
+        normalizedDistrict.includes(normalizedKeyword)
+        || normalizedTown.includes(normalizedKeyword)
+        || normalizedSubway.includes(normalizedKeyword)
+      ) {
+        score += 18;
+      }
+
+      if (normalizedAddress.includes(normalizedKeyword)) {
+        score += 22;
+      }
+    }
+
+    const normalizedTokens = keywordTokens.map(normalizeText).filter(Boolean);
+    if (normalizedTokens.length > 0) {
+      const nameMatches = normalizedTokens.filter((token) => normalizedName.includes(token)).length;
+      const locationMatches = normalizedTokens.filter((token) => (
+        normalizedAddress.includes(token)
+        || normalizedDistrict.includes(token)
+        || normalizedTown.includes(token)
+        || normalizedSubway.includes(token)
+      )).length;
+
+      score += (nameMatches * 14) + (locationMatches * 6);
+    }
+
+    return score;
   }
 
   function getDepartmentLabel(departmentId = '') {

@@ -1692,14 +1692,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function searchHospitalsByIntent(query, intent) {
     const localSource = dedupeHospitals(getFeaturedHospitalsSource());
-    const localResults = typeof SearchEngine !== 'undefined'
-      ? SearchEngine.query(localSource, { searchText: query, sortBy: state.currentSort, intent })
-      : localSource;
-
-    if (localResults.length > 0) {
-      return { hospitals: localResults, source: 'local' };
-    }
-
     const apiParams = buildSearchApiParams(intent);
     let remoteHospitals = [];
 
@@ -1724,7 +1716,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    return { hospitals, source: 'remote' };
+    return {
+      hospitals,
+      source: remoteHospitals.length > 0 ? 'remote+local' : 'local',
+    };
   }
 
   function buildSearchApiParams(intent) {
@@ -1732,7 +1727,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return null;
     }
 
-    const params = { limit: 40 };
+    const params = { limit: resolveSearchApiLimit(intent) };
 
     if (intent.region) {
       params.region = intent.region;
@@ -1751,6 +1746,26 @@ document.addEventListener('DOMContentLoaded', () => {
     return params;
   }
 
+  function resolveSearchApiLimit(intent) {
+    if (!intent) {
+      return 40;
+    }
+
+    if (shouldUseKeywordAsHospitalName(intent)) {
+      return 120;
+    }
+
+    if (intent.department && (intent.region || intent.district || intent.locality)) {
+      return 120;
+    }
+
+    if (intent.region || intent.department) {
+      return 80;
+    }
+
+    return 60;
+  }
+
   function shouldUseKeywordAsHospitalName(intent) {
     const keywordText = String(intent?.keywordText || '').trim();
     if (!keywordText) {
@@ -1763,11 +1778,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (!intent?.region && !intent?.department) {
-      return true;
+      return keywordText.length >= 2;
     }
 
     const tokens = keywordText.split(/\s+/).filter(Boolean);
-    return tokens.length >= 2 && keywordText.length >= 5;
+    if (tokens.length >= 2 && keywordText.length >= 5) {
+      return true;
+    }
+
+    return keywordText.length >= 4 && Boolean(intent?.region || intent?.district || intent?.locality);
   }
 
   function buildRelaxedSearchIntent(intent) {
