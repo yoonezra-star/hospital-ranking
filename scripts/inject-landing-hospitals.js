@@ -21,15 +21,23 @@ function loadArrayFromHead(file, constName) {
   return Function(`return [${match[1]}];`)();
 }
 
-function loadHospitalsFromHead() {
-  const source = execFileSync('git', ['show', 'HEAD:js/data.js'], {
-    cwd: ROOT,
-    encoding: 'utf8',
-  });
+function loadHospitals() {
+  const source = fs.readFileSync(path.join(ROOT, 'js/data.js'), 'utf8');
   const context = { window: {} };
   vm.createContext(context);
-  vm.runInContext(`${source}\nthis.__HOSPITALS = HOSPITALS;`, context);
-  return context.__HOSPITALS || [];
+  vm.runInContext(`${source}\nthis.__HOSPITALS = HOSPITALS; this.__NEW_HOSPITALS = NEW_HOSPITALS;`, context);
+  return [...(context.__HOSPITALS || []), ...(context.__NEW_HOSPITALS || [])].map(normalizeHospital);
+}
+
+function normalizeHospital(hospital) {
+  const tokens = String(hospital.address || '').trim().split(/\s+/).filter(Boolean);
+  const region = hospital.region || String(tokens[0] || '').replace(/(특별시|광역시|특별자치시|특별자치도|자치도|도)$/u, '');
+  const district = hospital.district || tokens[1] || '';
+  return {
+    ...hospital,
+    region,
+    district,
+  };
 }
 
 function escapeHtml(value) {
@@ -153,7 +161,23 @@ function scoreHospital(hospital, profile) {
 function chooseExamples(page, hospitals) {
   const profile = resolveProfile(page);
   const items = hospitals.filter((hospital) => !EXCLUDED_IDS.has(hospital.id));
-  const exact = items.filter((hospital) => {
+  const exactSpecialty = items.filter((hospital) => {
+    if (profile.region && hospital.region !== profile.region) {
+      return false;
+    }
+    if (profile.district && !hospital.address.includes(profile.district)) {
+      return false;
+    }
+    if (profile.operation && profile.operation !== 'newOpenings' && !hospital[profile.operation]) {
+      return false;
+    }
+    if (!profile.departmentId) {
+      return true;
+    }
+    return hospital.departmentId === profile.departmentId;
+  });
+
+  const exactFallback = items.filter((hospital) => {
     if (profile.region && hospital.region !== profile.region) {
       return false;
     }
@@ -176,7 +200,12 @@ function chooseExamples(page, hospitals) {
     return true;
   });
 
-  const specialty = items.filter((hospital) => departmentMatch(hospital, profile.departmentId));
+  const specialty = items.filter((hospital) => {
+    if (!profile.departmentId) {
+      return false;
+    }
+    return hospital.departmentId === profile.departmentId;
+  });
   const operationOnly = items.filter((hospital) => {
     if (!profile.operation || profile.operation === 'newOpenings') {
       return false;
@@ -198,7 +227,15 @@ function chooseExamples(page, hospitals) {
 
   let title = '\uC5F0\uACB0 \uBCD1\uC6D0 \uC608\uC2DC';
   let note = '\uD604\uC7AC \uB370\uC774\uD130\uC14B\uC5D0\uC11C \uC9C0\uC5ED\uACFC \uC9C4\uB8CC\uACFC\uAC00 \uC9C1\uC811 \uB9DE\uB294 \uBCD1\uC6D0\uC744 \uC6B0\uC120 \uC5F0\uACB0\uD588\uC2B5\uB2C8\uB2E4.';
-  push(exact);
+  push(exactSpecialty);
+
+  if (!picked.size) {
+    push(exactFallback);
+  }
+
+  if (picked.size < 3) {
+    push(specialty);
+  }
 
   if (!picked.size) {
     push(regional);
@@ -207,7 +244,10 @@ function chooseExamples(page, hospitals) {
   }
 
   if (picked.size < 3) {
-    push(specialty);
+    push(regional);
+  }
+  if (picked.size < 3) {
+    push(exactFallback);
   }
   if (picked.size < 3) {
     push(operationOnly);
@@ -288,7 +328,7 @@ function injectSection(html, section) {
 
 function main() {
   const pages = loadArrayFromHead('js/landing-pages.js', 'LANDING_PAGES');
-  const hospitals = loadHospitalsFromHead();
+  const hospitals = loadHospitals();
 
   for (const page of pages) {
     const filePath = path.join(ROOT, page.href);
