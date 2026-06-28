@@ -84,6 +84,11 @@ document.addEventListener('DOMContentLoaded', () => {
     searchActive: false,
   };
 
+  const searchSuggestionState = {
+    items: [],
+    activeIndex: -1,
+  };
+
   const NON_EDITORIAL_HOSPITAL_IDS = new Set(['101']);
 
   const $ = (selector) => document.querySelector(selector);
@@ -93,6 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     mobileMenuBtn: $('#mobile-menu-btn'),
     themeToggle: $('#theme-toggle'),
     heroSearch: $('#hero-search'),
+    searchSuggestions: $('#search-suggestions'),
     searchBtn: $('#search-btn'),
     clearSearchBtn: $('#clear-search'),
     searchResults: $('#search-results'),
@@ -127,8 +133,6 @@ document.addEventListener('DOMContentLoaded', () => {
     dataSourceNote: $('#data-source-note'),
   };
 
-  init();
-
   function init() {
     applyStaticCopy();
     state.hospitals = loadHospitals();
@@ -140,6 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
     bindEvents();
     applyUrlState();
     refreshPage();
+    hideSearchSuggestions();
   }
 
   function applyStaticCopy() {
@@ -231,6 +236,190 @@ document.addEventListener('DOMContentLoaded', () => {
   function setInnerHtml(selector, value) {
     const node = document.querySelector(selector);
     if (node) node.innerHTML = value;
+  }
+
+  function createSearchSuggestion(value, prefix, score = 0) {
+    return { value, prefix, score };
+  }
+
+  function pushSearchSuggestion(collection, seenValues, value, prefix, score = 0) {
+    const trimmedValue = String(value || '').trim();
+    if (!trimmedValue) return;
+
+    const dedupeKey = normalizeSearchText(trimmedValue);
+    if (!dedupeKey || seenValues.has(dedupeKey)) return;
+
+    seenValues.add(dedupeKey);
+    collection.push(createSearchSuggestion(trimmedValue, prefix, score));
+  }
+
+  function buildDefaultSearchSuggestions() {
+    const shortcutValues = Array.from(document.querySelectorAll('[data-search-example]'))
+      .map((button) => button.dataset.searchExample || '')
+      .filter(Boolean);
+
+    return shortcutValues.slice(0, 8).map((value, index) => (
+      createSearchSuggestion(value, '\uBC14\uB85C \uAC80\uC0C9', 100 - index)
+    ));
+  }
+
+  function buildSearchSuggestions(query) {
+    const trimmedQuery = String(query || '').trim();
+    if (!trimmedQuery) {
+      return buildDefaultSearchSuggestions();
+    }
+
+    const normalizedQuery = normalizeSearchText(trimmedQuery);
+    if (!normalizedQuery) {
+      return buildDefaultSearchSuggestions();
+    }
+
+    const suggestions = [];
+    const seenValues = new Set();
+    const rankedHospitals = [...state.hospitals].sort(compareByRankingQuality);
+    const nameMatches = rankedHospitals
+      .filter((item) => normalizeSearchText(item.name).includes(normalizedQuery))
+      .slice(0, 6);
+
+    nameMatches.forEach((item, index) => {
+      pushSearchSuggestion(suggestions, seenValues, item.name, '\uBCD1\uC6D0\uBA85', 220 - index);
+    });
+
+    const contextualMatches = rankedHospitals
+      .filter((item) => keywordMatchesHospital(item, trimmedQuery))
+      .slice(0, 18);
+
+    contextualMatches.forEach((item, index) => {
+      const department = firstToken(item.department || findDepartmentName(item.departmentId) || '');
+      const primaryLocality = item.town || item.district || item.region || '';
+      const districtLocality = item.district || '';
+
+      if (primaryLocality && department) {
+        pushSearchSuggestion(suggestions, seenValues, `${primaryLocality} ${department}`, '\uC0DD\uD65C\uAD8C', 180 - index);
+      }
+
+      if (districtLocality && department && districtLocality !== primaryLocality) {
+        pushSearchSuggestion(suggestions, seenValues, `${districtLocality} ${department}`, '\uC9C0\uC5ED', 165 - index);
+      }
+
+      if (item.nightOpen && department) {
+        pushSearchSuggestion(suggestions, seenValues, `\uC57C\uAC04 ${department}`, '\uC6B4\uC601', 145 - index);
+      }
+      if (item.saturdayOpen && department) {
+        pushSearchSuggestion(suggestions, seenValues, `\uD1A0\uC694\uC77C ${department}`, '\uC6B4\uC601', 140 - index);
+      }
+      if (item.sundayOpen && department) {
+        pushSearchSuggestion(suggestions, seenValues, `\uC77C\uC694\uC77C ${department}`, '\uC6B4\uC601', 135 - index);
+      }
+      if ((item.parkingCapacity > 0 || item.parkingFee) && department) {
+        pushSearchSuggestion(suggestions, seenValues, `\uC8FC\uCC28 \uAC00\uB2A5\uD55C ${department}`, '\uD3B8\uC758', 128 - index);
+      }
+    });
+
+    const fallbackSuggestions = buildDefaultSearchSuggestions()
+      .filter((item) => normalizeSearchText(item.value).includes(normalizedQuery));
+
+    fallbackSuggestions.forEach((item, index) => {
+      pushSearchSuggestion(suggestions, seenValues, item.value, item.prefix, 90 - index);
+    });
+
+    return suggestions
+      .sort((left, right) => right.score - left.score || left.value.localeCompare(right.value, 'ko'))
+      .slice(0, 8);
+  }
+
+  function renderSearchSuggestions() {
+    if (!ui.searchSuggestions) return;
+
+    if (searchSuggestionState.items.length === 0) {
+      hideSearchSuggestions();
+      return;
+    }
+
+    ui.searchSuggestions.hidden = false;
+    ui.searchSuggestions.innerHTML = searchSuggestionState.items.map((item, index) => `
+      <button
+        type="button"
+        class="search-suggestion-item${index === searchSuggestionState.activeIndex ? ' is-active' : ''}"
+        data-suggestion-index="${index}"
+      >
+        <span class="search-suggestion-prefix">${escapeHtml(item.prefix)}</span>
+        <span>${escapeHtml(item.value)}</span>
+      </button>
+    `).join('');
+  }
+
+  function hideSearchSuggestions() {
+    searchSuggestionState.items = [];
+    searchSuggestionState.activeIndex = -1;
+    if (ui.searchSuggestions) {
+      ui.searchSuggestions.hidden = true;
+      ui.searchSuggestions.innerHTML = '';
+    }
+  }
+
+  function refreshSearchSuggestions() {
+    if (!ui.heroSearch) return;
+
+    searchSuggestionState.items = buildSearchSuggestions(ui.heroSearch.value);
+    searchSuggestionState.activeIndex = searchSuggestionState.items.length > 0 ? 0 : -1;
+    renderSearchSuggestions();
+  }
+
+  function applySearchSuggestion(index, { run = true } = {}) {
+    const item = searchSuggestionState.items[index];
+    if (!item || !ui.heroSearch) return;
+
+    ui.heroSearch.value = item.value;
+    hideSearchSuggestions();
+
+    if (run) {
+      runSearch();
+    }
+  }
+
+  function moveSearchSuggestion(step) {
+    if (searchSuggestionState.items.length === 0) {
+      refreshSearchSuggestions();
+      return;
+    }
+
+    const total = searchSuggestionState.items.length;
+    const nextIndex = searchSuggestionState.activeIndex < 0
+      ? 0
+      : (searchSuggestionState.activeIndex + step + total) % total;
+
+    searchSuggestionState.activeIndex = nextIndex;
+    renderSearchSuggestions();
+  }
+
+  function handleHeroSearchKeydown(event) {
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      moveSearchSuggestion(1);
+      return;
+    }
+
+    if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      moveSearchSuggestion(-1);
+      return;
+    }
+
+    if (event.key === 'Escape') {
+      hideSearchSuggestions();
+      return;
+    }
+
+    if (event.key === 'Enter') {
+      if (searchSuggestionState.activeIndex >= 0 && searchSuggestionState.items.length > 0) {
+        event.preventDefault();
+        applySearchSuggestion(searchSuggestionState.activeIndex);
+        return;
+      }
+
+      runSearch();
+    }
   }
 
   function loadHospitals() {
@@ -489,6 +678,8 @@ document.addEventListener('DOMContentLoaded', () => {
     return text;
   }
 
+  init();
+
   function initTheme() {
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
@@ -586,9 +777,9 @@ document.addEventListener('DOMContentLoaded', () => {
     ui.themeToggle?.addEventListener('click', toggleTheme);
     ui.mobileMenuBtn?.addEventListener('click', toggleMobileMenu);
     ui.searchBtn?.addEventListener('click', runSearch);
-    ui.heroSearch?.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') runSearch();
-    });
+    ui.heroSearch?.addEventListener('keydown', handleHeroSearchKeydown);
+    ui.heroSearch?.addEventListener('input', refreshSearchSuggestions);
+    ui.heroSearch?.addEventListener('focus', refreshSearchSuggestions);
     ui.clearSearchBtn?.addEventListener('click', clearSearch);
     ui.heroLocationApply?.addEventListener('click', applyHeroLocation);
     ui.regionFilter?.addEventListener('change', onRegionChange);
@@ -608,6 +799,15 @@ document.addEventListener('DOMContentLoaded', () => {
     ui.loadMoreBtn?.addEventListener('click', () => {
       state.visibleCount += 12;
       renderRanking();
+    });
+
+    document.querySelectorAll('[data-search-example]').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!ui.heroSearch) return;
+
+        ui.heroSearch.value = button.dataset.searchExample || '';
+        runSearch();
+      });
     });
 
     document.querySelectorAll('.quick-filter-btn').forEach((button) => {
@@ -636,6 +836,34 @@ document.addEventListener('DOMContentLoaded', () => {
       state.visibleCount = 12;
       refreshPage();
       scrollToRanking();
+    });
+
+    ui.searchSuggestions?.addEventListener('mousemove', (event) => {
+      const target = event.target.closest('[data-suggestion-index]');
+      if (!target) return;
+
+      searchSuggestionState.activeIndex = Number(target.dataset.suggestionIndex || -1);
+      renderSearchSuggestions();
+    });
+
+    ui.searchSuggestions?.addEventListener('click', (event) => {
+      const target = event.target.closest('[data-suggestion-index]');
+      if (!target) return;
+
+      applySearchSuggestion(Number(target.dataset.suggestionIndex || -1));
+    });
+
+    document.addEventListener('click', (event) => {
+      const target = event.target;
+      if (
+        ui.heroSearch?.contains(target)
+        || ui.searchSuggestions?.contains(target)
+        || target?.closest?.('.search-wrapper')
+      ) {
+        return;
+      }
+
+      hideSearchSuggestions();
     });
   }
 
@@ -778,12 +1006,14 @@ document.addEventListener('DOMContentLoaded', () => {
     state.keyword = ui.heroSearch?.value.trim() || '';
     state.searchActive = true;
     state.visibleCount = 12;
+    hideSearchSuggestions();
     refreshPage();
     scrollToSearchResults();
   }
 
   function clearSearch() {
     if (ui.heroSearch) ui.heroSearch.value = '';
+    hideSearchSuggestions();
     state.keyword = '';
     state.specialFilter = '';
     state.searchActive = false;
