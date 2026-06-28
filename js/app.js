@@ -84,6 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
     searchActive: false,
   };
 
+  const NON_EDITORIAL_HOSPITAL_IDS = new Set(['101']);
+
   const $ = (selector) => document.querySelector(selector);
   const ui = {
     header: $('#header'),
@@ -923,21 +925,21 @@ document.addEventListener('DOMContentLoaded', () => {
   function sortHospitals(a, b) {
     switch (state.sort) {
       case 'reviews':
-        return b.reviewCount - a.reviewCount;
+        return (b.reviewCount - a.reviewCount) || compareByRankingQuality(a, b);
       case 'specialists':
-        return b.specialistCount - a.specialistCount;
+        return (b.specialistCount - a.specialistCount) || compareByRankingQuality(a, b);
       case 'newest':
-        return parseDate(b.openDate) - parseDate(a.openDate);
+        return (parseDate(b.openDate) - parseDate(a.openDate)) || compareByRankingQuality(a, b);
       case 'name':
         return String(a.name).localeCompare(String(b.name), 'ko');
       case 'saturday_first':
-        return Number(b.saturdayOpen) - Number(a.saturdayOpen) || b.score - a.score;
+        return Number(b.saturdayOpen) - Number(a.saturdayOpen) || compareByRankingQuality(a, b);
       case 'night_first':
-        return Number(b.nightOpen) - Number(a.nightOpen) || b.score - a.score;
+        return Number(b.nightOpen) - Number(a.nightOpen) || compareByRankingQuality(a, b);
       case 'sunday_first':
-        return Number(b.sundayOpen) - Number(a.sundayOpen) || b.score - a.score;
+        return Number(b.sundayOpen) - Number(a.sundayOpen) || compareByRankingQuality(a, b);
       default:
-        return b.score - a.score || b.reviewCount - a.reviewCount;
+        return compareByRankingQuality(a, b);
     }
   }
 
@@ -1061,25 +1063,159 @@ document.addEventListener('DOMContentLoaded', () => {
     return parts.join(' / ');
   }
 
+  function pickEditorialItems(items, limit, comparator = compareByRankingQuality) {
+    const sortedItems = [...items].sort(comparator);
+    const preferred = sortedItems.filter(isEditorialEligible);
+
+    if (preferred.length >= limit) {
+      return preferred.slice(0, limit);
+    }
+
+    const preferredIds = new Set(preferred.map((item) => String(item.id ?? '')));
+    const fallback = sortedItems.filter((item) => {
+      const id = String(item.id ?? '');
+      return !preferredIds.has(id) && !NON_EDITORIAL_HOSPITAL_IDS.has(id);
+    });
+
+    return [...preferred, ...fallback].slice(0, limit);
+  }
+
+  function isEditorialEligible(hospital) {
+    const id = String(hospital?.id ?? '');
+    if (!id || NON_EDITORIAL_HOSPITAL_IDS.has(id)) {
+      return false;
+    }
+
+    const reviews = Math.max(Number(hospital?.reviewCount || 0), 0);
+    const specialists = Math.max(Number(hospital?.specialistCount || 0), 0);
+    const infoRichness = getHospitalInfoRichnessScore(hospital);
+
+    if (reviews >= 100) return true;
+    if (specialists > 0 && reviews >= 50) return true;
+    if (isRecentOpening(hospital?.openDate) && reviews >= 50 && infoRichness >= 5) return true;
+
+    return getRankingScore(hospital) >= 4.45 && reviews >= 60 && infoRichness >= 6;
+  }
+
+  function compareByRankingQuality(a, b) {
+    const rankingScoreDiff = getRankingScore(b) - getRankingScore(a);
+    if (Math.abs(rankingScoreDiff) >= 0.01) {
+      return rankingScoreDiff;
+    }
+
+    const infoRichnessDiff = getHospitalInfoRichnessScore(b) - getHospitalInfoRichnessScore(a);
+    if (infoRichnessDiff !== 0) {
+      return infoRichnessDiff;
+    }
+
+    const reviewDiff = (b.reviewCount || 0) - (a.reviewCount || 0);
+    if (reviewDiff !== 0) {
+      return reviewDiff;
+    }
+
+    const specialistDiff = (b.specialistCount || 0) - (a.specialistCount || 0);
+    if (specialistDiff !== 0) {
+      return specialistDiff;
+    }
+
+    const typeDiff = getTypePriority(b) - getTypePriority(a);
+    if (typeDiff !== 0) {
+      return typeDiff;
+    }
+
+    return String(a.name || '').localeCompare(String(b.name || ''), 'ko');
+  }
+
+  function getRankingScore(hospital) {
+    const priorMean = 4.3;
+    const priorWeight = 500;
+    const numericScore = Number(hospital?.score);
+    const score = Number.isFinite(numericScore) && numericScore > 0
+      ? numericScore
+      : priorMean;
+    const reviews = Math.max(Number(hospital?.reviewCount || 0), 0);
+    const specialists = Math.max(Number(hospital?.specialistCount || 0), 0);
+
+    const bayesianScore = ((score * reviews) + (priorMean * priorWeight)) / (reviews + priorWeight);
+    const reviewVolumeBonus = Math.min(reviews / 1000, 0.2);
+    const specialistBonus = Math.min(specialists / 500, 0.25);
+    const typeBonus = getTypePriority(hospital) * 0.02;
+    const infoRichnessBonus = getHospitalInfoRichnessScore(hospital) * 0.025;
+
+    return bayesianScore + reviewVolumeBonus + specialistBonus + typeBonus + infoRichnessBonus;
+  }
+
+  function getHospitalInfoRichnessScore(hospital) {
+    const checks = [
+      Boolean(hospital?.address),
+      Boolean(hospital?.phone),
+      Boolean(hospital?.url),
+      Boolean(hospital?.region || hospital?.district || hospital?.town),
+      Boolean(hospital?.openDate),
+      Math.max(Number(hospital?.reviewCount || 0), 0) > 0 || Math.max(Number(hospital?.specialistCount || 0), 0) > 0,
+      hasOperationalInfo(hospital),
+      hasParkingInfo(hospital)
+        || Boolean(hospital?.equipment)
+        || Number(hospital?.roomCount || 0) > 0
+        || Number(hospital?.bedCount || 0) > 0,
+    ];
+
+    return checks.filter(Boolean).length;
+  }
+
+  function hasOperationalInfo(hospital) {
+    if (!hospital) {
+      return false;
+    }
+
+    if (hospital.saturdayOpen === true || hospital.saturdayOpen === false) return true;
+    if (hospital.sundayOpen === true || hospital.sundayOpen === false) return true;
+    if (hospital.nightOpen === true || hospital.nightOpen === false) return true;
+
+    const hours = hospital.hours;
+    if (!hours || typeof hours !== 'object') {
+      return false;
+    }
+
+    return Object.values(hours).some((value) => String(value || '').trim());
+  }
+
+  function hasParkingInfo(hospital) {
+    return Number(hospital?.parkingCapacity || 0) > 0 || Boolean(hospital?.parkingFee);
+  }
+
+  function getTypePriority(hospital) {
+    const typeName = String(hospital?.type || '');
+    if (hospital?.departmentId === 'general' || typeName.includes('상급종합') || typeName.includes('종합병원')) return 5;
+    if (typeName.includes('병원')) return 4;
+    if (typeName.includes('치과병원') || typeName.includes('한방병원')) return 3;
+    if (typeName.includes('의원')) return 2;
+    return 1;
+  }
+
   function renderQuickAccess() {
     renderQuickAccessList(
       ui.currentOpenList,
-      state.hospitals.filter(isOpenNow).sort((a, b) => b.score - a.score).slice(0, 4),
+      pickEditorialItems(state.hospitals.filter(isOpenNow), 4),
       '현재 바로 보기 좋은 병원이 없습니다.'
     );
     renderQuickAccessList(
       ui.saturdayOpenList,
-      state.hospitals.filter((item) => item.saturdayOpen).sort((a, b) => b.reviewCount - a.reviewCount).slice(0, 4),
+      pickEditorialItems(state.hospitals.filter((item) => item.saturdayOpen), 4),
       '토요일 진료 병원을 준비 중입니다.'
     );
     renderQuickAccessList(
       ui.nightOpenList,
-      state.hospitals.filter((item) => item.nightOpen).sort((a, b) => b.reviewCount - a.reviewCount).slice(0, 4),
+      pickEditorialItems(state.hospitals.filter((item) => item.nightOpen), 4),
       '야간 진료 병원을 준비 중입니다.'
     );
     renderQuickAccessList(
       ui.recentOpenList,
-      [...state.hospitals].sort((a, b) => parseDate(b.openDate) - parseDate(a.openDate)).slice(0, 4),
+      pickEditorialItems(
+        state.hospitals.filter((item) => item.openDate),
+        4,
+        (a, b) => (parseDate(b.openDate) - parseDate(a.openDate)) || compareByRankingQuality(a, b),
+      ),
       '신규 개원 병원을 준비 중입니다.'
     );
   }
@@ -1110,7 +1246,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function renderReviews() {
     if (!ui.reviewsList) return;
-    const items = [...state.hospitals].sort((a, b) => b.reviewCount - a.reviewCount).slice(0, 6);
+    const items = pickEditorialItems(
+      state.hospitals,
+      6,
+      (a, b) => (b.reviewCount - a.reviewCount) || compareByRankingQuality(a, b),
+    );
     ui.reviewsList.innerHTML = items.map((item) => `
       <article class="review-card fade-up visible">
         <span class="review-quote">“</span>
@@ -1139,10 +1279,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function renderNewHospitals() {
     if (!ui.newHospitalsList) return;
-    const items = [...state.hospitals]
-      .filter((item) => item.openDate)
-      .sort((a, b) => parseDate(b.openDate) - parseDate(a.openDate))
-      .slice(0, 8);
+    const items = pickEditorialItems(
+      state.hospitals.filter((item) => item.openDate),
+      8,
+      (a, b) => (parseDate(b.openDate) - parseDate(a.openDate)) || compareByRankingQuality(a, b),
+    );
 
     ui.newHospitalsList.innerHTML = items.map((item) => `
       <article class="timeline-item">
