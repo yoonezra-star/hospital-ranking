@@ -90,6 +90,35 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const NON_EDITORIAL_HOSPITAL_IDS = new Set(['101']);
+  const SEARCH_GENERIC_TOKENS = new Set([
+    '\uBCD1\uC6D0',
+    '\uBCD1\uC758\uC6D0',
+    '\uC758\uC6D0',
+    '\uD074\uB9AC\uB2C9',
+    '\uC9C4\uB8CC',
+    '\uAC80\uC0C9',
+    '\uCD94\uCC9C',
+    '\uCC3E\uAE30',
+    '\uADFC\uCC98',
+    '\uAC00\uAE4C\uC6B4',
+  ]);
+  const SUPPLEMENTAL_SEARCH_TOKEN_ALIASES = {
+    '\uC18C\uC544\uACFC': ['\uC18C\uC544\uACFC', '\uC18C\uC544\uCCAD\uC18C\uB144\uACFC', '\uC18C\uC544\uCCAD\uC18C\uB144'],
+    '\uC18C\uC544': ['\uC18C\uC544', '\uC18C\uC544\uACFC', '\uC18C\uC544\uCCAD\uC18C\uB144\uACFC'],
+    '\uC774\uBE44\uC778\uD6C4': ['\uC774\uBE44\uC778\uD6C4', '\uC774\uBE44\uC778\uD6C4\uACFC', '\uC774\uBE44\uC778\uD6C4\uACFC\uC758\uC6D0'],
+    '\uC815\uD615': ['\uC815\uD615', '\uC815\uD615\uC678\uACFC'],
+    '\uD53C\uBD80': ['\uD53C\uBD80', '\uD53C\uBD80\uACFC'],
+    '\uCE58\uACFC': ['\uCE58\uACFC', '\uCE58\uACFC\uC758\uC6D0', '\uCE58\uACFC\uBCD1\uC6D0'],
+    '\uB0B4\uACFC': ['\uB0B4\uACFC', '\uB0B4\uACFC\uC758\uC6D0'],
+    '\uD55C\uC758\uC6D0': ['\uD55C\uC758\uC6D0', '\uD55C\uBC29', '\uD55C\uBC29\uB0B4\uACFC'],
+    '\uD55C\uBC29': ['\uD55C\uBC29', '\uD55C\uC758\uC6D0', '\uD55C\uBC29\uB0B4\uACFC'],
+  };
+  const KEYWORD_OPERATION_PATTERNS = [
+    { label: '\uD1A0\uC694\uC77C \uC9C4\uB8CC', tokens: ['\uD1A0\uC694', '\uD1A0\uC694\uC77C', '\uD1A0\uC694\uC9C4\uB8CC', '\uC8FC\uB9D0'] },
+    { label: '\uC57C\uAC04 \uC9C4\uB8CC', tokens: ['\uC57C\uAC04', '\uC57C\uAC04\uC9C4\uB8CC', '\uB2A6\uAC8C', '\uC800\uB141'] },
+    { label: '\uC77C\uC694\uC77C \uC9C4\uB8CC', tokens: ['\uC77C\uC694', '\uC77C\uC694\uC77C', '\uC77C\uC694\uC9C4\uB8CC', '\uD734\uC77C'] },
+    { label: '\uC8FC\uCC28 \uAC00\uB2A5', tokens: ['\uC8FC\uCC28', '\uC8FC\uCC28\uAC00\uB2A5'] },
+  ];
 
   const $ = (selector) => document.querySelector(selector);
   const ui = {
@@ -801,13 +830,12 @@ document.addEventListener('DOMContentLoaded', () => {
       renderRanking();
     });
 
-    document.querySelectorAll('[data-search-example]').forEach((button) => {
-      button.addEventListener('click', () => {
-        if (!ui.heroSearch) return;
+    document.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-search-example]');
+      if (!button || !ui.heroSearch) return;
 
-        ui.heroSearch.value = button.dataset.searchExample || '';
-        runSearch();
-      });
+      ui.heroSearch.value = button.dataset.searchExample || '';
+      runSearch();
     });
 
     document.querySelectorAll('.quick-filter-btn').forEach((button) => {
@@ -820,13 +848,18 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
-    document.querySelectorAll('.search-refine-btn').forEach((button) => {
-      button.addEventListener('click', () => {
-        state.specialFilter = button.dataset.refine || '';
-        state.searchActive = true;
-        state.visibleCount = 12;
-        refreshPage();
-      });
+    document.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-refine]');
+      if (!button) return;
+
+      if (button.closest('.search-empty-state')) {
+        if (ui.heroSearch) ui.heroSearch.value = '';
+        state.keyword = '';
+      }
+      state.specialFilter = button.dataset.refine || '';
+      state.searchActive = true;
+      state.visibleCount = 12;
+      refreshPage();
     });
 
     ui.departmentGrid?.addEventListener('click', (event) => {
@@ -1004,6 +1037,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function runSearch() {
     state.keyword = ui.heroSearch?.value.trim() || '';
+    state.specialFilter = '';
     state.searchActive = true;
     state.visibleCount = 12;
     hideSearchSuggestions();
@@ -1082,8 +1116,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!normalizedKeyword) return true;
     if (haystack.includes(normalizedKeyword)) return true;
 
-    const tokens = expandSearchTokens(normalizedKeyword);
-    return tokens.every((token) => haystack.includes(token));
+    const tokenGroups = buildSearchTokenGroups(normalizedKeyword);
+    if (tokenGroups.length === 0) return true;
+
+    return tokenGroups.every((group) => (
+      group.some((token) => haystack.includes(token))
+    ));
   }
 
   function buildSearchHaystack(item) {
@@ -1115,19 +1153,40 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function expandSearchTokens(keyword) {
+    return Array.from(new Set(buildSearchTokenGroups(keyword).flat()));
+  }
+
+  function buildSearchTokenGroups(keyword) {
     const tokens = normalizeSearchText(keyword).split(' ').filter(Boolean);
-    const expanded = [];
+    const groups = [];
 
     tokens.forEach((token) => {
+      if (SEARCH_GENERIC_TOKENS.has(token)) {
+        return;
+      }
+
+      const group = [];
       const aliases = SEARCH_TOKEN_ALIASES[token];
       if (aliases?.length) {
-        expanded.push(...aliases);
-      } else {
-        expanded.push(token);
+        group.push(...aliases);
+      }
+
+      const supplementalAliases = SUPPLEMENTAL_SEARCH_TOKEN_ALIASES[token];
+      if (supplementalAliases?.length) {
+        group.push(...supplementalAliases);
+      }
+
+      if (!aliases?.length && !supplementalAliases?.length) {
+        group.push(token);
+      }
+
+      const normalizedGroup = Array.from(new Set(group.map(normalizeSearchText).filter(Boolean)));
+      if (normalizedGroup.length > 0) {
+        groups.push(normalizedGroup);
       }
     });
 
-    return Array.from(new Set(expanded));
+    return groups;
   }
 
   function matchesSpecialFilter(item, filter) {
@@ -1207,19 +1266,71 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     ui.searchIntentSummary.textContent = buildIntentSummary();
     ui.searchResultCount.innerHTML = `검색 결과 <strong>${formatNumber(state.filteredHospitals.length)}</strong>개`;
-    ui.searchResultsList.innerHTML = state.filteredHospitals
-      .slice(0, Math.min(state.visibleCount, 24))
-      .map((item, index) => renderHospitalCard(item, index + 1))
-      .join('');
+    ui.searchResultsList.innerHTML = state.filteredHospitals.length > 0
+      ? state.filteredHospitals
+        .slice(0, Math.min(state.visibleCount, 24))
+        .map((item, index) => renderHospitalCard(item, index + 1))
+        .join('')
+      : renderSearchEmptyState();
   }
 
   function buildIntentSummary() {
     const parts = [];
     if (state.regionCode !== 'all') parts.push(findRegionName(state.regionCode));
     if (state.departmentId !== 'all') parts.push(findDepartmentName(state.departmentId));
+    getKeywordOperationLabels(state.keyword).forEach((label) => parts.push(label));
     if (state.keyword) parts.push(`키워드 "${state.keyword}"`);
     if (state.specialFilter) parts.push(buildSpecialFilterLabel(state.specialFilter));
     return parts.length > 0 ? `${parts.join(' / ')} 기준 결과입니다.` : '현재 조건에 맞는 병원 결과입니다.';
+  }
+
+  function getKeywordOperationLabels(keyword) {
+    const normalizedKeyword = normalizeSearchText(keyword);
+    if (!normalizedKeyword) return [];
+
+    return KEYWORD_OPERATION_PATTERNS
+      .filter(({ tokens }) => tokens.some((token) => normalizedKeyword.includes(normalizeSearchText(token))))
+      .map(({ label }) => label);
+  }
+
+  function renderSearchEmptyState() {
+    const keyword = state.keyword || buildSpecialFilterLabel(state.specialFilter) || '\uAC80\uC0C9\uC5B4';
+    const retryQueries = [
+      '\uAD50\uD558 \uB0B4\uACFC',
+      '\uC6B4\uC815 \uC18C\uC544\uACFC',
+      '\uAC15\uB0A8 \uD53C\uBD80\uACFC',
+      '\uC57C\uAC04 \uD53C\uBD80\uACFC',
+      '\uD1A0\uC694\uC77C \uC815\uD615\uC678\uACFC',
+      '\uC8FC\uCC28 \uAC00\uB2A5\uD55C \uCE58\uACFC',
+    ];
+
+    return `
+      <div class="search-empty-state">
+        <div class="search-empty-head">
+          <p class="search-empty-icon" aria-hidden="true">\u2315</p>
+          <h3>${escapeHtml(keyword)} \uAC80\uC0C9 \uACB0\uACFC\uB97C \uCC3E\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4</h3>
+          <p>\uC9C0\uC5ED\uBA85\uACFC \uC9C4\uB8CC\uACFC\uB97C \uB098\uB220 \uC785\uB825\uD558\uAC70\uB098, \uD1A0\uC694\uC77C\u00B7\uC57C\uAC04\u00B7\uC77C\uC694\uC77C \uAC19\uC740 \uC6B4\uC601\uC870\uAC74\uC744 \uD568\uAED8 \uC785\uB825\uD574 \uBCF4\uC138\uC694.</p>
+        </div>
+        <div class="search-empty-sections">
+          <div class="search-empty-group">
+            <h4>\uAC80\uC0C9\uC5B4\uB97C \uC774\uB807\uAC8C \uBC14\uAFC0 \uC218 \uC788\uC5B4\uC694</h4>
+            <div class="search-empty-chip-list">
+              ${retryQueries.map((query) => `
+                <button type="button" class="search-empty-chip" data-search-example="${escapeHtml(query)}">${escapeHtml(query)}</button>
+              `).join('')}
+            </div>
+          </div>
+          <div class="search-empty-group">
+            <h4>\uBE60\uB978 \uD544\uD130</h4>
+            <div class="search-empty-preset-list">
+              <button type="button" class="search-empty-preset search-refine-btn" data-refine="sat"><strong>\uD1A0\uC694 \uC9C4\uB8CC</strong><span>\uC8FC\uB9D0 \uBC29\uBB38\uC774 \uD544\uC694\uD560 \uB54C</span></button>
+              <button type="button" class="search-empty-preset search-refine-btn" data-refine="night"><strong>\uC57C\uAC04 \uC9C4\uB8CC</strong><span>\uD1F4\uADFC \uD6C4 \uBC29\uBB38\uD560 \uC218 \uC788\uB294 \uBCD1\uC6D0</span></button>
+              <button type="button" class="search-empty-preset search-refine-btn" data-refine="parking"><strong>\uC8FC\uCC28 \uAC00\uB2A5</strong><span>\uCC28\uB7C9 \uBC29\uBB38\uC774 \uD3B8\uD55C \uACF3</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
   }
 
   function renderHospitalCard(item, rank) {
