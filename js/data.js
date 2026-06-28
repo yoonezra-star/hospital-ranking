@@ -311,3 +311,8 @@ const STATS = {
   totalRegions: 17,
   totalDepartments: 30,
 };
+
+window.DEPARTMENTS = DEPARTMENTS;
+window.HOSPITALS = HOSPITALS;
+window.NEW_HOSPITALS = NEW_HOSPITALS;
+window.STATS = STATS;
