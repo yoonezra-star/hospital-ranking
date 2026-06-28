@@ -3,266 +3,130 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>??뽰뒻 燁살꼵??癰귣쵐?앾㎕?섎┛ | ?袁る탣???留욌０??鍮㏓９鍮욃첎袁⑹춭??筌ｋ똾寃?/title>
-  <meta name="description" content="??뽰뒻?癒?퐣 燁살꼵??癰귣쵐???筌≪뼚?????類ㅼ뵥??疫꿸퀣????類ｂ봺??됰뮸??덈뼄. ?袁る탣???? ?대Ŋ?? ????? ??⑥퍢筌욊쑬利? ?醫롮뒄??筌욊쑬利?????? 獄쎻뫖揆 ??筌ｋ똾寃????紐? ??ｍ뜞 ?類ㅼ뵥??뤾쉭??">
+  <title>서울 치과 병원찾기 - 병원찾기</title>
+  <meta name="description" content="임플란트, 교정, 보철 기준으로 서울 치과 탐색 흐름을 정리했습니다.">
   <link rel="canonical" href="https://hospital-ranking.kr/seoul-dental.html">
   <meta name="robots" content="index,follow">
-  <link rel="stylesheet" href="css/style.css?v=5">
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "name": "??뽰뒻 燁살꼵??癰귣쵐?앾㎕?섎┛",
-    "url": "https://hospital-ranking.kr/seoul-dental.html",
-    "description": "??뽰뒻 筌왖??燁살꼵??癰귣쵐???癒?퉳 揶쎛??諭?? ??? 筌띻낱寃?筌뤴뫁??
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "??, "item": "https://hospital-ranking.kr/" },
-      { "@type": "ListItem", "position": 2, "name": "??뽰뒻 燁살꼵??癰귣쵐?앾㎕?섎┛", "item": "https://hospital-ranking.kr/seoul-dental.html" }
-    ]
-  }
-  </script>
+  <link rel="stylesheet" href="css/style.css?v=6">
   <style>
     .landing-page { max-width: 1120px; padding-top: 56px; }
-    .landing-hero {
-      padding: 36px;
-      border: 1px solid var(--border-default);
-      border-radius: 24px;
-      background:
-        radial-gradient(circle at top right, rgba(27, 94, 68, 0.16), transparent 28%),
-        linear-gradient(135deg, color-mix(in srgb, var(--bg-card) 84%, white 16%), color-mix(in srgb, var(--bg-body) 90%, white 10%));
-      margin-bottom: 28px;
-    }
-    .landing-grid, .landing-link-grid, .hospital-spotlight-grid { display: grid; gap: 20px; }
+    .landing-hero { padding: 36px; border: 1px solid var(--border-default); border-radius: 24px; background: radial-gradient(circle at top right, rgba(24, 124, 103, 0.16), transparent 28%), linear-gradient(135deg, color-mix(in srgb, var(--bg-card) 84%, white 16%), color-mix(in srgb, var(--bg-body) 90%, white 10%)); margin-bottom: 28px; }
+    .landing-grid, .landing-link-grid { display: grid; gap: 20px; }
     .landing-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-bottom: 28px; }
     .landing-link-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-    .hospital-spotlight-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-top: 28px; }
-    .landing-card-page, .landing-note {
-      border: 1px solid var(--border-default);
-      border-radius: 20px;
-      background: var(--bg-card);
-      box-shadow: var(--shadow-xs);
-    }
-    .landing-card-page { padding: 24px; }
-    .landing-note { padding: 24px; margin-top: 28px; }
-    .landing-card-page h3, .landing-note h3 { margin-bottom: 12px; font-size: 1.1rem; }
-    .landing-card-page p, .landing-note p, .landing-card-page li, .landing-note li { color: var(--text-body); line-height: 1.7; }
-    .landing-card-page ul, .landing-note ul { padding-left: 18px; margin: 0; }
-    .landing-link {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      min-height: 100%;
-      padding: 22px;
-      border: 1px solid var(--border-default);
-      border-radius: 18px;
-      background: var(--bg-card);
-      text-decoration: none;
-      color: inherit;
-      box-shadow: var(--shadow-xs);
-      transition: transform var(--t-base), box-shadow var(--t-base), border-color var(--t-base);
-    }
-    .landing-link:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: color-mix(in srgb, var(--secondary) 34%, var(--border-default) 66%); }
-    .landing-badge {
-      display: inline-flex;
-      width: fit-content;
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: color-mix(in srgb, var(--primary-50) 68%, white 32%);
-      color: var(--primary-700);
-      font-size: 0.84rem;
-      font-weight: 700;
-    }
-    .hospital-spotlight-card {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      padding: 22px;
-      border: 1px solid var(--border-default);
-      border-radius: 18px;
-      background: var(--bg-card);
-      text-decoration: none;
-      color: inherit;
-      box-shadow: var(--shadow-xs);
-    }
-    .hospital-spotlight-meta { color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; }
-    .hospital-spotlight-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-    .hospital-spotlight-tags span {
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: color-mix(in srgb, var(--bg-body) 78%, white 22%);
-      border: 1px solid var(--border-default);
-      color: var(--text-body);
-      font-size: 0.83rem;
+    .landing-card-page, .landing-note { border: 1px solid var(--border-default); border-radius: 20px; background: var(--bg-card); box-shadow: var(--shadow-xs); padding: 24px; }
+    .landing-card-page ul { padding-left: 18px; margin: 0; }
+    .landing-card-page li, .landing-card-page p, .landing-note p { color: var(--text-body); line-height: 1.72; }
+    .landing-link { display:flex; flex-direction:column; gap:12px; min-height:100%; padding:22px; border:1px solid var(--border-default); border-radius:18px; background:var(--bg-card); text-decoration:none; color:inherit; box-shadow:var(--shadow-xs); }
+    .landing-badge { display:inline-flex; width:fit-content; padding:7px 12px; border-radius:999px; background:color-mix(in srgb, var(--primary-50) 68%, white 32%); color:var(--primary-700); font-size:0.84rem; font-weight:700; }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:20px; }
+    .faq-item { border:1px solid var(--border-default); border-radius:14px; background:var(--bg-body); padding:16px 18px; }
+    .faq-item summary { cursor:pointer; font-weight:700; color:var(--text-heading); line-height:1.5; }
+    .faq-item p { margin:12px 0 0; }
+    @media (max-width: 768px) {
+      .landing-page { padding-top: 44px; }
+      .landing-hero, .landing-card-page, .landing-note, .landing-link { padding: 20px 18px; }
     }
   </style>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"서울 치과 병원찾기","url":"https://hospital-ranking.kr/seoul-dental.html","description":"임플란트, 교정, 보철 기준으로 서울 치과 탐색 흐름을 정리했습니다."}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"병원찾기","item":"https://hospital-ranking.kr/"},{"@type":"ListItem","position":2,"name":"서울 치과 병원찾기","item":"https://hospital-ranking.kr/seoul-dental.html"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"서울 치과 병원찾기 페이지는 어떻게 활용하면 좋나요?","acceptedAnswer":{"@type":"Answer","text":"서울 치과 병원찾기 페이지는 검색 전에 비교 기준을 빠르게 정리하는 참고 페이지입니다. 서울 치과 검색 결과를 보기 전에 방문 목적과 운영조건을 먼저 정리하면 결과를 훨씬 빠르게 좁힐 수 있습니다."}},{"@type":"Question","name":"방문 전에 무엇을 먼저 확인해야 하나요?","acceptedAnswer":{"@type":"Answer","text":"접수 마감 시간, 실제 진료 가능 여부, 준비해야 할 검사 결과나 복용약 정보를 먼저 확인하는 것이 좋습니다. 임플란트 가이드도 함께 보면 준비 순서를 정리하는 데 도움이 됩니다."}},{"@type":"Question","name":"이 페이지 정보만으로 병원을 결정해도 되나요?","acceptedAnswer":{"@type":"Answer","text":"아닙니다. 이 페이지는 비교를 위한 참고 정보입니다. 최종 방문 전에는 병원 운영시간, 접수 가능 여부, 비용과 검사 범위를 병원에 직접 다시 확인하는 것을 권장합니다."}}]}</script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1441018945572157" crossorigin="anonymous"></script>
 </head>
 <body class="light-mode">
-  <header class="header" id="header">
+  <header class="header">
     <div class="header-inner">
-      <a href="index.html" class="logo">
-        <span class="logo-icon">?猷?/span>
-        <span class="gradient-text">癰귣쵐?앾㎕?섎┛</span>
-      </a>
-      <nav class="nav-links" id="nav-links">
-        <a href="index.html#ranking">癰귣쵐?앾쭗?몄쨯</a>
-        <a href="guide.html">椰꾨떯而?揶쎛??諭?/a>
-        <a href="about.html">????????뻣</a>
+      <a href="index.html" class="logo"><span class="logo-icon">🏥</span><span class="gradient-text">병원찾기</span></a>
+      <nav class="nav-links">
+        <a href="index.html#ranking">병원목록</a>
+        <a href="guide.html">건강 가이드</a>
+        <a href="about.html">사이트 소개</a>
       </nav>
     </div>
   </header>
-
   <main class="container landing-page">
     <section class="landing-hero fade-up visible">
-      <span class="landing-badge">??뽰뒻 筌왖??燁살꼵???癒?퉳</span>
-      <h1 style="margin-top:14px;">??뽰뒻 燁살꼵??癰귣쵐?앾㎕?섎┛</h1>
-      <p class="section-desc" style="margin-top:12px;">??뽰뒻?癒?퐣 燁살꼵?든몴?筌≪뼔??????癒?뮉 ?袁る탣???? ?대Ŋ?? ????? ?겸뫗??燁살꼶利븝㎗?롮쓥 獄쎻뫖揆 筌뤴뫗????브쑬梨??野껋럩??첎? 筌띾‘???덈뼄. ????륁뵠筌왖??筌왖????筌욊쑬利뷸⑥눖? ?믪눘? ?リ낱?녔? ?醫롮뒄??筌욊쑬利?????? ?怨룸뼖 ??筌ｋ똾寃????硫명돱筌왖 ??甕곕뜆肉??類ㅼ뵥??????덈즲嚥??類ｂ봺???癒?퉳 ??륁뵠筌왖??낅빍??</p>
-      <div class="hero-actions" style="margin-top:20px;">
-        <a href="index.html?region=??뽰뒻&department=dental#ranking" class="btn btn-primary">??뽰뒻 燁살꼵??筌뤴뫖以?癰귣떯由?/a>
-        <a href="guide-implant.html" class="btn btn-outline">?袁る탣????揶쎛??諭?/a>
+      <span class="landing-badge">서울 치과</span>
+      <h1 style="margin-top:14px;">서울 치과 병원찾기</h1>
+      <p class="section-desc" style="margin-top:12px;">임플란트, 교정, 보철 기준으로 서울 치과 탐색 흐름을 정리했습니다.</p>
+      <div class="hero-actions">
+        <a href="index.html?keyword=%EC%84%9C%EC%9A%B8%20%EC%B9%98%EA%B3%BC#search-results" class="btn btn-primary">서울 치과 검색</a>
+        <a href="guide-implant.html" class="btn btn-outline">임플란트 가이드</a>
       </div>
     </section>
-
     <section class="landing-grid">
       <article class="landing-card-page">
-        <h3>????野껋럩???믪눘? ?類ㅼ뵥</h3>
+        <h3>이럴 때 먼저 보세요</h3>
         <ul>
-          <li>?袁る탣?????怨룸뼖 ??CT ?Ρ딆겫 ????? 癰귣똻荑??怨룸뼖 ?癒?カ</li>
-          <li>?대Ŋ???怨룸뼖 ??獄쏆뮇?????, 疫꿸퀗而? ?醫??關????덇땀</li>
-          <li>?????獄쏆뮇?귨㎗?롮쓥 ?諭??筌ｌ꼷??揶쎛??????? ???궗 ??덇퐨</li>
-          <li>筌욊낯???獄쎻뫖揆??筌띾∥?롳쭖???⑥퍢筌욊쑬利?? ?醫롮뒄???臾믩땾 ??볦퍢</li>
+          <li>서울 지역에서 치과 관련 병원을 찾을 때 비교 기준을 먼저 정리하고 싶은 경우</li>
+          <li>임플란트처럼 방문 목적이 비교적 분명한 경우</li>
+          <li>토요일, 야간, 일요일 진료나 주차 같은 운영조건을 함께 보고 싶은 경우</li>
         </ul>
       </article>
       <article class="landing-card-page">
-        <h3>??뽰뒻?癒?퐣 筌띾‘??癰귣???疫꿸퀣?</h3>
+        <h3>방문 전 체크</h3>
         <ul>
-          <li>揶쏅베沅? 筌띾뜇猷? ??ル솁筌ｌ꼶???臾롫젏???ル뿭? 筌왖?????</li>
-          <li>筌왖??륁퓢 ?臾롫젏, 雅뚯눘媛???덇땀, 癰귣똾?????疫???덇퐨</li>
-          <li>?λ뜆彛???뺤첒?? 疫꿸퀣?????걗??곗춳夷똂T ?Ρ딆겫癰?筌왖筌????</li>
-          <li>燁살꼷竊? 癰귣똻荑? ?대Ŋ?숋㎗?롮쓥 ?紐? 筌욊쑬利?獄쎻뫚堉??筌띿쉶?쀯쭪?</li>
+          <li>접수 마감 시간과 실제 진료 가능 여부</li>
+          <li>기존 검사 결과, 복용약, 이전 진료기록 준비 여부</li>
+          <li>주차, 대중교통, 보호자 동행처럼 실제 방문 동선에 필요한 조건</li>
         </ul>
       </article>
       <article class="landing-card-page">
-        <h3>獄쏅뗀以??怨뚭퍙??롫뮉 ??? ??륁뵠筌왖</h3>
+        <h3>검색 팁</h3>
         <ul>
-          <li><a href="index.html?region=??뽰뒻&department=dental#ranking">??뽰뒻 燁살꼵??癰귣쵐??筌뤴뫖以?/a></li>
-          <li><a href="guide-implant.html">?袁る탣?????怨룸뼖 ??筌ｋ똾寃?/a></li>
-          <li><a href="guide-ortho.html">?대Ŋ??燁살꼵??餓Β??揶쎛??諭?/a></li>
-          <li><a href="detail.html?id=6">??뽰뒻 燁살꼵????됰뻻 ?怨멸쉭 癰귣떯由?/a></li>
+          <li>검색창에 <strong>서울 치과</strong>처럼 지역과 진료과를 함께 입력해 보세요.</li>
+          <li><strong>서울 임플란트</strong>처럼 증상이나 목적을 붙이면 결과를 더 빨리 좁힐 수 있습니다.</li>
+          <li><strong>서울 치과 토요일</strong>처럼 운영조건을 함께 넣으면 실제 방문 가능한 병원을 찾기 쉬워집니다.</li>
         </ul>
       </article>
     </section>
-
     <section class="landing-link-grid">
-      <a href="index.html?region=??뽰뒻&department=dental&keyword=?袁る탣????ranking" class="landing-link">
-        <span class="landing-badge">?怨뱀넺癰?筌≪뼐由?/span>
-        <strong>??뽰뒻 ?袁る탣????燁살꼵??筌≪뼐由?/strong>
-        <span>?Ρ딆겫, 癰귣똻荑? ???궗 ??살구???袁⑹뒄??????癒? ?袁る립 筌욊쑴??筌띻낱寃??낅빍??</span>
+      <a href="index.html?keyword=%EC%84%9C%EC%9A%B8%20%EC%B9%98%EA%B3%BC#search-results" class="landing-link">
+        <span class="landing-badge">기본 검색</span>
+        <strong>서울 치과 검색 결과 보기</strong>
+        <span>임플란트, 교정, 보철 기준으로 서울 치과 탐색 흐름을 정리했습니다.</span>
       </a>
-      <a href="index.html?region=??뽰뒻&department=dental&keyword=?대Ŋ??ranking" class="landing-link">
-        <span class="landing-badge">?怨뱀넺癰?筌≪뼐由?/span>
-        <strong>??뽰뒻 ?대Ŋ??燁살꼵??筌≪뼐由?/strong>
-        <span>?怨룸뼖 疫꿸퀗而? ?醫??關?? 獄쏆뮇?????????ｍ뜞 癰귣????野껋럩???筌띿쉸??筌띻낱寃??낅빍??</span>
+      <a href="index.html?keyword=%EC%84%9C%EC%9A%B8%20%EC%B9%98%EA%B3%BC%20%ED%86%A0%EC%9A%94%EC%9D%BC#search-results" class="landing-link">
+        <span class="landing-badge">운영조건 검색</span>
+        <strong>서울 치과 토요일 바로 찾기</strong>
+        <span>지역, 진료과, 운영조건을 함께 넣어 실제 방문 가능한 병원을 빠르게 좁히는 데 도움이 됩니다.</span>
       </a>
-      <a href="index.html?region=??뽰뒻&department=dental&sort=rating#ranking" class="landing-link">
-        <span class="landing-badge">筌뤴뫖以?獄쏅뗀以덂첎?疫?/span>
-        <strong>??뽰뒻 燁살꼵????깆젎??癰귣떯由?/strong>
-        <span>?⑤벀而??怨쀬뵠?怨? ??? ?類ｂ봺 疫꿸퀣???獄쏅?源??곗쨮 ?믪눘? ??쑨???????됰뮸??덈뼄.</span>
-      </a>
-    </section>
-
-    <section class="hospital-spotlight-grid">
-      <a href="detail.html?id=6" class="hospital-spotlight-card">
-        <span class="landing-badge">??뽰뒻 燁살꼵????됰뻻</span>
-        <strong>沃섎챷???쇳뒄??/strong>
-        <p class="hospital-spotlight-meta">??뽰뒻 筌띾뜇猷룡뤃?疫꿸퀣???곗쨮 ??쑨???????덈뮉 燁살꼵????됰뻻??낅빍?? ?대Ŋ?? 癰귣똻荑? ?醫롮뒄??筌욊쑬利??癒?カ????ｍ뜞 ?類ㅼ뵥??띾┛ ?ル뿭???덈뼄.</p>
-        <div class="hospital-spotlight-tags"><span>燁살꼵???륁뜚</span><span>??뽰뒻 筌띾뜇猷?/span><span>?醫롮뒄??筌욊쑬利?/span></div>
-      </a>
-      <a href="index.html?region=??뽰뒻&department=dental&sort=reviews#ranking" class="hospital-spotlight-card">
-        <span class="landing-badge">??쑨??筌뤴뫖以?/span>
-        <strong>??뽰뒻 燁살꼵????곸겫 鈺곌퀗援???쑨??/strong>
-        <p class="hospital-spotlight-meta">??뽰뒻 筌왖??燁살꼵?든몴??袁㏓┛, ?醫롮뒄??筌욊쑬利? ??⑥퍢 ??곸겫 疫꿸퀣???곗쨮 ??甕곕뜆肉???쑨???롮젻??野껋럩???筌띿쉶??筌욊쑴??燁삳?諭??낅빍??</p>
-        <div class="hospital-spotlight-tags"><span>??뽰뒻 燁살꼵??/span><span>??곸겫 鈺곌퀗援?/span><span>??쑨??疫꿸퀣?</span></div>
-      </a>
-      <a href="guide-implant.html" class="hospital-spotlight-card">
-        <span class="landing-badge">餓Β??揶쎛??諭?/span>
-        <strong>?袁る탣?????怨룸뼖 ??筌ｋ똾寃?/strong>
-        <p class="hospital-spotlight-meta">CT ?Ρ딆겫, ??쑴???怨룸뼖, 癰귣똻荑??④쑵????믪눘? ?類ｂ봺??????뽰뒻 燁살꼵??筌뤴뫖以??곗쨮 ??猷??롫뮉 ?癒?カ??筌띿쉶??揶쎛??諭??낅빍??</p>
-        <div class="hospital-spotlight-tags"><span>?袁る탣????/span><span>CT ?Ρ딆겫</span><span>?怨룸뼖 餓Β??/span></div>
+      <a href="guide-implant.html" class="landing-link">
+        <span class="landing-badge">건강 가이드</span>
+        <strong>임플란트 가이드</strong>
+        <span>임플란트, 교정, 보철 중심으로 준비할 내용을 먼저 정리해 두면 검색 결과를 해석하기가 쉬워집니다.</span>
       </a>
     </section>
-
-    <section class="landing-grid" style="margin-top:28px;">
-      <article class="landing-card-page">
-        <h3>??뽰뒻 燁살꼵?든몴??⑥쥓? ????쇰땾??띾┛ ?????봔??/h3>
-        <p>??뽰뒻 燁살꼵???癒?퉳?癒?퐣??癰귣쵐????已??援??袁㏓┛ ??롮춸 癰귣떯??獄쏅뗀以???됰튋??롫뮉 野껋럩??첎? 筌띾‘?筌? ??쇱젫 ?怨룸뼖 筌띾슣??袁⑤뮉 燁살꼶利?筌뤴뫗?삥?餓Β???怨밴묶??????苡??ル슣???몃빍??</p>
-        <ul style="margin-top:12px;">
-          <li>?袁る탣?????怨룸뼖????CT ?Ρ딆겫 揶쎛??????? 癰귣똻荑???살구 ?癒?カ???믪눘? 癰귣????紐꾩뵠 ?ル뿭???덈뼄.</li>
-          <li>?대Ŋ???怨룸뼖????獄쏆뮇??揶쎛?關苑? ?醫??關????살구, ??媛묋눧?雅뚯눊由곁몴??믪눘? ?類ㅼ뵥??롫뮉 筌잛럩????μ몛?怨몄뿯??덈뼄.</li>
-          <li>?????獄쏆뮇???疫뀀맩苑????쵄 筌욊쑬利???諭??筌ｌ꼷??揶쎛??????? 筌띾뜆????域뮤揶쎛 ??덇퐨????餓λ쵐???????됰뮸??덈뼄.</li>
-        </ul>
-      </article>
-      <article class="landing-card-page">
-        <h3>筌뤴뫖以??癰????곕뗄荑??롫뮉 ??쑨????뽮퐣</h3>
-        <p>??뽰뒻 燁살꼵??筌뤴뫖以?? 癰귣똾??筌왖?? ?醫롮뒄??筌욊쑬利? ?귐됰윮 ?? ?袁ⓓ????? ?믪눘? 癰귣떯????좊선筌왖筌왖筌? ??쇱젫 ?醫뤾문?? ?袁⑥삋 ??뽮퐣揶쎛 ????쇱뒠?怨몄뿯??덈뼄.</p>
-        <ul style="margin-top:12px;">
-          <li>1??ｍ? 揶쏅베沅? 筌띾뜇猷? ??ル솁筌ｌ꼶????쇱젫 獄쎻뫖揆 揶쎛?館釉???븐넞亦낅슣???믪눘? ?リ낱???덈뼄.</li>
-          <li>2??ｍ? ?袁る탣???? ?대Ŋ?? 癰귣똻荑? ??곗뺘 筌욊쑬利븝㎗?롮쓥 筌뤴뫗????類λ???덈뼄.</li>
-          <li>3??ｍ? ?醫롮뒄??뗫９鍮욃첎苑룸９竊쒙㎕?揶쎛????????類ㅼ뵥??獄쎻뫖揆 ?봔??곸뱽 餓κ쑴???덈뼄.</li>
-          <li>4??ｍ? ?怨멸쉭 ??륁뵠筌왖?癒?퐣 ?貫?? FAQ, ?臾믩땾 ??덇땀??癰귣떯??筌ㅼ뮇伊??袁⑤궖??餓κ쑴???덈뼄.</li>
-        </ul>
-      </article>
-      <article class="landing-card-page">
-        <h3>?怨룸뼖 ??筌롫뗀????癒?늺 ?ル뿭? ?類ｋ궖</h3>
-        <p>燁살꼵???筌앹빘湲???살구癰귣???疫꿸퀣???癒?┷ 餓Β??쑨? ?怨룸뼖 ??얜즲????苡??ル슣???몃빍?? ?袁⑥삋 ??곸뒠筌??類ｂ봺??揶쎛??筌?獄쎻뫖揆 獄쎛?袁? ???わ쭪臾먮빍??</p>
-        <ul style="margin-top:12px;">
-          <li>???쵄 ?봔?袁? ??뽰삂 ??뽰젎, 筌△몿而⒴쳞怨뺢돌 ??ｊ탢?????뻼??沃섏눊而??? ???</li>
-          <li>疫꿸퀣?????걗??곗춳, CT, ?????곗춦 ?癒?뮉 ?겸뫗??燁살꼶利?疫꿸퀡以?/li>
-          <li>癰귣벊??餓λ쵐???? ???녔⑥쥙??癰귣벊?????, ?袁⑸뻿 ???</li>
-          <li>癰귣똻荑뗭쮯?대Ŋ?숈쮯?袁る탣????餓??얜똻毓??揶쎛??亦낃낫???? ??餓?筌롫뗀??/li>
-        </ul>
-      </article>
+    <section class="landing-note" style="margin-top:28px;">
+      <h3>비교 기준 정리</h3>
+      <p>서울 치과 병원찾기 페이지는 광고성 추천이 아니라 비교 기준을 잡기 위한 설명형 랜딩입니다. 같은 지역이라도 생활권, 접수 마감, 주차 여부, 토요일 또는 야간 운영 여부에 따라 실제 방문 편의가 크게 달라질 수 있습니다.</p>
+      <p style="margin-top:12px;">특히 임플란트, 교정, 보철처럼 방문 목적을 먼저 정리한 뒤 검색하면 목록을 훨씬 빠르게 좁힐 수 있습니다. 최종 방문 전에는 병원에 직접 연락해 진료 가능 여부와 준비사항을 다시 확인하는 것을 권장합니다.</p>
     </section>
-
-    <section class="landing-link-grid" style="margin-top:28px;">
-      <a href="seoul-ophthalmology.html" class="landing-link">
-        <span class="landing-badge">??ｍ뜞 癰귣떯由?/span>
-        <strong>??뽰뒻 ??뉖궢 癰귣쵐?앾㎕?섎┛</strong>
-        <span>揶쏆늿? ??뽰뒻 筌왖??肉????뉖궢 ?癒?퉳???袁⑹뒄??野껋럩??獄쏅뗀以???곷선????쑨???????됰뮸??덈뼄.</span>
-      </a>
-      <a href="busan-dental.html" class="landing-link">
-        <span class="landing-badge">??ｍ뜞 癰귣떯由?/span>
-        <strong>?봔??燁살꼵??癰귣쵐?앾㎕?섎┛</strong>
-        <span>燁살꼵???癒?퉳 ?닌듼쒐몴???삘뀲 筌왖??????쑨?????筌〓㈇???띾┛ ?ル뿭? ?대Ŋ媛?筌띻낱寃??낅빍??</span>
-      </a>
-      <a href="index.html?region=??뽰뒻&department=dental#ranking" class="landing-link">
-        <span class="landing-badge">筌뤴뫖以?獄쏅뗀以덂첎?疫?/span>
-        <strong>??뽰뒻 燁살꼵???袁⑷퍥 筌뤴뫖以?/strong>
-        <span>?袁り숲揶쎛 ?怨몄뒠??癰귣쵐??筌뤴뫖以??곗쨮 獄쏅뗀以???猷????쑨?녕몴???곷선揶?????됰뮸??덈뼄.</span>
-      </a>
+    <section class="landing-note" style="margin-top:28px;">
+      <h3>자주 묻는 질문</h3>
+      <div style="display:flex; flex-direction:column; gap:12px; margin-top:14px;">
+        <details open class="faq-item"><summary>서울 치과 병원찾기 페이지는 어떻게 활용하면 좋나요?</summary><p>서울 치과 병원찾기 페이지는 검색 전에 비교 기준을 빠르게 정리하는 참고 페이지입니다. 서울 치과 검색 결과를 보기 전에 방문 목적과 운영조건을 먼저 정리하면 결과를 훨씬 빠르게 좁힐 수 있습니다.</p></details><details class="faq-item"><summary>방문 전에 무엇을 먼저 확인해야 하나요?</summary><p>접수 마감 시간, 실제 진료 가능 여부, 준비해야 할 검사 결과나 복용약 정보를 먼저 확인하는 것이 좋습니다. 임플란트 가이드도 함께 보면 준비 순서를 정리하는 데 도움이 됩니다.</p></details><details class="faq-item"><summary>이 페이지 정보만으로 병원을 결정해도 되나요?</summary><p>아닙니다. 이 페이지는 비교를 위한 참고 정보입니다. 최종 방문 전에는 병원 운영시간, 접수 가능 여부, 비용과 검사 범위를 병원에 직접 다시 확인하는 것을 권장합니다.</p></details>
+      </div>
     </section>
-
-    <section class="landing-note">
-      <h3>獄쎻뫖揆 ??筌롫뗀??/h3>
-      <p>燁살꼵???燁살꼶利?甕곕뗄????怨뺤뵬 筌?獄쎻뫖揆???怨룸뼖 獄쎛?袁? ??苡????わ쭪臾먮빍?? 筌앹빘湲???뽰삂 ??뽰젎, ?븍뜇????봔?? 筌ㅼ뮄???Ρ딆겫 ???, 癰귣벊????뚯뱽 筌롫뗀???揶쎛筌??怨룸뼖 ??얜즲揶쎛 ??뫀?わ쭪臾먮빍?? 癰???륁뵠筌왖????뽰뒻 筌왖??燁살꼵???癒?퉳???類ｋ뮉 筌〓㈇????륁뵠筌왖??흭, ??쇱젫 燁살꼶利?野껉퀣??? ??????롮┷疫꿸퀗???筌욊낯???怨룸뼖???類ㅼ뵥??곷튊 ??몃빍??</p>
+    <section class="landing-note" style="margin-top:28px;">
+      <h3>관련 페이지</h3>
+      <div class="landing-link-grid" style="margin-top:16px;">
+        <a href="seoul-ophthalmology.html" class="landing-link"><span class="landing-badge">서울 안과</span><strong>서울 안과 병원찾기</strong><span>시력검사와 백내장 상담 기준으로 서울 안과 비교 흐름을 묶었습니다.</span></a><a href="seoul-internal.html" class="landing-link"><span class="landing-badge">서울 내과</span><strong>서울 내과 병원찾기</strong><span>건강검진 상담, 소화기 증상, 만성질환 추적 기준으로 서울 내과를 정리했습니다.</span></a><a href="seoul-obgyn.html" class="landing-link"><span class="landing-badge">서울 산부인과</span><strong>서울 산부인과 병원찾기</strong><span>여성검진, 자궁경부검사, 초음파 상담, 부정출혈 체크 기준으로 서울 산부인과 흐름을 정리했습니다.</span></a>
+      </div>
+    </section>
+    <section class="landing-note" style="margin-top:28px;">
+      <h3>안내와 주의사항</h3>
+      <p>이 페이지는 2026년 6월 기준으로 구조와 안내 문구를 정리한 참고 페이지입니다. 실제 진료 가능 여부, 접수 마감, 비용, 검사 범위는 병원마다 다를 수 있으므로 방문 전 직접 확인해 주세요.</p>
+      <p style="margin-top:12px;">응급 상황이나 증상 악화, 수술 결정처럼 즉시 판단이 필요한 경우에는 이 페이지 정보만으로 결정하지 말고 해당 병원이나 의료진과 직접 상담하는 것이 안전합니다.</p>
     </section>
   </main>
-
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-bottom">
-        <p>&copy; 2026 癰귣쵐?앾㎕?섎┛. ?⑤벀而??怨쀬뵠?怨? ??덇땀 ?꾩꼹?쀯㎘醫? 獄쏅?源??곗쨮 ?類ｂ봺???癒?퉳???類ｋ궖 ??륁뵠筌왖??낅빍??</p>
+        <p>&copy; 2026 병원찾기. 병원 검색과 진료 정보 탐색을 위한 안내 서비스입니다.</p>
+        <p>운영시간, 접수마감, 진료 가능 여부는 변동될 수 있으므로 방문 전 병원에 직접 확인하는 것을 권장합니다.</p>
       </div>
     </div>
   </footer>
-  <script src="js/landing-pages.js?v=1"></script>
-  <script src="js/landing-faq.js?v=1"></script>
-  <script src="js/landing-trust.js?v=1"></script>
 </body>
 </html>

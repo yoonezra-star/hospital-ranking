@@ -3,74 +3,130 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>서울 비뇨의학과 병원찾기 | 요로결석 배뇨장애 전립선 상담 체크</title>
-  <meta name="description" content="서울에서 비뇨의학과 병원을 찾을 때 참고할 핵심 기준을 정리했습니다. 요로결석, 배뇨장애, 전립선 상담, 여성 요실금, 초진 외래 준비 흐름을 함께 확인해 보세요.">
+  <title>서울 비뇨의학과 병원찾기 - 병원찾기</title>
+  <meta name="description" content="요로결석, 배뇨장애, 전립선 상담, 여성 요실금 기준으로 서울 비뇨의학과 흐름을 정리했습니다.">
   <link rel="canonical" href="https://hospital-ranking.kr/seoul-urology.html">
   <meta name="robots" content="index,follow">
-  <link rel="stylesheet" href="css/style.css?v=5">
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"CollectionPage","name":"서울 비뇨의학과 병원찾기","url":"https://hospital-ranking.kr/seoul-urology.html","description":"서울 비뇨의학과 외래 비교와 배뇨장애·결석 상담 준비 정보를 모은 랜딩 페이지"}
-  </script>
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"병원찾기","item":"https://hospital-ranking.kr/"},{"@type":"ListItem","position":2,"name":"서울 비뇨의학과 병원찾기","item":"https://hospital-ranking.kr/seoul-urology.html"}]}
-  </script>
+  <link rel="stylesheet" href="css/style.css?v=6">
   <style>
     .landing-page { max-width: 1120px; padding-top: 56px; }
-    .landing-hero { padding: 36px; border: 1px solid var(--border-default); border-radius: 24px; background: radial-gradient(circle at top right, rgba(48, 156, 142, 0.18), transparent 28%), linear-gradient(135deg, color-mix(in srgb, var(--bg-card) 84%, white 16%), color-mix(in srgb, var(--bg-body) 90%, white 10%)); margin-bottom: 28px; }
-    .landing-grid, .landing-link-grid, .hospital-spotlight-grid { display: grid; gap: 20px; }
+    .landing-hero { padding: 36px; border: 1px solid var(--border-default); border-radius: 24px; background: radial-gradient(circle at top right, rgba(24, 124, 103, 0.16), transparent 28%), linear-gradient(135deg, color-mix(in srgb, var(--bg-card) 84%, white 16%), color-mix(in srgb, var(--bg-body) 90%, white 10%)); margin-bottom: 28px; }
+    .landing-grid, .landing-link-grid { display: grid; gap: 20px; }
     .landing-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-bottom: 28px; }
-    .landing-link-grid, .hospital-spotlight-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-    .hospital-spotlight-grid { margin-top: 28px; }
+    .landing-link-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
     .landing-card-page, .landing-note { border: 1px solid var(--border-default); border-radius: 20px; background: var(--bg-card); box-shadow: var(--shadow-xs); padding: 24px; }
     .landing-card-page ul { padding-left: 18px; margin: 0; }
-    .landing-card-page li, .landing-card-page p, .landing-note p { color: var(--text-body); line-height: 1.7; }
-    .landing-link, .hospital-spotlight-card { display:flex; flex-direction:column; gap:12px; min-height:100%; padding:22px; border:1px solid var(--border-default); border-radius:18px; background:var(--bg-card); text-decoration:none; color:inherit; box-shadow:var(--shadow-xs); }
-    .landing-badge { display:inline-flex; width:fit-content; padding:7px 12px; border-radius:999px; background:color-mix(in srgb, #daf5ef 72%, white 28%); color:#187568; font-size:0.84rem; font-weight:700; }
-    .hospital-spotlight-meta { color:var(--text-muted); font-size:0.92rem; line-height:1.6; }
-    .hospital-spotlight-tags { display:flex; flex-wrap:wrap; gap:8px; }
-    .hospital-spotlight-tags span { padding:6px 10px; border-radius:999px; background:color-mix(in srgb, var(--bg-body) 78%, white 22%); border:1px solid var(--border-default); color:var(--text-body); font-size:0.83rem; }
+    .landing-card-page li, .landing-card-page p, .landing-note p { color: var(--text-body); line-height: 1.72; }
+    .landing-link { display:flex; flex-direction:column; gap:12px; min-height:100%; padding:22px; border:1px solid var(--border-default); border-radius:18px; background:var(--bg-card); text-decoration:none; color:inherit; box-shadow:var(--shadow-xs); }
+    .landing-badge { display:inline-flex; width:fit-content; padding:7px 12px; border-radius:999px; background:color-mix(in srgb, var(--primary-50) 68%, white 32%); color:var(--primary-700); font-size:0.84rem; font-weight:700; }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:20px; }
+    .faq-item { border:1px solid var(--border-default); border-radius:14px; background:var(--bg-body); padding:16px 18px; }
+    .faq-item summary { cursor:pointer; font-weight:700; color:var(--text-heading); line-height:1.5; }
+    .faq-item p { margin:12px 0 0; }
+    @media (max-width: 768px) {
+      .landing-page { padding-top: 44px; }
+      .landing-hero, .landing-card-page, .landing-note, .landing-link { padding: 20px 18px; }
+    }
   </style>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"서울 비뇨의학과 병원찾기","url":"https://hospital-ranking.kr/seoul-urology.html","description":"요로결석, 배뇨장애, 전립선 상담, 여성 요실금 기준으로 서울 비뇨의학과 흐름을 정리했습니다."}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"병원찾기","item":"https://hospital-ranking.kr/"},{"@type":"ListItem","position":2,"name":"서울 비뇨의학과 병원찾기","item":"https://hospital-ranking.kr/seoul-urology.html"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"서울 비뇨의학과 병원찾기 페이지는 어떻게 활용하면 좋나요?","acceptedAnswer":{"@type":"Answer","text":"서울 비뇨의학과 병원찾기 페이지는 검색 전에 비교 기준을 빠르게 정리하는 참고 페이지입니다. 서울 비뇨의학과 검색 결과를 보기 전에 방문 목적과 운영조건을 먼저 정리하면 결과를 훨씬 빠르게 좁힐 수 있습니다."}},{"@type":"Question","name":"방문 전에 무엇을 먼저 확인해야 하나요?","acceptedAnswer":{"@type":"Answer","text":"접수 마감 시간, 실제 진료 가능 여부, 준비해야 할 검사 결과나 복용약 정보를 먼저 확인하는 것이 좋습니다. 비뇨의학과 가이드도 함께 보면 준비 순서를 정리하는 데 도움이 됩니다."}},{"@type":"Question","name":"이 페이지 정보만으로 병원을 결정해도 되나요?","acceptedAnswer":{"@type":"Answer","text":"아닙니다. 이 페이지는 비교를 위한 참고 정보입니다. 최종 방문 전에는 병원 운영시간, 접수 가능 여부, 비용과 검사 범위를 병원에 직접 다시 확인하는 것을 권장합니다."}}]}</script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1441018945572157" crossorigin="anonymous"></script>
 </head>
 <body class="light-mode">
-  <header class="header"><div class="header-inner"><a href="index.html" class="logo"><span class="logo-icon">병</span><span class="gradient-text">병원찾기</span></a><nav class="nav-links"><a href="index.html#ranking">병원목록</a><a href="guide.html">건강 가이드</a><a href="about.html">사이트 소개</a></nav></div></header>
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo"><span class="logo-icon">🏥</span><span class="gradient-text">병원찾기</span></a>
+      <nav class="nav-links">
+        <a href="index.html#ranking">병원목록</a>
+        <a href="guide.html">건강 가이드</a>
+        <a href="about.html">사이트 소개</a>
+      </nav>
+    </div>
+  </header>
   <main class="container landing-page">
     <section class="landing-hero fade-up visible">
-      <span class="landing-badge">서울 비뇨의학과 탐색</span>
+      <span class="landing-badge">서울 비뇨의학과</span>
       <h1 style="margin-top:14px;">서울 비뇨의학과 병원찾기</h1>
-      <p class="section-desc" style="margin-top:12px;">서울에서 비뇨의학과를 찾는 경우는 요로결석 통증, 배뇨 불편, 전립선 상담, 여성 요실금, 소변검사와 초진 외래 준비처럼 방문 전에 질문을 정리해야 하는 경우가 많습니다. 이 페이지는 서울 비뇨의학과 목록과 방문 전 체크 포인트를 한 번에 연결하는 정적 랜딩 페이지입니다.</p>
-      <div class="hero-actions" style="margin-top:20px;"><a href="index.html?region=서울&department=urology#ranking" class="btn btn-primary">서울 비뇨의학과 목록 보기</a><a href="guide-urology.html" class="btn btn-outline">비뇨의학과 가이드</a></div>
+      <p class="section-desc" style="margin-top:12px;">요로결석, 배뇨장애, 전립선 상담, 여성 요실금 기준으로 서울 비뇨의학과 흐름을 정리했습니다.</p>
+      <div class="hero-actions">
+        <a href="index.html?keyword=%EC%84%9C%EC%9A%B8%20%EB%B9%84%EB%87%A8%EC%9D%98%ED%95%99%EA%B3%BC#search-results" class="btn btn-primary">서울 비뇨의학과 검색</a>
+        <a href="guide-urology.html" class="btn btn-outline">비뇨의학과 가이드</a>
+      </div>
     </section>
     <section class="landing-grid">
-      <article class="landing-card-page"><h3>먼저 보는 기준</h3><ul><li>결석 통증인지 배뇨장애 상담인지 방문 목적 구분</li><li>초음파, 소변검사, 혈액검사 연계 가능 여부 확인</li><li>토요일 진료, 접수 마감, 야간 외래 여부 체크</li><li>복용약, 통증 시작 시점, 배뇨 패턴 메모 준비 여부</li></ul></article>
-      <article class="landing-card-page"><h3>서울권 비교 포인트</h3><ul><li>강남, 종로, 송파 등 생활권별 이동 동선과 주차 접근성</li><li>전립선 상담 중심 외래인지 결석·배뇨 증상 외래인지 구분</li><li>직장인 방문이 많다면 야간 또는 토요일 외래 여부 확인</li><li>초진 후 재진 추적, 검사 설명, 약물 조정 흐름이 어떤지 체크</li></ul></article>
-      <article class="landing-card-page"><h3>바로 연결되는 페이지</h3><ul><li><a href="index.html?region=서울&department=urology#ranking">서울 비뇨의학과 목록</a></li><li><a href="guide-urology.html">비뇨의학과 가이드</a></li><li><a href="index.html?keyword=요로결석#ranking">요로결석 병원 찾기</a></li><li><a href="contact.html">정보 수정 요청하기</a></li></ul></article>
+      <article class="landing-card-page">
+        <h3>이럴 때 먼저 보세요</h3>
+        <ul>
+          <li>서울 지역에서 비뇨의학과 관련 병원을 찾을 때 비교 기준을 먼저 정리하고 싶은 경우</li>
+          <li>요로결석처럼 방문 목적이 비교적 분명한 경우</li>
+          <li>토요일, 야간, 일요일 진료나 주차 같은 운영조건을 함께 보고 싶은 경우</li>
+        </ul>
+      </article>
+      <article class="landing-card-page">
+        <h3>방문 전 체크</h3>
+        <ul>
+          <li>접수 마감 시간과 실제 진료 가능 여부</li>
+          <li>기존 검사 결과, 복용약, 이전 진료기록 준비 여부</li>
+          <li>주차, 대중교통, 보호자 동행처럼 실제 방문 동선에 필요한 조건</li>
+        </ul>
+      </article>
+      <article class="landing-card-page">
+        <h3>검색 팁</h3>
+        <ul>
+          <li>검색창에 <strong>서울 비뇨의학과</strong>처럼 지역과 진료과를 함께 입력해 보세요.</li>
+          <li><strong>서울 요로결석</strong>처럼 증상이나 목적을 붙이면 결과를 더 빨리 좁힐 수 있습니다.</li>
+          <li><strong>서울 비뇨의학과 주차</strong>처럼 운영조건을 함께 넣으면 실제 방문 가능한 병원을 찾기 쉬워집니다.</li>
+        </ul>
+      </article>
     </section>
     <section class="landing-link-grid">
-      <a href="index.html?region=서울&department=urology&keyword=요로결석#ranking" class="landing-link"><span class="landing-badge">상황별 찾기</span><strong>서울 요로결석 상담 병원 찾기</strong><span>옆구리 통증, 결석 의심, 응급실 이후 외래 비교처럼 요로결석 관련 상담을 찾을 때 먼저 보기 좋은 진입 링크입니다.</span></a>
-      <a href="index.html?region=서울&department=urology&keyword=배뇨#ranking" class="landing-link"><span class="landing-badge">상황별 찾기</span><strong>서울 배뇨장애 외래 찾기</strong><span>빈뇨, 잔뇨감, 야간뇨처럼 배뇨 관련 증상을 중심으로 외래를 비교할 때 참고하기 좋습니다.</span></a>
-      <a href="index.html?region=서울&department=urology&keyword=전립선#ranking" class="landing-link"><span class="landing-badge">목록 바로가기</span><strong>서울 전립선 상담 찾기</strong><span>전립선 상담이나 PSA 관련 외래를 찾는 경우 관련 키워드를 적용한 목록으로 바로 이동할 수 있습니다.</span></a>
+      <a href="index.html?keyword=%EC%84%9C%EC%9A%B8%20%EB%B9%84%EB%87%A8%EC%9D%98%ED%95%99%EA%B3%BC#search-results" class="landing-link">
+        <span class="landing-badge">기본 검색</span>
+        <strong>서울 비뇨의학과 검색 결과 보기</strong>
+        <span>요로결석, 배뇨장애, 전립선 상담, 여성 요실금 기준으로 서울 비뇨의학과 흐름을 정리했습니다.</span>
+      </a>
+      <a href="index.html?keyword=%EC%84%9C%EC%9A%B8%20%EB%B9%84%EB%87%A8%EC%9D%98%ED%95%99%EA%B3%BC%20%EC%A3%BC%EC%B0%A8#search-results" class="landing-link">
+        <span class="landing-badge">운영조건 검색</span>
+        <strong>서울 비뇨의학과 주차 바로 찾기</strong>
+        <span>지역, 진료과, 운영조건을 함께 넣어 실제 방문 가능한 병원을 빠르게 좁히는 데 도움이 됩니다.</span>
+      </a>
+      <a href="guide-urology.html" class="landing-link">
+        <span class="landing-badge">건강 가이드</span>
+        <strong>비뇨의학과 가이드</strong>
+        <span>요로결석, 배뇨장애, 전립선 상담, 여성 요실금 중심으로 준비할 내용을 먼저 정리해 두면 검색 결과를 해석하기가 쉬워집니다.</span>
+      </a>
     </section>
-    <section class="hospital-spotlight-grid">
-      <a href="guide-urology.html" class="hospital-spotlight-card"><span class="landing-badge">준비 가이드</span><strong>비뇨의학과 방문 준비 체크</strong><p class="hospital-spotlight-meta">배뇨 불편, 결석, 전립선 상담 전에 정리하면 좋은 증상 기록, 검사 흐름, 질문 포인트를 참고용으로 묶어 두었습니다.</p><div class="hospital-spotlight-tags"><span>요로결석</span><span>배뇨장애</span><span>전립선</span></div></a>
-      <a href="index.html?region=서울&department=urology&sort=reviews#ranking" class="hospital-spotlight-card"><span class="landing-badge">목록 탐색</span><strong>후기순 서울 비뇨의학과 보기</strong><p class="hospital-spotlight-meta">서울 지역 비뇨의학과 목록을 후기 기준으로 먼저 정렬해 비교를 시작할 수 있습니다.</p><div class="hospital-spotlight-tags"><span>서울</span><span>후기순</span><span>외래 비교</span></div></a>
-      <a href="index.html?region=서울&department=urology&keyword=야간#ranking" class="hospital-spotlight-card"><span class="landing-badge">바로 탐색</span><strong>야간 외래 중심으로 찾기</strong><p class="hospital-spotlight-meta">직장인 방문처럼 저녁 시간대 외래가 필요한 경우 관련 키워드를 적용한 목록으로 바로 이동할 수 있습니다.</p><div class="hospital-spotlight-tags"><span>야간 외래</span><span>직장인 방문</span><span>서울</span></div></a>
+    <section class="landing-note" style="margin-top:28px;">
+      <h3>비교 기준 정리</h3>
+      <p>서울 비뇨의학과 병원찾기 페이지는 광고성 추천이 아니라 비교 기준을 잡기 위한 설명형 랜딩입니다. 같은 지역이라도 생활권, 접수 마감, 주차 여부, 토요일 또는 야간 운영 여부에 따라 실제 방문 편의가 크게 달라질 수 있습니다.</p>
+      <p style="margin-top:12px;">특히 요로결석, 배뇨장애, 전립선 상담, 여성 요실금처럼 방문 목적을 먼저 정리한 뒤 검색하면 목록을 훨씬 빠르게 좁힐 수 있습니다. 최종 방문 전에는 병원에 직접 연락해 진료 가능 여부와 준비사항을 다시 확인하는 것을 권장합니다.</p>
     </section>
-    <section class="landing-grid" style="margin-top:28px;">
-      <article class="landing-card-page"><h3>서울 비뇨의학과는 증상과 검사를 함께 생각해야 합니다</h3><p>비뇨의학과는 요로결석, 배뇨장애, 전립선, 여성 요실금처럼 증상 범위가 넓고 검사 연결이 바로 필요한 경우가 많습니다. 통증이나 배뇨 패턴을 먼저 정리하면 목록 비교가 훨씬 쉬워집니다.</p><ul style="margin-top:12px;"><li>결석 의심이면 통증 위치와 파도처럼 심해지는지 여부를 먼저 기록합니다.</li><li>배뇨장애는 빈뇨, 야간뇨, 잔뇨감처럼 구체적으로 적는 편이 좋습니다.</li><li>전립선 상담은 최근 PSA, 초음파, 소변검사 여부를 함께 정리하면 도움이 됩니다.</li></ul></article>
-      <article class="landing-card-page"><h3>실제로 중요한 비교 기준</h3><p>비뇨의학과는 후기 수보다 검사 연계 가능 여부, 토요일 또는 야간 외래, 재진 접근성이 실제 만족도에 더 크게 작용하는 경우가 많습니다.</p><ul style="margin-top:12px;"><li>생활권이 넓은 서울에서는 재방문 편의성과 주차를 같이 보는 편이 좋습니다.</li><li>초음파, 소변검사, 혈액검사 안내가 정리된 페이지가 초진 이해에도 도움이 됩니다.</li><li>통증이 강한 경우라면 당일 검사 또는 응급실 이후 연결 흐름도 생각해야 합니다.</li><li>상세 페이지에 운영, 준비 문구, FAQ가 보이는지 확인하면 선택이 쉬워집니다.</li></ul></article>
-      <article class="landing-card-page"><h3>초진 전에 메모하면 좋은 정보</h3><p>비뇨의학과는 민감한 증상이 많아서, 미리 짧게 정리해 두면 질문을 덜 놓치게 됩니다.</p><ul style="margin-top:12px;"><li>통증 시작 시점, 배뇨 횟수 변화, 혈뇨 여부</li><li>최근 검사 결과, PSA 수치, 소변검사 기록</li><li>복용 중인 약, 항생제 또는 진통제 사용 이력</li><li>야간뇨, 절박뇨, 잔뇨감 같은 생활 불편 정도</li></ul></article>
+    <section class="landing-note" style="margin-top:28px;">
+      <h3>자주 묻는 질문</h3>
+      <div style="display:flex; flex-direction:column; gap:12px; margin-top:14px;">
+        <details open class="faq-item"><summary>서울 비뇨의학과 병원찾기 페이지는 어떻게 활용하면 좋나요?</summary><p>서울 비뇨의학과 병원찾기 페이지는 검색 전에 비교 기준을 빠르게 정리하는 참고 페이지입니다. 서울 비뇨의학과 검색 결과를 보기 전에 방문 목적과 운영조건을 먼저 정리하면 결과를 훨씬 빠르게 좁힐 수 있습니다.</p></details><details class="faq-item"><summary>방문 전에 무엇을 먼저 확인해야 하나요?</summary><p>접수 마감 시간, 실제 진료 가능 여부, 준비해야 할 검사 결과나 복용약 정보를 먼저 확인하는 것이 좋습니다. 비뇨의학과 가이드도 함께 보면 준비 순서를 정리하는 데 도움이 됩니다.</p></details><details class="faq-item"><summary>이 페이지 정보만으로 병원을 결정해도 되나요?</summary><p>아닙니다. 이 페이지는 비교를 위한 참고 정보입니다. 최종 방문 전에는 병원 운영시간, 접수 가능 여부, 비용과 검사 범위를 병원에 직접 다시 확인하는 것을 권장합니다.</p></details>
+      </div>
     </section>
-    <section class="landing-link-grid" style="margin-top:28px;">
-      <a href="seoul-internal.html" class="landing-link"><span class="landing-badge">함께 보기</span><strong>서울 내과 병원찾기</strong><span>검사 결과 상담이나 생활형 만성질환 외래가 함께 필요한 경우 이어서 보기 좋습니다.</span></a>
-      <a href="seoul-obgyn.html" class="landing-link"><span class="landing-badge">함께 보기</span><strong>서울 산부인과 병원찾기</strong><span>여성 요실금이나 여성검진 흐름과 함께 볼 수 있는 서울 랜딩입니다.</span></a>
-      <a href="index.html?region=서울&department=urology#ranking" class="landing-link"><span class="landing-badge">목록 바로가기</span><strong>서울 비뇨의학과 전체 목록</strong><span>필터가 적용된 목록으로 이동해 후기, 상세 정보, 관련 가이드를 이어서 확인할 수 있습니다.</span></a>
+    <section class="landing-note" style="margin-top:28px;">
+      <h3>관련 페이지</h3>
+      <div class="landing-link-grid" style="margin-top:16px;">
+        <a href="seoul-dental.html" class="landing-link"><span class="landing-badge">서울 치과</span><strong>서울 치과 병원찾기</strong><span>임플란트, 교정, 보철 기준으로 서울 치과 탐색 흐름을 정리했습니다.</span></a><a href="seoul-ophthalmology.html" class="landing-link"><span class="landing-badge">서울 안과</span><strong>서울 안과 병원찾기</strong><span>시력검사와 백내장 상담 기준으로 서울 안과 비교 흐름을 묶었습니다.</span></a><a href="seoul-internal.html" class="landing-link"><span class="landing-badge">서울 내과</span><strong>서울 내과 병원찾기</strong><span>건강검진 상담, 소화기 증상, 만성질환 추적 기준으로 서울 내과를 정리했습니다.</span></a>
+      </div>
     </section>
-    <section class="landing-note"><h3>방문 전 메모</h3><p>비뇨의학과 방문 전에는 통증 시작 시점, 배뇨 빈도 변화, 혈뇨 여부, 최근 검사 결과, 복용 중인 약을 먼저 정리해 두면 초진 상담이 훨씬 수월합니다. 이 페이지는 서울 비뇨의학과 탐색을 돕는 참고용 정리 페이지이며 실제 진료 결정은 해당 병원과 직접 확인해야 합니다.</p></section>
+    <section class="landing-note" style="margin-top:28px;">
+      <h3>안내와 주의사항</h3>
+      <p>이 페이지는 2026년 6월 기준으로 구조와 안내 문구를 정리한 참고 페이지입니다. 실제 진료 가능 여부, 접수 마감, 비용, 검사 범위는 병원마다 다를 수 있으므로 방문 전 직접 확인해 주세요.</p>
+      <p style="margin-top:12px;">응급 상황이나 증상 악화, 수술 결정처럼 즉시 판단이 필요한 경우에는 이 페이지 정보만으로 결정하지 말고 해당 병원이나 의료진과 직접 상담하는 것이 안전합니다.</p>
+    </section>
   </main>
-  <footer class="footer"><div class="footer-inner"><div class="footer-bottom"><p>&copy; 2026 병원찾기. 공개 데이터와 안내형 콘텐츠를 바탕으로 정리한 병원 탐색 정보 페이지입니다.</p></div></div></footer>
-  <script src="js/landing-pages.js?v=1"></script>
-  <script src="js/landing-faq.js?v=1"></script>
-  <script src="js/landing-trust.js?v=1"></script>
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-bottom">
+        <p>&copy; 2026 병원찾기. 병원 검색과 진료 정보 탐색을 위한 안내 서비스입니다.</p>
+        <p>운영시간, 접수마감, 진료 가능 여부는 변동될 수 있으므로 방문 전 병원에 직접 확인하는 것을 권장합니다.</p>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
