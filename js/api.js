@@ -46,6 +46,85 @@ const HospitalAPI = (() => {
     '80': 'korean',
   };
 
+  const DEPARTMENT_ID_TO_NAME = {
+    internal: '\uB0B4\uACFC',
+    psychiatry: '\uC815\uC2E0\uAC74\uAC15\uC758\uD559\uACFC',
+    surgery: '\uC678\uACFC',
+    orthopedic: '\uC815\uD615\uC678\uACFC',
+    neurosurgery: '\uC2E0\uACBD\uC678\uACFC',
+    plastic: '\uC131\uD615\uC678\uACFC',
+    pain: '\uD1B5\uC99D\uC758\uD559\uACFC',
+    obgyn: '\uC0B0\uBD80\uC778\uACFC',
+    pediatric: '\uC18C\uC544\uCCAD\uC18C\uB144\uACFC',
+    ophthalmology: '\uC548\uACFC',
+    ent: '\uC774\uBE44\uC778\uD6C4\uACFC',
+    dermatology: '\uD53C\uBD80\uACFC',
+    urology: '\uBE44\uB1E8\uC758\uD559\uACFC',
+    rehab: '\uC7AC\uD65C\uC758\uD559\uACFC',
+    familymed: '\uAC00\uC815\uC758\uD559\uACFC',
+    dental: '\uCE58\uACFC',
+    korean: '\uD55C\uC758\uC6D0',
+    general: '\uC885\uD569\uBCD1\uC6D0',
+  };
+
+  const REGION_NAME_ALIASES = {
+    '\uC11C\uC6B8': '\uC11C\uC6B8',
+    '\uC11C\uC6B8\uD2B9\uBCC4\uC2DC': '\uC11C\uC6B8',
+    '\uBD80\uC0B0': '\uBD80\uC0B0',
+    '\uBD80\uC0B0\uAD11\uC5ED\uC2DC': '\uBD80\uC0B0',
+    '\uB300\uAD6C': '\uB300\uAD6C',
+    '\uB300\uAD6C\uAD11\uC5ED\uC2DC': '\uB300\uAD6C',
+    '\uC778\uCC9C': '\uC778\uCC9C',
+    '\uC778\uCC9C\uAD11\uC5ED\uC2DC': '\uC778\uCC9C',
+    '\uAD11\uC8FC': '\uAD11\uC8FC',
+    '\uAD11\uC8FC\uAD11\uC5ED\uC2DC': '\uAD11\uC8FC',
+    '\uB300\uC804': '\uB300\uC804',
+    '\uB300\uC804\uAD11\uC5ED\uC2DC': '\uB300\uC804',
+    '\uC6B8\uC0B0': '\uC6B8\uC0B0',
+    '\uC6B8\uC0B0\uAD11\uC5ED\uC2DC': '\uC6B8\uC0B0',
+    '\uC138\uC885': '\uC138\uC885',
+    '\uC138\uC885\uD2B9\uBCC4\uC790\uCE58\uC2DC': '\uC138\uC885',
+    '\uACBD\uAE30': '\uACBD\uAE30',
+    '\uACBD\uAE30\uB3C4': '\uACBD\uAE30',
+    '\uAC15\uC6D0': '\uAC15\uC6D0',
+    '\uAC15\uC6D0\uD2B9\uBCC4\uC790\uCE58\uB3C4': '\uAC15\uC6D0',
+    '\uCDA9\uBD81': '\uCDA9\uBD81',
+    '\uCDA9\uCCAD\uBD81\uB3C4': '\uCDA9\uBD81',
+    '\uCDA9\uB0A8': '\uCDA9\uB0A8',
+    '\uCDA9\uCCAD\uB0A8\uB3C4': '\uCDA9\uB0A8',
+    '\uC804\uBD81': '\uC804\uBD81',
+    '\uC804\uBD81\uD2B9\uBCC4\uC790\uCE58\uB3C4': '\uC804\uBD81',
+    '\uC804\uB0A8': '\uC804\uB0A8',
+    '\uC804\uB77C\uB0A8\uB3C4': '\uC804\uB0A8',
+    '\uACBD\uBD81': '\uACBD\uBD81',
+    '\uACBD\uC0C1\uBD81\uB3C4': '\uACBD\uBD81',
+    '\uACBD\uB0A8': '\uACBD\uB0A8',
+    '\uACBD\uC0C1\uB0A8\uB3C4': '\uACBD\uB0A8',
+    '\uC81C\uC8FC': '\uC81C\uC8FC',
+    '\uC81C\uC8FC\uD2B9\uBCC4\uC790\uCE58\uB3C4': '\uC81C\uC8FC',
+  };
+
+  const DEPARTMENT_KEYWORD_MATCHERS = [
+    { id: 'general', keywords: ['\uC0C1\uAE09\uC885\uD569\uBCD1\uC6D0', '\uC885\uD569\uBCD1\uC6D0'] },
+    { id: 'dental', keywords: ['\uCE58\uACFC\uBCD1\uC6D0', '\uCE58\uACFC\uC758\uC6D0', '\uCE58\uACFC'] },
+    { id: 'korean', keywords: ['\uD55C\uBC29\uBCD1\uC6D0', '\uD55C\uC758\uC6D0', '\uD55C\uBC29', '\uD55C\uC758'] },
+    { id: 'ophthalmology', keywords: ['\uC548\uACFC'] },
+    { id: 'dermatology', keywords: ['\uD53C\uBD80\uACFC'] },
+    { id: 'orthopedic', keywords: ['\uC815\uD615\uC678\uACFC'] },
+    { id: 'pediatric', keywords: ['\uC18C\uC544\uCCAD\uC18C\uB144\uACFC'] },
+    { id: 'obgyn', keywords: ['\uC0B0\uBD80\uC778\uACFC'] },
+    { id: 'urology', keywords: ['\uBE44\uB1E8\uC758\uD559\uACFC'] },
+    { id: 'psychiatry', keywords: ['\uC815\uC2E0\uAC74\uAC15\uC758\uD559\uACFC', '\uC815\uC2E0\uC758\uD559\uACFC'] },
+    { id: 'plastic', keywords: ['\uC131\uD615\uC678\uACFC'] },
+    { id: 'familymed', keywords: ['\uAC00\uC815\uC758\uD559\uACFC'] },
+    { id: 'pain', keywords: ['\uD1B5\uC99D\uC758\uD559\uACFC'] },
+    { id: 'rehab', keywords: ['\uC7AC\uD65C\uC758\uD559\uACFC'] },
+    { id: 'neurosurgery', keywords: ['\uC2E0\uACBD\uC678\uACFC'] },
+    { id: 'surgery', keywords: ['\uC678\uACFC'] },
+    { id: 'internal', keywords: ['\uB0B4\uACFC'] },
+    { id: 'ent', keywords: ['\uC774\uBE44\uC778\uD6C4\uACFC'] },
+  ];
+
   const TYPE_GROUPS = {
     hospital: ['상급종합병원', '종합병원', '병원'],
     clinic: ['의원'],
@@ -86,24 +165,38 @@ const HospitalAPI = (() => {
   }
 
   function normalizeHospital(item) {
-    const location = parseAddressLocation(item.address);
+    const address = item.address || item.addr || '';
+    const location = parseAddressLocation(address);
+    const region = normalizeRegionName(
+      item.region || REGION_LABELS[String(item.regionCode || item.sidoCd || '')] || location.region || '',
+    );
+    const departmentId = normalizeDepartmentId(
+      item.departmentId || item.dgsbjtCd,
+      item.department,
+      item.dgsbjtCdNm,
+      item.type,
+      item.clCdNm,
+      item.name,
+      item.yadmNm,
+    );
+    const type = item.type || item.clCdNm || inferHospitalType(item.name || item.yadmNm);
 
     return {
       ...item,
-      id: item.id,
-      name: item.name || '',
-      type: item.type || inferHospitalType(item.name),
-      address: item.address || '',
-      phone: item.phone || '',
-      region: item.region || REGION_LABELS[String(item.regionCode || '')] || location.region || '',
-      regionCode: String(item.regionCode || location.regionCode || ''),
-      district: item.district || location.district || '',
-      town: item.town || location.town || '',
-      departmentId: item.departmentId || '',
-      department: item.department || '',
-      lat: Number(item.lat) || 0,
-      lng: Number(item.lng) || 0,
-      openDate: item.openDate || '',
+      id: item.id || item.ykiho,
+      name: item.name || item.yadmNm || '',
+      type,
+      address,
+      phone: item.phone || item.telno || '',
+      region,
+      regionCode: String(item.regionCode || item.sidoCd || findRegionCodeByName(region) || location.regionCode || ''),
+      district: item.district || item.sgguCdNm || location.district || '',
+      town: item.town || item.emdongNm || location.town || '',
+      departmentId,
+      department: findDepartmentName(departmentId, item.department || item.dgsbjtCdNm || item.clCdNm || ''),
+      lat: Number(item.lat || item.YPos || item.yPos) || 0,
+      lng: Number(item.lng || item.XPos || item.xPos) || 0,
+      openDate: item.openDate || normalizeOpenDate(item.estbDd) || '',
       specialistCount: Number(item.specialistCount) || 0,
       reviewCount: Number(item.reviewCount) || 0,
       score: Number(item.score) || 0,
@@ -127,7 +220,7 @@ const HospitalAPI = (() => {
 
   function parseAddressLocation(address) {
     const tokens = String(address || '').trim().split(/\s+/).filter(Boolean);
-    const region = tokens[0] || '';
+    const region = normalizeRegionName(tokens[0] || '');
     const district = tokens[1] || '';
     const third = tokens[2] || '';
     const town = /(읍|면|동|가|리)$/.test(third) ? third : '';
@@ -142,19 +235,71 @@ const HospitalAPI = (() => {
   }
 
   function findRegionCodeByName(regionName) {
-    const target = String(regionName || '');
+    const target = normalizeRegionName(regionName);
     return Object.entries(REGION_LABELS).find(([, label]) => target.startsWith(label))?.[0] || '';
+  }
+
+  function normalizeRegionName(value) {
+    const rawValue = String(value || '').trim();
+    if (!rawValue) return '';
+
+    const compactValue = rawValue.replace(/\s+/g, '');
+    if (REGION_NAME_ALIASES[compactValue]) {
+      return REGION_NAME_ALIASES[compactValue];
+    }
+
+    const normalized = compactValue.replace(/(\uD2B9\uBCC4\uC2DC|\uAD11\uC5ED\uC2DC|\uD2B9\uBCC4\uC790\uCE58\uC2DC|\uD2B9\uBCC4\uC790\uCE58\uB3C4|\uC790\uCE58\uB3C4|\uB3C4)$/u, '');
+    return REGION_NAME_ALIASES[normalized] || normalized;
+  }
+
+  function normalizeDepartmentId(primaryValue, ...fallbackValues) {
+    const candidates = [primaryValue, ...fallbackValues]
+      .flatMap((value) => (Array.isArray(value) ? value : [value]))
+      .filter((value) => value != null && String(value).trim());
+
+    for (const candidate of candidates) {
+      const text = String(candidate).trim();
+      if (Object.values(DEPARTMENT_CODE_TO_ID).includes(text)) {
+        return text;
+      }
+
+      const fromCode = DEPARTMENT_CODE_TO_ID[text];
+      if (fromCode) {
+        return fromCode;
+      }
+
+      const matchedKeyword = DEPARTMENT_KEYWORD_MATCHERS.find(({ keywords }) => (
+        keywords.some((keyword) => text.includes(keyword))
+      ));
+      if (matchedKeyword) {
+        return matchedKeyword.id;
+      }
+    }
+
+    return '';
+  }
+
+  function normalizeOpenDate(value) {
+    const text = String(value || '').trim();
+    if (/^\d{8}$/.test(text)) {
+      return `${text.slice(0, 4)}-${text.slice(4, 6)}-${text.slice(6, 8)}`;
+    }
+    return text;
+  }
+
+  function findDepartmentName(id, fallback = '') {
+    return DEPARTMENT_ID_TO_NAME[id] || fallback || '';
   }
 
   function matchesRegion(hospital, region) {
     if (!region || region === 'all') return true;
-    const target = String(region).trim();
+    const target = normalizeRegionName(region) || String(region).trim();
     return hospital.region === target || hospital.regionCode === target;
   }
 
   function matchesDepartment(hospital, department) {
     if (!department || department === 'all') return true;
-    const target = DEPARTMENT_CODE_TO_ID[String(department)] || String(department);
+    const target = normalizeDepartmentId(department, department);
     return hospital.departmentId === target;
   }
 
