@@ -1337,6 +1337,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tags = buildTagMarkup(item);
     const statusBadges = buildStatusBadges(item);
     const trustBadges = buildTrustBadges(item);
+    const facts = buildHospitalFactsMarkup(item);
     const openDate = item.openDate ? `개원 ${formatDate(item.openDate)}` : '개원일 확인 중';
     const doctors = item.specialistCount > 0 ? `전문의 ${item.specialistCount}명` : '의료진 정보 확인 중';
     const reviews = item.reviewCount > 0 ? `후기 ${formatNumber(item.reviewCount)}건` : '후기 집계 전';
@@ -1354,6 +1355,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="hospital-status-row hospital-status-row-compact">${statusBadges}</div>
           <div class="hospital-trust-row hospital-trust-row-compact">${trustBadges}</div>
           <p class="hospital-status-summary hospital-status-summary-compact">${escapeHtml(buildHospitalSummary(item))}</p>
+          ${facts}
           <div class="hospital-meta">
             <span class="meta-item"><span class="meta-icon">⭐</span><span class="meta-value">${item.score.toFixed(1)}</span></span>
             <span class="meta-item"><span class="meta-icon">📝</span><span class="meta-label">${escapeHtml(reviews)}</span></span>
@@ -1372,6 +1374,37 @@ document.addEventListener('DOMContentLoaded', () => {
     if (item.sundayOpen) badges.push('<span class="hospital-status-badge is-option">일요일 진료</span>');
     if (badges.length === 0) badges.push('<span class="hospital-status-badge is-closed">운영 정보 확인 필요</span>');
     return badges.join('');
+  }
+
+  function buildHospitalFactsMarkup(item) {
+    const operation = [
+      item.saturdayOpen ? '\uD1A0\uC694' : '',
+      item.nightOpen ? '\uC57C\uAC04' : '',
+      item.sundayOpen ? '\uC77C\uC694' : '',
+    ].filter(Boolean).join(' / ') || '\uC6B4\uC601\uC2DC\uAC04 \uD655\uC778 \uD544\uC694';
+    const parking = item.parkingCapacity > 0
+      ? `\uC8FC\uCC28 ${formatNumber(item.parkingCapacity)}\uB300${item.parkingFee ? ` \u00B7 ${item.parkingFee}` : ''}`
+      : item.parkingFee || '\uD655\uC778 \uD544\uC694';
+    const opening = item.openDate
+      ? formatDate(item.openDate)
+      : '\uD655\uC778 \uD544\uC694';
+    const facts = [
+      ['\uC804\uD654', item.phone || '\uD655\uC778 \uD544\uC694'],
+      ['\uC6B4\uC601', operation],
+      ['\uC8FC\uCC28', parking],
+      ['\uAC1C\uC6D0', opening],
+    ];
+
+    return `
+      <dl class="hospital-facts">
+        ${facts.map(([label, value]) => `
+          <div class="hospital-fact">
+            <dt>${escapeHtml(label)}</dt>
+            <dd>${escapeHtml(value)}</dd>
+          </div>
+        `).join('')}
+      </dl>
+    `;
   }
 
   function buildTrustBadges(item) {

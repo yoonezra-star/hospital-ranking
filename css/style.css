@@ -1593,6 +1593,41 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   margin-bottom: 10px;
 }
 
+.hospital-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 0 12px;
+}
+
+.hospital-fact {
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-sm);
+  background: color-mix(in srgb, var(--bg-card) 82%, var(--bg-body) 18%);
+}
+
+.hospital-fact dt {
+  margin: 0 0 4px;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: var(--fw-semibold);
+}
+
+.hospital-fact dd {
+  margin: 0;
+  color: var(--text-body);
+  font-size: 0.76rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+[data-theme="dark"] .hospital-fact {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.10);
+}
+
 .hospital-decision-summary {
   margin: -2px 0 var(--sp-3);
   color: color-mix(in srgb, var(--text-body) 84%, white 16%);
@@ -2402,6 +2437,7 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   
   .ranking-grid { grid-template-columns: 1fr; }
   .hospital-card { padding: var(--sp-5); }
+  .hospital-facts { grid-template-columns: 1fr; }
   .hospital-fact-grid { grid-template-columns: 1fr; }
   .hospital-insight-item { grid-template-columns: 1fr; }
   .hospital-insight-label { justify-self: start; }
