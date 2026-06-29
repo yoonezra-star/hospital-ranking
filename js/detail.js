@@ -1,4 +1,5 @@
 (() => {
+  const SITE_ORIGIN = 'https://hospital-ranking.kr';
   const NAVER_MAP_DEFAULT_KEYS = ['390058kho4', 'rgd9ajy97r'];
   const NAVER_MAP_STORAGE_KEY = 'NAVER_MAP_KEY';
 
@@ -163,6 +164,7 @@
   function renderHospital(hospital) {
     document.title = `${hospital.name} 상세 정보 - 병원찾기`;
     updateMetaDescription(`${hospital.name}의 진료과, 위치, 운영 정보, 방문 전 체크 포인트를 확인할 수 있습니다.`);
+    updateCanonical(hospital);
     updateSchema(hospital);
 
     setText('detail-name', hospital.name);
@@ -552,7 +554,7 @@
       name: hospital.name,
       address: hospital.address,
       telephone: hospital.phone || undefined,
-      url: window.location.href,
+      url: buildCanonicalDetailUrl(hospital.id),
     };
 
     if (hospital.score > 0 && hospital.reviewCount > 0) {
@@ -571,6 +573,20 @@
     if (meta) {
       meta.setAttribute('content', content);
     }
+  }
+
+  function updateCanonical(hospital) {
+    let link = document.querySelector('link[rel="canonical"]');
+    if (!link) {
+      link = document.createElement('link');
+      link.rel = 'canonical';
+      document.head.appendChild(link);
+    }
+    link.href = buildCanonicalDetailUrl(hospital.id);
+  }
+
+  function buildCanonicalDetailUrl(id) {
+    return `${SITE_ORIGIN}/detail.html?id=${encodeURIComponent(id)}`;
   }
 
   function updateSourceSummary(items) {
