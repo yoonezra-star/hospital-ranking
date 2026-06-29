@@ -865,10 +865,13 @@ document.addEventListener('DOMContentLoaded', () => {
     ui.departmentGrid?.addEventListener('click', (event) => {
       const target = event.target.closest('[data-department-id]');
       if (!target) return;
+      target.blur?.();
       state.departmentId = target.dataset.departmentId || 'all';
       state.visibleCount = 12;
+      window.setTimeout(() => {
+        window.location.hash = 'ranking-list';
+      }, 80);
       refreshPage();
-      scrollToRanking();
     });
 
     ui.searchSuggestions?.addEventListener('mousemove', (event) => {
@@ -1683,7 +1686,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function scrollToRanking() {
-    document.getElementById('ranking')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    requestAnimationFrame(() => {
+      const target = document.getElementById('ranking-list') || document.getElementById('ranking');
+      if (!target) return;
+      const headerHeight = Number.parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h'), 10) || 72;
+      const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - headerHeight - 18);
+      const previousScrollBehavior = document.documentElement.style.scrollBehavior;
+      document.documentElement.style.scrollBehavior = 'auto';
+      window.scrollTo({ top, left: 0, behavior: 'auto' });
+      window.setTimeout(() => {
+        document.documentElement.style.scrollBehavior = previousScrollBehavior;
+      }, 0);
+    });
   }
 
   function isOpenNow(item) {

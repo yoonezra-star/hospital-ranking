@@ -1350,6 +1350,7 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 16px;
+  scroll-margin-top: calc(var(--header-h) + 18px);
 }
 .ranking-group-list {
   display: flex;
@@ -1737,6 +1738,9 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   border-radius: var(--r-lg);
   box-shadow: var(--shadow-xs);
 }
+#ranking .trust-grid {
+  margin-top: var(--sp-8);
+}
 .trust-card {
   padding: var(--sp-5);
 }
@@ -1912,10 +1916,15 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   font-weight: var(--fw-medium);
 }
 .timeline-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
   background: var(--bg-card);
   border: 1px solid var(--border-default);
   border-radius: var(--r-md);
   padding: var(--sp-4) var(--sp-5);
+  text-decoration: none;
   transition: all var(--t-base) var(--ease-out);
 }
 .timeline-card:hover {
@@ -2437,6 +2446,11 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   .search-shortcut-chips { gap: 8px; }
   .search-shortcut-chip { font-size: var(--fs-xs); padding: 8px 12px; }
   .hero-location-controls { grid-template-columns: 1fr; }
+  .timeline { padding-left: 28px; }
+  .timeline::before { left: 9px; }
+  .timeline-item { padding-left: 12px; }
+  .timeline-item::before { left: -25px; }
+  .timeline-card { padding: 14px 16px; }
   .popular-search-grid { grid-template-columns: 1fr; gap: var(--sp-2); margin-top: var(--sp-5); }
   .popular-search-card { min-height: auto; padding: 16px; }
   .hero-trust-strip { grid-template-columns: 1fr; margin-top: var(--sp-6); }
