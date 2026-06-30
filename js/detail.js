@@ -388,7 +388,7 @@
     ].filter(Boolean);
 
     container.innerHTML = queries.map((query) => (
-      `<a href="index.html?keyword=${encodeURIComponent(query)}#ranking" style="display:flex; flex-direction:column; gap:8px; padding:18px; border:1px solid var(--border-default); border-radius:14px; text-decoration:none; color:inherit; background:var(--bg-body);">
+      `<a href="index.html?keyword=${encodeURIComponent(query)}#ranking-list" style="display:flex; flex-direction:column; gap:8px; padding:18px; border:1px solid var(--border-default); border-radius:14px; text-decoration:none; color:inherit; background:var(--bg-body);">
         <strong style="font-size:1rem;">${escapeHtml(query)}</strong>
         <span style="color:var(--text-body); line-height:1.6;">이 조건으로 목록 검색하기</span>
       </a>`

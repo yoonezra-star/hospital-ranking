@@ -537,7 +537,7 @@
     } else {
       links.push({
         title: `${region || '해당 지역'} 주말 대비 병원 목록 보기`,
-        href: buildIndexFilterHref({ region, department: departmentId, sort: 'rating' }),
+        href: buildIndexFilterHref({ region, department: departmentId, sort: 'score' }),
         description: '토요일 진료 여부를 포함해 같은 진료과 병원을 먼저 비교할 수 있습니다.',
         badge: '주말 비교',
       });
@@ -627,7 +627,7 @@
     if (type) params.set('type', type);
     if (sort) params.set('sort', sort);
     const query = params.toString();
-    return query ? `index.html?${query}#ranking` : 'index.html#ranking';
+    return query ? `index.html?${query}#ranking-list` : 'index.html#ranking-list';
   }
 
   function buildEquipmentHighlights(hospital) {

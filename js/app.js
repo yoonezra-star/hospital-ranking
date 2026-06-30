@@ -923,6 +923,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const keyword = params.get('keyword');
     const region = params.get('region');
     const department = params.get('department');
+    const type = params.get('type');
+    const sort = params.get('sort');
 
     if (keyword && ui.heroSearch) {
       ui.heroSearch.value = keyword;
@@ -938,6 +940,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (department) {
       state.departmentId = department;
+    }
+    if (type) {
+      state.type = type;
+      if (ui.typeFilter) ui.typeFilter.value = state.type;
+    }
+    if (sort) {
+      state.sort = sort;
+      if (ui.sortFilter) ui.sortFilter.value = state.sort;
     }
   }
 
