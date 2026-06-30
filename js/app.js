@@ -82,6 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
     sort: 'score',
     specialFilter: '',
     searchActive: false,
+    searchIntent: null,
+    relaxedSearchLabel: '',
   };
 
   const searchSuggestionState = {
@@ -1083,6 +1085,32 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function buildFilteredHospitals() {
+    state.relaxedSearchLabel = '';
+    state.searchIntent = getSearchIntent();
+
+    if (typeof SearchEngine !== 'undefined' && SearchEngine?.query) {
+      const filters = buildSearchEngineFilters();
+      const exactResults = SearchEngine.query(state.hospitals, {
+        searchText: state.keyword,
+        filters,
+        sortBy: state.sort,
+        intent: state.searchIntent,
+      });
+
+      if (exactResults.length > 0) {
+        return attachMatchReasons(exactResults);
+      }
+
+      const relaxedResults = buildRelaxedSearchResults(filters);
+      if (relaxedResults.length > 0) {
+        return relaxedResults;
+      }
+    }
+
+    return attachMatchReasons(buildLegacyFilteredHospitals());
+  }
+
+  function buildLegacyFilteredHospitals() {
     let hospitals = [...state.hospitals];
 
     if (state.regionCode !== 'all') {
@@ -1108,6 +1136,197 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     return hospitals.sort(sortHospitals);
+  }
+
+  function getSearchIntent() {
+    if (!state.keyword || typeof SearchEngine === 'undefined' || !SearchEngine?.parseSearchIntent) {
+      return null;
+    }
+    return SearchEngine.parseSearchIntent(state.keyword);
+  }
+
+  function buildSearchEngineFilters(overrides = {}) {
+    return {
+      region: state.regionCode !== 'all' ? state.regionCode : '',
+      district: state.district !== 'all' ? state.district : '',
+      town: state.town !== 'all' ? state.town : '',
+      department: state.departmentId !== 'all' ? state.departmentId : '',
+      type: state.type !== 'all' ? state.type : '',
+      saturdayOpen: state.specialFilter === 'sat',
+      sundayOpen: state.specialFilter === 'sun',
+      nightOpen: state.specialFilter === 'night',
+      parkingAvailable: state.specialFilter === 'parking',
+      specialistOnly: state.specialFilter === 'specialist',
+      recentOpen: state.specialFilter === 'new' || state.specialFilter === 'recent',
+      hasEmergency: state.specialFilter === 'emergency',
+      ...overrides,
+    };
+  }
+
+  function buildRelaxedSearchResults(baseFilters) {
+    if (!state.keyword && !state.specialFilter) return [];
+    if (typeof SearchEngine === 'undefined' || !SearchEngine?.query) return [];
+
+    const baseIntent = state.searchIntent || getSearchIntent();
+    const relaxedIntents = buildRelaxedIntents(baseIntent);
+    const relaxedFilters = [
+      {
+        label: '운영조건을 제외한 관련 병원입니다.',
+        filters: clearOperationFilters(baseFilters),
+        intent: relaxedIntents.withoutOperations,
+      },
+      {
+        label: '읍면동 조건을 넓혀 같은 시군구 병원을 보여드립니다.',
+        filters: { ...clearOperationFilters(baseFilters), town: '', locality: '' },
+        intent: relaxedIntents.withoutLocality,
+      },
+      {
+        label: '생활권 조건을 넓혀 같은 지역과 진료과 중심으로 보여드립니다.',
+        filters: { ...clearOperationFilters(baseFilters), district: '', town: '', locality: '' },
+        intent: relaxedIntents.regionDepartment,
+      },
+      {
+        label: '정확한 지역 결과가 없어 같은 진료과 병원을 우선 보여드립니다.',
+        filters: { ...clearOperationFilters(baseFilters), region: '', district: '', town: '', locality: '' },
+        intent: relaxedIntents.departmentOnly,
+      },
+    ];
+
+    for (const attempt of relaxedFilters) {
+      const result = SearchEngine.query(state.hospitals, {
+        searchText: state.keyword,
+        filters: attempt.filters,
+        sortBy: state.sort,
+        intent: attempt.intent,
+      });
+
+      if (result.length > 0) {
+        state.relaxedSearchLabel = attempt.label;
+        return attachMatchReasons(result, attempt.label);
+      }
+    }
+
+    return [];
+  }
+
+  function buildRelaxedIntents(intent) {
+    const empty = {
+      originalQuery: state.keyword || '',
+      region: '',
+      district: '',
+      locality: '',
+      department: '',
+      keywordTokens: [],
+      keywordText: '',
+      saturdayOpen: false,
+      sundayOpen: false,
+      nightOpen: false,
+      parkingAvailable: false,
+      specialistOnly: false,
+      recentOpen: false,
+      hasEmergency: false,
+      isStructured: false,
+    };
+    const source = intent || empty;
+    const withoutOperations = {
+      ...source,
+      saturdayOpen: false,
+      sundayOpen: false,
+      nightOpen: false,
+      parkingAvailable: false,
+      specialistOnly: false,
+      recentOpen: false,
+      hasEmergency: false,
+    };
+    const withoutLocality = {
+      ...withoutOperations,
+      locality: '',
+    };
+    const regionDepartment = {
+      ...withoutOperations,
+      district: '',
+      locality: '',
+    };
+    const departmentOnly = {
+      ...withoutOperations,
+      region: '',
+      district: '',
+      locality: '',
+    };
+
+    return {
+      withoutOperations,
+      withoutLocality,
+      regionDepartment,
+      departmentOnly,
+    };
+  }
+
+  function clearOperationFilters(filters) {
+    return {
+      ...filters,
+      saturdayOpen: false,
+      sundayOpen: false,
+      nightOpen: false,
+      parkingAvailable: false,
+      specialistOnly: false,
+      recentOpen: false,
+      hasEmergency: false,
+    };
+  }
+
+  function attachMatchReasons(hospitals, relaxedLabel = '') {
+    return hospitals.map((hospital) => ({
+      ...hospital,
+      matchReasons: buildMatchReasons(hospital),
+      relaxedSearchLabel: relaxedLabel,
+    }));
+  }
+
+  function buildMatchReasons(hospital) {
+    if (!state.searchActive && !state.keyword && !state.specialFilter && state.departmentId === 'all' && state.regionCode === 'all') {
+      return [];
+    }
+
+    const reasons = [];
+    const intent = state.searchIntent || getSearchIntent();
+    const haystack = buildSearchHaystack(hospital);
+    const normalizedKeyword = normalizeSearchText(state.keyword);
+
+    if (intent?.locality && haystack.includes(normalizeSearchText(intent.locality))) {
+      reasons.push(`${intent.locality} 생활권`);
+    } else if (intent?.district && hospital.district === intent.district) {
+      reasons.push(`${intent.district} 지역`);
+    } else if (intent?.region && hospital.region === intent.region) {
+      reasons.push(`${intent.region} 지역`);
+    } else if (state.regionCode !== 'all' && hospital.regionCode === state.regionCode) {
+      reasons.push(`${hospital.region} 지역`);
+    }
+
+    const departmentId = intent?.department || (state.departmentId !== 'all' ? state.departmentId : '');
+    if (departmentId && hospital.departmentId === departmentId) {
+      reasons.push(`${hospital.department} 진료`);
+    }
+
+    if ((intent?.saturdayOpen || state.specialFilter === 'sat') && hospital.saturdayOpen) reasons.push('토요일 진료');
+    if ((intent?.nightOpen || state.specialFilter === 'night') && hospital.nightOpen) reasons.push('야간 진료');
+    if ((intent?.sundayOpen || state.specialFilter === 'sun') && hospital.sundayOpen) reasons.push('일요일 진료');
+    if ((intent?.parkingAvailable || state.specialFilter === 'parking') && hasParkingInfo(hospital)) reasons.push('주차 정보');
+    if ((intent?.specialistOnly || state.specialFilter === 'specialist') && Number(hospital.specialistCount || 0) > 0) reasons.push('전문의 정보');
+    if ((intent?.recentOpen || state.specialFilter === 'new' || state.specialFilter === 'recent') && hospital.openDate) reasons.push('개원일 정보');
+
+    if (normalizedKeyword && normalizeSearchText(hospital.name).includes(normalizedKeyword)) {
+      reasons.push('병원명 일치');
+    }
+
+    if (reasons.length === 0 && state.keyword) {
+      const matchedTokens = expandSearchTokens(state.keyword).filter((token) => haystack.includes(token));
+      if (matchedTokens.length > 0) {
+        reasons.push(`검색어 ${matchedTokens.slice(0, 2).join(', ')} 포함`);
+      }
+    }
+
+    return Array.from(new Set(reasons)).slice(0, 4);
   }
 
   function matchesType(item, type) {
@@ -1281,7 +1500,7 @@ document.addEventListener('DOMContentLoaded', () => {
       searchQueryDisplay.textContent = state.keyword || buildSpecialFilterLabel(state.specialFilter) || '검색';
     }
     ui.searchIntentSummary.textContent = buildIntentSummary();
-    ui.searchResultCount.innerHTML = `검색 결과 <strong>${formatNumber(state.filteredHospitals.length)}</strong>개`;
+    ui.searchResultCount.innerHTML = `${state.relaxedSearchLabel ? '추천 결과' : '검색 결과'} <strong>${formatNumber(state.filteredHospitals.length)}</strong>개`;
     ui.searchResultsList.innerHTML = state.filteredHospitals.length > 0
       ? state.filteredHospitals
         .slice(0, Math.min(state.visibleCount, 24))
@@ -1297,6 +1516,11 @@ document.addEventListener('DOMContentLoaded', () => {
     getKeywordOperationLabels(state.keyword).forEach((label) => parts.push(label));
     if (state.keyword) parts.push(`키워드 "${state.keyword}"`);
     if (state.specialFilter) parts.push(buildSpecialFilterLabel(state.specialFilter));
+    if (state.relaxedSearchLabel) {
+      const requested = parts.length > 0 ? `요청 조건: ${parts.join(' / ')}. ` : '';
+      return `${requested}정확히 일치하는 병원이 없어 ${state.relaxedSearchLabel}`;
+    }
+
     return parts.length > 0 ? `${parts.join(' / ')} 기준 결과입니다.` : '현재 조건에 맞는 병원 결과입니다.';
   }
 
@@ -1354,6 +1578,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusBadges = buildStatusBadges(item);
     const trustBadges = buildTrustBadges(item);
     const facts = buildHospitalFactsMarkup(item);
+    const matchReasons = buildMatchReasonMarkup(item);
     const openDate = item.openDate ? `개원 ${formatDate(item.openDate)}` : '개원일 확인 중';
     const doctors = item.specialistCount > 0 ? `전문의 ${item.specialistCount}명` : '의료진 정보 확인 중';
     const reviews = item.reviewCount > 0 ? `후기 ${formatNumber(item.reviewCount)}건` : '후기 집계 전';
@@ -1371,6 +1596,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="hospital-status-row hospital-status-row-compact">${statusBadges}</div>
           <div class="hospital-trust-row hospital-trust-row-compact">${trustBadges}</div>
           <p class="hospital-status-summary hospital-status-summary-compact">${escapeHtml(buildHospitalSummary(item))}</p>
+          ${matchReasons}
           ${facts}
           <div class="hospital-meta">
             <span class="meta-item"><span class="meta-icon">⭐</span><span class="meta-value">${item.score.toFixed(1)}</span></span>
@@ -1421,6 +1647,26 @@ document.addEventListener('DOMContentLoaded', () => {
         `).join('')}
       </dl>
     `;
+  }
+
+  function buildMatchReasonMarkup(item) {
+    const reasons = Array.isArray(item.matchReasons) ? item.matchReasons.filter(Boolean) : [];
+    if (reasons.length === 0 && !item.relaxedSearchLabel) return '';
+
+    return `
+      <div class="hospital-match-reasons" aria-label="검색 매칭 이유">
+        ${item.relaxedSearchLabel ? `<span class="match-reason is-relaxed">${escapeHtml(buildRelaxedChipLabel(item.relaxedSearchLabel))}</span>` : ''}
+        ${reasons.map((reason) => `<span class="match-reason">${escapeHtml(reason)}</span>`).join('')}
+      </div>
+    `;
+  }
+
+  function buildRelaxedChipLabel(label = '') {
+    if (label.includes('운영조건')) return '운영조건 완화';
+    if (label.includes('읍면동')) return '시군구로 확장';
+    if (label.includes('생활권')) return '지역/진료과 확장';
+    if (label.includes('같은 진료과')) return '진료과 우선';
+    return '추천 결과';
   }
 
   function buildTrustBadges(item) {

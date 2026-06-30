@@ -1610,6 +1610,45 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   margin-bottom: 10px;
 }
 
+.hospital-match-reasons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 12px;
+}
+
+.match-reason {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 4px 9px;
+  border-radius: var(--r-full);
+  border: 1px solid rgba(104,134,127,0.18);
+  background: rgba(238,243,241,0.78);
+  color: var(--primary-dark);
+  font-size: 0.7rem;
+  font-weight: var(--fw-semibold);
+  line-height: 1.35;
+}
+
+.match-reason.is-relaxed {
+  border-color: rgba(166,124,82,0.24);
+  background: rgba(248,241,230,0.86);
+  color: #876344;
+}
+
+[data-theme="dark"] .match-reason {
+  border-color: rgba(104,134,127,0.28);
+  background: rgba(104,134,127,0.16);
+  color: #dbe8e3;
+}
+
+[data-theme="dark"] .match-reason.is-relaxed {
+  border-color: rgba(199,139,70,0.28);
+  background: rgba(199,139,70,0.16);
+  color: #f2dcc0;
+}
+
 .hospital-facts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
