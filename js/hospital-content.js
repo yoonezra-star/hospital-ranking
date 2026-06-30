@@ -627,7 +627,7 @@
     if (type) params.set('type', type);
     if (sort) params.set('sort', sort);
     const query = params.toString();
-    return query ? `index.html?${query}#ranking-list` : 'index.html#ranking-list';
+    return query ? `index.html?${query}#ranking` : 'index.html#ranking';
   }
 
   function buildEquipmentHighlights(hospital) {

@@ -174,6 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
     applyUrlState();
     refreshPage();
     hideSearchSuggestions();
+    handleInitialHash();
   }
 
   function applyStaticCopy() {
@@ -860,6 +861,7 @@ document.addEventListener('DOMContentLoaded', () => {
       state.searchActive = true;
       state.visibleCount = 12;
       refreshPage();
+      scrollToSearchResults();
     });
 
     ui.departmentGrid?.addEventListener('click', (event) => {
@@ -868,10 +870,11 @@ document.addEventListener('DOMContentLoaded', () => {
       target.blur?.();
       state.departmentId = target.dataset.departmentId || 'all';
       state.visibleCount = 12;
-      window.setTimeout(() => {
-        window.location.hash = 'ranking-list';
-      }, 80);
       refreshPage();
+      if (window.history?.replaceState) {
+        window.history.replaceState(null, '', '#ranking');
+      }
+      scrollToRanking();
     });
 
     ui.searchSuggestions?.addEventListener('mousemove', (event) => {
@@ -1692,13 +1695,29 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function scrollToSearchResults() {
-    ui.searchResults?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    scrollToElement(ui.searchResults);
   }
 
   function scrollToRanking() {
+    scrollToElement(document.getElementById('ranking') || document.getElementById('ranking-list'));
+  }
+
+  function handleInitialHash() {
+    window.setTimeout(() => {
+      const hash = decodeURIComponent(window.location.hash || '');
+      if (hash === '#search-results' || (state.searchActive && !hash)) {
+        scrollToSearchResults();
+        return;
+      }
+      if (hash === '#ranking' || hash === '#ranking-list') {
+        scrollToRanking();
+      }
+    }, 120);
+  }
+
+  function scrollToElement(target) {
+    if (!target) return;
     requestAnimationFrame(() => {
-      const target = document.getElementById('ranking-list') || document.getElementById('ranking');
-      if (!target) return;
       const headerHeight = Number.parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h'), 10) || 72;
       const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - headerHeight - 18);
       const previousScrollBehavior = document.documentElement.style.scrollBehavior;
