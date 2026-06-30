@@ -7,6 +7,7 @@ const TODAY = '2026-06-30';
 const ROOT = path.resolve(__dirname, '..');
 
 const EXCLUDED_HTML = new Set([
+  '404.html',
   'detail.html',
   'test_map.html',
 ]);
@@ -64,7 +65,8 @@ function changefreq(file) {
 }
 
 function pageUrl(file) {
-  return file === 'index.html' ? `${SITE_URL}/` : `${SITE_URL}/${file}`;
+  if (file === 'index.html') return `${SITE_URL}/`;
+  return `${SITE_URL}/${file.replace(/\.html$/, '')}`;
 }
 
 function xmlEscape(value) {
@@ -99,7 +101,7 @@ function buildSitemap() {
 
   for (const id of readHospitalIds()) {
     urls.push({
-      loc: `${SITE_URL}/detail.html?id=${encodeURIComponent(id)}`,
+      loc: `${SITE_URL}/detail?id=${encodeURIComponent(id)}`,
       freq: 'weekly',
       priority: '0.6',
     });

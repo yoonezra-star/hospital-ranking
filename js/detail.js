@@ -641,7 +641,7 @@
   }
 
   function buildCanonicalDetailUrl(id) {
-    return `${SITE_ORIGIN}/detail.html?id=${encodeURIComponent(id)}`;
+    return `${SITE_ORIGIN}/detail?id=${encodeURIComponent(id)}`;
   }
 
   function updateSourceSummary(items) {

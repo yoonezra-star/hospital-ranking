@@ -148,7 +148,7 @@ function buildHtml(page, meta, pages) {
   const conditionKeyword = buildConditionKeyword(page);
   const relatedPages = pickRelatedPages(page, pages);
   const faqItems = buildFaq(page, meta, guide);
-  const canonical = `${SITE_URL}/${page.href}`;
+  const canonical = `${SITE_URL}/${page.href.replace(/\.html$/, '')}`;
   const badge = page.region === '전국' ? page.department : `${page.region} ${page.department}`;
   const schemaCollection = {
     '@context': 'https://schema.org',
