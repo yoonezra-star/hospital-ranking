@@ -191,11 +191,13 @@
     renderHours(hospital);
     renderFacility(hospital);
     renderChoiceSummary(hospital);
+    renderDecisionChecklist(hospital);
     renderSnapshot(hospital);
     renderVisitGuide(hospital);
     renderSymptomGuide(hospital);
     renderComparePoints(hospital);
     renderPublicDigest(hospital);
+    renderDataQuality(hospital);
   }
 
   function renderBadges(hospital) {
@@ -290,6 +292,48 @@
     setText('detail-choice-caution', cautionParts.join(' / '));
   }
 
+  function renderDecisionChecklist(hospital) {
+    const intro = document.getElementById('detail-decision-intro');
+    const target = document.getElementById('detail-decision-checklist');
+    if (!target) return;
+
+    if (intro) {
+      intro.textContent = `${hospital.name} 방문 전에는 운영 여부, 접수 마감, 진료 범위를 한 번 더 확인하는 것이 좋습니다.`;
+    }
+
+    const items = [
+      {
+        title: '진료 가능 여부 확인',
+        body: hospital.phone
+          ? `전화 문의로 ${hospital.department} 진료 가능 시간과 접수 마감을 확인하세요.`
+          : '방문 전 운영 시간과 접수 가능 여부를 먼저 확인하세요.',
+      },
+      {
+        title: '방문 목적 정리',
+        body: `${hospital.department} 상담 목적, 증상 발생 시점, 복용 중인 약을 간단히 정리해 두면 접수가 수월합니다.`,
+      },
+      {
+        title: '이동 동선 확인',
+        body: hospital.address
+          ? `${buildRegionText(hospital) || '해당 지역'} 주소와 네이버 지도 위치를 함께 확인하세요.`
+          : '지도 위치와 실제 주소를 함께 확인하세요.',
+      },
+      {
+        title: '편의 정보 확인',
+        body: hospital.parkingCapacity > 0
+          ? `차량 방문 시 주차 ${hospital.parkingCapacity}대 정보를 참고하되, 실제 가능 여부는 현장 상황을 확인하세요.`
+          : '주차, 엘리베이터, 보호자 동행 가능 여부가 필요하면 사전에 확인하세요.',
+      },
+    ];
+
+    target.innerHTML = items.map((item) => `
+      <li>
+        <strong>${escapeHtml(item.title)}</strong>
+        <span>${escapeHtml(item.body)}</span>
+      </li>
+    `).join('');
+  }
+
   function renderSnapshot(hospital) {
     setText('detail-snapshot-summary', `${hospital.department} / ${hospital.type} / ${buildRegionText(hospital) || '지역 정보 확인 중'}`);
     setText('detail-snapshot-operation', buildOperationSummary(hospital));
@@ -356,6 +400,17 @@
     setText('detail-operation-summary', buildOperationSummary(hospital));
     setText('detail-location-summary', hospital.address || '위치 정보 확인 중');
     setText('detail-equipment-summary', hospital.equipment || '장비 및 시설 정보 확인 중');
+  }
+
+  function renderDataQuality(hospital) {
+    setText('detail-data-updated', `2026-06-30 기준 페이지 구조와 안내 문구를 점검했습니다. 병원 운영 정보는 변동될 수 있습니다.`);
+    setText('detail-verification-note', [
+      hospital.phone ? '전화번호' : '',
+      hospital.address ? '주소' : '',
+      hospital.saturdayOpen || hospital.sundayOpen || hospital.nightOpen ? '운영조건' : '',
+      hospital.parkingCapacity > 0 || hospital.parkingFee ? '주차정보' : '',
+    ].filter(Boolean).join(' / ') || '운영 시간과 위치 정보');
+    setText('detail-medical-note', `${hospital.department} 관련 증상, 진단, 치료, 약물 결정은 이 페이지가 아니라 해당 병원 또는 의료진과 직접 상담해 주세요.`);
   }
 
   function renderGuideLinks(hospital) {

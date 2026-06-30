@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=10">
+  <link rel="stylesheet" href="css/style.css?v=11">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏥</text></svg>">
   <script type="application/ld+json" id="schema-hospital">
   {
@@ -184,6 +184,17 @@
           <li><span class="info-label">확인 메모</span> <span id="detail-choice-caution">방문 전에 한 번 더 확인할 내용을 정리 중입니다...</span></li>
         </ul>
       </div>
+
+      <div class="info-card detail-guidance-card">
+        <h3>방문 전 확인 순서</h3>
+        <p class="detail-guidance-intro" id="detail-decision-intro">방문 전 확인할 항목을 정리 중입니다...</p>
+        <ol class="detail-checklist-grid" id="detail-decision-checklist">
+          <li>운영 시간과 접수 마감 시간을 확인합니다.</li>
+          <li>주소와 지도 위치를 확인합니다.</li>
+          <li>필요한 서류와 이전 검사 결과를 준비합니다.</li>
+        </ol>
+      </div>
+
       <div class="info-card">
         <h3>기본 정보</h3>
         <ul class="info-list">
@@ -271,6 +282,15 @@
           <li><span class="info-label">운영 요약</span> <span id="detail-operation-summary">운영 정보를 정리 중입니다.</span></li>
           <li><span class="info-label">위치 기준</span> <span id="detail-location-summary">위치 기준 정보를 정리 중입니다.</span></li>
           <li><span class="info-label">장비 핵심</span> <span id="detail-equipment-summary">장비와 시설 정보를 정리 중입니다.</span></li>
+        </ul>
+      </div>
+
+      <div class="info-card detail-quality-card">
+        <h3>정보 확인 기준</h3>
+        <ul class="info-list">
+          <li><span class="info-label">기준일</span> <span id="detail-data-updated">정보 기준일을 정리 중입니다.</span></li>
+          <li><span class="info-label">확인 필요</span> <span id="detail-verification-note">운영 정보 확인 항목을 정리 중입니다.</span></li>
+          <li><span class="info-label">의료 안내</span> <span id="detail-medical-note">의료 판단 관련 안내를 정리 중입니다.</span></li>
         </ul>
       </div>
 
@@ -373,7 +393,7 @@
   <script src="js/hospital-content.js?v=8"></script>
   <script src="js/api.js?v=16"></script>
   <script src="js/map.js?v=17"></script>
-  <script src="js/detail.js?v=32"></script>
+  <script src="js/detail.js?v=33"></script>
   <script src="js/app.js?v=39"></script>
 </body>
 </html>

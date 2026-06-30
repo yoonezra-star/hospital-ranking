@@ -4,7 +4,7 @@ const { execFileSync } = require('child_process');
 
 const ROOT = process.cwd();
 const SITE_URL = 'https://hospital-ranking.kr';
-const CSS_VERSION = '10';
+const CSS_VERSION = '11';
 
 function loadArrayFromHead(file, constName) {
   const source = execFileSync('git', ['show', `HEAD:${file}`], {
