@@ -1,6 +1,8 @@
 node_modules/
 .wrangler/
 .env
+README.md
+adsense-audit-plan.md
 clean_detail.js
 clean_map.js
 update1.js
