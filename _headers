@@ -15,6 +15,12 @@
   Content-Type: text/plain; charset=utf-8
   Cache-Control: public, max-age=0, must-revalidate
 
+/guide*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/guide*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
 /404
   X-Robots-Tag: noindex, nofollow
   Cache-Control: no-store
