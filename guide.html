@@ -3,468 +3,210 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>건강 가이드 모음 - 병원찾기</title>
-  <meta name="description" content="임플란트, 라식·라섹, 당뇨, 수면내시경, 우울 상담, 여드름, 재활, 비염, 비뇨기 질환까지 병원 방문 전에 읽기 좋은 건강 가이드 모음입니다.">
+  <title>건강가이드 모음 - 병원찾기</title>
+  <meta name="description" content="임플란트, 내시경, 우울·불안 상담, 비염, 당뇨, 라식·라섹 등 병원 방문 전에 확인하면 좋은 건강가이드 모음입니다.">
   <link rel="canonical" href="https://hospital-ranking.kr/guide">
   <meta name="robots" content="index,follow">
   <link rel="stylesheet" href="css/style.css?v=11">
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "name": "병원찾기 건강 가이드 모음",
-    "url": "https://hospital-ranking.kr/guide",
-    "description": "병원 방문 전에 읽기 좋은 건강 가이드를 진료과별로 정리한 병원찾기 안내 페이지입니다."
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "홈",
-        "item": "https://hospital-ranking.kr/"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "건강 가이드",
-        "item": "https://hospital-ranking.kr/guide"
-      }
-    ]
-  }
-  </script>
   <style>
-    .guide-page {
-      max-width: 1120px;
-      padding-top: 56px;
-    }
-    .guide-hero {
-      padding: 34px;
-      border: 1px solid var(--border-default);
-      border-radius: var(--r-xl);
-      background:
-        radial-gradient(circle at top right, rgba(104, 134, 127, 0.16), transparent 28%),
-        linear-gradient(135deg, color-mix(in srgb, var(--bg-card) 84%, white 16%), color-mix(in srgb, var(--bg-body) 90%, white 10%));
-      margin-bottom: 28px;
-    }
-    .guide-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 16px;
-    }
-    .guide-meta span {
-      display: inline-flex;
-      align-items: center;
-      min-height: 38px;
-      padding: 8px 14px;
-      border-radius: 999px;
-      border: 1px solid var(--border-default);
-      background: color-mix(in srgb, var(--bg-card) 88%, white 12%);
-      color: var(--text-muted);
-      font-size: var(--fs-sm);
-    }
-    .guide-info-grid,
-    .guide-grid-page,
-    .guide-checklist-grid {
-      display: grid;
-      gap: 20px;
-    }
-    .guide-info-grid {
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      margin-bottom: 28px;
-    }
-    .guide-grid-page {
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      margin-bottom: 28px;
-    }
-    .guide-checklist-grid {
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    }
-    .guide-info-card,
-    .guide-check-card,
-    .guide-note-box {
-      border: 1px solid var(--border-default);
-      border-radius: 18px;
-      background: var(--bg-card);
-      box-shadow: var(--shadow-xs);
-    }
-    .guide-info-card,
-    .guide-check-card {
-      padding: 22px;
-    }
-    .guide-card-link {
-      display: flex;
-      flex-direction: column;
-      min-height: 100%;
-      border: 1px solid var(--border-default);
-      border-radius: var(--r-lg);
-      overflow: hidden;
-      background: var(--bg-card);
-      transition: transform var(--t-base), box-shadow var(--t-base), border-color var(--t-base);
-      box-shadow: var(--shadow-xs);
-    }
-    .guide-card-link:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-md);
-      border-color: color-mix(in srgb, var(--secondary) 34%, var(--border-default) 66%);
-    }
-    .guide-card-visual {
-      min-height: 152px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fffdf9;
-      font-size: 3rem;
-      font-weight: 700;
-    }
-    .guide-card-body {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .guide-category {
-      color: var(--primary);
-      font-size: var(--fs-sm);
-      font-weight: var(--fw-bold);
-    }
-    .guide-card-body h2,
-    .guide-info-card h2,
-    .guide-check-card h2,
-    .guide-note-box h2 {
-      margin: 0;
-      color: var(--text-heading);
-    }
-    .guide-card-body h2 {
-      font-size: 1.1rem;
-    }
-    .guide-card-body p,
-    .guide-info-card p,
-    .guide-check-card p,
-    .guide-note-box p,
-    .guide-note-box li {
-      color: var(--text-body);
-      line-height: 1.78;
-      margin: 0;
-    }
-    .guide-note-box {
-      padding: 26px;
-    }
-    .guide-note-box ul {
-      margin: 12px 0 0;
-      padding-left: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .guide-link-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 16px;
-    }
-    .guide-link-row a {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 44px;
-      padding: 10px 14px;
-      border-radius: 10px;
-      border: 1px solid var(--border-default);
-      background: var(--bg-body);
-      color: var(--text-heading);
-      text-decoration: none;
-      font-weight: 700;
-    }
-    @media (max-width: 768px) {
-      .guide-page {
-        padding-top: 44px;
-      }
-      .guide-hero,
-      .guide-info-card,
-      .guide-check-card,
-      .guide-note-box {
-        padding: 22px 18px;
-      }
-    }
+    .guide-page-wrap { max-width: 1040px; padding-top: 48px; }
+    .guide-hero-clean { padding: 34px; border: 1px solid var(--border-default); border-radius: 26px; background: radial-gradient(circle at 88% 8%, rgba(104, 134, 127, 0.18), transparent 28%), linear-gradient(135deg, color-mix(in srgb, var(--bg-card) 88%, white 12%), color-mix(in srgb, var(--bg-body) 90%, white 10%)); box-shadow: var(--shadow-sm); }
+    .guide-kicker { color: var(--primary); font-weight: 800; margin: 0 0 10px; letter-spacing: -0.02em; }
+    .guide-title { font-size: clamp(2rem, 4vw, 3.2rem); margin: 0 0 16px; color: var(--text-heading); line-height: 1.22; letter-spacing: -0.04em; }
+    .guide-summary { max-width: 760px; color: var(--text-body); line-height: 1.85; font-size: 1.05rem; margin: 0; }
+    .guide-badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+    .guide-badges span, .guide-link-row a { display: inline-flex; align-items: center; min-height: 38px; padding: 8px 13px; border-radius: 999px; border: 1px solid var(--border-default); background: color-mix(in srgb, var(--bg-card) 88%, white 12%); color: var(--text-heading); font-size: .92rem; font-weight: 700; }
+    .guide-content { display: grid; gap: 22px; margin-top: 28px; }
+    .guide-card-clean { padding: 26px; border: 1px solid var(--border-default); border-radius: 22px; background: var(--bg-card); box-shadow: var(--shadow-xs); }
+    .guide-card-clean h2 { margin: 0 0 14px; font-size: 1.35rem; color: var(--text-heading); }
+    .guide-card-clean p { color: var(--text-body); line-height: 1.82; margin: 0; }
+    .guide-content ul, .guide-content ol { list-style: disc; padding-left: 20px; margin: 0; display: grid; gap: 9px; }
+    .guide-content ol { list-style: decimal; }
+    .guide-content li { color: var(--text-body); line-height: 1.78; }
+    .guide-grid-clean { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+    .guide-trust-meta, .guide-safety-note { padding: 18px 20px; border: 1px solid var(--border-default); border-radius: 18px; background: color-mix(in srgb, var(--bg-body) 88%, white 12%); color: var(--text-body); line-height: 1.8; }
+    .guide-trust-meta a, .guide-safety-note a, .footer-bottom a { color: var(--primary); font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
+    .guide-safety-note h2 { margin: 0 0 12px; font-size: 1.2rem; }
+    .guide-link-row { display: flex; flex-wrap: wrap; gap: 10px; }
+    .guide-link-row a { text-decoration: none; border-radius: 12px; }
+    @media (max-width: 768px) { .guide-page-wrap { padding-top: 34px; } .guide-hero-clean, .guide-card-clean { padding: 22px 18px; } .guide-title { font-size: 2rem; } }
   </style>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"병원찾기 건강가이드 모음","url":"https://hospital-ranking.kr/guide","description":"병원 방문 전에 확인하면 좋은 건강가이드와 진료과별 체크리스트를 모은 페이지입니다.","dateModified":"2026-07-01","hasPart":[{"@type":"MedicalWebPage","name":"임플란트 치과 상담 전 체크 가이드","url":"https://hospital-ranking.kr/guide-implant"},{"@type":"MedicalWebPage","name":"위·대장 내시경 검사 준비 가이드","url":"https://hospital-ranking.kr/guide-endoscopy"},{"@type":"MedicalWebPage","name":"우울·불안 상담 전 준비 가이드","url":"https://hospital-ranking.kr/guide-depression"},{"@type":"MedicalWebPage","name":"당뇨·고혈압 만성질환 진료 준비 가이드","url":"https://hospital-ranking.kr/guide-diabetes"},{"@type":"MedicalWebPage","name":"비염·반복 감기 이비인후과 방문 가이드","url":"https://hospital-ranking.kr/guide-rhinitis"},{"@type":"MedicalWebPage","name":"비뇨의학과 방문 전 증상 정리 가이드","url":"https://hospital-ranking.kr/guide-urology"},{"@type":"MedicalWebPage","name":"라식·라섹 안과 검사 전 체크 가이드","url":"https://hospital-ranking.kr/guide-lasik"},{"@type":"MedicalWebPage","name":"백내장 검사와 수술 상담 가이드","url":"https://hospital-ranking.kr/guide-cataract"},{"@type":"MedicalWebPage","name":"정형외과·통증 외래 방문 전 체크 가이드","url":"https://hospital-ranking.kr/guide-ortho"},{"@type":"MedicalWebPage","name":"도수치료 상담 전 확인 가이드","url":"https://hospital-ranking.kr/guide-manual-therapy"},{"@type":"MedicalWebPage","name":"여드름·피부과 상담 전 체크 가이드","url":"https://hospital-ranking.kr/guide-acne"},{"@type":"MedicalWebPage","name":"여성검진·산부인과 상담 전 체크 가이드","url":"https://hospital-ranking.kr/guide-womens-checkup"},{"@type":"MedicalWebPage","name":"유방초음파 상담 전 체크 가이드","url":"https://hospital-ranking.kr/guide-breast-ultrasound"},{"@type":"MedicalWebPage","name":"요실금·배뇨장애 상담 전 체크 가이드","url":"https://hospital-ranking.kr/guide-incontinence"},{"@type":"MedicalWebPage","name":"소아치과 방문 전 보호자 체크 가이드","url":"https://hospital-ranking.kr/guide-pediatric-dental"},{"@type":"MedicalWebPage","name":"추나·한방 통증 진료 전 체크 가이드","url":"https://hospital-ranking.kr/guide-chuna"}]}</script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1441018945572157" crossorigin="anonymous"></script>
 </head>
 <body class="light-mode">
   <header class="header" id="header" style="position:static; border-bottom:1px solid var(--border-default);">
     <div class="header-inner">
-      <a href="/" class="logo">
-        <span class="logo-icon">🏥</span>
-        <span class="gradient-text">병원찾기</span>
-      </a>
+      <a href="index.html" class="logo"><span class="logo-icon">H</span><span class="gradient-text">병원찾기</span></a>
       <nav class="nav-links">
-        <a href="index.html">홈</a>
+        <a href="index.html#search-results">병원목록</a>
+        <a href="guide.html" class="active">건강가이드</a>
         <a href="about.html">사이트 소개</a>
-        <a href="contact.html">문의하기</a>
+        <a href="contact.html">문의</a>
       </nav>
     </div>
   </header>
-
-  <main class="container section-padding guide-page">
-    <section class="guide-hero fade-up visible">
-      <p style="color:var(--primary); font-weight:700; margin:0 0 8px;">건강 가이드 모음</p>
-      <h1 style="font-size:var(--fs-4xl); margin:0 0 14px; color:var(--text-heading);">병원 방문 전에 먼저 읽어야 할 핵심 가이드</h1>
-      <p style="color:var(--text-body); line-height:1.85; max-width:780px; margin:0;">
-        병원찾기의 건강 가이드는 특정 병원을 홍보하기 위한 광고형 문서가 아니라, 진료 전에 알아두면 좋은 기본 정보를 정리한 참고 콘텐츠입니다.
-        증상, 검사, 치료 방식, 병원 선택 체크포인트를 이해하기 쉽게 묶었고, 실제 진단과 치료 결정은 반드시 해당 병원 또는 의료진과 직접 상담해 주세요.
-      </p>
-      <div class="guide-meta">
-        <span>최종 수정일 2026-06-20</span>
-        <span>운영 문의 replyleaders@naver.com</span>
-        <span>콘텐츠 성격 참고용 건강 정보</span>
+  <main class="container section-padding guide-page-wrap">
+    <section class="guide-hero-clean">
+      <p class="guide-kicker">건강가이드 모음</p>
+      <h1 class="guide-title">병원 방문 전에 먼저 읽어보면 좋은 체크리스트</h1>
+      <p class="guide-summary">진료과와 증상별로 방문 전 준비할 내용, 상담 때 물어볼 질문, 병원 비교 기준을 정리했습니다. 모든 정보는 참고용이며 실제 진단과 치료 결정은 의료진 상담이 우선입니다.</p>
+      <div class="guide-badges">
+        <span>최종 점검일 2026-07-01</span>
+        <span>16개 가이드</span>
+        <span>광고 공간 없음</span>
       </div>
     </section>
-
-    <section class="guide-info-grid">
-      <article class="guide-info-card">
-        <h2 style="font-size:1.05rem; margin-bottom:10px;">이렇게 활용하세요</h2>
-        <p>병원 방문 전 기본 개념을 정리하고, 상담 시 무엇을 물어봐야 하는지 미리 체크하는 용도로 보는 것이 가장 좋습니다.</p>
-      </article>
-      <article class="guide-info-card">
-        <h2 style="font-size:1.05rem; margin-bottom:10px;">콘텐츠 원칙</h2>
-        <p>과도한 치료 유도 표현 대신 증상 이해, 검사 준비, 진료과 선택 기준 같은 실용 정보 위주로 정리합니다.</p>
-      </article>
-      <article class="guide-info-card">
-        <h2 style="font-size:1.05rem; margin-bottom:10px;">정정 제안</h2>
-        <p>오류 제안이나 보완 의견은 <a href="mailto:replyleaders@naver.com" style="color:var(--primary); font-weight:700;">replyleaders@naver.com</a>으로 받을 수 있습니다.</p>
-      </article>
-    </section>
-
-    <section class="guide-note-box fade-up visible" style="margin-bottom:28px;">
-      <h2 style="font-size:1.35rem; margin-bottom:10px;">병원 선택은 어떤 순서로 보면 좋을까?</h2>
-      <p>
-        같은 진료과라도 병원 선택 기준은 증상, 거리, 운영시간, 검사 장비, 접수 편의에 따라 달라집니다.
-        병원찾기에서는 먼저 지역과 진료과를 좁히고, 그 다음에 토요일·야간 진료나 주차 가능 여부 같은 생활 조건을 맞춘 뒤,
-        마지막으로 상세페이지에서 준비서류, 운영 요약, 공공데이터 기준 장비·시설 정보를 확인하는 흐름을 권장합니다.
-      </p>
-      <ul>
-        <li>1단계: 지금 필요한 진료과와 이동 가능한 지역을 먼저 정합니다.</li>
-        <li>2단계: 토요일, 야간, 일요일, 주차 같은 실제 방문 조건을 함께 봅니다.</li>
-        <li>3단계: 상세페이지에서 준비서류, 접수 흐름, 위치, 운영 메모를 다시 확인합니다.</li>
-        <li>4단계: 비용, 접수 마감, 수술 가능 여부는 병원 안내나 전화 문의로 최종 확인합니다.</li>
-      </ul>
-    </section>
-
-    <section class="guide-note-box fade-up visible" style="margin-bottom:28px;">
-      <h2 style="font-size:1.35rem; margin-bottom:10px;">공공데이터와 보강 정보는 어떻게 읽어야 할까?</h2>
-      <p>
-        이 사이트의 병원 정보는 공공 병원 데이터와 공개 가능한 병원 안내 정보를 함께 정리한 참고형 콘텐츠입니다.
-        공공데이터는 병원 기본 정보와 운영 단서를 빠르게 파악하는 데 유용하지만, 실제 내원 시점의 접수 마감, 검사 가능 여부,
-        장비 운영 일정, 주차 혼잡도처럼 현장 변동이 큰 정보는 병원 고지가 더 우선일 수 있습니다.
-      </p>
-      <ul>
-        <li>공공데이터: 병원 기본 정보, 지역, 진료 분류, 일부 운영 단서 확인에 유용합니다.</li>
-        <li>보강 정보: 준비서류, 방문 흐름, 비교 포인트처럼 사용자가 바로 판단하기 쉬운 설명을 더합니다.</li>
-        <li>최종 확인: 수술, 응급, 검사, 접수 마감처럼 중요한 정보는 병원에 직접 다시 확인하는 편이 안전합니다.</li>
-      </ul>
-    </section>
-
-    <section class="guide-grid-page">
-      <a class="guide-card-link fade-up visible" href="guide-implant.html">
-        <div class="guide-card-visual" style="background:linear-gradient(135deg, #68867f, #3f5f5a);">치</div>
-        <div class="guide-card-body">
-          <span class="guide-category">치과</span>
-          <h2>임플란트 전 꼭 확인할 점</h2>
-          <p>시술 전 검사, 비용 구조, 부작용 가능성, 치과 선택 기준을 확인할 수 있는 기본 가이드입니다.</p>
-        </div>
-      </a>
-
-      <a class="guide-card-link fade-up visible" href="guide-lasik.html">
-        <div class="guide-card-visual" style="background:linear-gradient(135deg, #c39a72, #a67c52);">안</div>
-        <div class="guide-card-body">
-          <span class="guide-category">안과</span>
-          <h2>라식·라섹 비교와 수술 전 체크포인트</h2>
-          <p>시력교정술 종류별 차이와 수술 전 검사, 회복 과정, 상담 시 확인할 질문을 정리했습니다.</p>
-        </div>
-      </a>
-
-      <a class="guide-card-link fade-up visible" href="guide-diabetes.html">
-        <div class="guide-card-visual" style="background:linear-gradient(135deg, #bb6a5b, #8b4b42);">내</div>
-        <div class="guide-card-body">
-          <span class="guide-category">내과</span>
-          <h2>당뇨 초기 관리와 생활 습관 정리</h2>
-          <p>혈당 관리의 기본 원칙, 정기 검사의 중요성, 내과 방문 전에 체크할 내용을 정리했습니다.</p>
-        </div>
-      </a>
-
-      <a class="guide-card-link fade-up visible" href="guide-endoscopy.html">
-        <div class="guide-card-visual" style="background:linear-gradient(135deg, #4f7b73, #2f5751);">검</div>
-        <div class="guide-card-body">
-          <span class="guide-category">소화기내과</span>
-          <h2>수면내시경 준비 가이드</h2>
-          <p>검사 전 금식, 복용 약, 수면내시경 상담 포인트 등 꼭 챙겨야 할 준비 사항을 정리했습니다.</p>
-        </div>
-      </a>
-
-      <a class="guide-card-link fade-up visible" href="guide-depression.html">
-        <div class="guide-card-visual" style="background:linear-gradient(135deg, #7d7289, #5c5368);">마</div>
-        <div class="guide-card-body">
-          <span class="guide-category">정신건강의학과</span>
-          <h2>우울감과 상담 치료 시작하기</h2>
-          <p>상담이 필요한 신호, 초진 전 준비, 병원 선택 시 확인할 항목을 중심으로 정리했습니다.</p>
-        </div>
-      </a>
-
-      <a class="guide-card-link fade-up visible" href="guide-acne.html">
-        <div class="guide-card-visual" style="background:linear-gradient(135deg, #b87a68, #94594a);">피</div>
-        <div class="guide-card-body">
-          <span class="guide-category">피부과</span>
-          <h2>여드름 치료 시작 전 알아둘 점</h2>
-          <p>약물 치료와 시술 치료의 차이, 흉터 관리, 상담 전에 질문하면 좋은 항목을 담았습니다.</p>
-        </div>
-      </a>
-
-      <a class="guide-card-link fade-up visible" href="guide-ortho.html">
-        <div class="guide-card-visual" style="background:linear-gradient(135deg, #6f8f96, #4b6d74);">재</div>
-        <div class="guide-card-body">
-          <span class="guide-category">정형외과·재활</span>
-          <h2>재활치료와 통증 관리 체크리스트</h2>
-          <p>재활을 시작하기 전에 확인할 검사, 치료 빈도, 병원 비교 기준을 정리했습니다.</p>
-        </div>
-      </a>
-
-      <a class="guide-card-link fade-up visible" href="guide-rhinitis.html">
-        <div class="guide-card-visual" style="background:linear-gradient(135deg, #6b84a7, #4a6285);">비</div>
-        <div class="guide-card-body">
-          <span class="guide-category">이비인후과</span>
-          <h2>만성 비염과 코막힘 관리</h2>
-          <p>비염 증상 구분, 약물 치료와 수술 상담 포인트, 이비인후과 방문 전에 볼 내용을 담았습니다.</p>
-        </div>
-      </a>
-
-      <a class="guide-card-link fade-up visible" href="guide-urology.html">
-        <div class="guide-card-visual" style="background:linear-gradient(135deg, #737d84, #4b545a);">비</div>
-        <div class="guide-card-body">
-          <span class="guide-category">비뇨의학과</span>
-          <h2>요로결석과 응급 진료 판단</h2>
-          <p>응급으로 봐야 하는 경우, 통증 대응, 비뇨의학과 상담 전에 준비할 항목을 정리했습니다.</p>
-        </div>
-      </a>
-      <a class="guide-card-link fade-up visible" href="guide-cataract.html">
-        <div class="guide-card-visual" style="background:linear-gradient(135deg, #c59e7b, #8b6547);">안</div>
-        <div class="guide-card-body">
-          <span class="guide-category">안과</span>
-          <h2>백내장 검사와 수술 상담 준비</h2>
-          <p>시야 흐림, 눈부심, 렌즈 선택, 회복기 관리까지 중장년층이 많이 묻는 핵심 질문을 정리했습니다.</p>
-        </div>
-      </a>
-
-      <a class="guide-card-link fade-up visible" href="guide-womens-checkup.html">
-        <div class="guide-card-visual" style="background:linear-gradient(135deg, #b57f7a, #85544f);">여</div>
-        <div class="guide-card-body">
-          <span class="guide-category">산부인과</span>
-          <h2>여성검진과 산부인과 상담 가이드</h2>
-          <p>자궁경부검사, 초음파 상담, 폐경 전후 체크, 부정출혈 질문 포인트를 한 페이지로 정리했습니다.</p>
-        </div>
-      </a>
-    </section>
-
-    <section class="guide-note-box fade-up visible" style="margin-bottom:28px;">
-      <h2 style="font-size:1.35rem; margin-bottom:10px;">추가로 보강한 가이드</h2>
-      <div class="guide-link-row" style="margin-top:0;">
-        <a href="guide-pediatric-dental.html">소아치과 가이드</a>
-        <a href="guide-breast-ultrasound.html">유방초음파 가이드</a>
-        <a href="guide-incontinence.html">요실금 가이드</a>
-        <a href="guide-manual-therapy.html">도수치료 가이드</a>
-        <a href="guide-chuna.html">추나요법 가이드</a>
+    <section class="guide-content">
+      <section class="guide-grid-clean"><a class="guide-card-link" href="guide-implant.html">
+      <div class="guide-card-body">
+        <span class="guide-category">치과</span>
+        <h2>임플란트 치과 상담 전 체크 가이드</h2>
+        <p>임플란트 상담 전에 촬영, 잇몸 상태, 보철 계획, 비용 범위를 어떻게 확인하면 좋은지 정리했습니다.</p>
       </div>
-      <ul style="margin:16px 0 0; padding-left:18px;">
-        <li>소아치과 방문 전 아이 나이, 충치 여부, 예방진료 목적, 진료 협조도 정리</li>
-        <li>유방초음파 전 메모할 증상, 추적검사 질문, 이전 검진 결과 정리</li>
-        <li>요실금 상담 전에 구분하면 좋은 증상 상황과 생활 불편 기록</li>
-        <li>도수치료 상담 전 통증 위치, 촬영 여부, 방문 빈도, 치료 목표 체크</li>
-        <li>추나요법 상담 전 한방치료 경험, 자세 문제, 반복 통증 패턴 정리</li>
-      </ul>
-    </section>
-
-    <section class="guide-note-box fade-up visible">
-      <h2 style="font-size:1.35rem; margin-bottom:10px;">병원 선택 전 체크리스트</h2>
-      <div class="guide-checklist-grid" style="margin-top:16px;">
-        <article class="guide-check-card">
-          <h2 style="font-size:1.05rem; margin-bottom:8px;">진료 가능 시간</h2>
-          <p>토요일, 야간, 일요일 운영 여부와 점심시간, 접수 마감 시간을 방문 전 다시 확인하세요.</p>
-        </article>
-        <article class="guide-check-card">
-          <h2 style="font-size:1.05rem; margin-bottom:8px;">검사와 장비</h2>
-          <p>필요한 검사가 가능한지, 촬영 장비나 입원 시설이 있는지 병원 안내와 함께 보는 것이 안전합니다.</p>
-        </article>
-        <article class="guide-check-card">
-          <h2 style="font-size:1.05rem; margin-bottom:8px;">비용과 보험</h2>
-          <p>건강보험 적용 여부, 비급여 여부, 검사나 시술 전후 추가 비용 가능성을 상담 때 확인하세요.</p>
-        </article>
-        <article class="guide-check-card">
-          <h2 style="font-size:1.05rem; margin-bottom:8px;">응급 여부 판단</h2>
-          <p>심한 통증, 출혈, 호흡 곤란, 고열, 갑작스러운 증상 악화는 온라인 정보보다 직접 진료가 우선입니다.</p>
-        </article>
+    </a>
+<a class="guide-card-link" href="guide-endoscopy.html">
+      <div class="guide-card-body">
+        <span class="guide-category">내과·검진</span>
+        <h2>위·대장 내시경 검사 준비 가이드</h2>
+        <p>수면내시경과 일반 내시경을 준비할 때 금식, 약 복용, 보호자 동행, 검사 후 회복 동선을 확인하는 기준입니다.</p>
       </div>
-    </section>
-
-    <section class="guide-note-box fade-up visible">
-      <h2 style="font-size:1.35rem; margin-bottom:10px;">안내 및 면책</h2>
-      <p>
-        아래 콘텐츠는 병원 방문 전에 기본 맥락을 이해하기 위한 참고 자료입니다. 병원별 실제 진료 가능 시간, 비용, 장비 보유 여부,
-        수술 가능 여부는 방문 전 해당 병원에 직접 다시 확인해 주세요.
-      </p>
-      <ul>
-        <li>응급 상황이나 증상 악화 시에는 온라인 정보보다 응급실 또는 직접 진료를 우선해 주세요.</li>
-        <li>콘텐츠 보완 제안이나 오류 제보는 <a href="mailto:replyleaders@naver.com" style="color:var(--primary); font-weight:600;">replyleaders@naver.com</a>으로 접수합니다.</li>
-        <li>운영 기준과 정정 절차는 사이트 소개 페이지에서 더 자세히 확인할 수 있습니다.</li>
-      </ul>
-      <div class="guide-link-row">
-        <a href="about.html">사이트 소개 보기</a>
-        <a href="editorial-policy.html">콘텐츠 편집 원칙</a>
-        <a href="ad-policy.html">광고 및 제휴 안내</a>
-        <a href="contact.html">문의하기</a>
-        <a href="privacy.html">개인정보처리방침</a>
+    </a>
+<a class="guide-card-link" href="guide-depression.html">
+      <div class="guide-card-body">
+        <span class="guide-category">정신건강의학과</span>
+        <h2>우울·불안 상담 전 준비 가이드</h2>
+        <p>초진 상담 전에 증상 기간, 수면, 식욕, 일상 기능 변화, 복용약 정보를 정리하는 방법을 안내합니다.</p>
       </div>
+    </a>
+<a class="guide-card-link" href="guide-diabetes.html">
+      <div class="guide-card-body">
+        <span class="guide-category">내과</span>
+        <h2>당뇨·고혈압 만성질환 진료 준비 가이드</h2>
+        <p>검진 결과 상담, 혈당·혈압 기록, 복용약 조정, 합병증 검사를 준비할 때 확인할 항목입니다.</p>
+      </div>
+    </a>
+<a class="guide-card-link" href="guide-rhinitis.html">
+      <div class="guide-card-body">
+        <span class="guide-category">이비인후과</span>
+        <h2>비염·반복 감기 이비인후과 방문 가이드</h2>
+        <p>코막힘, 재채기, 후비루, 반복 감기 증상을 정리하고 이비인후과 방문 전에 확인할 내용을 모았습니다.</p>
+      </div>
+    </a>
+<a class="guide-card-link" href="guide-urology.html">
+      <div class="guide-card-body">
+        <span class="guide-category">비뇨의학과</span>
+        <h2>비뇨의학과 방문 전 증상 정리 가이드</h2>
+        <p>배뇨 불편, 빈뇨, 혈뇨, 요로결석 의심 증상으로 비뇨의학과를 찾기 전 확인할 내용입니다.</p>
+      </div>
+    </a>
+<a class="guide-card-link" href="guide-lasik.html">
+      <div class="guide-card-body">
+        <span class="guide-category">안과</span>
+        <h2>라식·라섹 안과 검사 전 체크 가이드</h2>
+        <p>시력교정술 상담 전에 각막 두께, 안구건조, 렌즈 중단 기간, 회복 일정을 확인하는 기준입니다.</p>
+      </div>
+    </a>
+<a class="guide-card-link" href="guide-cataract.html">
+      <div class="guide-card-body">
+        <span class="guide-category">안과</span>
+        <h2>백내장 검사와 수술 상담 가이드</h2>
+        <p>시야 흐림, 눈부심, 인공수정체 선택, 수술 전후 주의사항을 상담할 때 필요한 체크포인트입니다.</p>
+      </div>
+    </a>
+<a class="guide-card-link" href="guide-ortho.html">
+      <div class="guide-card-body">
+        <span class="guide-category">정형외과</span>
+        <h2>정형외과·통증 외래 방문 전 체크 가이드</h2>
+        <p>허리, 목, 어깨, 무릎 통증 진료 전에 통증 위치, 악화 동작, 영상검사 이력을 정리하는 방법입니다.</p>
+      </div>
+    </a>
+<a class="guide-card-link" href="guide-manual-therapy.html">
+      <div class="guide-card-body">
+        <span class="guide-category">재활·통증</span>
+        <h2>도수치료 상담 전 확인 가이드</h2>
+        <p>도수치료 상담 전에 통증 위치, 영상검사, 치료 목표, 방문 빈도와 비용 범위를 확인하는 기준입니다.</p>
+      </div>
+    </a>
+<a class="guide-card-link" href="guide-acne.html">
+      <div class="guide-card-body">
+        <span class="guide-category">피부과</span>
+        <h2>여드름·피부과 상담 전 체크 가이드</h2>
+        <p>여드름, 색소, 흉터 상담 전에 증상 기간, 사용 제품, 약 처방 경험, 시술 선택 기준을 정리합니다.</p>
+      </div>
+    </a>
+<a class="guide-card-link" href="guide-womens-checkup.html">
+      <div class="guide-card-body">
+        <span class="guide-category">산부인과</span>
+        <h2>여성검진·산부인과 상담 전 체크 가이드</h2>
+        <p>여성검진, 초음파, 자궁경부암 검사, 생리 이상 상담 전에 준비할 정보를 정리했습니다.</p>
+      </div>
+    </a>
+<a class="guide-card-link" href="guide-breast-ultrasound.html">
+      <div class="guide-card-body">
+        <span class="guide-category">여성검진</span>
+        <h2>유방초음파 상담 전 체크 가이드</h2>
+        <p>유방초음파 전 멍울, 통증, 검진 이력, 가족력, 추가검사 질문을 정리하는 방법입니다.</p>
+      </div>
+    </a>
+<a class="guide-card-link" href="guide-incontinence.html">
+      <div class="guide-card-body">
+        <span class="guide-category">비뇨의학과·산부인과</span>
+        <h2>요실금·배뇨장애 상담 전 체크 가이드</h2>
+        <p>요실금, 빈뇨, 야간뇨, 절박뇨 상담 전에 증상 빈도와 생활 영향을 정리하는 기준입니다.</p>
+      </div>
+    </a>
+<a class="guide-card-link" href="guide-pediatric-dental.html">
+      <div class="guide-card-body">
+        <span class="guide-category">소아치과</span>
+        <h2>소아치과 방문 전 보호자 체크 가이드</h2>
+        <p>아이 충치, 유치 관리, 불소도포, 치과 공포를 줄이기 위해 보호자가 미리 확인할 항목입니다.</p>
+      </div>
+    </a>
+<a class="guide-card-link" href="guide-chuna.html">
+      <div class="guide-card-body">
+        <span class="guide-category">한의원·한방병원</span>
+        <h2>추나·한방 통증 진료 전 체크 가이드</h2>
+        <p>추나, 침, 한방 통증 진료를 상담하기 전 통증 위치, 기존 검사, 복용약, 치료 목표를 정리합니다.</p>
+      </div>
+    </a></section>
+      <section class="guide-safety-note" data-guide-checklist="true">
+        <h2>이 가이드를 볼 때 기억할 점</h2>
+        <ul>
+          <li>병원찾기는 특정 병원의 진료 결과나 만족도를 보장하지 않습니다.</li>
+          <li>접수 시간, 진료 가능 여부, 검사 비용은 반드시 방문 전 병원에 직접 확인해 주세요.</li>
+          <li>응급 증상은 검색보다 119, 응급실, 해당 병원 안내가 우선입니다.</li>
+        </ul>
+      </section>
     </section>
   </main>
-
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-top">
         <div class="footer-brand">
-          <div class="logo">
-            <span class="logo-icon">🏥</span>
-            <span class="gradient-text">병원찾기</span>
-          </div>
-          <p>공공 데이터와 건강 가이드를 바탕으로 병원 탐색 전에 읽기 좋은 참고 정보를 제공합니다.</p>
+          <div class="logo"><span class="logo-icon">H</span><span class="gradient-text">병원찾기</span></div>
+          <p>공공 데이터와 공개 가능한 정보를 바탕으로 병원 탐색에 필요한 참고 정보를 정리합니다.</p>
         </div>
         <div class="footer-links-group">
           <h4>바로가기</h4>
           <a href="index.html">홈</a>
+          <a href="guide.html">건강가이드</a>
           <a href="about.html">사이트 소개</a>
-          <a href="contact.html">문의하기</a>
         </div>
         <div class="footer-links-group">
           <h4>정책</h4>
           <a href="editorial-policy.html">콘텐츠 편집 원칙</a>
           <a href="ad-policy.html">광고 및 제휴 안내</a>
-          <a href="terms.html">이용약관</a>
           <a href="privacy.html">개인정보처리방침</a>
-        </div>
-        <div class="footer-links-group">
-          <h4>추천 가이드</h4>
-          <a href="guide-implant.html">임플란트 가이드</a>
-          <a href="guide-endoscopy.html">수면내시경 가이드</a>
         </div>
       </div>
       <div class="footer-bottom">
         <p>&copy; 2026 병원찾기. 모든 권리 보유.</p>
-        <p>운영 문의 및 정보 정정 요청: <a href="mailto:replyleaders@naver.com" style="color:var(--primary); font-weight:600;">replyleaders@naver.com</a></p>
-        <p>가이드 콘텐츠는 참고용 의료 정보이며, 실제 진단과 치료 결정은 반드시 해당 병원 또는 의료진과 직접 상담해 주세요.</p>
+        <p>운영 문의 및 정보 정정 요청: <a href="mailto:replyleaders@naver.com">replyleaders@naver.com</a></p>
+        <p>본 사이트의 정보는 참고용이며, 실제 진단과 치료 결정은 반드시 해당 병원 또는 의료진과 직접 상담해 주세요.</p>
       </div>
     </div>
   </footer>
+  <script src="js/guide-page.js?v=5"></script>
 </body>
 </html>
