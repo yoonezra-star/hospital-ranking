@@ -1511,10 +1511,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function buildIntentSummary() {
     const parts = [];
-    if (state.regionCode !== 'all') parts.push(findRegionName(state.regionCode));
-    if (state.departmentId !== 'all') parts.push(findDepartmentName(state.departmentId));
-    getKeywordOperationLabels(state.keyword).forEach((label) => parts.push(label));
-    if (state.keyword) parts.push(`키워드 "${state.keyword}"`);
+
+    const parsedIntentSummary = typeof SearchEngine !== 'undefined'
+      && SearchEngine?.buildSearchSummary
+      && state.searchIntent
+      ? SearchEngine.buildSearchSummary(state.searchIntent)
+      : '';
+
+    if (parsedIntentSummary) {
+      parts.push(parsedIntentSummary);
+    } else {
+      if (state.regionCode !== 'all') parts.push(findRegionName(state.regionCode));
+      if (state.departmentId !== 'all') parts.push(findDepartmentName(state.departmentId));
+      getKeywordOperationLabels(state.keyword).forEach((label) => parts.push(label));
+      if (state.keyword) parts.push(`키워드 "${state.keyword}"`);
+    }
+
     if (state.specialFilter) parts.push(buildSpecialFilterLabel(state.specialFilter));
     if (state.relaxedSearchLabel) {
       const requested = parts.length > 0 ? `요청 조건: ${parts.join(' / ')}. ` : '';
@@ -1619,6 +1631,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function buildHospitalFactsMarkup(item) {
+    const location = [
+      item.region,
+      item.district,
+      item.town,
+    ].filter(Boolean).join(' ') || '지역 확인 필요';
+    const doctorInfo = item.specialistCount > 0
+      ? `전문의 ${formatNumber(item.specialistCount)}명`
+      : '의료진 확인 필요';
     const operation = [
       item.saturdayOpen ? '\uD1A0\uC694' : '',
       item.nightOpen ? '\uC57C\uAC04' : '',
@@ -1631,10 +1651,12 @@ document.addEventListener('DOMContentLoaded', () => {
       ? formatDate(item.openDate)
       : '\uD655\uC778 \uD544\uC694';
     const facts = [
-      ['\uC804\uD654', item.phone || '\uD655\uC778 \uD544\uC694'],
-      ['\uC6B4\uC601', operation],
-      ['\uC8FC\uCC28', parking],
-      ['\uAC1C\uC6D0', opening],
+      ['위치', location],
+      ['진료과', item.department || item.type || '진료과 확인 필요'],
+      ['의료진', doctorInfo],
+      ['운영', operation],
+      ['주차', parking],
+      ['개원', opening],
     ];
 
     return `
