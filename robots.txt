@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /adsense-audit-plan.md
 Disallow: /README.md
-Disallow: /hospital-ranking-deploy-20260620.zip
+Disallow: /hospital-ranking-deploy-*.zip
 Disallow: /test_map.html
 Disallow: /index_check.txt
 Disallow: /test_raw.bin

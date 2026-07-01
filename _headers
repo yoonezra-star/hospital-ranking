@@ -15,6 +15,42 @@
   Content-Type: text/plain; charset=utf-8
   Cache-Control: public, max-age=0, must-revalidate
 
+/README.md
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store
+
+/adsense-audit-plan.md
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store
+
+/test_map.html
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store
+
+/index_check.txt
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store
+
+/test_raw.bin
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store
+
+/clean_detail.js
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store
+
+/clean_map.js
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store
+
+/update1.js
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store
+
+/hospital-ranking-deploy-*.zip
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store
+
 /guide*
   Cache-Control: public, max-age=0, must-revalidate
 

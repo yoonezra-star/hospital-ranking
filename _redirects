@@ -1,1 +1,12 @@
+/README.md /404.html 404
+/adsense-audit-plan.md /404.html 404
+/test_map.html /404.html 404
+/index_check.txt /404.html 404
+/test_raw.bin /404.html 404
+/clean_detail.js /404.html 404
+/clean_map.js /404.html 404
+/update1.js /404.html 404
+/hospital-ranking-deploy-20260620.zip /404.html 404
+/hospital-ranking-deploy-*.zip /404.html 404
+
 # No SPA fallback - serve static HTML files directly
