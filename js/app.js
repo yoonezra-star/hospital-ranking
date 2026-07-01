@@ -486,7 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
         item.name,
         item.yadmNm,
       );
-      const type = item.type || item.clCdNm || inferHospitalType(item.name || item.yadmNm) || '?섎즺湲곌?';
+      const type = item.type || item.clCdNm || inferHospitalType(item.name || item.yadmNm) || '의료기관';
 
       item.id = item.id || item.ykiho;
       item.name = item.name || item.yadmNm;

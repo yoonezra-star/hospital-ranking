@@ -1,139 +1,74 @@
-# 병원찾기 - 전국 병의원 순위 정보
+# 병원찾기
 
-건강보험심사평가원 공공데이터 기반 전국 병의원 랭킹, 후기, 진료 시간 정보를 제공하는 정적 웹사이트입니다.
+`hospital-ranking.kr` 정적 사이트 소스입니다. 공공 데이터와 공개 가능한 병원 정보를 바탕으로 지역별 병원 검색, 병원 상세 정보, 진료과별 가이드, 운영조건별 랜딩 페이지를 제공합니다.
 
-## 기술 스택
+## 운영 기준
 
-- **HTML5** + **CSS3** + **Vanilla JavaScript**
-- **배포**: Cloudflare Pages + GitHub 연동
+- 사이트명: 병원찾기
+- 운영 도메인: `https://hospital-ranking.kr`
+- 배포 방식: GitHub `main` 브랜치 푸시 후 Cloudflare Pages 자동 배포
+- 광고 정책: 애드센스 승인용 스크립트만 삽입하고, 승인 전 빈 광고 영역은 노출하지 않습니다.
+- 의료 정보 기준: 모든 건강 정보는 참고용이며 진단, 처방, 수술 여부 판단은 의료진 상담이 우선입니다.
+
+## 주요 구성
+
+- `index.html`: 메인 검색 페이지
+- `detail.html`: 병원 상세 페이지
+- `guide.html`, `guide-*.html`: 건강가이드와 진료 준비 체크리스트
+- `*-clinic.html`, `seoul-*.html` 등: 지역/조건별 랜딩 페이지
+- `about.html`, `contact.html`, `privacy.html`, `terms.html`, `ad-policy.html`, `editorial-policy.html`: 신뢰/정책 페이지
+- `functions/api/*.js`: Cloudflare Pages Functions API 프록시
+- `scripts/generate-sitemap.js`: 사이트맵 생성
+- `scripts/regenerate-guides.js`: 건강가이드 페이지 재생성
 
 ## 로컬 실행
 
-```bash
-# 방법 1: VS Code Live Server 확장
-# index.html을 우클릭 → "Open with Live Server"
+정적 사이트라 별도 빌드 없이 실행할 수 있습니다.
 
-# 방법 2: Python
+```powershell
 python -m http.server 8080
-
-# 방법 3: Node.js
-npx serve .
 ```
 
-브라우저에서 `http://localhost:8080` 접속
+브라우저에서 `http://localhost:8080`으로 접속합니다.
 
-## Cloudflare Pages 배포
+## 배포 흐름
 
-1. **GitHub 리포지토리 생성** 및 코드 Push
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit: 병원찾기 사이트"
-   git remote add origin https://github.com/[사용자명]/hospital-ranking.git
-   git push -u origin main
-   ```
-
-2. **Cloudflare Pages 연결**
-   - [Cloudflare Dashboard](https://dash.cloudflare.com) → Pages → "Create a project"
-   - "Connect to Git" → GitHub 리포 선택
-   - 빌드 설정:
-     - **Framework preset**: None
-     - **Build command**: (비워두기)
-     - **Build output directory**: `/` (루트)
-   - "Save and Deploy" 클릭
-
-3. 자동으로 `*.pages.dev` 도메인이 할당됩니다.
-
-## 공공데이터 API 연동 가이드
-
-현재는 `js/data.js`에 Mock 데이터를 사용합니다. 실제 API로 전환하려면:
-
-### 1단계: API 키 발급
-1. [공공데이터포털](https://data.go.kr) 회원가입
-2. "건강보험심사평가원 병원정보서비스" 검색 → 활용신청
-3. 마이페이지에서 **인증키(Encoding)** 복사
-
-### 2단계: Cloudflare Workers 프록시 생성
-CORS 문제 해결을 위해 Cloudflare Workers에 프록시를 설정합니다.
-
-```javascript
-// functions/api/hospitals.js (Cloudflare Pages Functions)
-export async function onRequestGet(context) {
-  const url = new URL(context.request.url);
-  const params = url.searchParams;
-
-  const apiUrl = new URL('http://apis.data.go.kr/B551182/hospInfoServicev2/getHospBasisList');
-  apiUrl.searchParams.set('serviceKey', context.env.DATA_GO_KR_API_KEY);
-  apiUrl.searchParams.set('_type', 'json');
-  apiUrl.searchParams.set('numOfRows', params.get('limit') || '20');
-  apiUrl.searchParams.set('pageNo', params.get('page') || '1');
-
-  if (params.get('region'))     apiUrl.searchParams.set('sidoCd', params.get('region'));
-  if (params.get('district'))   apiUrl.searchParams.set('sgguCd', params.get('district'));
-  if (params.get('name'))       apiUrl.searchParams.set('yadmNm', params.get('name'));
-  if (params.get('department')) apiUrl.searchParams.set('dgsbjtCd', params.get('department'));
-
-  const response = await fetch(apiUrl.toString());
-  const data = await response.json();
-
-  return new Response(JSON.stringify(data), {
-    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-  });
-}
+```powershell
+git status
+git add .
+git commit -m "작업 내용"
+git push origin main
 ```
 
-### 3단계: 프론트엔드 데이터 교체
-`js/data.js`의 `HOSPITALS` 배열을 API 호출로 교체:
+Cloudflare Pages가 GitHub `main` 브랜치 변경을 감지해 자동 배포합니다.
 
-```javascript
-async function fetchHospitals(filters = {}) {
-  const params = new URLSearchParams(filters);
-  const res = await fetch(`/api/hospitals?${params}`);
-  const data = await res.json();
-  return data.response.body.items.item.map(item => ({
-    name: item.yadmNm,
-    address: item.addr,
-    type: item.clCdNm,
-    department: item.dgsbjtCdNm,
-    phone: item.telno,
-    lat: parseFloat(item.YPos),
-    lng: parseFloat(item.XPos),
-    openDate: item.estbDd,
-    // score, reviewCount 등은 별도 데이터 필요
-  }));
-}
+## 검증 명령
+
+```powershell
+$node='C:\Users\yoone\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe'
+& $node --check js\app.js
+& $node --check js\detail.js
+& $node --check js\search.js
+& $node --check js\hospital-content.js
+& $node --check scripts\generate-sitemap.js
+& $node --check scripts\regenerate-guides.js
 ```
 
-### API 필드 매핑표
+사이트맵 재생성:
 
-| API 응답 필드 | 설명 | 매핑 |
-|-------------|------|------|
-| `yadmNm` | 병원명 | `name` |
-| `addr` | 주소 | `address` |
-| `clCdNm` | 종별코드명 | `type` |
-| `dgsbjtCdNm` | 진료과목코드명 | `department` |
-| `telno` | 전화번호 | `phone` |
-| `XPos` | 경도 | `lng` |
-| `YPos` | 위도 | `lat` |
-| `estbDd` | 개설일자 | `openDate` |
-| `sidoCdNm` | 시도명 | `region` |
-| `sgguCdNm` | 시군구명 | `district` |
-| `drTotCnt` | 의사 총수 | `specialistCount` |
-
-## 프로젝트 구조
-
-```
-hospital/
-├── index.html          # 메인 페이지
-├── css/
-│   └── style.css       # 디자인 시스템
-├── js/
-│   ├── data.js         # Mock 데이터 (→ API 교체 예정)
-│   ├── app.js          # 메인 앱 로직
-│   └── search.js       # 검색/필터 로직
-└── README.md           # 이 파일
+```powershell
+$node='C:\Users\yoone\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe'
+& $node scripts\generate-sitemap.js
 ```
 
-## 라이선스
+## SEO 및 승인 체크
 
-MIT License
+- `robots.txt`는 `https://hospital-ranking.kr/sitemap.xml`을 가리켜야 합니다.
+- `sitemap.xml`은 `.html` 확장자 없는 clean URL을 사용합니다.
+- `404.html`은 `noindex,nofollow`로 운영합니다.
+- 모든 공개 페이지는 고유한 `title`, `description`, canonical URL을 가져야 합니다.
+- 가이드와 상세 페이지에는 참고용 의료정보 고지와 정정 문의 경로가 있어야 합니다.
+
+## 문의
+
+운영 문의 및 정보 정정 요청: `replyleaders@naver.com`
