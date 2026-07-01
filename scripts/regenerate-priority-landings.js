@@ -204,7 +204,7 @@ function render(page) {
   <meta name="description" content="${esc(page.description)}">
   <link rel="canonical" href="${SITE}/${page.slug}">
   <meta name="robots" content="index,follow">
-  <link rel="stylesheet" href="css/style.css?v=11">
+  <link rel="stylesheet" href="css/style.css?v=12">
   <style>
     .intent-page { max-width: 1120px; padding-top: 56px; }
     .intent-hero { padding: 38px; border: 1px solid var(--border-default); border-radius: 28px; background: radial-gradient(circle at 88% 10%, rgba(166, 124, 82, .18), transparent 30%), linear-gradient(135deg, color-mix(in srgb, var(--bg-card) 88%, white 12%), color-mix(in srgb, var(--bg-body) 92%, white 8%)); box-shadow: var(--shadow-sm); }
