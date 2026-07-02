@@ -317,9 +317,9 @@ const NEW_HOSPITALS = [
 
 // 통계 데이터
 const STATS = {
-  totalHospitals: 95247,
-  totalRegions: 17,
-  totalDepartments: 30,
+  totalHospitals: 56,
+  totalRegions: 7,
+  totalDepartments: 16,
 };
 
 window.DEPARTMENTS = DEPARTMENTS;

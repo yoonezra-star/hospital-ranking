@@ -403,7 +403,7 @@
   }
 
   function renderDataQuality(hospital) {
-    setText('detail-data-updated', `2026-06-30 기준 페이지 구조와 안내 문구를 점검했습니다. 병원 운영 정보는 변동될 수 있습니다.`);
+    setText('detail-data-updated', `2026-07-02 기준 페이지 구조와 안내 문구를 점검했습니다. 병원 운영 정보는 변동될 수 있습니다.`);
     setText('detail-verification-note', [
       hospital.phone ? '전화번호' : '',
       hospital.address ? '주소' : '',

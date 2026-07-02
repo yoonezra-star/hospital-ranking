@@ -167,6 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function init() {
     applyStaticCopy();
     state.hospitals = loadHospitals();
+    renderHeroStats();
     initTheme();
     initHeader();
     populateFilters();
@@ -216,8 +217,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const statLabels = document.querySelectorAll('.hero-stats .stat-label');
-    if (statLabels[0]) statLabels[0].textContent = '등록 병원';
-    if (statLabels[1]) statLabels[1].textContent = '광역시도';
+    if (statLabels[0]) statLabels[0].textContent = '현재 정리 병원';
+    if (statLabels[1]) statLabels[1].textContent = '제공 지역';
     if (statLabels[2]) statLabels[2].textContent = '주요 진료과';
 
     setTextContent('#search-results .search-results-header h2', '검색 결과');
@@ -249,6 +250,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (ui.dataSourceBadge) ui.dataSourceBadge.textContent = '기본 병원 데이터';
     if (ui.dataSourceNote) ui.dataSourceNote.textContent = '기본 병원 데이터와 공개 가능한 정보를 바탕으로 검색 결과를 구성합니다.';
+  }
+
+  function renderHeroStats() {
+    const statNumbers = document.querySelectorAll('.hero-stats .stat-number');
+    if (statNumbers.length === 0) return;
+
+    const regionCount = uniqueValues(state.hospitals.map((item) => item.region).filter(Boolean)).length;
+    const departmentCount = uniqueValues(state.hospitals.map((item) => item.departmentId || item.department).filter(Boolean)).length;
+    const values = [state.hospitals.length, regionCount, departmentCount];
+
+    statNumbers.forEach((node, index) => {
+      const value = values[index] || 0;
+      node.dataset.target = String(value);
+      node.textContent = formatNumber(value);
+    });
+
+    if (ui.dataSourceBadge) ui.dataSourceBadge.textContent = '현재 정리 데이터';
+    if (ui.dataSourceNote) {
+      ui.dataSourceNote.textContent = `현재 ${formatNumber(state.hospitals.length)}개 병원 정보를 기준으로 검색 결과를 구성합니다. 운영시간과 병원 정보는 방문 전 병원에 다시 확인해 주세요.`;
+    }
   }
 
   function setSectionCopy(sectionId, title, description) {

@@ -3,7 +3,7 @@ const path = require('path');
 const vm = require('vm');
 
 const SITE_URL = 'https://hospital-ranking.kr';
-const TODAY = '2026-06-30';
+const TODAY = '2026-07-02';
 const ROOT = path.resolve(__dirname, '..');
 
 const EXCLUDED_HTML = new Set([
