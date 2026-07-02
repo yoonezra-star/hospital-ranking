@@ -1207,7 +1207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         intent: relaxedIntents.regionDepartment,
       },
       {
-        label: '정확한 지역 결과가 없어 같은 진료과 병원을 우선 보여드립니다.',
+        label: '같은 진료과의 다른 지역 추천입니다.',
         filters: { ...clearOperationFilters(baseFilters), region: '', district: '', town: '', locality: '' },
         intent: relaxedIntents.departmentOnly,
       },
@@ -1708,6 +1708,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (label.includes('운영조건')) return '운영조건 완화';
     if (label.includes('읍면동')) return '시군구로 확장';
     if (label.includes('생활권')) return '지역/진료과 확장';
+    if (label.includes('다른 지역')) return '다른 지역 추천';
     if (label.includes('같은 진료과')) return '진료과 우선';
     return '추천 결과';
   }
