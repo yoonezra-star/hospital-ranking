@@ -7,19 +7,7 @@
 export async function onRequestGet(context) {
   const cache = caches.default;
   const cacheKey = new Request(context.request.url, { method: 'GET' });
-  let apiKey = context.env?.HIRA_DTL_API_KEY;
-
-  if (!apiKey) {
-    return new Response(JSON.stringify({ error: 'Missing HIRA_DTL_API_KEY environment variable' }), {
-      status: 500,
-      headers: corsHeaders('application/json'),
-    });
-  }
-
-  try {
-    apiKey = decodeURIComponent(apiKey);
-  } catch (error) {}
-
+  let apiKey = context.env?.HIRA_DTL_API_KEY || context.env?.DATA_API_KEY;
   const url = new URL(context.request.url);
   const ykiho = url.searchParams.get('ykiho');
 
@@ -29,6 +17,14 @@ export async function onRequestGet(context) {
       headers: corsHeaders('application/json'),
     });
   }
+
+  if (!apiKey) {
+    return localFallback(context, ykiho, 'missing-api-key');
+  }
+
+  try {
+    apiKey = decodeURIComponent(apiKey);
+  } catch (error) {}
 
   const apiUrl = new URL('https://apis.data.go.kr/B551182/MadmDtlInfoService2.8/getDtlInfo2.8');
   apiUrl.searchParams.set('serviceKey', apiKey);
@@ -48,9 +44,7 @@ export async function onRequestGet(context) {
         return withDataSourceHeader(cached, 'stale-cache');
       }
 
-      return new Response(JSON.stringify({ found: false, error: `Upstream error ${response.status}` }), {
-        headers: corsHeaders('application/json'),
-      });
+      return localFallback(context, ykiho, `upstream-${response.status}`);
     }
 
     const text = await response.text();
@@ -64,16 +58,12 @@ export async function onRequestGet(context) {
         return withDataSourceHeader(cached, 'stale-cache');
       }
 
-      return new Response(JSON.stringify({ found: false, error: 'Invalid JSON', raw: text.slice(0, 500) }), {
-        headers: corsHeaders('application/json'),
-      });
+      return localFallback(context, ykiho, 'invalid-upstream-json');
     }
 
     const items = data?.response?.body?.items?.item;
     if (!items) {
-      return new Response(JSON.stringify({ found: false }), {
-        headers: corsHeaders('application/json'),
-      });
+      return localFallback(context, ykiho, 'empty-upstream');
     }
 
     const item = Array.isArray(items) ? items[0] : items;
@@ -153,12 +143,11 @@ export async function onRequestGet(context) {
       return withDataSourceHeader(cached, 'stale-cache');
     }
 
-    return new Response(JSON.stringify({
-      found: false,
-      error: error.name === 'AbortError' ? 'Upstream API request timed out' : error.message,
-    }), {
-      headers: corsHeaders('application/json'),
-    });
+    return localFallback(
+      context,
+      ykiho,
+      error.name === 'AbortError' ? 'upstream-timeout' : `upstream-error-${sanitizeHeaderValue(error.message)}`,
+    );
   }
 }
 
@@ -187,4 +176,58 @@ function withDataSourceHeader(response, value) {
     statusText: response.statusText,
     headers,
   });
+}
+
+async function localFallback(context, ykiho, reason) {
+  const hospital = await findLocalHospital(context, ykiho);
+  const headers = corsHeaders('application/json', 'public, max-age=120, stale-while-revalidate=600');
+  headers['X-Data-Source'] = 'local-fallback';
+  headers['X-Fallback-Reason'] = sanitizeHeaderValue(reason);
+
+  if (!hospital) {
+    return new Response(JSON.stringify({ found: false, ykiho, fallback: true, fallbackReason: reason }), {
+      headers,
+    });
+  }
+
+  const parkingSummary = [];
+  if (hospital.parkingFee) parkingSummary.push(`${hospital.parkingFee} 주차`);
+  if (hospital.parkingCapacity) parkingSummary.push(`주차 가능 ${hospital.parkingCapacity}대`);
+
+  const receptionSummary = [];
+  if (hospital.hours?.mon) receptionSummary.push(`평일 ${hospital.hours.mon}`);
+  if (hospital.hours?.sat) receptionSummary.push(`토요일 ${hospital.hours.sat}`);
+
+  return new Response(JSON.stringify({
+    found: true,
+    fallback: true,
+    fallbackReason: reason,
+    ykiho,
+    yadmNm: hospital.name || null,
+    addr: hospital.address || null,
+    telno: hospital.phone || null,
+    hospUrl: hospital.url || null,
+    hours: hospital.hours || {},
+    parkingSummary,
+    emergencySummary: hospital.hasEmergency ? ['응급 진료 가능 여부 확인 필요'] : [],
+    receptionSummary,
+  }), {
+    headers,
+  });
+}
+
+async function findLocalHospital(context, ykiho) {
+  if (!context.env?.ASSETS?.fetch || !ykiho) return null;
+  const assetUrl = new URL('/data/hospitals.json', context.request.url);
+  const response = await context.env.ASSETS.fetch(assetUrl.toString());
+  if (!response.ok) return null;
+  const data = await response.json();
+  return (Array.isArray(data.hospitals) ? data.hospitals : [])
+    .find((hospital) => String(hospital.id) === String(ykiho)) || null;
+}
+
+function sanitizeHeaderValue(value) {
+  return String(value || '')
+    .replace(/[^\w.-]+/g, '-')
+    .slice(0, 120);
 }

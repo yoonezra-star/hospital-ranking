@@ -8,18 +8,6 @@ export async function onRequestGet(context) {
   const cache = caches.default;
   const cacheKey = new Request(context.request.url, { method: 'GET' });
   let apiKey = context.env?.NEMC_API_KEY;
-
-  if (!apiKey) {
-    return new Response(JSON.stringify({ error: 'Missing NEMC_API_KEY environment variable' }), {
-      status: 500,
-      headers: corsHeaders('application/json'),
-    });
-  }
-
-  try {
-    apiKey = decodeURIComponent(apiKey);
-  } catch (error) {}
-
   const url = new URL(context.request.url);
   const name = url.searchParams.get('name');
   const address = url.searchParams.get('address') || '';
@@ -31,6 +19,14 @@ export async function onRequestGet(context) {
       headers: corsHeaders('application/json'),
     });
   }
+
+  if (!apiKey) {
+    return localFallback(context, name, address, 'missing-api-key');
+  }
+
+  try {
+    apiKey = decodeURIComponent(apiKey);
+  } catch (error) {}
 
   const apiUrl = new URL('https://apis.data.go.kr/B552657/HsptlAsembySearchService/getHsptlMdcncListInfoInqire');
   apiUrl.searchParams.set('serviceKey', apiKey);
@@ -52,9 +48,7 @@ export async function onRequestGet(context) {
         return withDataSourceHeader(cached, 'stale-cache');
       }
 
-      return new Response(JSON.stringify({ found: false, error: `Upstream error ${response.status}` }), {
-        headers: corsHeaders('application/json'),
-      });
+      return localFallback(context, name, address, `upstream-${response.status}`);
     }
 
     const text = await response.text();
@@ -68,16 +62,12 @@ export async function onRequestGet(context) {
         return withDataSourceHeader(cached, 'stale-cache');
       }
 
-      return new Response(JSON.stringify({ found: false, error: 'Invalid JSON', raw: text.slice(0, 500) }), {
-        headers: corsHeaders('application/json'),
-      });
+      return localFallback(context, name, address, 'invalid-upstream-json');
     }
 
     const items = data?.response?.body?.items?.item;
     if (!items) {
-      return new Response(JSON.stringify({ found: false }), {
-        headers: corsHeaders('application/json'),
-      });
+      return localFallback(context, name, address, 'empty-upstream');
     }
 
     const list = Array.isArray(items) ? items : [items];
@@ -173,12 +163,12 @@ export async function onRequestGet(context) {
       return withDataSourceHeader(cached, 'stale-cache');
     }
 
-    return new Response(JSON.stringify({
-      found: false,
-      error: error.name === 'AbortError' ? 'Upstream API request timed out' : error.message,
-    }), {
-      headers: corsHeaders('application/json'),
-    });
+    return localFallback(
+      context,
+      name,
+      address,
+      error.name === 'AbortError' ? 'upstream-timeout' : `upstream-error-${sanitizeHeaderValue(error.message)}`,
+    );
   }
 }
 
@@ -207,4 +197,77 @@ function withDataSourceHeader(response, value) {
     statusText: response.statusText,
     headers,
   });
+}
+
+async function localFallback(context, name, address, reason) {
+  const hospital = await findLocalHospital(context, name, address);
+  const headers = corsHeaders('application/json', 'public, max-age=120, stale-while-revalidate=600');
+  headers['X-Data-Source'] = 'local-fallback';
+  headers['X-Fallback-Reason'] = sanitizeHeaderValue(reason);
+
+  const hours = hospital?.hours || {};
+  const operationSummary = [];
+  if (hours.mon || hours.tue || hours.wed || hours.thu || hours.fri) operationSummary.push('평일 운영 정보 확인');
+  if (hours.sat) operationSummary.push(`토요일 ${hours.sat}`);
+  if (hours.sun) operationSummary.push(`일요일 ${hours.sun}`);
+  if (hours.holiday) operationSummary.push(`공휴일 ${hours.holiday}`);
+
+  return new Response(JSON.stringify({
+    found: Boolean(hospital),
+    fallback: true,
+    fallbackReason: reason,
+    hpid: hospital?.id ? String(hospital.id) : null,
+    dutyName: hospital?.name || name,
+    dutyAddr: hospital?.address || address || null,
+    dutyTel1: hospital?.phone || null,
+    dutyMapimg: null,
+    dutyInf: hospital ? '로컬 병원 데이터 기준 운영 정보입니다. 방문 전 병원에 직접 확인해 주세요.' : null,
+    wgs84Lat: hospital?.lat || null,
+    wgs84Lon: hospital?.lng || null,
+    matchScore: hospital ? 80 : 0,
+    matchedSummary: hospital ? [hospital.name, hospital.address].filter(Boolean).join(' / ') : '',
+    operationSummary,
+    hours,
+  }), {
+    headers,
+  });
+}
+
+async function findLocalHospital(context, name, address) {
+  if (!context.env?.ASSETS?.fetch || !name) return null;
+  const assetUrl = new URL('/data/hospitals.json', context.request.url);
+  const response = await context.env.ASSETS.fetch(assetUrl.toString());
+  if (!response.ok) return null;
+  const data = await response.json();
+  const hospitals = Array.isArray(data.hospitals) ? data.hospitals : [];
+  const normalizedName = normalizeText(name);
+  const normalizedAddress = normalizeText(address);
+
+  const best = hospitals
+    .map((hospital) => {
+      let score = 0;
+      const hospitalName = normalizeText(hospital.name);
+      const hospitalAddress = normalizeText(hospital.address);
+      if (hospitalName === normalizedName) score += 100;
+      else if (hospitalName.includes(normalizedName) || normalizedName.includes(hospitalName)) score += 60;
+      if (normalizedAddress && hospitalAddress.includes(normalizedAddress)) score += 40;
+      return { hospital, score };
+    })
+    .sort((left, right) => right.score - left.score)[0];
+
+  return best?.score > 0 ? best.hospital : null;
+}
+
+function normalizeText(value) {
+  return String(value || '')
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s]/gu, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function sanitizeHeaderValue(value) {
+  return String(value || '')
+    .replace(/[^\w.-]+/g, '-')
+    .slice(0, 120);
 }
