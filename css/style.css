@@ -560,7 +560,7 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
 .hero-panels {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(360px, 0.9fr);
-  align-items: stretch;
+  align-items: start;
   gap: 16px;
   width: min(1040px, 100%);
   margin: 0 auto var(--sp-4);
