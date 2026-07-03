@@ -11,6 +11,11 @@ export async function onRequestGet(context) {
   const cacheKey = new Request(context.request.url, { method: 'GET' });
   const params = requestUrl.searchParams;
   const apiKey = normalizeApiKey(context.env?.DATA_API_KEY);
+  const wantsLive = params.get('live') === 'true' || params.get('live') === '1';
+
+  if (!wantsLive) {
+    return localFallback(context, params, 'local-default', 200);
+  }
 
   if (!apiKey) {
     return localFallback(context, params, 'missing-api-key', 200);
