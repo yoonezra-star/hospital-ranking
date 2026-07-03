@@ -181,10 +181,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function applyStaticCopy() {
-    document.title = '병원찾기 - 지역별 병원 검색과 진료 정보';
-    const meta = document.querySelector('meta[name="description"]');
-    if (meta) {
-      meta.setAttribute('content', '지역명과 진료과, 토요일·야간·일요일 운영 조건으로 병원을 찾을 수 있는 병원검색 서비스입니다.');
+    const isDetailPage = document.body.classList.contains('detail-page');
+
+    if (!isDetailPage) {
+      document.title = '병원찾기 - 지역별 병원 검색과 진료 정보';
+      const meta = document.querySelector('meta[name="description"]');
+      if (meta) {
+        meta.setAttribute('content', '지역명과 진료과, 토요일·야간·일요일 운영 조건으로 병원을 찾을 수 있는 병원검색 서비스입니다.');
+      }
     }
 
     const logoText = document.querySelector('.logo .gradient-text');
