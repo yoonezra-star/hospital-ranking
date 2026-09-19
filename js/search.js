@@ -516,6 +516,7 @@ const SearchEngine = (() => {
       result = result.filter((hospital) => {
         const departmentText = String(hospital?.department || '').trim();
         return hospital.departmentId === filters.department
+          || hospital.registeredDepartmentIds?.includes(filters.department)
           || (departmentLabel && departmentText.includes(departmentLabel));
       });
     }

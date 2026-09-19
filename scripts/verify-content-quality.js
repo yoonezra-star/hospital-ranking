@@ -94,9 +94,50 @@ const server = http.createServer((request, response) => {
       await page.locator('#detail-hours-note').filter({ hasText: '출처가 서로 다릅니다' }).waitFor();
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), 'Detail overflows viewport');
       await page.screenshot({ path: path.join(os.tmpdir(), `hospital-live-detail-${width}.png`), fullPage: true });
+
+      const regionRequests = [];
+      let releaseBusan;
+      const busanGate = new Promise((resolve) => { releaseBusan = resolve; });
+      await page.route(`${origin}/api/hospitals*`, async (route) => {
+        const params = new URL(route.request().url()).searchParams;
+        regionRequests.push(Object.fromEntries(params));
+        if (params.get('sidoCd') === '210000') await busanGate;
+        const incheon = params.get('sidoCd') === '220000';
+        const item = { ykiho: incheon ? 'JDincheon' : 'JDbusan', yadmNm: incheon ? '인천검증병원' : '부산검증병원',
+          clCdNm: '종합병원', addr: incheon ? '인천광역시 연수구 테스트로 1' : '부산광역시 서구 테스트로 1' };
+        const payload = params.get('sidoCd') === '230000'
+          ? { hospitals: [], fromMock: true, fallback: true }
+          : { response: { body: { items: { item }, totalCount: 1 } } };
+        await route.fulfill({ json: payload });
+      });
+      await page.goto(`${origin}/`);
+      await page.locator('#hero-search').fill('부산 내과');
+      const busanRequest = page.waitForRequest((req) => req.url().includes('sidoCd=210000'));
+      await page.locator('#search-btn').click();
+      await busanRequest;
+      await page.locator('#hero-search').fill('인천 내과');
+      await page.locator('#search-btn').click();
+      await page.locator('#search-results-list .hospital-card').filter({ hasText: '인천검증병원' }).waitFor();
+      const busanResponse = page.waitForResponse((response) => response.url().includes('sidoCd=210000'));
+      releaseBusan();
+      await busanResponse;
+      assert.equal(await page.locator('#search-results-list .hospital-card').filter({ hasText: '부산검증병원' }).count(), 0);
+      assert(regionRequests.every((params) => params.dgsbjtCd === '01' && !params.yadmNm), 'Structured search sent as hospital name');
+      assert(regionRequests.some((params) => params.sidoCd === '220000'), 'Incheon region code incorrect');
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), 'Regional search overflows viewport');
+      await page.locator('#search-results-list').scrollIntoViewIfNeeded();
+      await page.screenshot({ path: path.join(os.tmpdir(), `hospital-region-search-${width}.png`) });
+      await page.locator('#hero-search').fill('대구 내과');
+      await page.locator('#search-btn').click();
+      await page.locator('[data-expand-search]').waitFor();
+      assert.equal(await page.locator('#search-results-list .hospital-card').count(), 0, 'Unrequested regions appeared automatically');
+      assert((await page.locator('#search-results-list').innerText()).includes('조회가 완료되지 않았습니다'));
+      await page.locator('[data-expand-search]').click();
+      await page.locator('#search-results-list .hospital-card').first().waitFor();
+      assert((await page.locator('#search-result-count').innerText()).includes('추천 결과'));
       assert.deepEqual(errors, [], 'Browser runtime errors');
       await page.close();
-      console.log(`PASS: ${width}px guide, checklist, local/live search, detail reload and hours conflict`);
+      console.log(`PASS: ${width}px guide, detail, region codes, strict search, opt-in relaxation and response race`);
     }
     const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
     const page = await context.newPage();

@@ -54,6 +54,28 @@ test('network failure allows a later successful retry', async () => {
   assert.equal((await api.fetchHospitals()).fromMock, false);
 });
 
+test('regional requests use HIRA codes and registered-department filters, not a hospital-name guess', () => {
+  const api = apiContext([]);
+  const mappings = { 11: '110000', 26: '210000', 27: '230000', 28: '220000', 29: '240000', 30: '250000', 31: '260000', 36: '410000', 41: '310000', 42: '320000', 43: '330000', 44: '340000', 45: '350000', 46: '360000', 47: '370000', 48: '380000', 50: '390000' };
+  for (const [regionCode, code] of Object.entries(mappings)) {
+    const params = api.buildSearchParams({ regionCode, departmentId: 'internal' });
+    assert.equal(params.sidoCd, code);
+    assert.equal(params.dgsbjtCd, '01');
+    assert.equal(params.yadmNm, undefined);
+  }
+});
+
+test('department-filter response preserves API evidence without changing the primary department', async () => {
+  const result = await apiContext([apiPayload({ ...publicHospital, clCdNm: '종합병원' })]).fetchHospitals({ dgsbjtCd: '01' });
+  assert.equal(result.hospitals[0].registeredDepartmentIds[0], 'internal');
+  assert.equal(result.hospitals[0].departmentId, 'general');
+});
+
+test('upstream error is not displayed as a successful empty search', async () => {
+  const result = await apiContext([{ response: { header: { resultCode: '30' } } }]).fetchHospitals();
+  assert.equal(result.fromMock, true);
+});
+
 const detailContext = vm.createContext({
   window: { location: { search: '' } }, URLSearchParams,
   document: { readyState: 'loading', addEventListener() {} },

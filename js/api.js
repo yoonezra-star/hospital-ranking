@@ -5,6 +5,14 @@
 
 const HospitalAPI = (() => {
   const PROXY_PATH = '/api/hospitals';
+  // HIRA codes differ from the administrative codes used by the UI.
+  // Checked against live hospital responses for all 17 regions on 2026-09-20.
+  const HIRA_REGION_CODES = {
+    '11': '110000', '26': '210000', '27': '230000', '28': '220000',
+    '29': '240000', '30': '250000', '31': '260000', '36': '410000',
+    '41': '310000', '42': '320000', '43': '330000', '44': '340000',
+    '45': '350000', '46': '360000', '47': '370000', '48': '380000', '50': '390000',
+  };
 
   const REGION_LABELS = {
     '11': '서울',
@@ -134,6 +142,16 @@ const HospitalAPI = (() => {
 
   let proxyReachable = null;
 
+  function buildSearchParams({ regionCode = '', departmentId = '', name = '', town = '' } = {}) {
+    const params = { live: true, numOfRows: 50 };
+    if (HIRA_REGION_CODES[regionCode]) params.sidoCd = HIRA_REGION_CODES[regionCode];
+    const departmentCode = Object.keys(DEPARTMENT_CODE_TO_ID).find((code) => DEPARTMENT_CODE_TO_ID[code] === departmentId);
+    if (departmentCode) params.dgsbjtCd = departmentCode;
+    if (name) params.yadmNm = name;
+    if (town) params.emdongNm = town;
+    return params;
+  }
+
   function getHospitals() {
     const primary = Array.isArray(window.HOSPITALS)
       ? window.HOSPITALS
@@ -195,6 +213,7 @@ const HospitalAPI = (() => {
       district: item.district || item.sgguCdNm || location.district || '',
       town: item.town || item.emdongNm || location.town || '',
       departmentId,
+      registeredDepartmentIds: Array.isArray(item.registeredDepartmentIds) ? item.registeredDepartmentIds : [],
       department: findDepartmentName(departmentId, item.department || item.dgsbjtCdNm || item.clCdNm || ''),
       lat: Number(item.lat || item.YPos || item.yPos) || 0,
       lng: Number(item.lng || item.XPos || item.xPos) || 0,
@@ -411,6 +430,9 @@ const HospitalAPI = (() => {
       : Array.isArray(upstreamItems) ? upstreamItems
         : upstreamItems && typeof upstreamItems === 'object' ? [upstreamItems] : [];
     const fromMock = payload.fallback === true || payload.fromMock === true || Array.isArray(payload.hospitals);
+    if (!fromMock && String(payload?.response?.header?.resultCode || '00') !== '00') {
+      throw new Error('Public API returned an error');
+    }
     const provenance = fromMock ? {} : {
       sourceType: 'hira-live',
       sourceName: '건강보험심사평가원 병원기본정보 API',
@@ -425,6 +447,8 @@ const HospitalAPI = (() => {
       hospitals: items.map((item) => normalizeHospital({
         ...item,
         ...provenance,
+        ...(!fromMock && DEPARTMENT_CODE_TO_ID[params.dgsbjtCd]
+          ? { registeredDepartmentIds: [DEPARTMENT_CODE_TO_ID[params.dgsbjtCd]] } : {}),
       })),
       totalCount: Number(payload?.totalCount || payload?.response?.body?.totalCount || items.length || 0),
       page: Number(payload?.page || params.pageNo || params.page || 1),
@@ -454,6 +478,7 @@ const HospitalAPI = (() => {
 
   return {
     fetchHospitals,
+    buildSearchParams,
     getHospitals: () => getHospitals().map(normalizeHospital),
     isProxyReachable: () => proxyReachable,
   };

@@ -86,8 +86,10 @@ document.addEventListener('DOMContentLoaded', () => {
     relaxedSearchLabel: '',
     liveSearchQuery: '',
     liveSearchLoading: false,
-    liveRegionQuery: '',
-    liveRegionLoading: false,
+    liveRequestId: 0,
+    liveSearchMessage: '',
+    searchSignature: '',
+    allowRelaxation: false,
   };
 
   const searchSuggestionState = {
@@ -523,7 +525,7 @@ document.addEventListener('DOMContentLoaded', () => {
       item.address = address;
       item.phone = item.phone || item.telno || '';
       item.region = region;
-      item.regionCode = String(item.regionCode || item.sidoCd || findRegionCode(region) || location.regionCode || '');
+      item.regionCode = String(item.regionCode || findRegionCode(region) || location.regionCode || '');
       item.district = item.district || item.sgguCdNm || location.district || '';
       item.town = item.town || item.emdongNm || location.town || '';
       item.departmentId = departmentId;
@@ -576,13 +578,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function mergeHospitalLists(...groups) {
     const merged = [];
-    const seenIds = new Set();
+    const positions = new Map();
 
     groups.flat().forEach((item) => {
       const id = String(item?.id ?? '');
-      if (!id || seenIds.has(id)) return;
-      seenIds.add(id);
-      merged.push(item);
+      if (!id) return;
+      if (positions.has(id)) {
+        const index = positions.get(id);
+        const previous = merged[index];
+        merged[index] = { ...previous, ...item, registeredDepartmentIds: uniqueValues([
+          ...(previous.registeredDepartmentIds || []), ...(item.registeredDepartmentIds || []),
+        ]) };
+      } else {
+        positions.set(id, merged.length);
+        merged.push(item);
+      }
     });
 
     return merged;
@@ -840,6 +850,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function bindEvents() {
+    document.addEventListener('click', (event) => {
+      if (event.target.closest('[data-expand-search]')) {
+        state.allowRelaxation = true;
+        refreshPage();
+      }
+      if (event.target.closest('[data-retry-live-search]')) {
+        state.liveSearchQuery = '';
+        refreshPage();
+      }
+    });
     ui.themeToggle?.addEventListener('click', toggleTheme);
     ui.mobileMenuBtn?.addEventListener('click', toggleMobileMenu);
     ui.searchBtn?.addEventListener('click', runSearch);
@@ -1088,6 +1108,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function runSearch() {
+    state.allowRelaxation = false;
+    state.liveSearchQuery = '';
     state.keyword = ui.heroSearch?.value.trim() || '';
     state.specialFilter = '';
     state.searchActive = true;
@@ -1105,14 +1127,24 @@ document.addEventListener('DOMContentLoaded', () => {
     state.searchActive = false;
     state.liveSearchQuery = '';
     state.liveSearchLoading = false;
-    state.liveRegionQuery = '';
-    state.liveRegionLoading = false;
+    state.liveRequestId += 1;
+    state.liveSearchMessage = '';
+    state.allowRelaxation = false;
     state.visibleCount = 12;
     refreshPage();
     ui.searchResults?.classList.remove('active');
   }
 
   function refreshPage() {
+    const signature = JSON.stringify([state.keyword, state.regionCode, state.district, state.town, state.departmentId, state.type, state.specialFilter]);
+    if (signature !== state.searchSignature) {
+      state.searchSignature = signature;
+      state.allowRelaxation = false;
+      state.liveSearchQuery = '';
+      state.liveRequestId += 1;
+      state.liveSearchLoading = false;
+      state.liveSearchMessage = '';
+    }
     state.filteredHospitals = buildFilteredHospitals();
     renderRanking();
     renderSearchResults();
@@ -1120,90 +1152,48 @@ document.addEventListener('DOMContentLoaded', () => {
     renderReviews();
     renderNewHospitals();
     updateMap();
-    maybeFetchLiveHospitalName();
-    maybeFetchLiveRegionSupport();
+    maybeFetchLiveSearch();
   }
 
-  function maybeFetchLiveHospitalName() {
-    const query = String(state.keyword || '').trim();
-    const normalizedQuery = normalizeSearchText(query);
-    if (!state.searchActive || normalizedQuery.length < 3 || state.liveSearchLoading || state.liveSearchQuery === query) {
-      return;
-    }
-
-    const localNameMatch = state.hospitals.some((item) => normalizeSearchText(item.name).includes(normalizedQuery));
-    if (localNameMatch || typeof HospitalAPI?.fetchHospitals !== 'function') {
-      state.liveSearchQuery = query;
-      return;
-    }
-
-    state.liveSearchLoading = true;
-    state.liveSearchQuery = query;
-    HospitalAPI.fetchHospitals({ live: true, yadmNm: query, numOfRows: 20 }).then((response) => {
-      const liveHospitals = Array.isArray(response?.hospitals) ? response.hospitals : [];
-      if (response?.fromMock !== false || liveHospitals.length === 0) return;
-
-      state.hospitals = mergeHospitalLists(state.hospitals, liveHospitals);
-      if (ui.dataSourceBadge) ui.dataSourceBadge.textContent = '공공 API 검색 포함';
-      if (ui.dataSourceNote) ui.dataSourceNote.textContent = '병원명 검색 결과에 건강보험심사평가원 공공 API 조회 결과를 함께 반영했습니다. 운영시간과 접수 가능 여부는 방문 전 다시 확인해 주세요.';
-      state.filteredHospitals = buildFilteredHospitals();
-      renderRanking();
-      renderSearchResults();
-      updateMap();
-    }).catch((error) => {
-      console.warn('[hospital-search] live name lookup skipped:', error.message);
-    }).finally(() => {
-      state.liveSearchLoading = false;
-    });
-  }
-
-  function maybeFetchLiveRegionSupport() {
+  function maybeFetchLiveSearch() {
+    if (typeof HospitalAPI === 'undefined' || !HospitalAPI?.buildSearchParams) return;
     const intent = state.searchIntent || getSearchIntent();
-    const regionCode = findRegionCode(intent?.region);
-    const queryKey = [
-      regionCode,
-      intent?.district || '',
-      intent?.locality || '',
-      intent?.department || '',
-    ].join('|');
-
-    if (
-      !state.searchActive
-      || !regionCode
-      || !intent?.department
-      || (!state.relaxedSearchLabel && state.filteredHospitals.length >= 8)
-      || state.liveRegionLoading
-      || state.liveRegionQuery === queryKey
-      || typeof HospitalAPI?.fetchHospitals !== 'function'
-    ) {
-      return;
-    }
-
-    state.liveRegionLoading = true;
-    state.liveRegionQuery = queryKey;
-    HospitalAPI.fetchHospitals({
-      live: true,
-      sidoCd: regionCode,
-      yadmNm: findDepartmentName(intent.department),
-      emdongNm: intent.locality || '',
-      numOfRows: 50,
-    }).then((response) => {
+    const regionCode = state.regionCode !== 'all' ? state.regionCode : findRegionCode(intent?.region);
+    const departmentId = state.departmentId !== 'all' ? state.departmentId : intent?.department || '';
+    const name = intent ? intent.keywordText : state.keyword;
+    if (!regionCode && !departmentId && String(name || '').length < 2) return;
+    const params = HospitalAPI.buildSearchParams({ regionCode, departmentId, name,
+      town: state.town !== 'all' ? state.town : '',
+    });
+    const queryKey = JSON.stringify(params);
+    if (state.liveSearchQuery === queryKey) return;
+    const requestId = ++state.liveRequestId;
+    state.liveSearchQuery = queryKey;
+    state.liveSearchLoading = true;
+    state.liveSearchMessage = '공공 API에서 조건에 맞는 병원을 조회 중입니다.';
+    renderSearchResults();
+    HospitalAPI.fetchHospitals(params).then((response) => {
+      if (requestId !== state.liveRequestId) return;
       const liveHospitals = Array.isArray(response?.hospitals) ? response.hospitals : [];
-      if (response?.fromMock !== false || liveHospitals.length === 0) return;
-
-      state.hospitals = mergeHospitalLists(state.hospitals, liveHospitals);
-      if (ui.dataSourceBadge) ui.dataSourceBadge.textContent = '공공 API 지역 결과 포함';
-      if (ui.dataSourceNote) {
-        ui.dataSourceNote.textContent = '지역 검색이 부족할 때 건강보험심사평가원 병원기본정보 API 결과를 보강했습니다. 진료과와 운영시간은 기관별 공식 정보에서 최종 확인해 주세요.';
+      if (response?.fromMock !== false) {
+        state.liveSearchMessage = '공공 API 조회가 완료되지 않았습니다. 저장된 정보만 표시하며, 결과가 없어도 해당 지역에 병원이 없다는 뜻은 아닙니다.';
+        return;
       }
+      state.hospitals = mergeHospitalLists(state.hospitals, liveHospitals);
+      state.liveSearchMessage = `공공 API ${liveHospitals.length}건을 조회한 뒤 지역·진료과 조건으로 걸렀습니다. 전체 목록이 아닐 수 있으며 운영시간은 별도 확인이 필요합니다.`;
+      if (ui.dataSourceBadge) ui.dataSourceBadge.textContent = '공공 API 검색 포함';
       state.filteredHospitals = buildFilteredHospitals();
+      syncLocalityFilters();
       renderRanking();
-      renderSearchResults();
       updateMap();
     }).catch((error) => {
-      console.warn('[hospital-search] live region lookup skipped:', error.message);
+      if (requestId !== state.liveRequestId) return;
+      state.liveSearchMessage = '공공 API 연결에 실패했습니다. 잠시 후 다시 조회해 주세요.';
+      console.warn('[hospital-search] live lookup failed:', error.message);
     }).finally(() => {
-      state.liveRegionLoading = false;
+      if (requestId !== state.liveRequestId) return;
+      state.liveSearchLoading = false;
+      renderSearchResults();
     });
   }
 
@@ -1224,10 +1214,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return attachMatchReasons(exactResults);
       }
 
-      const relaxedResults = buildRelaxedSearchResults(filters);
+      const relaxedResults = state.allowRelaxation ? buildRelaxedSearchResults(filters) : [];
       if (relaxedResults.length > 0) {
         return relaxedResults;
       }
+      return [];
     }
 
     return attachMatchReasons(buildLegacyFilteredHospitals());
@@ -1427,7 +1418,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const departmentId = intent?.department || (state.departmentId !== 'all' ? state.departmentId : '');
-    if (departmentId && hospital.departmentId === departmentId) {
+    if (departmentId && hospital.registeredDepartmentIds?.includes(departmentId)) {
+      reasons.push(`${findDepartmentName(departmentId)} 등록 (공공 API)`);
+    } else if (departmentId && hospital.departmentId === departmentId) {
       reasons.push(`${hospital.department} 진료`);
     }
 
@@ -1636,7 +1629,10 @@ document.addEventListener('DOMContentLoaded', () => {
       ? renderOfficialSearchCallout()
       : '';
 
-    ui.searchResultsList.innerHTML = officialSearchMarkup + resultMarkup;
+    const statusMarkup = state.liveSearchMessage ? `<div class="search-official-callout" role="status"><p>${escapeHtml(state.liveSearchMessage)}</p>${!state.liveSearchLoading ? '<button type="button" class="search-empty-chip" data-retry-live-search>다시 조회</button>' : ''}</div>` : '';
+    const expandMarkup = !state.filteredHospitals.length && !state.liveSearchLoading && !state.allowRelaxation
+      ? '<div class="search-official-callout"><p>입력한 조건을 유지했습니다. 원하면 운영조건이나 지역 범위를 넓혀 참고 병원을 볼 수 있습니다.</p><button type="button" class="search-empty-chip" data-expand-search>조건 넓혀 보기</button></div>' : '';
+    ui.searchResultsList.innerHTML = statusMarkup + officialSearchMarkup + expandMarkup + resultMarkup;
   }
 
   function renderOfficialSearchCallout() {
@@ -1753,6 +1749,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div class="hospital-address">📍 ${escapeHtml(item.address || '주소 정보 확인 중')}</div>
           <div class="hospital-subinfo">${escapeHtml(doctors)} / ${escapeHtml(openDate)}</div>
+          <p class="hospital-status-summary">${escapeHtml(item.verificationStatus === 'unverified' ? '공식 출처 미확인 · 아래 정보는 방문 전 확인이 필요합니다.' : `기본정보 출처: ${item.sourceName || '공공 API'} · ${item.verifiedAt || '조회일 확인 필요'} (운영시간 확인과는 별개)` )}</p>
           <div class="hospital-status-row hospital-status-row-compact">${statusBadges}</div>
           <div class="hospital-trust-row hospital-trust-row-compact">${trustBadges}</div>
           <p class="hospital-status-summary hospital-status-summary-compact">${escapeHtml(buildHospitalSummary(item))}</p>
@@ -1765,6 +1762,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function buildStatusBadges(item) {
+    if (item.verificationStatus === 'unverified') return '<span class="hospital-status-badge is-closed">운영정보 미검증 · 전화 확인 필요</span>';
     const badges = [];
     if (isOpenNow(item)) badges.push('<span class="hospital-status-badge is-open">현재 진료 가능성 높음</span>');
     if (item.saturdayOpen) badges.push('<span class="hospital-status-badge is-today">토요일 진료</span>');
@@ -1796,7 +1794,9 @@ document.addEventListener('DOMContentLoaded', () => {
       : '\uD655\uC778 \uD544\uC694';
     const facts = [
       ['위치', location],
-      ['진료과', item.department || item.type || '진료과 확인 필요'],
+      ['진료과', item.registeredDepartmentIds?.length
+        ? `${item.registeredDepartmentIds.map((id) => findDepartmentName(id)).join(', ')} (공공 API 조회 과목)`
+        : item.department || item.type || '진료과 확인 필요'],
       ['의료진', doctorInfo],
       ['운영', operation],
       ['주차', parking],
@@ -1837,6 +1837,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function buildTrustBadges(item) {
+    if (item.verificationStatus === 'unverified') return '<span class="hospital-trust-badge is-basic">개별 공식 출처 확인 필요</span>';
     const badges = [];
     badges.push('<span class="hospital-trust-badge is-basic">방문 전 확인 필요</span>');
 
@@ -1846,6 +1847,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function buildTagMarkup(item) {
+    if (item.verificationStatus === 'unverified') return '';
     const tags = [];
     if (item.saturdayOpen) tags.push('<span class="tag tag-sat">토요일</span>');
     if (item.nightOpen) tags.push('<span class="tag tag-night">야간</span>');
