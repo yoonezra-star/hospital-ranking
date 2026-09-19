@@ -86,6 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
     relaxedSearchLabel: '',
     liveSearchQuery: '',
     liveSearchLoading: false,
+    liveRegionQuery: '',
+    liveRegionLoading: false,
   };
 
   const searchSuggestionState = {
@@ -1103,6 +1105,8 @@ document.addEventListener('DOMContentLoaded', () => {
     state.searchActive = false;
     state.liveSearchQuery = '';
     state.liveSearchLoading = false;
+    state.liveRegionQuery = '';
+    state.liveRegionLoading = false;
     state.visibleCount = 12;
     refreshPage();
     ui.searchResults?.classList.remove('active');
@@ -1117,6 +1121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderNewHospitals();
     updateMap();
     maybeFetchLiveHospitalName();
+    maybeFetchLiveRegionSupport();
   }
 
   function maybeFetchLiveHospitalName() {
@@ -1149,6 +1154,56 @@ document.addEventListener('DOMContentLoaded', () => {
       console.warn('[hospital-search] live name lookup skipped:', error.message);
     }).finally(() => {
       state.liveSearchLoading = false;
+    });
+  }
+
+  function maybeFetchLiveRegionSupport() {
+    const intent = state.searchIntent || getSearchIntent();
+    const regionCode = findRegionCode(intent?.region);
+    const queryKey = [
+      regionCode,
+      intent?.district || '',
+      intent?.locality || '',
+      intent?.department || '',
+    ].join('|');
+
+    if (
+      !state.searchActive
+      || !regionCode
+      || !intent?.department
+      || (!state.relaxedSearchLabel && state.filteredHospitals.length >= 8)
+      || state.liveRegionLoading
+      || state.liveRegionQuery === queryKey
+      || typeof HospitalAPI?.fetchHospitals !== 'function'
+    ) {
+      return;
+    }
+
+    state.liveRegionLoading = true;
+    state.liveRegionQuery = queryKey;
+    HospitalAPI.fetchHospitals({
+      live: true,
+      sidoCd: regionCode,
+      yadmNm: findDepartmentName(intent.department),
+      emdongNm: intent.locality || '',
+      numOfRows: 50,
+    }).then((response) => {
+      const liveHospitals = Array.isArray(response?.hospitals) ? response.hospitals : [];
+      if (response?.fromMock !== false || liveHospitals.length === 0) return;
+
+      state.hospitals = mergeHospitalLists(state.hospitals, liveHospitals);
+      if (ui.dataSourceBadge) ui.dataSourceBadge.textContent = '공공 API 지역 결과 포함';
+      if (ui.dataSourceNote) {
+        ui.dataSourceNote.textContent = '지역 검색이 부족할 때 건강보험심사평가원 병원기본정보 API 결과를 보강했습니다. 진료과와 운영시간은 기관별 공식 정보에서 최종 확인해 주세요.';
+      }
+      state.filteredHospitals = buildFilteredHospitals();
+      renderRanking();
+      renderSearchResults();
+      updateMap();
+    }).catch((error) => {
+      console.warn('[hospital-search] live region lookup skipped:', error.message);
+    }).finally(() => {
+      state.liveRegionLoading = false;
     });
   }
 
@@ -1569,12 +1624,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     ui.searchIntentSummary.textContent = buildIntentSummary();
     ui.searchResultCount.innerHTML = `${state.relaxedSearchLabel ? '추천 결과' : '검색 결과'} <strong>${formatNumber(state.filteredHospitals.length)}</strong>개`;
-    ui.searchResultsList.innerHTML = state.filteredHospitals.length > 0
+    const resultMarkup = state.filteredHospitals.length > 0
       ? state.filteredHospitals
         .slice(0, Math.min(state.visibleCount, 24))
         .map((item, index) => renderHospitalCard(item, index + 1))
         .join('')
       : renderSearchEmptyState();
+    const officialSearchMarkup = state.relaxedSearchLabel
+      && state.searchIntent?.region
+      && state.searchIntent?.department
+      ? renderOfficialSearchCallout()
+      : '';
+
+    ui.searchResultsList.innerHTML = officialSearchMarkup + resultMarkup;
+  }
+
+  function renderOfficialSearchCallout() {
+    return `
+      <aside class="search-official-callout" aria-label="공식 병원 조건검색 안내">
+        <div>
+          <strong>지역과 진료과를 더 정확하게 확인하려면</strong>
+          <p>현재 결과는 내부 데이터와 공공 기본정보를 조합한 추천입니다. 운영 여부와 진료과 조건은 건강보험심사평가원 공식 조건검색에서 한 번 더 확인할 수 있습니다.</p>
+        </div>
+        <a href="https://www.hira.or.kr/ra/dtlCndHospSrch/dtlCndHospSrch.do?pgmid=HIRAA050200000000" target="_blank" rel="noopener">공식 조건검색 열기</a>
+      </aside>
+    `;
   }
 
   function buildIntentSummary() {
@@ -1648,6 +1722,13 @@ document.addEventListener('DOMContentLoaded', () => {
               <button type="button" class="search-empty-preset search-refine-btn" data-refine="parking"><strong>\uC8FC\uCC28 \uAC00\uB2A5</strong><span>\uCC28\uB7C9 \uBC29\uBB38\uC774 \uD3B8\uD55C \uACF3</span></button>
             </div>
           </div>
+        </div>
+        <div class="search-official-callout search-empty-official-callout">
+          <div>
+            <strong>\uACF5\uC2DD \uC870\uAC74\uAC80\uC0C9\uB3C4 \uD568\uAED8 \uD655\uC778\uD558\uC138\uC694</strong>
+            <p>\uC9C0\uC5ED\u00B7\uC9C4\uB8CC\uACFC\u00B7\uAE30\uAD00\uC885\uBCC4 \uC0C1\uC138 \uC870\uAC74\uC740 \uAC74\uAC15\uBCF4\uD5D8\uC2EC\uC0AC\uD3C9\uAC00\uC6D0 \uACF5\uC2DD \uAC80\uC0C9\uC5D0\uC11C \uD655\uC778\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.</p>
+          </div>
+          <a href="https://www.hira.or.kr/ra/dtlCndHospSrch/dtlCndHospSrch.do?pgmid=HIRAA050200000000" target="_blank" rel="noopener">\uACF5\uC2DD \uC870\uAC74\uAC80\uC0C9 \uC5F4\uAE30</a>
         </div>
       </div>
     `;
