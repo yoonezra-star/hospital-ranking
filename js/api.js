@@ -185,6 +185,7 @@ const HospitalAPI = (() => {
     return {
       ...item,
       id: item.id || item.ykiho,
+      hiraId: item.hiraId || provenance.hiraId || item.ykiho || '',
       name: item.name || item.yadmNm || '',
       type,
       address,

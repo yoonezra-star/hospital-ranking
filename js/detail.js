@@ -114,6 +114,7 @@
     return {
       ...hospital,
       id: hospital.id,
+      hiraId: hospital.hiraId || provenance.hiraId || '',
       name: hospital.name || '병원 정보',
       type: hospital.type || '의료기관',
       address: hospital.address || '',
@@ -157,13 +158,13 @@
 
   async function enrichHospital(hospital) {
     const [detailResult, hoursResult, equipmentResult] = await Promise.allSettled([
-      fetchOptionalJson('/api/hospital-details', { ykiho: hospital.id }),
+      fetchOptionalJson('/api/hospital-details', { ykiho: hospital.hiraId || hospital.id }),
       fetchOptionalJson('/api/hospital-hours', {
         name: hospital.name,
         address: hospital.address,
         region: hospital.region,
       }),
-      fetchOptionalJson('/api/hospital-equip', { ykiho: hospital.id }),
+      fetchOptionalJson('/api/hospital-equip', { ykiho: hospital.hiraId || hospital.id }),
     ]);
     const liveDetails = mergeLiveDetails(
       hospital,
@@ -511,7 +512,7 @@
   }
 
   function renderPublicDigest(hospital) {
-    setText('detail-match-summary', hospital.id && String(hospital.id).startsWith('JD') ? '공공 병원 API 기준 병원 코드 연결' : '기본 병원 데이터 기준 상세 정보');
+    setText('detail-match-summary', hospital.hiraId ? '공공 병원 API 기준 기관코드 연결' : '기본 병원 데이터 기준 상세 정보');
     setText('detail-operation-summary', buildOperationSummary(hospital));
     setText('detail-location-summary', hospital.address || '위치 정보 확인 중');
     setText('detail-equipment-summary', [hospital.equipment, ...(hospital.facilitySummary || [])].filter(Boolean).join(' / ') || '장비 및 시설 정보 확인 중');
