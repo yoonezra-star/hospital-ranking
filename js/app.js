@@ -84,6 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
     searchActive: false,
     searchIntent: null,
     relaxedSearchLabel: '',
+    liveSearchQuery: '',
+    liveSearchLoading: false,
   };
 
   const searchSuggestionState = {
@@ -1099,6 +1101,8 @@ document.addEventListener('DOMContentLoaded', () => {
     state.keyword = '';
     state.specialFilter = '';
     state.searchActive = false;
+    state.liveSearchQuery = '';
+    state.liveSearchLoading = false;
     state.visibleCount = 12;
     refreshPage();
     ui.searchResults?.classList.remove('active');
@@ -1112,6 +1116,40 @@ document.addEventListener('DOMContentLoaded', () => {
     renderReviews();
     renderNewHospitals();
     updateMap();
+    maybeFetchLiveHospitalName();
+  }
+
+  function maybeFetchLiveHospitalName() {
+    const query = String(state.keyword || '').trim();
+    const normalizedQuery = normalizeSearchText(query);
+    if (!state.searchActive || normalizedQuery.length < 3 || state.liveSearchLoading || state.liveSearchQuery === query) {
+      return;
+    }
+
+    const localNameMatch = state.hospitals.some((item) => normalizeSearchText(item.name).includes(normalizedQuery));
+    if (localNameMatch || typeof HospitalAPI?.fetchHospitals !== 'function') {
+      state.liveSearchQuery = query;
+      return;
+    }
+
+    state.liveSearchLoading = true;
+    state.liveSearchQuery = query;
+    HospitalAPI.fetchHospitals({ live: true, yadmNm: query, numOfRows: 20 }).then((response) => {
+      const liveHospitals = Array.isArray(response?.hospitals) ? response.hospitals : [];
+      if (liveHospitals.length === 0) return;
+
+      state.hospitals = mergeHospitalLists(state.hospitals, liveHospitals);
+      if (ui.dataSourceBadge) ui.dataSourceBadge.textContent = '공공 API 검색 포함';
+      if (ui.dataSourceNote) ui.dataSourceNote.textContent = '병원명 검색 결과에 건강보험심사평가원 공공 API 조회 결과를 함께 반영했습니다. 운영시간과 접수 가능 여부는 방문 전 다시 확인해 주세요.';
+      state.filteredHospitals = buildFilteredHospitals();
+      renderRanking();
+      renderSearchResults();
+      updateMap();
+    }).catch((error) => {
+      console.warn('[hospital-search] live name lookup skipped:', error.message);
+    }).finally(() => {
+      state.liveSearchLoading = false;
+    });
   }
 
   function buildFilteredHospitals() {
