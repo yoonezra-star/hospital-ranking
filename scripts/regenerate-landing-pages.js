@@ -302,6 +302,7 @@ function buildHtml(page, meta, pages) {
       <div class="footer-bottom">
         <p>&copy; 2026 병원찾기. 병원 검색과 진료 정보 탐색을 위한 안내 서비스입니다.</p>
         <p>운영시간, 접수마감, 진료 가능 여부는 변동될 수 있으므로 방문 전 병원에 직접 확인하는 것을 권장합니다.</p>
+        <p><a href="about.html">사이트 소개</a> · <a href="data-policy.html">병원 데이터 출처 안내</a> · <a href="contact.html">문의하기</a></p>
       </div>
     </div>
   </footer>
