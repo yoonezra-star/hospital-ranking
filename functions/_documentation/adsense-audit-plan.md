@@ -72,4 +72,4 @@ node scripts/verify-content-quality.js
 - [Google 검색 센터: 사이트맵 제작 및 제출](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap?hl=ko)
 - [건강보험심사평가원 건강지도](https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000)
 
-이 보고서는 공개 콘텐츠가 아니다. 루트 폴더 전체를 배포하는 현재 설정에서 정적 파일로 제공되지 않는 functions/_documentation에 보관한다. 기존 _redirects의 404 상태 규칙은 실제 요청을 차단하지 못했으며, noindex 헤더만으로 파일 접근을 막을 수는 없었다. 기존 보고서 URL과 이동한 경로 모두 실제 배포 후 404 응답을 확인한다.
+이 보고서는 공개 콘텐츠가 아니다. 루트 폴더 전체를 배포하는 현재 설정에서 정적 파일로 제공되지 않는 functions/_documentation에 보관한다. 기존 _redirects의 404 상태 규칙은 실제 요청을 차단하지 못했으며, noindex 헤더만으로 파일 접근을 막을 수는 없었다. 이전 공개 URL은 Pages가 지원하는 302 응답으로 /404 안내 화면에 연결한다. 이동한 문서 경로는 정적 자산에 포함되지 않으며 404 응답을 확인했다.
