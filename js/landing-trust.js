@@ -12,7 +12,7 @@
     <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
       <div style="padding:16px; border:1px solid var(--border-default); border-radius:14px; background:var(--bg-body);">
         <strong style="display:block; margin-bottom:8px; color:var(--text-heading);">최근 확인일</strong>
-        <p style="margin:0; color:var(--text-body); line-height:1.7;">2026-06-20 기준으로 랜딩 구조와 안내 문구를 점검했습니다.</p>
+        <p style="margin:0; color:var(--text-body); line-height:1.7;">2026-09-19 기준으로 랜딩 구조와 안내 문구를 점검했습니다.</p>
       </div>
       <div style="padding:16px; border:1px solid var(--border-default); border-radius:14px; background:var(--bg-body);">
         <strong style="display:block; margin-bottom:8px; color:var(--text-heading);">이용 방법</strong>
