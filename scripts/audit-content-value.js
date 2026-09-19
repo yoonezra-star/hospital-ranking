@@ -36,9 +36,14 @@ const context = { window: {} };
 vm.createContext(context);
 vm.runInContext(read('js/data.js'), context);
 const hospitals = [...context.window.HOSPITALS, ...context.window.NEW_HOSPITALS];
-const exported = JSON.parse(read('data/hospitals.json')).hospitals;
+const exportedData = JSON.parse(read('data/hospitals.json'));
+const exported = exportedData.hospitals;
+if (exportedData.sourceType !== 'local-curated') errors.push('Hospital dataset sourceType must remain local-curated');
 for (const hospital of [...hospitals, ...exported]) {
   if (hospital.score || hospital.reviewCount) errors.push(`Hospital ${hospital.id}: unsupported rating remains`);
+  if (hospital.verificationStatus === 'verified' && (!hospital.sourceUrl || !hospital.verifiedAt)) {
+    errors.push(`Hospital ${hospital.id}: verified record is missing sourceUrl or verifiedAt`);
+  }
 }
 if (sitemap.some((url) => /\/detail(?:\?|$)/.test(url))) errors.push('Unverified detail URL in sitemap');
 if (/estimateScore|estimateReviewCount|aggregateRating/.test(read('js/detail.js'))) errors.push('Synthetic detail rating code remains');
@@ -49,7 +54,9 @@ const report = {
   htmlPages: pages.length,
   sitemapUrls: sitemap.length,
   localHospitals: hospitals.length,
-  hospitalsMissingProvenance: hospitals.filter((hospital) => !hospital.sourceUrl || !hospital.verifiedAt).length,
+  hospitalsWithApiProvenance: exported.filter((hospital) => hospital.verificationStatus === 'api-retrieved' && hospital.sourceUrl && hospital.verifiedAt).length,
+  hospitalsMissingProvenance: exported.filter((hospital) => !hospital.sourceUrl || !hospital.verifiedAt).length,
+  hospitalsExplicitlyMarkedUnverified: exported.filter((hospital) => !hospital.verificationStatus || hospital.verificationStatus === 'unverified').length,
   guidesWithoutExternalReferences: guideReview.map((page) => page.file),
   shortestContentPages: pages.filter((page) => !page.noindex && !['privacy.html', 'terms.html', 'contact.html', 'about.html', 'ad-policy.html', 'editorial-policy.html'].includes(page.file)).sort((a, b) => a.characters - b.characters).slice(0, 10),
   errors: [...new Set(errors)],

@@ -19,6 +19,7 @@ const POLICY_PAGES = new Set([
   'about.html',
   'contact.html',
   'editorial-policy.html',
+  'data-policy.html',
   'ad-policy.html',
   'terms.html',
   'privacy.html',

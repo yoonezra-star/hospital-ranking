@@ -1,0 +1,19 @@
+{
+  "101": {"name":"김흥진치과의원","hiraId":"JDQ4MTYyMiM2MSMkMSMkMiMkNzIkMzgxOTYxIzExIyQyIyQ3IyQwMCQyNjE0ODEjNDEjJDEjJDQjJDgz"},
+  "1": {"name":"서울대학교병원","hiraId":"JDQ4MTYyMiM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQwMyQyNjEwMDIjNTEjJDEjJDYjJDgz"},
+  "2": {"name":"삼성서울병원","hiraId":"JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQxMyQzNjEwMDIjODEjJDEjJDIjJDgz"},
+  "3": {"name":"서울아산병원","hiraId":"JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQwMyQyNjE0ODEjNDEjJDEjJDQjJDgz"},
+  "7": {"name":"분당서울대학교병원","hiraId":"JDQ4MTYyMiM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQwMyQyNjEwMDIjNTEjJDEjJDYjJDgz"},
+  "9": {"name":"아름다운피부과","hiraId":"JDQ4MTYyMiM2MSMkMiMkNiMkMDAkMzgxMTkxIzMxIyQxIyQzIyQ5MiQyNjEyMjIjNDEjJDEjJDgjJDgz"},
+  "10": {"name":"부산대학교병원","hiraId":"JDQ4MTAxMiM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQ3OSQyNjEyMjIjNDEjJDEjJDgjJDgz"},
+  "11": {"name":"해운대백병원","hiraId":"JDQ4MTAxMiM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQ4MiQyNjE0ODEjODEjJDEjJDIjJDgz"},
+  "15": {"name":"인천세종병원","hiraId":"JDQ4MTYyMiM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQ3IyQ5OSQzNjEyMjIjNzEjJDEjJDgjJDgz"},
+  "18": {"name":"대전을지대학교병원","hiraId":"JDQ4MTYyMiM2MSMkMSMkMiMkODkkMzgxMzUxIzExIyQxIyQzIyQ3OSQzNjE0ODEjNDEjJDEjJDgjJDgz"},
+  "21": {"name":"연세산부인과","hiraId":"JDQ4MTYyMiM1MSMkMiMkMCMkMDAkNDgxOTYxIzMxIyQxIyQ3IyQ4OSQ0NjEwMDIjNTEjJDEjJDIjJDgz"},
+  "22": {"name":"제주한라병원","hiraId":"JDQ4MTYyMiM4MSMkMSMkOCMkODkkMzgxMzUxIzExIyQxIyQzIyQ3OSQyNjEyMjIjNTEjJDEjJDIjJDgz"},
+  "23": {"name":"광주기독병원","hiraId":"JDQ4MTYyMiM3MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQ3OSQyNjE4MzIjNDEjJDEjJDQjJDgz"},
+  "1009": {"name":"교하하나의원","hiraId":"JDQ4MTYyMiM1MSMkMiMkMCMkMDAkNDgxNzAyIzQxIyQxIyQ3IyQ3MiQzNjE4MzIjNTEjJDEjJDIjJDgz"},
+  "1010": {"name":"교하본정형외과의원","hiraId":"JDU4MTI3MSM1MSMkMiMkMCMkMDAkNTgxOTYxIzMxIyQxIyQzIyQ3OSQzNjE4MzIjNzEjJDEjJDgjJDgz"},
+  "1011": {"name":"교하굿모닝치과의원","hiraId":"JDQ4MTYyMiM1MSMkMSMkMCMkNzIkNDgxOTYxIzIxIyQxIyQ1IyQ2MiQ0NjEwMDIjNjEjJDEjJDAjJDgz"},
+  "1012": {"name":"교하연세이비인후과의원","hiraId":"JDU4MTI3MSM1MSMkMiMkMCMkMDAkMzgxOTYxIzIxIyQxIyQxIyQ4MiQzNjEwMDIjNDEjJDEjJDgjJDgz"}
+}

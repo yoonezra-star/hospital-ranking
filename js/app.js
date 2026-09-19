@@ -496,6 +496,7 @@ document.addEventListener('DOMContentLoaded', () => {
         );
 
     return source.map((item) => {
+      const provenance = window.HOSPITAL_PROVENANCE?.[String(item.id || item.ykiho)] || {};
       const address = item.address || item.addr || '';
       const location = parseAddressLocation(address);
       const constLocation = location;
@@ -556,6 +557,11 @@ document.addEventListener('DOMContentLoaded', () => {
       parkingFee: item.parkingFee || '',
       equipment: item.equipment || '',
       url: item.url || '',
+      sourceType: item.sourceType || provenance.sourceType || 'local-curated',
+      sourceName: item.sourceName || provenance.sourceName || '병원찾기 내부 정리 데이터',
+      sourceUrl: item.sourceUrl || provenance.sourceUrl || '',
+      verificationStatus: item.verificationStatus || provenance.verificationStatus || 'unverified',
+      verifiedAt: item.verifiedAt || provenance.verifiedAt || '',
       };
     });
   }

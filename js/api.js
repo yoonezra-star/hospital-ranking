@@ -165,6 +165,7 @@ const HospitalAPI = (() => {
   }
 
   function normalizeHospital(item) {
+    const provenance = window.HOSPITAL_PROVENANCE?.[String(item.id || item.ykiho)] || {};
     const address = item.address || item.addr || '';
     const location = parseAddressLocation(address);
     const region = normalizeRegionName(
@@ -204,6 +205,11 @@ const HospitalAPI = (() => {
       sundayOpen: Boolean(item.sundayOpen),
       nightOpen: Boolean(item.nightOpen),
       hasEmergency: Boolean(item.hasEmergency),
+      sourceType: item.sourceType || provenance.sourceType || 'local-curated',
+      sourceName: item.sourceName || provenance.sourceName || '병원찾기 내부 정리 데이터',
+      sourceUrl: item.sourceUrl || provenance.sourceUrl || '',
+      verificationStatus: item.verificationStatus || provenance.verificationStatus || 'unverified',
+      verifiedAt: item.verifiedAt || provenance.verifiedAt || '',
     };
   }
 
@@ -226,6 +232,7 @@ const HospitalAPI = (() => {
     const town = /(읍|면|동|가|리)$/.test(third) ? third : '';
     const regionCode = findRegionCodeByName(region);
 
+    const retrievedAt = new Date().toISOString().slice(0, 10);
     return {
       region,
       regionCode,
@@ -411,11 +418,23 @@ const HospitalAPI = (() => {
     proxyReachable = true;
 
     return {
-      hospitals: items.map(normalizeHospital),
+      hospitals: items.map((item) => normalizeHospital({
+        ...item,
+        sourceType: 'hira-live',
+        sourceName: '건강보험심사평가원 병원기본정보 API',
+        sourceUrl: 'https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000',
+        verificationStatus: 'api-retrieved',
+        verifiedAt: retrievedAt,
+      })),
       totalCount: Number(payload?.totalCount || payload?.response?.body?.totalCount || items.length || 0),
       page: Number(payload?.page || params.page || 1),
       pageSize: Number(payload?.pageSize || params.limit || 20),
       fromMock: false,
+      sourceType: 'hira-live',
+      sourceName: '건강보험심사평가원 병원기본정보 API',
+      sourceUrl: 'https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000',
+      verificationStatus: 'api-retrieved',
+      verifiedAt: retrievedAt,
     };
   }
 

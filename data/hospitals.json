@@ -1,5 +1,11 @@
 {
-  "generatedAt": "2026-07-03",
+  "generatedAt": "2026-09-19",
+  "sourceType": "local-curated",
+  "sourceName": "병원찾기 내부 정리 데이터",
+  "sourceUrl": "",
+  "verificationStatus": "unverified",
+  "verifiedAt": "",
+  "provenanceCount": 17,
   "totalCount": 56,
   "hospitals": [
     {
@@ -41,7 +47,12 @@
         "sat": "09시 00분 ~ 13시 00분",
         "sun": "휴진",
         "holiday": "휴진"
-      }
+      },
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-19"
     },
     {
       "id": 1,
@@ -73,7 +84,12 @@
       "lat": 37.5796,
       "lng": 126.999,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-19"
     },
     {
       "id": 2,
@@ -105,7 +121,12 @@
       "lat": 37.4881,
       "lng": 127.0855,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-19"
     },
     {
       "id": 3,
@@ -137,7 +158,12 @@
       "lat": 37.527,
       "lng": 127.1082,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-19"
     },
     {
       "id": 4,
@@ -169,7 +195,12 @@
       "lat": 37.5622,
       "lng": 126.941,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 5,
@@ -201,7 +232,12 @@
       "lat": 37.5006,
       "lng": 127.0365,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 6,
@@ -233,7 +269,12 @@
       "lat": 37.5531,
       "lng": 126.9196,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 7,
@@ -265,7 +306,12 @@
       "lat": 37.352,
       "lng": 127.1232,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-19"
     },
     {
       "id": 8,
@@ -297,7 +343,12 @@
       "lat": 37.4934,
       "lng": 127.0137,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 9,
@@ -329,7 +380,12 @@
       "lat": 37.5119,
       "lng": 127.0228,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-19"
     },
     {
       "id": 10,
@@ -361,7 +417,12 @@
       "lat": 35.1049,
       "lng": 129.017,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-19"
     },
     {
       "id": 11,
@@ -393,7 +454,12 @@
       "lat": 35.1718,
       "lng": 129.176,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-19"
     },
     {
       "id": 12,
@@ -425,7 +491,12 @@
       "lat": 37.566,
       "lng": 126.9916,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 13,
@@ -457,7 +528,12 @@
       "lat": 37.5103,
       "lng": 127.0407,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 14,
@@ -489,7 +565,12 @@
       "lat": 37.4969,
       "lng": 127.0286,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 15,
@@ -521,7 +602,12 @@
       "lat": 37.4436,
       "lng": 126.731,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-19"
     },
     {
       "id": 16,
@@ -553,7 +639,12 @@
       "lat": 37.2764,
       "lng": 127.0285,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 17,
@@ -585,7 +676,12 @@
       "lat": 37.5142,
       "lng": 127.106,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 18,
@@ -617,7 +713,12 @@
       "lat": 35.8542,
       "lng": 126.8893,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-19"
     },
     {
       "id": 19,
@@ -649,7 +750,12 @@
       "lat": 37.5257,
       "lng": 127.0354,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 20,
@@ -681,7 +787,12 @@
       "lat": 37.6584,
       "lng": 126.769,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 21,
@@ -713,7 +824,12 @@
       "lat": 37.5583,
       "lng": 126.8371,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-19"
     },
     {
       "id": 22,
@@ -745,7 +861,12 @@
       "lat": 33.489,
       "lng": 126.4833,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-19"
     },
     {
       "id": 23,
@@ -777,7 +898,12 @@
       "lat": 35.141,
       "lng": 126.912,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-19"
     },
     {
       "id": 24,
@@ -809,7 +935,12 @@
       "lat": 37.5255,
       "lng": 126.9254,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 25,
@@ -841,7 +972,12 @@
       "lat": 37.5614,
       "lng": 127.0378,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1001,
@@ -873,7 +1009,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1002,
@@ -905,7 +1046,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1003,
@@ -937,7 +1083,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1004,
@@ -969,7 +1120,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1005,
@@ -1001,7 +1157,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1006,
@@ -1033,7 +1194,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1007,
@@ -1065,7 +1231,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1008,
@@ -1097,7 +1268,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1009,
@@ -1129,7 +1305,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-19"
     },
     {
       "id": 1010,
@@ -1161,7 +1342,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-19"
     },
     {
       "id": 1011,
@@ -1193,7 +1379,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-19"
     },
     {
       "id": 1012,
@@ -1225,7 +1416,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-19"
     },
     {
       "id": 1013,
@@ -1257,7 +1453,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1014,
@@ -1289,7 +1490,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1015,
@@ -1321,7 +1527,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1016,
@@ -1353,7 +1564,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1017,
@@ -1385,7 +1601,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1018,
@@ -1417,7 +1638,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1019,
@@ -1449,7 +1675,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1020,
@@ -1481,7 +1712,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1021,
@@ -1513,7 +1749,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1022,
@@ -1545,7 +1786,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1023,
@@ -1577,7 +1823,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1024,
@@ -1609,7 +1860,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1025,
@@ -1641,7 +1897,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1026,
@@ -1673,7 +1934,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1027,
@@ -1705,7 +1971,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1028,
@@ -1737,7 +2008,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1029,
@@ -1769,7 +2045,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     },
     {
       "id": 1030,
@@ -1801,7 +2082,12 @@
       "lat": 0,
       "lng": 0,
       "url": "",
-      "hours": {}
+      "hours": {},
+      "sourceType": "local-curated",
+      "sourceName": "병원찾기 내부 정리 데이터",
+      "sourceUrl": "",
+      "verificationStatus": "unverified",
+      "verifiedAt": ""
     }
   ]
 }
