@@ -713,8 +713,6 @@
       ? `${String(hospital.equipment).split(',').slice(0, 2).join(', ')} 중심으로 장비 정보를 확인할 수 있습니다.`
       : '검사 장비와 시설 정보는 상세 페이지에서 함께 확인하는 편이 좋습니다.';
     const compareLine = [
-      hospital?.score ? `평점 ${hospital.score}` : '',
-      hospital?.reviewCount ? `후기 ${hospital.reviewCount}개` : '',
       hospital?.region ? `${hospital.region} 권역 비교 가능` : '',
       hospital?.nightOpen ? '야간 진료 여부 확인' : '',
       hospital?.saturdayOpen ? '토요일 진료 여부 확인' : '',
@@ -727,7 +725,7 @@
       },
       {
         question: `${hospitalLabel}를 다른 병원과 비교할 때 무엇을 먼저 보면 좋나요?`,
-        answer: `${compareLine || '평점, 후기, 운영 시간, 전문의 수'}를 먼저 보고, 그 다음에 ${uniqueList(profile.documents || []).slice(0, 2).join(', ') || '준비물과 이동 동선'}을 확인하면 선택이 훨씬 쉬워집니다.`,
+        answer: `${compareLine || '위치와 운영 시간'}를 먼저 보고, 그 다음에 ${uniqueList(profile.documents || []).slice(0, 2).join(', ') || '준비물과 이동 동선'}을 확인해 주세요.`,
       },
     ];
 

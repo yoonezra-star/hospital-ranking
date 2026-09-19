@@ -1,9 +1,7 @@
 const fs = require('fs');
 const path = require('path');
-const vm = require('vm');
 
 const SITE_URL = 'https://hospital-ranking.kr';
-const TODAY = '2026-07-03';
 const ROOT = path.resolve(__dirname, '..');
 
 const EXCLUDED_HTML = new Set([
@@ -26,20 +24,14 @@ const POLICY_PAGES = new Set([
   'privacy.html',
 ]);
 
-function readHospitalIds() {
-  const source = fs.readFileSync(path.join(ROOT, 'js', 'data.js'), 'utf8');
-  const context = {};
-  context.window = context;
-  vm.createContext(context);
-  vm.runInContext(`${source}\nthis.__HOSPITALS = HOSPITALS; this.__NEW_HOSPITALS = typeof NEW_HOSPITALS !== 'undefined' ? NEW_HOSPITALS : [];`, context);
-  const hospitals = [...(context.__HOSPITALS || []), ...(context.__NEW_HOSPITALS || [])];
-  return Array.from(new Set(hospitals.map((hospital) => String(hospital.id || '').trim()).filter(Boolean)));
-}
-
 function getHtmlPages() {
   return fs.readdirSync(ROOT)
     .filter((file) => file.endsWith('.html'))
     .filter((file) => !EXCLUDED_HTML.has(file))
+    .filter((file) => {
+      const html = fs.readFileSync(path.join(ROOT, file), 'utf8');
+      return !/<meta\b(?=[^>]*\bname=["']robots["'])(?=[^>]*\bcontent=["'][^"']*\bnoindex\b)[^>]*>/i.test(html);
+    })
     .sort((left, right) => {
       if (left === 'index.html') return -1;
       if (right === 'index.html') return 1;
@@ -78,11 +70,10 @@ function xmlEscape(value) {
     .replaceAll("'", '&apos;');
 }
 
-function renderUrl({ loc, lastmod = TODAY, freq = 'monthly', priority = '0.7' }) {
+function renderUrl({ loc, freq = 'monthly', priority = '0.7' }) {
   return [
     '  <url>',
     `    <loc>${xmlEscape(loc)}</loc>`,
-    `    <lastmod>${lastmod}</lastmod>`,
     `    <changefreq>${freq}</changefreq>`,
     `    <priority>${priority}</priority>`,
     '  </url>',
@@ -96,14 +87,6 @@ function buildSitemap() {
       loc: pageUrl(file),
       freq: changefreq(file),
       priority: pagePriority(file),
-    });
-  }
-
-  for (const id of readHospitalIds()) {
-    urls.push({
-      loc: `${SITE_URL}/detail?id=${encodeURIComponent(id)}`,
-      freq: 'weekly',
-      priority: '0.6',
     });
   }
 

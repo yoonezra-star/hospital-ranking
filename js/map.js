@@ -342,7 +342,7 @@ const MapModule = (() => {
             <span class="win-type">${h.type}</span>
           </div>
           <div class="win-body">
-            <div class="win-item"><strong>⭐ 평점:</strong> ${h.score} (${h.reviewCount}개 후기)</div>
+            <div class="win-item">운영시간은 방문 전 병원에 확인해 주세요.</div>
             <div class="win-item"><strong>📍 주소:</strong> ${h.address}</div>
             ${h.phone ? `<div class="win-item"><strong>📞 전화:</strong> ${h.phone}</div>` : ''}
             <div class="win-item"><strong>👨‍⚕️ 의사:</strong> 전문의 ${h.specialistCount}명</div>

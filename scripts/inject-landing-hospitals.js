@@ -134,8 +134,6 @@ function departmentMatch(hospital, departmentId) {
 
 function scoreHospital(hospital, profile) {
   let score = 0;
-  score += (hospital.score || 0) * 10;
-  score += (hospital.reviewCount || 0) / 40;
 
   if (profile.region && hospital.region === profile.region) {
     score += 25;
@@ -300,7 +298,7 @@ function buildSection(examples) {
             <span class="landing-badge">\uBCD1\uC6D0 \uC608\uC2DC</span>
             <strong>${escapeHtml(hospital.name)}</strong>
             <span class="hospital-spotlight-meta">${escapeHtml(hospital.address)}</span>
-            <span class="hospital-spotlight-meta">\uD3C9\uC810 ${escapeHtml(hospital.score || '-')} / \uB9AC\uBDF0 ${escapeHtml(hospital.reviewCount || 0)}\uAC1C / \uAC1C\uC6D0 ${escapeHtml(String(hospital.openDate || '').slice(0, 4) || '-')}\uB144</span>
+            <span class="hospital-spotlight-meta">등록 정보는 방문 전 병원에 직접 확인해 주세요.</span>
             <div class="hospital-spotlight-tags">
               ${buildTags(hospital).map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}
             </div>

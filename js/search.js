@@ -610,7 +610,7 @@ const SearchEngine = (() => {
           b
         ));
       case 'reviews':
-        return sorted.sort((a, b) => (b.reviewCount || 0) - (a.reviewCount || 0));
+        return sorted.sort(compareByRankingQuality);
       case 'specialists':
         return sorted.sort((a, b) => (b.specialistCount || 0) - (a.specialistCount || 0));
       case 'newest':
@@ -983,11 +983,6 @@ const SearchEngine = (() => {
       return infoRichnessDiff;
     }
 
-    const reviewDiff = (b.reviewCount || 0) - (a.reviewCount || 0);
-    if (reviewDiff !== 0) {
-      return reviewDiff;
-    }
-
     const specialistDiff = (b.specialistCount || 0) - (a.specialistCount || 0);
     if (specialistDiff !== 0) {
       return specialistDiff;
@@ -1002,22 +997,7 @@ const SearchEngine = (() => {
   }
 
   function getRankingScore(hospital) {
-    const priorMean = 4.3;
-    const priorWeight = 500;
-    const numericScore = Number(hospital?.score);
-    const score = Number.isFinite(numericScore) && numericScore > 0
-      ? numericScore
-      : priorMean;
-    const reviews = Math.max(Number(hospital?.reviewCount || 0), 0);
-    const specialists = Math.max(Number(hospital?.specialistCount || 0), 0);
-
-    const bayesianScore = ((score * reviews) + (priorMean * priorWeight)) / (reviews + priorWeight);
-    const reviewVolumeBonus = Math.min(reviews / 1000, 0.2);
-    const specialistBonus = Math.min(specialists / 500, 0.25);
-    const typeBonus = getTypePriority(hospital.type) * 0.02;
-    const infoRichnessBonus = getHospitalInfoRichnessScore(hospital) * 0.025;
-
-    return bayesianScore + reviewVolumeBonus + specialistBonus + typeBonus + infoRichnessBonus;
+    return getHospitalInfoRichnessScore(hospital);
   }
 
   function getHospitalInfoRichnessScore(hospital) {
@@ -1027,7 +1007,7 @@ const SearchEngine = (() => {
       Boolean(hospital?.url),
       Boolean(hospital?.subway || hospital?.region || hospital?.district),
       Boolean(hospital?.openDate),
-      Number(hospital?.reviewCount || 0) > 0 || Number(hospital?.specialistCount || 0) > 0,
+      Number(hospital?.specialistCount || 0) > 0,
       hasOperationalInfo(hospital),
       hasParkingInfo(hospital)
         || Boolean(hospital?.equipment)

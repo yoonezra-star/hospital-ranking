@@ -109,8 +109,6 @@
   function normalizeHospitalRecord(hospital) {
     const hours = normalizeHours(hospital.hours);
     const specialistCount = toNumber(hospital.specialistCount);
-    const reviewCount = toNumber(hospital.reviewCount);
-    const score = Number.isFinite(Number(hospital.score)) ? Number(hospital.score) : estimateScore(hospital);
 
     return {
       ...hospital,
@@ -126,8 +124,8 @@
       departmentId: hospital.departmentId || '',
       lat: Number(hospital.lat) || 0,
       lng: Number(hospital.lng) || 0,
-      score,
-      reviewCount: reviewCount > 0 ? reviewCount : estimateReviewCount(hospital),
+      score: 0,
+      reviewCount: 0,
       specialistCount,
       openDate: hospital.openDate || '',
       url: hospital.url || '',
@@ -169,8 +167,6 @@
 
     setText('detail-name', hospital.name);
     setText('detail-type', [hospital.type, buildRegionText(hospital)].filter(Boolean).join(' · ') || '의료기관');
-    setText('detail-score', `⭐ ${hospital.score.toFixed(1)}`);
-    setText('detail-reviews', formatNumber(hospital.reviewCount));
     setText('detail-department', hospital.department);
 
     setText('detail-address', hospital.address || '주소 정보 확인 중');
@@ -270,7 +266,6 @@
     ].filter(Boolean);
 
     const compareParts = [
-      hospital.reviewCount > 0 ? `리뷰 수 ${formatNumber(hospital.reviewCount)}건` : '',
       hospital.nightOpen ? '야간 진료 여부 확인' : '',
       hospital.saturdayOpen ? '토요일 운영 확인' : '',
       hospital.equipment ? `장비: ${firstToken(hospital.equipment)}` : '',
@@ -358,7 +353,7 @@
       hospital.nightOpen ? '퇴근 후 방문이 필요한 경우' : '',
     ].filter(Boolean).join(' / '));
 
-    setText('detail-documents', hospital.reviewCount > 0 ? '신분증 / 기존 검사 결과 / 이전 진료 기록' : '신분증 / 필요한 검사 결과');
+    setText('detail-documents', '신분증 / 필요한 검사 결과 / 병원에서 안내한 준비물');
     setText('detail-reservation', hospital.phone ? '전화 문의로 접수 가능 여부를 먼저 확인해 보세요.' : '방문 전 운영 시간을 먼저 확인해 주세요.');
     setText('detail-transport', hospital.address || '교통 정보 확인 중');
     setText('detail-accessibility', hospital.parkingCapacity > 0 ? `주차 ${hospital.parkingCapacity}대 기준 이동 편의 확인` : '주차 및 접근성 정보 확인 중');
@@ -612,14 +607,6 @@
       url: buildCanonicalDetailUrl(hospital.id),
     };
 
-    if (hospital.score > 0 && hospital.reviewCount > 0) {
-      schema.aggregateRating = {
-        '@type': 'AggregateRating',
-        ratingValue: hospital.score.toFixed(1),
-        reviewCount: hospital.reviewCount,
-      };
-    }
-
     node.textContent = JSON.stringify(schema);
   }
 
@@ -720,20 +707,6 @@
     if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
     if (/^\d{8}$/.test(value)) return `${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}`;
     return String(value);
-  }
-
-  function estimateScore(hospital) {
-    const specialistCount = toNumber(hospital.specialistCount);
-    const base = specialistCount > 0 ? 4.2 : 4.0;
-    return Math.min(4.9, base);
-  }
-
-  function estimateReviewCount(hospital) {
-    const specialistCount = toNumber(hospital.specialistCount);
-    if (specialistCount > 0) {
-      return specialistCount * 18;
-    }
-    return 12;
   }
 
   function formatNumber(value) {

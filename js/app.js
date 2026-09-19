@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const navItems = document.querySelectorAll('#nav-links a');
     if (navItems[0]) navItems[0].textContent = '진료과';
     if (navItems[1]) navItems[1].textContent = '병원목록';
-    if (navItems[2]) navItems[2].textContent = '후기';
+    if (navItems[2]) navItems[2].textContent = '병원 정보';
     if (navItems[3]) navItems[3].textContent = '건강 가이드';
     if (navItems[4]) navItems[4].textContent = '지도';
 
@@ -235,8 +235,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (quickButtons[3]) quickButtons[3].textContent = '🆕 신규 개원';
 
     setSectionCopy('quick-access', '빠른 찾기', '지금 바로 많이 찾는 운영 조건별 병원을 빠르게 살펴볼 수 있습니다.');
-    setSectionCopy('ranking', '병원 목록', '지역과 운영 조건, 후기와 전문의 수 등을 기준으로 병원을 탐색할 수 있습니다.');
-    setSectionCopy('reviews', '많이 본 병원', '후기 수와 관심도가 높은 병원을 중심으로 먼저 확인해 보세요.');
+    setSectionCopy('ranking', '병원 목록', '지역과 진료과, 등록된 운영 조건을 기준으로 탐색합니다. 목록 순서는 의료 수준 평가가 아닙니다.');
+    setSectionCopy('reviews', '병원 정보 살펴보기', '등록된 위치와 진료 정보를 살펴보세요. 이용 후기나 인기 순위가 아닙니다.');
     setSectionCopy('new-hospitals', '최근 개원 병원', '최신 개원 병원을 날짜순으로 살펴볼 수 있습니다.');
     setSectionCopy('map-section', '지도에서 보기', '현재 목록의 병원을 지도에서 함께 확인할 수 있습니다.');
 
@@ -541,8 +541,8 @@ document.addEventListener('DOMContentLoaded', () => {
       departmentId: item.departmentId || '',
       department: findDepartmentName(item.departmentId, item.department),
       type: item.type || inferHospitalType(item.name) || '의료기관',
-      score: Number(item.score) || 0,
-      reviewCount: Number(item.reviewCount) || 0,
+      score: 0,
+      reviewCount: 0,
       specialistCount: Number(item.specialistCount) || 0,
       openDate: item.openDate || '',
       lat: Number(item.lat) || 0,
@@ -789,8 +789,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function populateSortSelect() {
     if (!ui.sortFilter) return;
     ui.sortFilter.innerHTML = `
-      <option value="score">평점순</option>
-      <option value="reviews">후기 많은순</option>
+      <option value="score">관련도순</option>
       <option value="specialists">전문의 많은순</option>
       <option value="newest">최신 개원순</option>
       <option value="name">이름순</option>
@@ -1474,7 +1473,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function sortHospitals(a, b) {
     switch (state.sort) {
       case 'reviews':
-        return (b.reviewCount - a.reviewCount) || compareByRankingQuality(a, b);
+        return compareByRankingQuality(a, b);
       case 'specialists':
         return (b.specialistCount - a.specialistCount) || compareByRankingQuality(a, b);
       case 'newest':
@@ -1618,7 +1617,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const matchReasons = buildMatchReasonMarkup(item);
     const openDate = item.openDate ? `개원 ${formatDate(item.openDate)}` : '개원일 확인 중';
     const doctors = item.specialistCount > 0 ? `전문의 ${item.specialistCount}명` : '의료진 정보 확인 중';
-    const reviews = item.reviewCount > 0 ? `후기 ${formatNumber(item.reviewCount)}건` : '후기 집계 전';
 
     return `
       <a href="detail.html?id=${encodeURIComponent(item.id)}" class="hospital-card fade-up visible">
@@ -1635,10 +1633,6 @@ document.addEventListener('DOMContentLoaded', () => {
           <p class="hospital-status-summary hospital-status-summary-compact">${escapeHtml(buildHospitalSummary(item))}</p>
           ${matchReasons}
           ${facts}
-          <div class="hospital-meta">
-            <span class="meta-item"><span class="meta-icon">⭐</span><span class="meta-value">${item.score.toFixed(1)}</span></span>
-            <span class="meta-item"><span class="meta-icon">📝</span><span class="meta-label">${escapeHtml(reviews)}</span></span>
-          </div>
           ${tags ? `<div class="hospital-tags">${tags}</div>` : ''}
         </div>
       </a>
@@ -1719,9 +1713,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function buildTrustBadges(item) {
     const badges = [];
-    if (item.reviewCount >= 500) badges.push('<span class="hospital-trust-badge is-high">후기 관심도 높음</span>');
-    else if (item.reviewCount >= 100) badges.push('<span class="hospital-trust-badge is-medium">후기 확인 가능</span>');
-    else badges.push('<span class="hospital-trust-badge is-basic">기본 정보 중심</span>');
+    badges.push('<span class="hospital-trust-badge is-basic">방문 전 확인 필요</span>');
 
     if (item.specialistCount > 0) badges.push('<span class="hospital-trust-badge is-verified">전문의 정보 있음</span>');
     if (item.parkingCapacity > 0 || item.parkingFee) badges.push('<span class="hospital-trust-badge is-partial">주차 정보 있음</span>');
@@ -1770,15 +1762,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return false;
     }
 
-    const reviews = Math.max(Number(hospital?.reviewCount || 0), 0);
-    const specialists = Math.max(Number(hospital?.specialistCount || 0), 0);
-    const infoRichness = getHospitalInfoRichnessScore(hospital);
-
-    if (reviews >= 100) return true;
-    if (specialists > 0 && reviews >= 50) return true;
-    if (isRecentOpening(hospital?.openDate) && reviews >= 50 && infoRichness >= 5) return true;
-
-    return getRankingScore(hospital) >= 4.45 && reviews >= 60 && infoRichness >= 6;
+    return Boolean(hospital?.address && hospital?.phone);
   }
 
   function compareByRankingQuality(a, b) {
@@ -1790,11 +1774,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoRichnessDiff = getHospitalInfoRichnessScore(b) - getHospitalInfoRichnessScore(a);
     if (infoRichnessDiff !== 0) {
       return infoRichnessDiff;
-    }
-
-    const reviewDiff = (b.reviewCount || 0) - (a.reviewCount || 0);
-    if (reviewDiff !== 0) {
-      return reviewDiff;
     }
 
     const specialistDiff = (b.specialistCount || 0) - (a.specialistCount || 0);
@@ -1811,22 +1790,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function getRankingScore(hospital) {
-    const priorMean = 4.3;
-    const priorWeight = 500;
-    const numericScore = Number(hospital?.score);
-    const score = Number.isFinite(numericScore) && numericScore > 0
-      ? numericScore
-      : priorMean;
-    const reviews = Math.max(Number(hospital?.reviewCount || 0), 0);
-    const specialists = Math.max(Number(hospital?.specialistCount || 0), 0);
-
-    const bayesianScore = ((score * reviews) + (priorMean * priorWeight)) / (reviews + priorWeight);
-    const reviewVolumeBonus = Math.min(reviews / 1000, 0.2);
-    const specialistBonus = Math.min(specialists / 500, 0.25);
-    const typeBonus = getTypePriority(hospital) * 0.02;
-    const infoRichnessBonus = getHospitalInfoRichnessScore(hospital) * 0.025;
-
-    return bayesianScore + reviewVolumeBonus + specialistBonus + typeBonus + infoRichnessBonus;
+    return getHospitalInfoRichnessScore(hospital);
   }
 
   function getHospitalInfoRichnessScore(hospital) {
@@ -1836,7 +1800,7 @@ document.addEventListener('DOMContentLoaded', () => {
       Boolean(hospital?.url),
       Boolean(hospital?.region || hospital?.district || hospital?.town),
       Boolean(hospital?.openDate),
-      Math.max(Number(hospital?.reviewCount || 0), 0) > 0 || Math.max(Number(hospital?.specialistCount || 0), 0) > 0,
+      Math.max(Number(hospital?.specialistCount || 0), 0) > 0,
       hasOperationalInfo(hospital),
       hasParkingInfo(hospital)
         || Boolean(hospital?.equipment)
@@ -1919,7 +1883,6 @@ document.addEventListener('DOMContentLoaded', () => {
         <p class="quick-access-address">${escapeHtml(item.address || '주소 정보 확인 중')}</p>
         <p class="quick-access-subinfo">${escapeHtml(item.department)} / ${escapeHtml(item.type)}</p>
         <div class="quick-access-meta">
-          <span>⭐ ${item.score.toFixed(1)}</span>
           ${item.saturdayOpen ? '<span>토요일</span>' : ''}
           ${item.nightOpen ? '<span>야간</span>' : ''}
           ${item.sundayOpen ? '<span>일요일</span>' : ''}
@@ -1933,27 +1896,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const items = pickEditorialItems(
       state.hospitals,
       6,
-      (a, b) => (b.reviewCount - a.reviewCount) || compareByRankingQuality(a, b),
+      compareByRankingQuality,
     );
     ui.reviewsList.innerHTML = items.map((item) => `
       <article class="review-card fade-up visible">
-        <span class="review-quote">“</span>
         <div class="review-header">
           <span class="review-badge">${escapeHtml(item.department)}</span>
           <strong>${escapeHtml(item.name)}</strong>
         </div>
         <p style="line-height:1.8; color:var(--text-body); margin-bottom:16px;">${escapeHtml(buildReviewSummary(item))}</p>
-        <div class="hospital-meta">
-          <span class="meta-item"><span class="meta-icon">⭐</span><span class="meta-value">${item.score.toFixed(1)}</span></span>
-          <span class="meta-item"><span class="meta-icon">📝</span><span class="meta-label">${formatNumber(item.reviewCount)}건</span></span>
-        </div>
+        <a href="detail.html?id=${encodeURIComponent(item.id)}">위치와 방문 전 확인 사항 보기</a>
       </article>
     `).join('');
   }
 
   function buildReviewSummary(item) {
     const parts = [
-      `${item.department} 중심으로 많이 조회된 병원입니다.`,
+      `${item.department} 진료 정보가 등록되어 있습니다.`,
       item.saturdayOpen ? '토요일 진료 확인 가능.' : '',
       item.nightOpen ? '야간 진료 조건도 함께 볼 수 있습니다.' : '',
       item.specialistCount > 0 ? `전문의 ${item.specialistCount}명 정보가 있습니다.` : '',
