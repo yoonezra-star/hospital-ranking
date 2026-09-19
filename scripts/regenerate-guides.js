@@ -295,6 +295,7 @@ function commonHead({ title, description, canonical, schema }) {
     .guide-card-clean { padding: 26px; border: 1px solid var(--border-default); border-radius: 22px; background: var(--bg-card); box-shadow: var(--shadow-xs); }
     .guide-card-clean h2 { margin: 0 0 14px; font-size: 1.35rem; color: var(--text-heading); }
     .guide-card-clean p { color: var(--text-body); line-height: 1.82; margin: 0; }
+    .guide-plan-note { margin-top: 16px !important; padding-top: 14px; border-top: 1px solid var(--border-default); color: var(--text-muted) !important; }
     .guide-content ul, .guide-content ol { list-style: disc; padding-left: 20px; margin: 0; display: grid; gap: 9px; }
     .guide-content ol { list-style: decimal; }
     .guide-content li { color: var(--text-body); line-height: 1.78; }
@@ -417,6 +418,17 @@ ${commonHead({ title: guide.title, description: guide.summary, canonical: cleanU
         <section class="guide-card-clean">
           <h2>상담 때 물어볼 질문</h2>
           <ol>${li(guide.questions)}</ol>
+        </section>
+
+        <section class="guide-card-clean guide-visit-plan">
+          <h2>방문 준비 순서</h2>
+          <ol>
+            <li><strong>방문 목적 정리:</strong> ${esc(guide.visit[0])}</li>
+            <li><strong>자료 준비:</strong> ${esc(guide.prepare[0])}</li>
+            <li><strong>예약 전 확인:</strong> ${esc(guide.compare[0])}을 포함해 진료 가능 여부, 접수 마감, 예상 비용을 전화로 확인하세요.</li>
+            <li><strong>상담 기록:</strong> ${esc(guide.questions[0])}을 메모하고, 답변과 다음 방문 시점을 확인하세요.</li>
+          </ol>
+          <p class="guide-plan-note">검색 결과에 표시되는 주소·전화번호·운영 정보는 변동될 수 있습니다. 예약 전 병원에 직접 확인하고, 본인에게 필요한 검사와 치료 여부는 의료진의 설명을 기준으로 판단하세요.</p>
         </section>
 
         <section class="guide-safety-note" data-guide-checklist="true">
