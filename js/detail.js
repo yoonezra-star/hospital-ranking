@@ -142,6 +142,10 @@
       equipment: hospital.equipment || '',
       area: hospital.area || '',
       subway: hospital.subway || '',
+      receptionSummary: Array.isArray(hospital.receptionSummary) ? hospital.receptionSummary : [],
+      operationSummary: Array.isArray(hospital.operationSummary) ? hospital.operationSummary : [],
+      facilitySummary: Array.isArray(hospital.facilitySummary) ? hospital.facilitySummary : [],
+      liveDataSources: Array.isArray(hospital.liveDataSources) ? hospital.liveDataSources : [],
       sourceType: hospital.sourceType || provenance.sourceType || 'local-curated',
       sourceName: hospital.sourceName || provenance.sourceName || '병원찾기 내부 정리 데이터',
       sourceUrl: hospital.sourceUrl || provenance.sourceUrl || '',
@@ -152,19 +156,125 @@
   }
 
   async function enrichHospital(hospital) {
+    const [detailResult, hoursResult, equipmentResult] = await Promise.allSettled([
+      fetchOptionalJson('/api/hospital-details', { ykiho: hospital.id }),
+      fetchOptionalJson('/api/hospital-hours', {
+        name: hospital.name,
+        address: hospital.address,
+        region: hospital.region,
+      }),
+      fetchOptionalJson('/api/hospital-equip', { ykiho: hospital.id }),
+    ]);
+    const liveDetails = mergeLiveDetails(
+      hospital,
+      detailResult.status === 'fulfilled' ? detailResult.value : null,
+      hoursResult.status === 'fulfilled' ? hoursResult.value : null,
+      equipmentResult.status === 'fulfilled' ? equipmentResult.value : null,
+    );
+    const enrichedHospital = normalizeHospitalRecord(liveDetails.hospital);
+    window.currentHospitalDetail = enrichedHospital;
+
+    if (liveDetails.sources.length > 0) {
+      renderHospital(enrichedHospital);
+    }
+
     const sourceItems = [hospital.sourceName || '병원찾기 내부 정리 데이터'];
     if (hospital.sourceUrl && hospital.verificationStatus !== 'unverified') {
       sourceItems.push(`조회일 ${hospital.verifiedAt || '확인일 미상'}`);
     } else {
       sourceItems.push('개별 공식 출처 확인 필요');
     }
+    sourceItems.push(...liveDetails.sources);
     updateSourceSummary(sourceItems);
 
-    renderGuideLinks(hospital);
-    renderRelatedSearches(hospital);
-    renderNearbyHospitals(hospital);
-    renderReviewNotes(hospital);
-    renderMap(hospital);
+    renderGuideLinks(enrichedHospital);
+    renderRelatedSearches(enrichedHospital);
+    renderNearbyHospitals(enrichedHospital);
+    renderReviewNotes(enrichedHospital);
+    renderMap(enrichedHospital);
+  }
+
+  async function fetchOptionalJson(path, params) {
+    const query = new URLSearchParams();
+    Object.entries(params || {}).forEach(([key, value]) => {
+      if (value == null || value === '') return;
+      query.set(key, String(value));
+    });
+
+    const response = await fetch(`${path}?${query.toString()}`, {
+      signal: AbortSignal.timeout(10000),
+    });
+    if (!response.ok) throw new Error(`${path} status ${response.status}`);
+    return response.json();
+  }
+
+  function mergeLiveDetails(hospital, detail, hours, equipment) {
+    const next = {
+      ...hospital,
+      hours: { ...(hospital.hours || {}) },
+      receptionSummary: [...(hospital.receptionSummary || [])],
+      operationSummary: [...(hospital.operationSummary || [])],
+      facilitySummary: [...(hospital.facilitySummary || [])],
+      liveDataSources: [...(hospital.liveDataSources || [])],
+    };
+    const sources = [];
+
+    if (detail?.found && detail.fallback !== true) {
+      next.phone = detail.telno || next.phone;
+      next.address = detail.addr || next.address;
+      next.url = detail.hospUrl || next.url;
+      next.parkingCapacity = toNumber(detail.parkQty) || next.parkingCapacity;
+      next.parkingFee = detail.parkingSummary?.join(' / ') || next.parkingFee;
+      next.hasEmergency = Boolean(next.hasEmergency || detail.emyDayYn === 'Y' || detail.emyNgtYn === 'Y');
+      next.receptionSummary = uniqueValues([...next.receptionSummary, ...(detail.receptionSummary || [])]);
+      next.operationSummary = uniqueValues([...next.operationSummary, ...(detail.emergencySummary || [])]);
+      next.hours = mergeHours(next.hours, detail.hours);
+      sources.push('HIRA 상세정보 API 조회');
+    }
+
+    if (hours?.found && hours.fallback !== true && Number(hours.matchScore || 0) >= 100) {
+      next.phone = hours.dutyTel1 || next.phone;
+      next.address = hours.dutyAddr || next.address;
+      next.lat = Number(hours.wgs84Lat) || next.lat;
+      next.lng = Number(hours.wgs84Lon) || next.lng;
+      next.hours = mergeHours(next.hours, hours.hours);
+      next.operationSummary = uniqueValues([...next.operationSummary, ...(hours.operationSummary || [])]);
+      sources.push('응급의료기관 운영정보 API 일치 조회');
+    }
+
+    if (equipment?.found && equipment.fallback !== true) {
+      const equipmentNames = Array.isArray(equipment.topEquipment)
+        ? equipment.topEquipment.map((item) => item.name).filter(Boolean)
+        : Array.isArray(equipment.equips) ? equipment.equips.filter(Boolean) : [];
+      next.equipment = equipmentNames.join(', ') || next.equipment;
+      next.facilitySummary = uniqueValues([...next.facilitySummary, ...(equipment.facilitySummary || [])]);
+      next.bedCount = toNumber(equipment.facility?.stdSickbdCnt) || next.bedCount;
+      next.roomCount = toNumber(equipment.facility?.permSbdCnt) || next.roomCount;
+      next.area = equipment.facility?.totArea || next.area;
+      sources.push('HIRA 장비·시설 API 조회');
+    }
+
+    next.saturdayOpen = Boolean(next.saturdayOpen || isOpenHours(next.hours.sat));
+    next.sundayOpen = Boolean(next.sundayOpen || isOpenHours(next.hours.sun));
+    next.nightOpen = Boolean(next.nightOpen || hasNightHours(next.hours));
+    next.liveDataSources = uniqueValues([...next.liveDataSources, ...sources]);
+    return { hospital: next, sources };
+  }
+
+  function mergeHours(current, incoming) {
+    const next = { ...(current || {}) };
+    Object.entries(incoming || {}).forEach(([key, value]) => {
+      if (value) next[key] = value;
+    });
+    return next;
+  }
+
+  function uniqueValues(values) {
+    return Array.from(new Set((values || []).filter(Boolean)));
+  }
+
+  function isOpenHours(value) {
+    return Boolean(value && !/휴진|closed|close/i.test(String(value)));
   }
 
   function renderHospital(hospital) {
@@ -263,7 +373,7 @@
     setText('detail-room-bed', roomBed.join(' / ') || '병상 및 입원실 정보 확인 중');
     setText('detail-area', hospital.area || '면적 정보 확인 중');
     setText('detail-parking', parking.join(' / ') || '주차 안내 확인 중');
-    setText('detail-equipment', hospital.equipment || '보유 장비 정보 확인 중');
+    setText('detail-equipment', [hospital.equipment, ...(hospital.facilitySummary || [])].filter(Boolean).join(' / ') || '보유 장비 정보 확인 중');
   }
 
   function renderChoiceSummary(hospital) {
@@ -344,6 +454,7 @@
       hospital.equipment ? `장비 ${firstToken(hospital.equipment)}` : '',
       hospital.parkingCapacity > 0 ? `주차 ${hospital.parkingCapacity}대` : '',
       hospital.bedCount > 0 ? `병상 ${hospital.bedCount}개` : '',
+      ...(hospital.facilitySummary || []),
     ].filter(Boolean).join(' / ') || '시설 정보 확인 중');
     setText('detail-snapshot-visit', hospital.phone ? '전화 문의 후 방문하면 접수 확인이 더 쉽습니다.' : '운영 시간 확인 후 방문해 주세요.');
   }
@@ -362,7 +473,8 @@
     ].filter(Boolean).join(' / '));
 
     setText('detail-documents', '신분증 / 필요한 검사 결과 / 병원에서 안내한 준비물');
-    setText('detail-reservation', hospital.phone ? '전화 문의로 접수 가능 여부를 먼저 확인해 보세요.' : '방문 전 운영 시간을 먼저 확인해 주세요.');
+    const reception = hospital.receptionSummary?.join(' / ');
+    setText('detail-reservation', reception || (hospital.phone ? '전화 문의로 접수 가능 여부를 먼저 확인해 보세요.' : '방문 전 운영 시간을 먼저 확인해 주세요.'));
     setText('detail-transport', hospital.address || '교통 정보 확인 중');
     setText('detail-accessibility', hospital.parkingCapacity > 0 ? `주차 ${hospital.parkingCapacity}대 기준 이동 편의 확인` : '주차 및 접근성 정보 확인 중');
     setText('detail-checklist', [
@@ -402,7 +514,7 @@
     setText('detail-match-summary', hospital.id && String(hospital.id).startsWith('JD') ? '공공 병원 API 기준 병원 코드 연결' : '기본 병원 데이터 기준 상세 정보');
     setText('detail-operation-summary', buildOperationSummary(hospital));
     setText('detail-location-summary', hospital.address || '위치 정보 확인 중');
-    setText('detail-equipment-summary', hospital.equipment || '장비 및 시설 정보 확인 중');
+    setText('detail-equipment-summary', [hospital.equipment, ...(hospital.facilitySummary || [])].filter(Boolean).join(' / ') || '장비 및 시설 정보 확인 중');
   }
 
   function renderDataQuality(hospital) {
@@ -419,7 +531,8 @@
     const verificationLabel = hospital.verificationStatus === 'api-retrieved'
       ? '공공 API 응답 기반 · 운영시간과 접수는 방문 전 재확인 필요'
       : '개별 공식 출처 확인 전 · 운영시간과 접수는 방문 전 재확인 필요';
-    setText('detail-verification-note', `${verifiedFields.length > 0 ? `${verifiedFields.join(' / ')} 등록` : '기본 정보 등록'} · ${verificationLabel}`);
+    const liveLabel = hospital.liveDataSources?.length ? `추가 조회: ${hospital.liveDataSources.join(' / ')}` : '';
+    setText('detail-verification-note', `${verifiedFields.length > 0 ? `${verifiedFields.join(' / ')} 등록` : '기본 정보 등록'} · ${verificationLabel}${liveLabel ? ` · ${liveLabel}` : ''}`);
     setText('detail-medical-note', `${hospital.department} 관련 증상, 진단, 치료, 약물 결정은 이 페이지가 아니라 해당 병원 또는 의료진과 직접 상담해 주세요.`);
   }
 
@@ -699,12 +812,12 @@
   }
 
   function buildOperationSummary(hospital) {
-    const parts = [];
+    const parts = [...(hospital.operationSummary || [])];
     if (hospital.saturdayOpen) parts.push('토요일 진료');
     if (hospital.sundayOpen) parts.push('일요일 진료');
     if (hospital.nightOpen) parts.push('야간 진료');
     if (hospital.hasEmergency) parts.push('응급 진료 가능');
-    return parts.join(' / ') || '운영 정보 확인 중';
+    return uniqueValues(parts).join(' / ') || '운영 정보 확인 중';
   }
 
   function buildRegionText(hospital) {
