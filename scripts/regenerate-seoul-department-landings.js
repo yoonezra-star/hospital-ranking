@@ -1,7 +1,7 @@
 ﻿const fs = require('fs');
 
 const SITE = 'https://hospital-ranking.kr';
-const UPDATED = '2026-07-01';
+const UPDATED = '2026-09-19';
 const ADSENSE = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1441018945572157" crossorigin="anonymous"></script>';
 
 const pages = [
@@ -165,7 +165,7 @@ ${schemas(page)}
     <section class="intent-note"><h2>검색 예시</h2><div class="intent-chip-row">${page.chips.map(c=>`<span>${esc(c)}</span>`).join('\n')}</div></section>
     <section class="intent-faq intent-note"><h2>자주 묻는 질문</h2>${page.faq.map(([q,a],i)=>`<details${i===0?' open':''}><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('\n')}</section>
     <section class="intent-note"><h2>함께 보면 좋은 페이지</h2><div class="intent-link-row">${page.related.map(href=>`<a href="${esc(href)}">${esc(labelFor(href))}</a>`).join('\n')}<a href="index.html#search-results">병원 검색하기</a></div></section>
-    <section class="intent-note"><h2>의료 정보 안내</h2><ul><li>이 페이지는 병원 선택 전 비교 기준을 정리한 참고용 정보입니다.</li><li>진료 가능 여부, 접수 마감, 비용, 검사 가능 범위는 병원 사정에 따라 달라질 수 있으므로 방문 전 직접 확인해 주세요.</li><li>응급 증상이나 급격한 증상 악화는 온라인 검색보다 119, 응급실, 해당 병원의 직접 안내가 우선입니다.</li><li>정보 정정 요청은 replyleaders@naver.com 으로 접수합니다. 최종 점검일: ${UPDATED}</li></ul></section>
+    <section class="intent-note"><h2>공식 확인 경로</h2><p>이 페이지는 병원 선택 기준을 정리한 참고 자료입니다. 최신 운영 여부와 진료 가능 범위는 방문 전 병원에 확인하고, 기관 정보는 <a href="https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000" rel="external noopener" target="_blank">건강보험심사평가원 건강지도</a>에서도 대조해 주세요.</p></section>
   </main>
   <footer class="footer"><div class="footer-inner"><div class="footer-top"><div class="footer-brand"><div class="logo"><span class="logo-icon">H</span><span class="gradient-text">병원찾기</span></div><p>공공 데이터와 공개 가능한 정보를 바탕으로 병원 탐색에 필요한 참고 정보를 정리합니다.</p></div><div class="footer-links-group"><h4>바로가기</h4><a href="index.html">홈</a><a href="guide.html">건강가이드</a><a href="about.html">사이트 소개</a></div><div class="footer-links-group"><h4>정책</h4><a href="editorial-policy.html">콘텐츠 편집 원칙</a><a href="ad-policy.html">광고 및 제휴 안내</a><a href="privacy.html">개인정보처리방침</a></div></div><div class="footer-bottom"><p>&copy; 2026 병원찾기. 모든 권리 보유.</p><p>본 사이트의 정보는 참고용이며, 실제 진단과 치료 결정은 반드시 해당 병원 또는 의료진과 직접 상담해 주세요.</p></div></div></footer>
 </body>

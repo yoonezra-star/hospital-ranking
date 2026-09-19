@@ -25,13 +25,19 @@
     .guide-content li { color: var(--text-body); line-height: 1.78; }
     .guide-grid-clean { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
     .guide-trust-meta, .guide-safety-note { padding: 18px 20px; border: 1px solid var(--border-default); border-radius: 18px; background: color-mix(in srgb, var(--bg-body) 88%, white 12%); color: var(--text-body); line-height: 1.8; }
+    .guide-source-card { background: color-mix(in srgb, var(--bg-card) 92%, var(--primary-50) 8%); }
+    .guide-source-intro { margin: 0 0 14px; color: var(--text-body); line-height: 1.8; }
+    .guide-source-list { list-style: none !important; padding: 0 !important; margin: 0; display: grid; gap: 12px; }
+    .guide-source-list li { display: grid; gap: 3px; padding: 12px 14px; border: 1px solid var(--border-default); border-radius: 12px; background: var(--bg-card); }
+    .guide-source-list a { color: var(--primary); font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
+    .guide-source-list span { color: var(--text-muted); font-size: .92rem; line-height: 1.6; }
     .guide-trust-meta a, .guide-safety-note a, .footer-bottom a { color: var(--primary); font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
     .guide-safety-note h2 { margin: 0 0 12px; font-size: 1.2rem; }
     .guide-link-row { display: flex; flex-wrap: wrap; gap: 10px; }
     .guide-link-row a { text-decoration: none; border-radius: 12px; }
     @media (max-width: 768px) { .guide-page-wrap { padding-top: 34px; } .guide-hero-clean, .guide-card-clean { padding: 22px 18px; } .guide-title { font-size: 2rem; } }
   </style>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"MedicalWebPage","name":"위·대장 내시경 검사 준비 가이드","url":"https://hospital-ranking.kr/guide-endoscopy","description":"수면내시경과 일반 내시경을 준비할 때 금식, 약 복용, 보호자 동행, 검사 후 회복 동선을 확인하는 기준입니다.","dateModified":"2026-07-01","publisher":{"@type":"Organization","name":"병원찾기","url":"https://hospital-ranking.kr"},"about":[{"@type":"Thing","name":"내시경"},{"@type":"Thing","name":"수면내시경"},{"@type":"Thing","name":"검진"},{"@type":"Thing","name":"금식"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"MedicalWebPage","name":"위·대장 내시경 검사 준비 가이드","url":"https://hospital-ranking.kr/guide-endoscopy","description":"수면내시경과 일반 내시경을 준비할 때 금식, 약 복용, 보호자 동행, 검사 후 회복 동선을 확인하는 기준입니다.","dateModified":"2026-09-19","publisher":{"@type":"Organization","name":"병원찾기","url":"https://hospital-ranking.kr"},"about":[{"@type":"Thing","name":"내시경"},{"@type":"Thing","name":"수면내시경"},{"@type":"Thing","name":"검진"},{"@type":"Thing","name":"금식"}],"citation":["https://www.cancer.go.kr/lay1/program/S1T211C223/cancer/view.do?cancer_seq=4997&menu_seq=5009","https://edu.cancer.go.kr/lay1/S1T553C555/contents.do"]}</script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1441018945572157" crossorigin="anonymous"></script>
 </head>
 <body class="light-mode">
@@ -53,7 +59,7 @@
         <h1 class="guide-title">위·대장 내시경 검사 준비 가이드</h1>
         <p class="guide-summary">수면내시경과 일반 내시경을 준비할 때 금식, 약 복용, 보호자 동행, 검사 후 회복 동선을 확인하는 기준입니다. 병원찾기의 건강가이드는 특정 병원을 홍보하기보다 방문 전 사용자가 스스로 질문을 정리할 수 있도록 돕는 참고 자료입니다.</p>
         <div class="guide-badges">
-          <span>최종 점검일 2026-07-01</span>
+          <span>최종 점검일 2026-09-19</span>
           <span>참고용 건강 정보</span>
           <span>정정 요청 replyleaders@naver.com</span>
         </div>
@@ -103,6 +109,14 @@
           </ul>
         </section>
 
+        <section class="guide-card-clean guide-source-card">
+          <h2>공식 참고 자료</h2>
+          <p class="guide-source-intro">아래 링크는 이 글의 내용을 대신해 진단하거나 치료를 결정하는 자료가 아닙니다. 최신 내용과 개인에게 적용되는 범위는 의료진 또는 해당 기관에 직접 확인하세요.</p>
+          <ul class="guide-source-list">
+            <li><a href="https://www.cancer.go.kr/lay1/program/S1T211C223/cancer/view.do?cancer_seq=4997&amp;menu_seq=5009" rel="external noopener" target="_blank">국립암센터 대장암 검사 안내</a><span>대장내시경과 국가암검진 관련 공식 안내</span></li><li><a href="https://edu.cancer.go.kr/lay1/S1T553C555/contents.do" rel="external noopener" target="_blank">국립암센터 국가암검진사업</a><span>검진 주기와 검사 방법 확인</span></li>
+          </ul>
+        </section>
+
         <section class="guide-card-clean">
           <h2>관련해서 함께 볼 페이지</h2>
           <div class="guide-link-row">
@@ -143,6 +157,6 @@
       </div>
     </div>
   </footer>
-  <script src="js/guide-page.js?v=5"></script>
+  <script src="js/guide-page.js?v=20260919"></script>
 </body>
 </html>

@@ -25,13 +25,19 @@
     .guide-content li { color: var(--text-body); line-height: 1.78; }
     .guide-grid-clean { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
     .guide-trust-meta, .guide-safety-note { padding: 18px 20px; border: 1px solid var(--border-default); border-radius: 18px; background: color-mix(in srgb, var(--bg-body) 88%, white 12%); color: var(--text-body); line-height: 1.8; }
+    .guide-source-card { background: color-mix(in srgb, var(--bg-card) 92%, var(--primary-50) 8%); }
+    .guide-source-intro { margin: 0 0 14px; color: var(--text-body); line-height: 1.8; }
+    .guide-source-list { list-style: none !important; padding: 0 !important; margin: 0; display: grid; gap: 12px; }
+    .guide-source-list li { display: grid; gap: 3px; padding: 12px 14px; border: 1px solid var(--border-default); border-radius: 12px; background: var(--bg-card); }
+    .guide-source-list a { color: var(--primary); font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
+    .guide-source-list span { color: var(--text-muted); font-size: .92rem; line-height: 1.6; }
     .guide-trust-meta a, .guide-safety-note a, .footer-bottom a { color: var(--primary); font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
     .guide-safety-note h2 { margin: 0 0 12px; font-size: 1.2rem; }
     .guide-link-row { display: flex; flex-wrap: wrap; gap: 10px; }
     .guide-link-row a { text-decoration: none; border-radius: 12px; }
     @media (max-width: 768px) { .guide-page-wrap { padding-top: 34px; } .guide-hero-clean, .guide-card-clean { padding: 22px 18px; } .guide-title { font-size: 2rem; } }
   </style>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"MedicalWebPage","name":"정형외과·통증 외래 방문 전 체크 가이드","url":"https://hospital-ranking.kr/guide-ortho","description":"허리, 목, 어깨, 무릎 통증 진료 전에 통증 위치, 악화 동작, 영상검사 이력을 정리하는 방법입니다.","dateModified":"2026-07-01","publisher":{"@type":"Organization","name":"병원찾기","url":"https://hospital-ranking.kr"},"about":[{"@type":"Thing","name":"정형외과"},{"@type":"Thing","name":"통증"},{"@type":"Thing","name":"허리통증"},{"@type":"Thing","name":"무릎통증"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"MedicalWebPage","name":"정형외과·통증 외래 방문 전 체크 가이드","url":"https://hospital-ranking.kr/guide-ortho","description":"허리, 목, 어깨, 무릎 통증 진료 전에 통증 위치, 악화 동작, 영상검사 이력을 정리하는 방법입니다.","dateModified":"2026-09-19","publisher":{"@type":"Organization","name":"병원찾기","url":"https://hospital-ranking.kr"},"about":[{"@type":"Thing","name":"정형외과"},{"@type":"Thing","name":"통증"},{"@type":"Thing","name":"허리통증"},{"@type":"Thing","name":"무릎통증"}],"citation":["https://health.kdca.go.kr/"]}</script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1441018945572157" crossorigin="anonymous"></script>
 </head>
 <body class="light-mode">
@@ -53,7 +59,7 @@
         <h1 class="guide-title">정형외과·통증 외래 방문 전 체크 가이드</h1>
         <p class="guide-summary">허리, 목, 어깨, 무릎 통증 진료 전에 통증 위치, 악화 동작, 영상검사 이력을 정리하는 방법입니다. 병원찾기의 건강가이드는 특정 병원을 홍보하기보다 방문 전 사용자가 스스로 질문을 정리할 수 있도록 돕는 참고 자료입니다.</p>
         <div class="guide-badges">
-          <span>최종 점검일 2026-07-01</span>
+          <span>최종 점검일 2026-09-19</span>
           <span>참고용 건강 정보</span>
           <span>정정 요청 replyleaders@naver.com</span>
         </div>
@@ -103,6 +109,14 @@
           </ul>
         </section>
 
+        <section class="guide-card-clean guide-source-card">
+          <h2>공식 참고 자료</h2>
+          <p class="guide-source-intro">아래 링크는 이 글의 내용을 대신해 진단하거나 치료를 결정하는 자료가 아닙니다. 최신 내용과 개인에게 적용되는 범위는 의료진 또는 해당 기관에 직접 확인하세요.</p>
+          <ul class="guide-source-list">
+            <li><a href="https://health.kdca.go.kr/" rel="external noopener" target="_blank">질병관리청 국가건강정보포털</a><span>근골격계 증상과 건강정보 확인</span></li>
+          </ul>
+        </section>
+
         <section class="guide-card-clean">
           <h2>관련해서 함께 볼 페이지</h2>
           <div class="guide-link-row">
@@ -143,6 +157,6 @@
       </div>
     </div>
   </footer>
-  <script src="js/guide-page.js?v=5"></script>
+  <script src="js/guide-page.js?v=20260919"></script>
 </body>
 </html>

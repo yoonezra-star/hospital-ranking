@@ -25,6 +25,12 @@
     .guide-content li { color: var(--text-body); line-height: 1.78; }
     .guide-grid-clean { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
     .guide-trust-meta, .guide-safety-note { padding: 18px 20px; border: 1px solid var(--border-default); border-radius: 18px; background: color-mix(in srgb, var(--bg-body) 88%, white 12%); color: var(--text-body); line-height: 1.8; }
+    .guide-source-card { background: color-mix(in srgb, var(--bg-card) 92%, var(--primary-50) 8%); }
+    .guide-source-intro { margin: 0 0 14px; color: var(--text-body); line-height: 1.8; }
+    .guide-source-list { list-style: none !important; padding: 0 !important; margin: 0; display: grid; gap: 12px; }
+    .guide-source-list li { display: grid; gap: 3px; padding: 12px 14px; border: 1px solid var(--border-default); border-radius: 12px; background: var(--bg-card); }
+    .guide-source-list a { color: var(--primary); font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
+    .guide-source-list span { color: var(--text-muted); font-size: .92rem; line-height: 1.6; }
     .guide-trust-meta a, .guide-safety-note a, .footer-bottom a { color: var(--primary); font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
     .guide-safety-note h2 { margin: 0 0 12px; font-size: 1.2rem; }
     .guide-link-row { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -185,6 +191,11 @@
           <li>응급 증상은 검색보다 119, 응급실, 해당 병원 안내가 우선입니다.</li>
         </ul>
       </section>
+      <section class="guide-card-clean guide-source-card">
+        <h2>공식 참고 자료</h2>
+        <p class="guide-source-intro">병원찾기의 안내를 대신해 진단하거나 치료를 결정하는 자료가 아닙니다. 최신 내용과 개인에게 적용되는 범위는 의료진 또는 해당 기관에 직접 확인하세요.</p>
+        <ul class="guide-source-list"><li><a href="https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000" rel="external noopener" target="_blank">건강보험심사평가원 건강지도</a><span>의료기관 검색과 기관 정보 확인 경로</span></li></ul>
+      </section>
     </section>
   </main>
   <footer class="footer">
@@ -214,6 +225,6 @@
       </div>
     </div>
   </footer>
-  <script src="js/guide-page.js?v=5"></script>
+  <script src="js/guide-page.js?v=20260919"></script>
 </body>
 </html>

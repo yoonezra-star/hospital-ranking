@@ -146,10 +146,10 @@
   }
 
   async function enrichHospital(hospital) {
-    updateSourceSummary(['기본 병원 데이터']);
+    updateSourceSummary(['병원찾기 기본 정리 데이터', '개별 공식 출처 확인 필요']);
 
     if (hospital.id && typeof hospital.id === 'string' && hospital.id.startsWith('JD')) {
-      updateSourceSummary(['기본 병원 데이터', '공공 병원 API 연동']);
+      updateSourceSummary(['공공 병원 API 응답', '방문 전 최신 정보 확인 필요']);
     }
 
     renderGuideLinks(hospital);
@@ -398,13 +398,14 @@
   }
 
   function renderDataQuality(hospital) {
-    setText('detail-data-updated', `2026-07-02 기준 페이지 구조와 안내 문구를 점검했습니다. 병원 운영 정보는 변동될 수 있습니다.`);
-    setText('detail-verification-note', [
+    setText('detail-data-updated', `기본 정리 데이터 기준: 2026년 7월 3일. 페이지 점검일: 2026년 9월 19일.`);
+    const verifiedFields = [
       hospital.phone ? '전화번호' : '',
       hospital.address ? '주소' : '',
       hospital.saturdayOpen || hospital.sundayOpen || hospital.nightOpen ? '운영조건' : '',
       hospital.parkingCapacity > 0 || hospital.parkingFee ? '주차정보' : '',
-    ].filter(Boolean).join(' / ') || '운영 시간과 위치 정보');
+    ].filter(Boolean);
+    setText('detail-verification-note', `${verifiedFields.length > 0 ? `${verifiedFields.join(' / ')} 등록` : '기본 정보 등록'} · 개별 공식 출처와 최신 운영시간은 방문 전 확인 필요`);
     setText('detail-medical-note', `${hospital.department} 관련 증상, 진단, 치료, 약물 결정은 이 페이지가 아니라 해당 병원 또는 의료진과 직접 상담해 주세요.`);
   }
 
@@ -635,7 +636,7 @@
     const target = document.getElementById('detail-source-summary');
     if (!target) return;
     const uniqueItems = Array.from(new Set((items || []).filter(Boolean)));
-    target.textContent = uniqueItems.length > 0 ? uniqueItems.join(' / ') : '데이터 출처 확인 중';
+    target.textContent = uniqueItems.length > 0 ? uniqueItems.join(' / ') : '데이터 출처 확인 필요';
   }
 
   function getHospitalList() {

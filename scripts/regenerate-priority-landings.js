@@ -1,7 +1,7 @@
 ﻿const fs = require('fs');
 
 const SITE = 'https://hospital-ranking.kr';
-const UPDATED = '2026-07-01';
+const UPDATED = '2026-09-19';
 const ADSENSE = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1441018945572157" crossorigin="anonymous"></script>';
 
 const pages = [
@@ -290,6 +290,11 @@ ${schemas}
         <li>응급 증상이나 급격한 증상 악화는 온라인 검색보다 119, 응급실, 해당 병원의 직접 안내가 우선입니다.</li>
         <li>정보 정정 요청은 replyleaders@naver.com 으로 접수합니다. 최종 점검일: ${UPDATED}</li>
       </ul>
+    </section>
+
+    <section class="intent-note">
+      <h2>공식 확인 경로</h2>
+      <p>이 페이지는 병원 선택 기준을 정리한 참고 자료입니다. 의료기관의 최신 운영 여부와 진료 가능 범위는 방문 전 병원에 확인하고, 기관 정보는 <a href="https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000" rel="external noopener" target="_blank">건강보험심사평가원 건강지도</a>에서도 대조해 주세요.</p>
     </section>
   </main>
 

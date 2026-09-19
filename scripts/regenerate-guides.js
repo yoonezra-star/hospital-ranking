@@ -1,7 +1,7 @@
 ﻿const fs = require('fs');
 
 const SITE = 'https://hospital-ranking.kr';
-const TODAY = '2026-07-01';
+const TODAY = '2026-09-19';
 const SEARCH_GUIDE = { slug: 'guide-hospital-search', title: '지역 병원 검색부터 전화 확인까지', category: '병원 이용 안내', summary: '검색 결과가 없을 때의 대처, 야간·휴일 접수 확인 질문과 인쇄 가능한 방문 체크리스트입니다.' };
 const ADSENSE = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1441018945572157" crossorigin="anonymous"></script>';
 
@@ -200,6 +200,59 @@ const guides = [
   }
 ];
 
+const OFFICIAL_SOURCES = {
+  'guide-implant': [
+    { title: '건강보험심사평가원 건강지도', href: 'https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000', note: '치과 등 의료기관 검색과 기관 정보 확인 경로' },
+  ],
+  'guide-endoscopy': [
+    { title: '국립암센터 대장암 검사 안내', href: 'https://www.cancer.go.kr/lay1/program/S1T211C223/cancer/view.do?cancer_seq=4997&menu_seq=5009', note: '대장내시경과 국가암검진 관련 공식 안내' },
+    { title: '국립암센터 국가암검진사업', href: 'https://edu.cancer.go.kr/lay1/S1T553C555/contents.do', note: '검진 주기와 검사 방법 확인' },
+  ],
+  'guide-depression': [
+    { title: '질병관리청 국가건강정보포털', href: 'https://health.kdca.go.kr/', note: '우울증 등 건강정보를 공식 포털에서 다시 확인' },
+  ],
+  'guide-diabetes': [
+    { title: '질병관리청 국가건강정보포털', href: 'https://health.kdca.go.kr/', note: '고혈압·당뇨병 건강정보 확인' },
+    { title: '질병관리청 심뇌혈관질환 예방관리', href: 'https://www.kdca.go.kr/kdca/3361/subview.do', note: '고혈압·당뇨병 예방관리 안내' },
+  ],
+  'guide-rhinitis': [
+    { title: '질병관리청 국가건강정보포털', href: 'https://health.kdca.go.kr/', note: '증상과 질환 정보를 공식 포털에서 검색' },
+  ],
+  'guide-urology': [
+    { title: '질병관리청 국가건강정보포털', href: 'https://health.kdca.go.kr/', note: '배뇨·요로 관련 건강정보 확인' },
+  ],
+  'guide-lasik': [
+    { title: '미국 국립안연구소 시력교정술 안내', href: 'https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/refractive-errors/surgery-refractive-errors', note: 'LASIK과 굴절교정술의 적응·위험 설명' },
+  ],
+  'guide-cataract': [
+    { title: '미국 국립안연구소 백내장 수술 안내', href: 'https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/cataracts/cataract-surgery', note: '백내장 수술 전후 확인사항' },
+  ],
+  'guide-ortho': [
+    { title: '질병관리청 국가건강정보포털', href: 'https://health.kdca.go.kr/', note: '근골격계 증상과 건강정보 확인' },
+  ],
+  'guide-manual-therapy': [
+    { title: '건강보험심사평가원 건강지도', href: 'https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000', note: '진료과와 의료기관 검색 경로' },
+  ],
+  'guide-acne': [
+    { title: '질병관리청 국가건강정보포털', href: 'https://health.kdca.go.kr/', note: '피부 증상과 질환 정보를 공식 포털에서 검색' },
+  ],
+  'guide-womens-checkup': [
+    { title: '국립암센터 국가암검진사업', href: 'https://edu.cancer.go.kr/lay1/S1T553C555/contents.do', note: '유방암·자궁경부암 등 국가검진 안내' },
+  ],
+  'guide-breast-ultrasound': [
+    { title: '국립암센터 국가암검진사업', href: 'https://edu.cancer.go.kr/lay1/S1T553C555/contents.do', note: '유방검진 항목과 검사 방법 확인' },
+  ],
+  'guide-incontinence': [
+    { title: '질병관리청 국가건강정보포털', href: 'https://health.kdca.go.kr/', note: '배뇨 관련 건강정보 확인' },
+  ],
+  'guide-pediatric-dental': [
+    { title: '건강보험심사평가원 건강지도', href: 'https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000', note: '소아 진료기관 검색 경로' },
+  ],
+  'guide-chuna': [
+    { title: '건강보험심사평가원 건강지도', href: 'https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000', note: '한방·재활 관련 의료기관 검색 경로' },
+  ],
+};
+
 function esc(value) {
   return String(value).replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
 }
@@ -247,6 +300,12 @@ function commonHead({ title, description, canonical, schema }) {
     .guide-content li { color: var(--text-body); line-height: 1.78; }
     .guide-grid-clean { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
     .guide-trust-meta, .guide-safety-note { padding: 18px 20px; border: 1px solid var(--border-default); border-radius: 18px; background: color-mix(in srgb, var(--bg-body) 88%, white 12%); color: var(--text-body); line-height: 1.8; }
+    .guide-source-card { background: color-mix(in srgb, var(--bg-card) 92%, var(--primary-50) 8%); }
+    .guide-source-intro { margin: 0 0 14px; color: var(--text-body); line-height: 1.8; }
+    .guide-source-list { list-style: none !important; padding: 0 !important; margin: 0; display: grid; gap: 12px; }
+    .guide-source-list li { display: grid; gap: 3px; padding: 12px 14px; border: 1px solid var(--border-default); border-radius: 12px; background: var(--bg-card); }
+    .guide-source-list a { color: var(--primary); font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
+    .guide-source-list span { color: var(--text-muted); font-size: .92rem; line-height: 1.6; }
     .guide-trust-meta a, .guide-safety-note a, .footer-bottom a { color: var(--primary); font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
     .guide-safety-note h2 { margin: 0 0 12px; font-size: 1.2rem; }
     .guide-link-row { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -311,7 +370,8 @@ function renderGuide(guide) {
     description: guide.summary,
     dateModified: TODAY,
     publisher: { '@type': 'Organization', name: '병원찾기', url: SITE },
-    about: guide.keywords.map((name) => ({ '@type': 'Thing', name }))
+    about: guide.keywords.map((name) => ({ '@type': 'Thing', name })),
+    citation: (OFFICIAL_SOURCES[guide.slug] || []).map((source) => source.href),
   };
 
   const html = `<!DOCTYPE html>
@@ -364,6 +424,14 @@ ${commonHead({ title: guide.title, description: guide.summary, canonical: cleanU
             <li>진료 가능 시간, 접수 마감, 비용, 검사 가능 여부는 병원 사정에 따라 달라질 수 있으므로 방문 전 직접 확인해 주세요.</li>
             <li>증상 악화, 출혈, 호흡 곤란, 급성 통증, 의식 저하 등 응급 상황은 온라인 검색보다 119 또는 응급실 안내가 우선입니다.</li>
             <li>콘텐츠 오류나 보완 의견은 <a href="mailto:replyleaders@naver.com">replyleaders@naver.com</a>으로 알려주세요.</li>
+          </ul>
+        </section>
+
+        <section class="guide-card-clean guide-source-card">
+          <h2>공식 참고 자료</h2>
+          <p class="guide-source-intro">아래 링크는 이 글의 내용을 대신해 진단하거나 치료를 결정하는 자료가 아닙니다. 최신 내용과 개인에게 적용되는 범위는 의료진 또는 해당 기관에 직접 확인하세요.</p>
+          <ul class="guide-source-list">
+            ${(OFFICIAL_SOURCES[guide.slug] || []).map((source) => `<li><a href="${esc(source.href)}" rel="external noopener" target="_blank">${esc(source.title)}</a><span>${esc(source.note)}</span></li>`).join('')}
           </ul>
         </section>
 
@@ -428,6 +496,11 @@ ${commonHead({ title: '건강가이드 모음', description: '임플란트, 내�
           <li>접수 시간, 진료 가능 여부, 검사 비용은 반드시 방문 전 병원에 직접 확인해 주세요.</li>
           <li>응급 증상은 검색보다 119, 응급실, 해당 병원 안내가 우선입니다.</li>
         </ul>
+      </section>
+      <section class="guide-card-clean guide-source-card">
+        <h2>공식 참고 자료</h2>
+        <p class="guide-source-intro">병원찾기의 안내를 대신해 진단하거나 치료를 결정하는 자료가 아닙니다. 최신 내용과 개인에게 적용되는 범위는 의료진 또는 해당 기관에 직접 확인하세요.</p>
+        <ul class="guide-source-list"><li><a href="https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000" rel="external noopener" target="_blank">건강보험심사평가원 건강지도</a><span>의료기관 검색과 기관 정보 확인 경로</span></li></ul>
       </section>
     </section>
   </main>
