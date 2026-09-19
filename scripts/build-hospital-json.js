@@ -16,6 +16,10 @@ vm.createContext(context);
 vm.runInContext(source, context, { filename: 'js/data.js' });
 
 const provenance = JSON.parse(fs.readFileSync(PROVENANCE_FILE, 'utf8'));
+const institutionCodes = Object.values(provenance).map((item) => item.hiraId).filter(Boolean);
+if (new Set(institutionCodes).size !== institutionCodes.length) {
+  throw new Error('Duplicate HIRA institution codes: verify hospital identity before generating data');
+}
 const hospitals = [
   ...(context.HOSPITALS || []),
   ...(context.NEW_HOSPITALS || []),
@@ -29,7 +33,7 @@ const hospitals = [
       sourceName: '건강보험심사평가원 병원기본정보 API',
       sourceUrl: 'https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000',
       verificationStatus: 'api-retrieved',
-      verifiedAt: '2026-09-19',
+      verifiedAt: itemProvenance.verifiedAt || '2026-09-19',
     } : {}),
   });
 });
@@ -53,7 +57,7 @@ const runtimeProvenance = Object.fromEntries(Object.entries(provenance).map(([id
   sourceName: '건강보험심사평가원 병원기본정보 API',
   sourceUrl: 'https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000',
   verificationStatus: 'api-retrieved',
-  verifiedAt: '2026-09-19',
+  verifiedAt: item.verifiedAt || '2026-09-19',
 }]));
 fs.writeFileSync(PROVENANCE_SCRIPT, `window.HOSPITAL_PROVENANCE = ${JSON.stringify(runtimeProvenance, null, 2)};\n`, 'utf8');
 
@@ -62,6 +66,7 @@ console.log(`Wrote ${hospitals.length} hospitals to ${path.relative(ROOT, OUT_FI
 function normalizeHospital(item) {
   return {
     id: item.id,
+    hiraId: item.hiraId || '',
     name: item.name || '',
     type: item.type || '',
     department: item.department || '',

@@ -10,6 +10,7 @@
   "hospitals": [
     {
       "id": 101,
+      "hiraId": "JDQ4MTYyMiM2MSMkMSMkMiMkNzIkMzgxOTYxIzExIyQyIyQ3IyQwMCQyNjE0ODEjNDEjJDEjJDQjJDgz",
       "name": "김흥진치과의원",
       "type": "치과의원",
       "department": "치과",
@@ -56,6 +57,7 @@
     },
     {
       "id": 1,
+      "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQ3OSQzNjE4MzIjODEjJDEjJDYjJDgz",
       "name": "서울대학교병원",
       "type": "종합병원",
       "department": "종합병원",
@@ -89,10 +91,11 @@
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
       "verificationStatus": "api-retrieved",
-      "verifiedAt": "2026-09-19"
+      "verifiedAt": "2026-09-20"
     },
     {
       "id": 2,
+      "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQxMyQzNjEwMDIjODEjJDEjJDIjJDgz",
       "name": "삼성서울병원",
       "type": "종합병원",
       "department": "종합병원",
@@ -130,6 +133,7 @@
     },
     {
       "id": 3,
+      "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQwMyQyNjE0ODEjNDEjJDEjJDQjJDgz",
       "name": "서울아산병원",
       "type": "종합병원",
       "department": "종합병원",
@@ -167,6 +171,7 @@
     },
     {
       "id": 4,
+      "hiraId": "",
       "name": "연세세브란스병원",
       "type": "종합병원",
       "department": "종합병원",
@@ -204,6 +209,7 @@
     },
     {
       "id": 5,
+      "hiraId": "",
       "name": "강남밝은세상안과",
       "type": "의원",
       "department": "안과",
@@ -241,6 +247,7 @@
     },
     {
       "id": 6,
+      "hiraId": "",
       "name": "미소들치과",
       "type": "치과의원",
       "department": "치과",
@@ -278,6 +285,7 @@
     },
     {
       "id": 7,
+      "hiraId": "JDQ4MTYyMiM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQwMyQyNjEwMDIjNTEjJDEjJDYjJDgz",
       "name": "분당서울대학교병원",
       "type": "종합병원",
       "department": "종합병원",
@@ -315,6 +323,7 @@
     },
     {
       "id": 8,
+      "hiraId": "",
       "name": "관절힐링정형외과",
       "type": "의원",
       "department": "정형외과",
@@ -352,6 +361,7 @@
     },
     {
       "id": 9,
+      "hiraId": "JDQ4MTYyMiM2MSMkMiMkNiMkMDAkMzgxMTkxIzMxIyQxIyQzIyQ5MiQyNjEyMjIjNDEjJDEjJDgjJDgz",
       "name": "아름다운피부과",
       "type": "의원",
       "department": "피부과",
@@ -389,6 +399,7 @@
     },
     {
       "id": 10,
+      "hiraId": "JDQ4MTAxMiM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQ3OSQyNjEyMjIjNDEjJDEjJDgjJDgz",
       "name": "부산대학교병원",
       "type": "종합병원",
       "department": "종합병원",
@@ -426,6 +437,7 @@
     },
     {
       "id": 11,
+      "hiraId": "JDQ4MTAxMiM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQ4MiQyNjE0ODEjODEjJDEjJDIjJDgz",
       "name": "해운대백병원",
       "type": "종합병원",
       "department": "종합병원",
@@ -463,6 +475,7 @@
     },
     {
       "id": 12,
+      "hiraId": "",
       "name": "서울좋은이비인후과",
       "type": "의원",
       "department": "이비인후과",
@@ -500,6 +513,7 @@
     },
     {
       "id": 13,
+      "hiraId": "",
       "name": "함소아한의원 강남점",
       "type": "한의원",
       "department": "한의원",
@@ -537,6 +551,7 @@
     },
     {
       "id": 14,
+      "hiraId": "",
       "name": "맑은마음 정신건강의학과",
       "type": "의원",
       "department": "정신건강의학과",
@@ -574,6 +589,7 @@
     },
     {
       "id": 15,
+      "hiraId": "JDQ4MTYyMiM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQ3IyQ5OSQzNjEyMjIjNzEjJDEjJDgjJDgz",
       "name": "인천세종병원",
       "type": "종합병원",
       "department": "종합병원",
@@ -611,6 +627,7 @@
     },
     {
       "id": 16,
+      "hiraId": "",
       "name": "수원윌스기념병원",
       "type": "병원",
       "department": "정형외과",
@@ -648,6 +665,7 @@
     },
     {
       "id": 17,
+      "hiraId": "",
       "name": "더봄소아청소년과",
       "type": "의원",
       "department": "소아청소년과",
@@ -685,6 +703,7 @@
     },
     {
       "id": 18,
+      "hiraId": "JDQ4MTYyMiM2MSMkMSMkMiMkODkkMzgxMzUxIzExIyQxIyQzIyQ3OSQzNjE0ODEjNDEjJDEjJDgjJDgz",
       "name": "대전을지대학교병원",
       "type": "종합병원",
       "department": "종합병원",
@@ -722,6 +741,7 @@
     },
     {
       "id": 19,
+      "hiraId": "",
       "name": "새빛성형외과",
       "type": "의원",
       "department": "성형외과",
@@ -759,6 +779,7 @@
     },
     {
       "id": 20,
+      "hiraId": "",
       "name": "온누리가정의학과",
       "type": "의원",
       "department": "가정의학과",
@@ -796,6 +817,7 @@
     },
     {
       "id": 21,
+      "hiraId": "JDQ4MTYyMiM1MSMkMiMkMCMkMDAkNDgxOTYxIzMxIyQxIyQ3IyQ4OSQ0NjEwMDIjNTEjJDEjJDIjJDgz",
       "name": "연세산부인과",
       "type": "의원",
       "department": "산부인과",
@@ -833,6 +855,7 @@
     },
     {
       "id": 22,
+      "hiraId": "JDQ4MTYyMiM4MSMkMSMkOCMkODkkMzgxMzUxIzExIyQxIyQzIyQ3OSQyNjEyMjIjNTEjJDEjJDIjJDgz",
       "name": "제주한라병원",
       "type": "종합병원",
       "department": "종합병원",
@@ -870,6 +893,7 @@
     },
     {
       "id": 23,
+      "hiraId": "JDQ4MTYyMiM3MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQ3OSQyNjE4MzIjNDEjJDEjJDQjJDgz",
       "name": "광주기독병원",
       "type": "종합병원",
       "department": "종합병원",
@@ -907,6 +931,7 @@
     },
     {
       "id": 24,
+      "hiraId": "",
       "name": "바른통증의학과",
       "type": "의원",
       "department": "통증의학과",
@@ -944,6 +969,7 @@
     },
     {
       "id": 25,
+      "hiraId": "",
       "name": "척시원재활의학과",
       "type": "의원",
       "department": "재활의학과",
@@ -981,6 +1007,7 @@
     },
     {
       "id": 1001,
+      "hiraId": "",
       "name": "판교디지털내과의원",
       "type": "의원",
       "department": "내과",
@@ -1018,6 +1045,7 @@
     },
     {
       "id": 1002,
+      "hiraId": "",
       "name": "서초리더스365의원",
       "type": "의원",
       "department": "가정의학과",
@@ -1055,6 +1083,7 @@
     },
     {
       "id": 1003,
+      "hiraId": "",
       "name": "일산밝은안과의원",
       "type": "의원",
       "department": "안과",
@@ -1092,6 +1121,7 @@
     },
     {
       "id": 1004,
+      "hiraId": "",
       "name": "해운대좋은치과의원",
       "type": "치과의원",
       "department": "치과",
@@ -1129,6 +1159,7 @@
     },
     {
       "id": 1005,
+      "hiraId": "",
       "name": "연세밝은미래소아청소년과",
       "type": "의원",
       "department": "소아청소년과",
@@ -1166,6 +1197,7 @@
     },
     {
       "id": 1006,
+      "hiraId": "",
       "name": "대전온정형외과의원",
       "type": "의원",
       "department": "정형외과",
@@ -1203,6 +1235,7 @@
     },
     {
       "id": 1007,
+      "hiraId": "",
       "name": "인천마음숲정신건강의학과",
       "type": "의원",
       "department": "정신건강의학과",
@@ -1240,6 +1273,7 @@
     },
     {
       "id": 1008,
+      "hiraId": "",
       "name": "강남뉴페이스성형외과",
       "type": "의원",
       "department": "성형외과",
@@ -1277,6 +1311,7 @@
     },
     {
       "id": 1009,
+      "hiraId": "JDQ4MTYyMiM1MSMkMiMkMCMkMDAkNDgxNzAyIzQxIyQxIyQ3IyQ3MiQzNjE4MzIjNTEjJDEjJDIjJDgz",
       "name": "교하하나의원",
       "type": "의원",
       "department": "내과, 소아청소년과, 신경외과, 외과, 정형외과",
@@ -1314,6 +1349,7 @@
     },
     {
       "id": 1010,
+      "hiraId": "JDU4MTI3MSM1MSMkMiMkMCMkMDAkNTgxOTYxIzMxIyQxIyQzIyQ3OSQzNjE4MzIjNzEjJDEjJDgjJDgz",
       "name": "교하본정형외과의원",
       "type": "의원",
       "department": "정형외과",
@@ -1351,6 +1387,7 @@
     },
     {
       "id": 1011,
+      "hiraId": "JDQ4MTYyMiM1MSMkMSMkMCMkNzIkNDgxOTYxIzIxIyQxIyQ1IyQ2MiQ0NjEwMDIjNjEjJDEjJDAjJDgz",
       "name": "교하굿모닝치과의원",
       "type": "치과의원",
       "department": "치과",
@@ -1388,6 +1425,7 @@
     },
     {
       "id": 1012,
+      "hiraId": "JDU4MTI3MSM1MSMkMiMkMCMkMDAkMzgxOTYxIzIxIyQxIyQxIyQ4MiQzNjEwMDIjNDEjJDEjJDgjJDgz",
       "name": "교하연세이비인후과의원",
       "type": "의원",
       "department": "이비인후과",
@@ -1425,6 +1463,7 @@
     },
     {
       "id": 1013,
+      "hiraId": "",
       "name": "분당바른정형외과의원",
       "type": "의원",
       "department": "정형외과",
@@ -1462,6 +1501,7 @@
     },
     {
       "id": 1014,
+      "hiraId": "",
       "name": "운정아이소아청소년과의원",
       "type": "의원",
       "department": "소아청소년과",
@@ -1499,6 +1539,7 @@
     },
     {
       "id": 1015,
+      "hiraId": "",
       "name": "송도밝은안과의원",
       "type": "의원",
       "department": "안과",
@@ -1536,6 +1577,7 @@
     },
     {
       "id": 1016,
+      "hiraId": "",
       "name": "정자연세내과의원",
       "type": "의원",
       "department": "내과",
@@ -1573,6 +1615,7 @@
     },
     {
       "id": 1017,
+      "hiraId": "",
       "name": "야탑튼튼정형외과의원",
       "type": "의원",
       "department": "정형외과",
@@ -1610,6 +1653,7 @@
     },
     {
       "id": 1018,
+      "hiraId": "",
       "name": "센텀푸른안과의원",
       "type": "의원",
       "department": "안과",
@@ -1647,6 +1691,7 @@
     },
     {
       "id": 1019,
+      "hiraId": "",
       "name": "청라아이봄소아청소년과의원",
       "type": "의원",
       "department": "소아청소년과",
@@ -1684,6 +1729,7 @@
     },
     {
       "id": 1020,
+      "hiraId": "",
       "name": "홍대서울치과의원",
       "type": "치과의원",
       "department": "치과",
@@ -1721,6 +1767,7 @@
     },
     {
       "id": 1021,
+      "hiraId": "",
       "name": "잠실서울산부인과의원",
       "type": "의원",
       "department": "산부인과",
@@ -1758,6 +1805,7 @@
     },
     {
       "id": 1022,
+      "hiraId": "",
       "name": "강남맑은비뇨의학과의원",
       "type": "의원",
       "department": "비뇨의학과",
@@ -1795,6 +1843,7 @@
     },
     {
       "id": 1023,
+      "hiraId": "",
       "name": "서현바른재활의학과의원",
       "type": "의원",
       "department": "재활의학과",
@@ -1832,6 +1881,7 @@
     },
     {
       "id": 1024,
+      "hiraId": "",
       "name": "송파마음정신건강의학과의원",
       "type": "의원",
       "department": "정신건강의학과",
@@ -1869,6 +1919,7 @@
     },
     {
       "id": 1025,
+      "hiraId": "",
       "name": "마포숨편한이비인후과의원",
       "type": "의원",
       "department": "이비인후과",
@@ -1906,6 +1957,7 @@
     },
     {
       "id": 1026,
+      "hiraId": "",
       "name": "동탄온가정의학과의원",
       "type": "의원",
       "department": "가정의학과",
@@ -1943,6 +1995,7 @@
     },
     {
       "id": 1027,
+      "hiraId": "",
       "name": "광교참피부과의원",
       "type": "의원",
       "department": "피부과",
@@ -1980,6 +2033,7 @@
     },
     {
       "id": 1028,
+      "hiraId": "",
       "name": "센텀바른치과의원",
       "type": "치과의원",
       "department": "치과",
@@ -2017,6 +2071,7 @@
     },
     {
       "id": 1029,
+      "hiraId": "",
       "name": "대전새봄내과의원",
       "type": "의원",
       "department": "내과",
@@ -2054,6 +2109,7 @@
     },
     {
       "id": 1030,
+      "hiraId": "",
       "name": "운정맑은피부과의원",
       "type": "의원",
       "department": "피부과",

@@ -77,7 +77,8 @@
   }
 
   function normalizeDetailUrl(hospitalId) {
-    const expected = `detail.html?id=${encodeURIComponent(hospitalId)}`;
+    const name = new URLSearchParams(window.location.search).get('name');
+    const expected = `detail.html?id=${encodeURIComponent(hospitalId)}${name ? `&name=${encodeURIComponent(name)}` : ''}`;
     const current = `${window.location.pathname.split('/').pop() || 'detail.html'}${window.location.search || ''}`;
     if (current !== expected) {
       window.history.replaceState({}, '', expected);
@@ -87,7 +88,8 @@
   async function resolveHospital(id) {
     const hospitalList = getHospitalList();
     if (Array.isArray(hospitalList)) {
-      const localMatch = hospitalList.find((item) => String(item.id) === String(id));
+      const localMatch = hospitalList.find((item) => String(item.id) === String(id)
+        || window.HOSPITAL_PROVENANCE?.[String(item.id)]?.hiraId === String(id));
       if (localMatch) {
         return localMatch;
       }
@@ -96,8 +98,14 @@
     const api = getHospitalApi();
     if (api?.fetchHospitals) {
       try {
-        const response = await api.fetchHospitals({ ykiho: id, limit: 1 });
-        return response?.hospitals?.[0] || null;
+        if (!/^JD[A-Za-z0-9+/=]+$/.test(String(id))) return null;
+        const name = new URLSearchParams(window.location.search).get('name');
+        if (!name) return null;
+        // The basic-information API ignores ykiho as a search filter.
+        const response = await api.fetchHospitals({ live: true, yadmNm: name, numOfRows: 50 });
+        return response?.fromMock === false
+          ? response.hospitals?.find((item) => String(item.id) === String(id)) || null
+          : null;
       } catch (error) {
         console.warn('[detail] API lookup skipped:', error);
       }
@@ -132,8 +140,8 @@
       openDate: hospital.openDate || '',
       url: hospital.url || '',
       hours,
-      saturdayOpen: typeof hospital.saturdayOpen === 'boolean' ? hospital.saturdayOpen : Boolean(hours.sat),
-      sundayOpen: typeof hospital.sundayOpen === 'boolean' ? hospital.sundayOpen : Boolean(hours.sun),
+      saturdayOpen: hours.sat ? isOpenHours(hours.sat) : hospital.saturdayOpen === true,
+      sundayOpen: hours.sun ? isOpenHours(hours.sun) : hospital.sundayOpen === true,
       nightOpen: typeof hospital.nightOpen === 'boolean' ? hospital.nightOpen : hasNightHours(hours),
       hasEmergency: Boolean(hospital.hasEmergency),
       parkingCapacity: toNumber(hospital.parkingCapacity),
@@ -157,14 +165,21 @@
   }
 
   async function enrichHospital(hospital) {
+    renderGuideLinks(hospital);
+    renderRelatedSearches(hospital);
+    renderNearbyHospitals(hospital);
+    renderReviewNotes(hospital);
+    renderMap(hospital);
+    updateSourceSummary([hospital.sourceName, '추가 정보 조회 중']);
+    const hiraId = /^JD[A-Za-z0-9+/=]+$/.test(String(hospital.hiraId)) ? hospital.hiraId : '';
     const [detailResult, hoursResult, equipmentResult] = await Promise.allSettled([
-      fetchOptionalJson('/api/hospital-details', { ykiho: hospital.hiraId || hospital.id }),
+      hiraId ? fetchOptionalJson('/api/hospital-details', { ykiho: hiraId }) : Promise.resolve(null),
       fetchOptionalJson('/api/hospital-hours', {
         name: hospital.name,
         address: hospital.address,
         region: hospital.region,
       }),
-      fetchOptionalJson('/api/hospital-equip', { ykiho: hospital.hiraId || hospital.id }),
+      hiraId ? fetchOptionalJson('/api/hospital-equip', { ykiho: hiraId }) : Promise.resolve(null),
     ]);
     const liveDetails = mergeLiveDetails(
       hospital,
@@ -192,7 +207,7 @@
     renderRelatedSearches(enrichedHospital);
     renderNearbyHospitals(enrichedHospital);
     renderReviewNotes(enrichedHospital);
-    renderMap(enrichedHospital);
+    if (hospital.lat !== enrichedHospital.lat || hospital.lng !== enrichedHospital.lng) renderMap(enrichedHospital);
   }
 
   async function fetchOptionalJson(path, params) {
@@ -219,8 +234,10 @@
       liveDataSources: [...(hospital.liveDataSources || [])],
     };
     const sources = [];
+    const matchesHira = (result) => result?.found && result.fallback !== true
+      && hospital.hiraId && result.ykiho === hospital.hiraId;
 
-    if (detail?.found && detail.fallback !== true) {
+    if (matchesHira(detail)) {
       next.phone = detail.telno || next.phone;
       next.address = detail.addr || next.address;
       next.url = detail.hospUrl || next.url;
@@ -233,31 +250,40 @@
       sources.push('HIRA 상세정보 API 조회');
     }
 
-    if (hours?.found && hours.fallback !== true && Number(hours.matchScore || 0) >= 100) {
+    if (hours?.found && hours.fallback !== true && matchesHospitalIdentity(hospital, hours)) {
       next.phone = hours.dutyTel1 || next.phone;
       next.address = hours.dutyAddr || next.address;
       next.lat = Number(hours.wgs84Lat) || next.lat;
       next.lng = Number(hours.wgs84Lon) || next.lng;
-      next.hours = mergeHours(next.hours, hours.hours);
-      next.operationSummary = uniqueValues([...next.operationSummary, ...(hours.operationSummary || [])]);
+      next.hoursConflicts = [];
+      const dayNames = { mon: '월요일', tue: '화요일', wed: '수요일', thu: '목요일', fri: '금요일', sat: '토요일', sun: '일요일', holiday: '공휴일' };
+      Object.entries(hours.hours || {}).forEach(([day, value]) => {
+        if (!value || !dayNames[day]) return;
+        const hiraHours = matchesHira(detail) ? detail.hours?.[day] : '';
+        if (hiraHours && String(hiraHours).replace(/\s/g, '') !== String(value).replace(/\s/g, '')) {
+          next.hours[day] = '출처별 시간이 달라 전화 확인 필요';
+          next.hoursConflicts.push(`${dayNames[day]}: HIRA ${hiraHours} / 운영정보 ${value}`);
+        } else {
+          next.hours[day] = value;
+        }
+      });
       sources.push('응급의료기관 운영정보 API 일치 조회');
     }
 
-    if (equipment?.found && equipment.fallback !== true) {
+    if (matchesHira(equipment)) {
       const equipmentNames = Array.isArray(equipment.topEquipment)
         ? equipment.topEquipment.map((item) => item.name).filter(Boolean)
         : Array.isArray(equipment.equips) ? equipment.equips.filter(Boolean) : [];
       next.equipment = equipmentNames.join(', ') || next.equipment;
       next.facilitySummary = uniqueValues([...next.facilitySummary, ...(equipment.facilitySummary || [])]);
       next.bedCount = toNumber(equipment.facility?.stdSickbdCnt) || next.bedCount;
-      next.roomCount = toNumber(equipment.facility?.permSbdCnt) || next.roomCount;
       next.area = equipment.facility?.totArea || next.area;
-      sources.push('HIRA 장비·시설 API 조회');
+      if (equipmentNames.length || equipment.facilitySummary?.length) sources.push('HIRA 장비·시설 API 조회');
     }
 
-    next.saturdayOpen = Boolean(next.saturdayOpen || isOpenHours(next.hours.sat));
-    next.sundayOpen = Boolean(next.sundayOpen || isOpenHours(next.hours.sun));
-    next.nightOpen = Boolean(next.nightOpen || hasNightHours(next.hours));
+    if (next.hours.sat) next.saturdayOpen = isOpenHours(next.hours.sat);
+    if (next.hours.sun) next.sundayOpen = isOpenHours(next.hours.sun);
+    if (Object.values(next.hours).some(Boolean)) next.nightOpen = hasNightHours(next.hours);
     next.liveDataSources = uniqueValues([...next.liveDataSources, ...sources]);
     return { hospital: next, sources };
   }
@@ -275,7 +301,21 @@
   }
 
   function isOpenHours(value) {
-    return Boolean(value && !/휴진|closed|close/i.test(String(value)));
+    return /\d{1,2}(?::|시)\s*\d{2}/.test(String(value || '')) && !/휴진|확인|closed/i.test(String(value));
+  }
+
+  function matchesHospitalIdentity(hospital, candidate) {
+    const normalizeName = (value) => String(value || '').replace(/\s+/g, '').toLowerCase();
+    const addressKey = (value) => {
+      const tokens = String(value || '').split('(')[0].replace(/,/g, ' ').trim().split(/\s+/);
+      const road = tokens.findIndex((token) => /(?:대로|로|길)$/.test(token));
+      if (road < 2 || !/^\d+(?:-\d+)?$/.test(tokens[road + 1] || '')) return '';
+      tokens[0] = tokens[0].replace(/특별자치도|특별자치시|특별시|광역시|도$/g, '');
+      return tokens.slice(0, road + 2).join(' ');
+    };
+    const address = addressKey(hospital.address);
+    return Boolean(address && normalizeName(hospital.name) === normalizeName(candidate.dutyName)
+      && address === addressKey(candidate.dutyAddr));
   }
 
   function renderHospital(hospital) {
@@ -358,7 +398,9 @@
     if (hospital.nightOpen) noteParts.push('야간 진료');
 
     setText('detail-emergency', hospital.hasEmergency ? '응급 진료 가능 여부 확인 필요' : '응급 진료 정보 확인 중');
-    setText('detail-hours-note', noteParts.join(' / ') || '운영 시간은 방문 전 병원에 다시 확인해 주세요.');
+    setText('detail-hours-note', hospital.hoursConflicts?.length
+      ? `운영시간 출처가 서로 다릅니다. ${hospital.hoursConflicts.join(' · ')}. 방문 전 전화로 확인해 주세요.`
+      : noteParts.join(' / ') || '운영 시간은 방문 전 병원에 다시 확인해 주세요.');
     setText('detail-duty-note', '운영 정보는 공개 데이터와 병원 기본 정보를 기준으로 정리했습니다.');
   }
 
@@ -768,7 +810,7 @@
   }
 
   function getHospitalList() {
-    return Array.isArray(window.HOSPITALS) ? window.HOSPITALS : [];
+    return [...(window.HOSPITALS || []), ...(window.NEW_HOSPITALS || [])];
   }
 
   function getHospitalApi() {

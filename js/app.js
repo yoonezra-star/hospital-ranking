@@ -1141,7 +1141,7 @@ document.addEventListener('DOMContentLoaded', () => {
     state.liveSearchQuery = query;
     HospitalAPI.fetchHospitals({ live: true, yadmNm: query, numOfRows: 20 }).then((response) => {
       const liveHospitals = Array.isArray(response?.hospitals) ? response.hospitals : [];
-      if (liveHospitals.length === 0) return;
+      if (response?.fromMock !== false || liveHospitals.length === 0) return;
 
       state.hospitals = mergeHospitalLists(state.hospitals, liveHospitals);
       if (ui.dataSourceBadge) ui.dataSourceBadge.textContent = '공공 API 검색 포함';
@@ -1744,7 +1744,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const doctors = item.specialistCount > 0 ? `전문의 ${item.specialistCount}명` : '의료진 정보 확인 중';
 
     return `
-      <a href="detail.html?id=${encodeURIComponent(item.id)}" class="hospital-card fade-up visible">
+      <a href="detail.html?id=${encodeURIComponent(item.id)}&amp;name=${encodeURIComponent(item.name)}" class="hospital-card fade-up visible">
         <div class="rank-badge ${rank <= 3 ? `rank-${rank}` : 'rank-default'}">${rank}</div>
         <div class="hospital-info">
           <div class="hospital-name">

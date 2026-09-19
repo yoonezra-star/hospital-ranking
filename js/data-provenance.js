@@ -1,12 +1,12 @@
 window.HOSPITAL_PROVENANCE = {
   "1": {
     "name": "서울대학교병원",
-    "hiraId": "JDQ4MTYyMiM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQwMyQyNjEwMDIjNTEjJDEjJDYjJDgz",
+    "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQ3OSQzNjE4MzIjODEjJDEjJDYjJDgz",
+    "verifiedAt": "2026-09-20",
     "sourceType": "hira-api",
     "sourceName": "건강보험심사평가원 병원기본정보 API",
     "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
-    "verificationStatus": "api-retrieved",
-    "verifiedAt": "2026-09-19"
+    "verificationStatus": "api-retrieved"
   },
   "2": {
     "name": "삼성서울병원",

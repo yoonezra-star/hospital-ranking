@@ -1,0 +1,128 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const vm = require('node:vm');
+const { test } = require('node:test');
+
+const root = path.resolve(__dirname, '..');
+const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
+const publicHospital = { ykiho: 'JDexample', yadmNm: '테스트의원', addr: '서울특별시 종로구 대학로 101', sidoCd: 110000 };
+const apiPayload = (item) => ({ response: { body: { items: { item }, totalCount: item ? 1 : 0 } } });
+
+function apiContext(responses) {
+  const context = vm.createContext({
+    window: { HOSPITALS: [{ id: 1, name: '로컬의원' }] }, URLSearchParams, AbortSignal,
+    console: { warn() {} },
+    fetch: async () => {
+      const response = responses.shift();
+      if (response instanceof Error) throw response;
+      return { ok: true, json: async () => response };
+    },
+  });
+  vm.runInContext(read('js/api.js'), context);
+  return context.window.HospitalAPI;
+}
+
+test('single-object and array API responses both return live hospitals', async () => {
+  for (const item of [publicHospital, [publicHospital]]) {
+    const result = await apiContext([apiPayload(item)]).fetchHospitals({ live: true });
+    assert.equal(result.hospitals.length, 1);
+    assert.equal(result.hospitals[0].id, publicHospital.ykiho);
+    assert.equal(result.hospitals[0].regionCode, '11');
+    assert.match(result.hospitals[0].verifiedAt, /^\d{4}-\d{2}-\d{2}$/);
+    assert.equal(result.fromMock, false);
+  }
+});
+
+test('server fallback preserves local provenance instead of claiming live verification', async () => {
+  const result = await apiContext([{ hospitals: [{ id: 2, name: '미확인의원' }], fallback: true, fallbackReason: 'upstream-timeout' }]).fetchHospitals();
+  assert.equal(result.fromMock, true);
+  assert.equal(result.fallbackReason, 'upstream-timeout');
+  assert.equal(result.hospitals[0].verificationStatus, 'unverified');
+  assert.equal(result.hospitals[0].verifiedAt, '');
+});
+
+test('empty live result stays empty, not an unrelated local hospital', async () => {
+  const result = await apiContext([apiPayload(null)]).fetchHospitals({ live: true });
+  assert.equal(result.hospitals.length, 0);
+  assert.equal(result.totalCount, 0);
+});
+
+test('network failure allows a later successful retry', async () => {
+  const api = apiContext([new Error('offline'), apiPayload(publicHospital)]);
+  assert.equal((await api.fetchHospitals()).fromMock, true);
+  assert.equal((await api.fetchHospitals()).fromMock, false);
+});
+
+const detailContext = vm.createContext({
+  window: { location: { search: '' } }, URLSearchParams,
+  document: { readyState: 'loading', addEventListener() {} },
+});
+// Expose pure helpers in the test sandbox without adding test hooks to the browser bundle.
+vm.runInContext(read('js/detail.js').replace(/\}\)\(\);\s*$/, `
+  globalThis.detailTest = { mergeLiveDetails, matchesHospitalIdentity, resolveHospital, isOpenHours };
+})();`), detailContext);
+const { mergeLiveDetails, matchesHospitalIdentity, isOpenHours } = detailContext.detailTest;
+const hospital = { id: 1, hiraId: 'JDexample', name: '테스트의원', address: publicHospital.addr, hours: {}, sundayOpen: true };
+
+test('same name at a different branch is rejected even with a high match score', () => {
+  const otherBranch = { found: true, matchScore: 242, dutyName: hospital.name, dutyAddr: '서울특별시 종로구 대학로 1010', hours: { sun: '09:00 ~ 18:00' } };
+  assert.equal(matchesHospitalIdentity(hospital, otherBranch), false);
+  assert.equal(mergeLiveDetails(hospital, null, otherBranch, null).sources.length, 0);
+  assert.equal(matchesHospitalIdentity(hospital, { ...otherBranch, dutyAddr: `${hospital.address}, 5층 (연건동)` }), true);
+});
+
+test('different institution code cannot overwrite hospital data', () => {
+  const result = mergeLiveDetails(hospital, { found: true, ykiho: 'JDother', telno: 'wrong-phone' }, null, null);
+  assert.equal(result.hospital.phone, undefined);
+  assert.equal(result.sources.length, 0);
+});
+
+test('conflicting operating hours require confirmation and do not produce open badges', () => {
+  const hira = { found: true, ykiho: hospital.hiraId, hours: { sat: '09:00 ~ 14:30', sun: '휴진' } };
+  const nemc = { found: true, dutyName: hospital.name, dutyAddr: hospital.address, hours: { sat: '09:00 ~ 13:00' } };
+  const result = mergeLiveDetails(hospital, hira, nemc, null).hospital;
+  assert.match(result.hours.sat, /전화 확인/);
+  assert.equal(result.hoursConflicts.length, 1);
+  assert.equal(result.saturdayOpen, false);
+  assert.equal(result.sundayOpen, false);
+  assert.equal(isOpenHours('확인 필요'), false);
+  assert.equal(isOpenHours('09:00 ~ 13:00'), true);
+});
+
+test('empty equipment data is not marked as new facility information', () => {
+  const result = mergeLiveDetails(hospital, null, null, { found: true, ykiho: hospital.hiraId, equips: [], facility: { permSbdCnt: 30 } });
+  assert.equal(result.sources.length, 0);
+  assert.equal(result.hospital.roomCount, undefined);
+});
+
+test('supplemental local hospitals resolve without an API request', async () => {
+  detailContext.window.NEW_HOSPITALS = [{ id: 1009, name: '추가의원' }];
+  assert.equal((await detailContext.detailTest.resolveHospital('1009')).name, '추가의원');
+});
+
+test('remote detail searches by name and only accepts the exact institution code', async () => {
+  detailContext.window.location.search = '?name=' + encodeURIComponent('테스트의원');
+  let request;
+  detailContext.window.HospitalAPI = { fetchHospitals: async (params) => {
+    request = params;
+    return { fromMock: false, hospitals: [{ id: 'JDother' }, { id: 'JDexample', name: '테스트의원' }] };
+  } };
+  assert.equal((await detailContext.detailTest.resolveHospital('JDexample')).name, '테스트의원');
+  assert.equal(request.live, true);
+  assert.equal(request.yadmNm, '테스트의원');
+  assert.equal(request.ykiho, undefined);
+  assert.equal(await detailContext.detailTest.resolveHospital('JDmissing'), null);
+  detailContext.window.HospitalAPI.fetchHospitals = async () => ({ fromMock: true, hospitals: [{ id: 'JDexample' }] });
+  assert.equal(await detailContext.detailTest.resolveHospital('JDexample'), null);
+});
+
+test('each stored HIRA code belongs to only one local record and survives export', () => {
+  const provenance = JSON.parse(read('data/hospital-provenance.json'));
+  const codes = Object.values(provenance).map((item) => item.hiraId);
+  assert.equal(new Set(codes).size, codes.length);
+  const exported = JSON.parse(read('data/hospitals.json')).hospitals;
+  for (const [id, item] of Object.entries(provenance)) {
+    assert.equal(exported.find((record) => String(record.id) === id).hiraId, item.hiraId);
+  }
+});

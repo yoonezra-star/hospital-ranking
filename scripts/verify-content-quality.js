@@ -61,9 +61,42 @@ const server = http.createServer((request, response) => {
       assert.equal(schema.aggregateRating, undefined);
       assert.equal(await page.locator('meta[name="robots"]').getAttribute('content'), 'noindex,follow');
       assert.equal(await page.locator('#detail-score, #detail-reviews').count(), 0);
+
+      const liveHospital = { ykiho: 'JDtestremote', yadmNm: '통합검증의원', addr: '서울특별시 종로구 대학로 101', telno: '02-000-0000' };
+      const detailRequests = [];
+      await page.route(`${origin}/api/**`, async (route) => {
+        const url = new URL(route.request().url());
+        let payload;
+        if (url.pathname === '/api/hospitals') {
+          payload = { response: { body: { items: { item: liveHospital }, totalCount: 1 } } };
+        } else if (url.pathname === '/api/hospital-hours') {
+          payload = { found: true, dutyName: liveHospital.yadmNm, dutyAddr: liveHospital.addr, hours: { sat: '09:00 ~ 13:00' } };
+        } else {
+          detailRequests.push(url.searchParams.get('ykiho'));
+          payload = { found: true, ykiho: liveHospital.ykiho, hours: { sat: '09:00 ~ 14:30', sun: '휴진' }, equips: [] };
+        }
+        await route.fulfill({ json: payload });
+      });
+      await page.goto(`${origin}/`);
+      await page.locator('#hero-search').fill(liveHospital.yadmNm);
+      await page.locator('#search-btn').click();
+      const liveResult = page.locator('#search-results-list .hospital-card').filter({ hasText: liveHospital.yadmNm }).first();
+      await liveResult.waitFor();
+      assert((await liveResult.getAttribute('href')).includes('name='), 'Remote detail has no reloadable name lookup');
+      await liveResult.click();
+      await page.locator('#detail-name').filter({ hasText: liveHospital.yadmNm }).waitFor();
+      await page.locator('#detail-hours-note').filter({ hasText: '출처가 서로 다릅니다' }).waitFor();
+      assert((await page.locator('#detail-hours').innerText()).includes('전화 확인 필요'));
+      assert.equal(await page.evaluate(() => window.currentHospitalDetail.saturdayOpen), false);
+      assert(detailRequests.length >= 2 && detailRequests.every((id) => id === liveHospital.ykiho), 'Wrong detail institution requested');
+      await page.reload();
+      await page.locator('#detail-name').filter({ hasText: liveHospital.yadmNm }).waitFor();
+      await page.locator('#detail-hours-note').filter({ hasText: '출처가 서로 다릅니다' }).waitFor();
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), 'Detail overflows viewport');
+      await page.screenshot({ path: path.join(os.tmpdir(), `hospital-live-detail-${width}.png`), fullPage: true });
       assert.deepEqual(errors, [], 'Browser runtime errors');
       await page.close();
-      console.log(`PASS: ${width}px guide, checklist, search and detail`);
+      console.log(`PASS: ${width}px guide, checklist, local/live search, detail reload and hours conflict`);
     }
     const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
     const page = await context.newPage();

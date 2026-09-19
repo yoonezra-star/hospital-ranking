@@ -191,7 +191,7 @@ const HospitalAPI = (() => {
       address,
       phone: item.phone || item.telno || '',
       region,
-      regionCode: String(item.regionCode || item.sidoCd || findRegionCodeByName(region) || location.regionCode || ''),
+      regionCode: String(item.regionCode || findRegionCodeByName(region) || location.regionCode || ''),
       district: item.district || item.sgguCdNm || location.district || '',
       town: item.town || item.emdongNm || location.town || '',
       departmentId,
@@ -233,7 +233,6 @@ const HospitalAPI = (() => {
     const town = /(읍|면|동|가|리)$/.test(third) ? third : '';
     const regionCode = findRegionCodeByName(region);
 
-    const retrievedAt = new Date().toISOString().slice(0, 10);
     return {
       region,
       regionCode,
@@ -390,10 +389,6 @@ const HospitalAPI = (() => {
   }
 
   async function fetchProxy(params = {}) {
-    if (proxyReachable === false) {
-      throw new Error('Proxy unavailable');
-    }
-
     const query = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
       if (value == null || value === '') return;
@@ -410,32 +405,34 @@ const HospitalAPI = (() => {
     }
 
     const payload = await response.json();
+    const upstreamItems = payload?.response?.body?.items?.item;
     const items = Array.isArray(payload?.hospitals)
       ? payload.hospitals
-      : Array.isArray(payload?.response?.body?.items?.item)
-        ? payload.response.body.items.item
-        : [];
+      : Array.isArray(upstreamItems) ? upstreamItems
+        : upstreamItems && typeof upstreamItems === 'object' ? [upstreamItems] : [];
+    const fromMock = payload.fallback === true || payload.fromMock === true || Array.isArray(payload.hospitals);
+    const provenance = fromMock ? {} : {
+      sourceType: 'hira-live',
+      sourceName: '건강보험심사평가원 병원기본정보 API',
+      sourceUrl: 'https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000',
+      verificationStatus: 'api-retrieved',
+      verifiedAt: new Date().toISOString().slice(0, 10),
+    };
 
     proxyReachable = true;
 
     return {
       hospitals: items.map((item) => normalizeHospital({
         ...item,
-        sourceType: 'hira-live',
-        sourceName: '건강보험심사평가원 병원기본정보 API',
-        sourceUrl: 'https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000',
-        verificationStatus: 'api-retrieved',
-        verifiedAt: retrievedAt,
+        ...provenance,
       })),
       totalCount: Number(payload?.totalCount || payload?.response?.body?.totalCount || items.length || 0),
-      page: Number(payload?.page || params.page || 1),
-      pageSize: Number(payload?.pageSize || params.limit || 20),
-      fromMock: false,
-      sourceType: 'hira-live',
-      sourceName: '건강보험심사평가원 병원기본정보 API',
-      sourceUrl: 'https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000',
-      verificationStatus: 'api-retrieved',
-      verifiedAt: retrievedAt,
+      page: Number(payload?.page || params.pageNo || params.page || 1),
+      pageSize: Number(payload?.pageSize || params.numOfRows || params.limit || 20),
+      fromMock,
+      fallback: payload.fallback === true,
+      fallbackReason: payload.fallbackReason || '',
+      ...provenance,
     };
   }
 
@@ -447,9 +444,7 @@ const HospitalAPI = (() => {
 
     try {
       const proxyResult = await fetchProxy(params);
-      if (Array.isArray(proxyResult.hospitals) && proxyResult.hospitals.length > 0) {
-        return proxyResult;
-      }
+      return proxyResult;
     } catch (error) {
       console.warn('[HospitalAPI] proxy fallback to local data:', error.message);
     }
