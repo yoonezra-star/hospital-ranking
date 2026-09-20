@@ -223,7 +223,7 @@ async function findLocalHospital(context, ykiho) {
   if (!response.ok) return null;
   const data = await response.json();
   return (Array.isArray(data.hospitals) ? data.hospitals : [])
-    .find((hospital) => String(hospital.id) === String(ykiho)) || null;
+    .find((hospital) => String(hospital.id) === String(ykiho) || String(hospital.hiraId) === String(ykiho)) || null;
 }
 
 function sanitizeHeaderValue(value) {

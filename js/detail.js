@@ -154,6 +154,11 @@
       receptionSummary: Array.isArray(hospital.receptionSummary) ? hospital.receptionSummary : [],
       operationSummary: Array.isArray(hospital.operationSummary) ? hospital.operationSummary : [],
       facilitySummary: Array.isArray(hospital.facilitySummary) ? hospital.facilitySummary : [],
+      parkingSummary: Array.isArray(hospital.parkingSummary) ? hospital.parkingSummary : [],
+      emergencySummary: Array.isArray(hospital.emergencySummary) ? hospital.emergencySummary : [],
+      lunchWeek: hospital.lunchWeek || '',
+      rcvWeek: hospital.rcvWeek || '',
+      rcvSat: hospital.rcvSat || '',
       liveDataSources: Array.isArray(hospital.liveDataSources) ? hospital.liveDataSources : [],
       sourceType: hospital.sourceType || provenance.sourceType || 'local-curated',
       sourceName: hospital.sourceName || provenance.sourceName || '병원찾기 내부 정리 데이터',
@@ -231,6 +236,11 @@
       receptionSummary: [...(hospital.receptionSummary || [])],
       operationSummary: [...(hospital.operationSummary || [])],
       facilitySummary: [...(hospital.facilitySummary || [])],
+      parkingSummary: [...(hospital.parkingSummary || [])],
+      emergencySummary: [...(hospital.emergencySummary || [])],
+      lunchWeek: hospital.lunchWeek || '',
+      rcvWeek: hospital.rcvWeek || '',
+      rcvSat: hospital.rcvSat || '',
       liveDataSources: [...(hospital.liveDataSources || [])],
     };
     const sources = [];
@@ -243,9 +253,14 @@
       next.url = detail.hospUrl || next.url;
       next.parkingCapacity = toNumber(detail.parkQty) || next.parkingCapacity;
       next.parkingFee = detail.parkingSummary?.join(' / ') || next.parkingFee;
+      next.parkingSummary = uniqueValues([...next.parkingSummary, ...(detail.parkingSummary || [])]);
       next.hasEmergency = Boolean(next.hasEmergency || detail.emyDayYn === 'Y' || detail.emyNgtYn === 'Y');
+      next.emergencySummary = uniqueValues([...next.emergencySummary, ...(detail.emergencySummary || [])]);
       next.receptionSummary = uniqueValues([...next.receptionSummary, ...(detail.receptionSummary || [])]);
       next.operationSummary = uniqueValues([...next.operationSummary, ...(detail.emergencySummary || [])]);
+      next.lunchWeek = detail.lunchWeek || next.lunchWeek;
+      next.rcvWeek = detail.rcvWeek || next.rcvWeek;
+      next.rcvSat = detail.rcvSat || next.rcvSat;
       next.hours = mergeHours(next.hours, detail.hours);
       sources.push('HIRA 상세정보 API 조회');
     }
@@ -267,6 +282,7 @@
           next.hours[day] = value;
         }
       });
+      next.operationSummary = uniqueValues([...next.operationSummary, ...(hours.operationSummary || [])]);
       sources.push('응급의료기관 운영정보 API 일치 조회');
     }
 
@@ -411,6 +427,7 @@
 
     const parking = [];
     if (hospital.parkingCapacity > 0) parking.push(`주차 ${hospital.parkingCapacity}대`);
+    parking.push(...(hospital.parkingSummary || []));
     if (hospital.parkingFee) parking.push(hospital.parkingFee);
 
     setText('detail-room-bed', roomBed.join(' / ') || '병상 및 입원실 정보 확인 중');
@@ -516,7 +533,12 @@
     ].filter(Boolean).join(' / '));
 
     setText('detail-documents', '신분증 / 필요한 검사 결과 / 병원에서 안내한 준비물');
-    const reception = hospital.receptionSummary?.join(' / ');
+    const reception = uniqueValues([
+      ...(hospital.receptionSummary || []),
+      hospital.rcvWeek ? `평일 접수 ${hospital.rcvWeek}` : '',
+      hospital.rcvSat ? `토요일 접수 ${hospital.rcvSat}` : '',
+      hospital.lunchWeek ? `점심시간 ${hospital.lunchWeek}` : '',
+    ]).join(' / ');
     setText('detail-reservation', reception || (hospital.phone ? '전화 문의로 접수 가능 여부를 먼저 확인해 보세요.' : '방문 전 운영 시간을 먼저 확인해 주세요.'));
     setText('detail-transport', hospital.address || '교통 정보 확인 중');
     setText('detail-accessibility', hospital.parkingCapacity > 0 ? `주차 ${hospital.parkingCapacity}대 기준 이동 편의 확인` : '주차 및 접근성 정보 확인 중');

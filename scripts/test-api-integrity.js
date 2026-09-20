@@ -138,6 +138,32 @@ test('conflicting operating hours require confirmation and do not produce open b
   assert.equal(isOpenHours('09:00 ~ 13:00'), true);
 });
 
+test('detail API fields are preserved for the visitor instead of being dropped during merge', () => {
+  const result = mergeLiveDetails(hospital, {
+    found: true,
+    ykiho: hospital.hiraId,
+    telno: '02-1234-5678',
+    parkingSummary: ['무료 주차', '주차 가능 20대'],
+    emergencySummary: ['주간 응급 진료 가능'],
+    receptionSummary: ['평일 접수 08:30까지'],
+    lunchWeek: '12:30 ~ 13:30',
+    rcvWeek: '08:30 ~ 17:30',
+    rcvSat: '08:30 ~ 12:00',
+    hours: {},
+  }, {
+    found: true,
+    dutyName: hospital.name,
+    dutyAddr: hospital.address,
+    hours: { mon: '09:00 ~ 18:00' },
+    operationSummary: ['평일 운영 정보 확인'],
+  }, null).hospital;
+  assert.match(result.parkingSummary.join(' '), /주차 가능 20대/);
+  assert.match(result.receptionSummary.join(' '), /평일 접수/);
+  assert.equal(result.lunchWeek, '12:30 ~ 13:30');
+  assert.equal(result.rcvSat, '08:30 ~ 12:00');
+  assert(result.operationSummary.includes('평일 운영 정보 확인'));
+});
+
 test('empty equipment data is not marked as new facility information', () => {
   const result = mergeLiveDetails(hospital, null, null, { found: true, ykiho: hospital.hiraId, equips: [], facility: { permSbdCnt: 30 } });
   assert.equal(result.sources.length, 0);
