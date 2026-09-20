@@ -9,11 +9,12 @@ const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
 const publicHospital = { ykiho: 'JDexample', yadmNm: '테스트의원', addr: '서울특별시 종로구 대학로 101', sidoCd: 110000 };
 const apiPayload = (item) => ({ response: { body: { items: { item }, totalCount: item ? 1 : 0 } } });
 
-function apiContext(responses) {
+function apiContext(responses, requests = []) {
   const context = vm.createContext({
     window: { HOSPITALS: [{ id: 1, name: '로컬의원' }] }, URLSearchParams, AbortSignal,
     console: { warn() {} },
-    fetch: async () => {
+    fetch: async (url) => {
+      requests.push(new URL(url, 'https://hospital-ranking.kr'));
       const response = responses.shift();
       if (response instanceof Error) throw response;
       return { ok: true, json: async () => response };
@@ -74,6 +75,31 @@ test('department-filter response preserves API evidence without changing the pri
 test('upstream error is not displayed as a successful empty search', async () => {
   const result = await apiContext([{ response: { header: { resultCode: '30' } } }]).fetchHospitals();
   assert.equal(result.fromMock, true);
+});
+
+test('Gwangju queries all five current district codes and excludes other Jeonnam records', async () => {
+  const requests = [];
+  const responses = ['360801', '360802', '360803', '360804', '360805'].map((code) => apiPayload([
+    { ...publicHospital, ykiho: 'JD' + code, sidoCd: 360000, sgguCd: code, addr: '전남광주통합특별시 동구 제봉로 42' },
+    { ...publicHospital, ykiho: 'JDother', sidoCd: 360000, sgguCd: '360022', addr: '전남광주통합특별시 화순군 화순읍 서양로 322' },
+  ]));
+  const api = apiContext(responses, requests);
+  const result = await api.fetchHospitals(api.buildSearchParams({ regionCode: '29', departmentId: 'internal' }));
+  assert.equal(result.hospitals.length, 5);
+  assert(result.hospitals.every((item) => item.region === '광주' && item.regionCode === '29'));
+  assert.equal(result.partial, false);
+  assert.equal(new Set(requests.map((url) => url.searchParams.get('sgguCd'))).size, 5);
+  assert(requests.every((url) => url.searchParams.get('sidoCd') === '360000' && !url.searchParams.has('regionScope')));
+});
+
+test('Gwangju partial failures keep verified district results and report limited coverage', async () => {
+  const api = apiContext([apiPayload({ ...publicHospital, sidoCd: 360000, sgguCd: '360801' }),
+    new Error('offline'), { fallback: true, hospitals: [] }, new Error('offline'), new Error('offline')]);
+  const result = await api.fetchHospitals(api.buildSearchParams({ regionCode: '29' }));
+  assert.equal(result.fromMock, false);
+  assert.equal(result.partial, true);
+  assert.equal(result.districtCoverage, 1);
+  assert.equal(result.hospitals.length, 1);
 });
 
 const detailContext = vm.createContext({

@@ -5,6 +5,8 @@
 
 const HospitalAPI = (() => {
   const PROXY_PATH = '/api/hospitals';
+  // Current upstream responses use these codes for the five Gwangju districts.
+  const GWANGJU_DISTRICTS = ['360801', '360802', '360803', '360804', '360805'];
   // HIRA codes differ from the administrative codes used by the UI.
   // Checked against live hospital responses for all 17 regions on 2026-09-20.
   const HIRA_REGION_CODES = {
@@ -145,6 +147,7 @@ const HospitalAPI = (() => {
   function buildSearchParams({ regionCode = '', departmentId = '', name = '', town = '' } = {}) {
     const params = { live: true, numOfRows: 50 };
     if (HIRA_REGION_CODES[regionCode]) params.sidoCd = HIRA_REGION_CODES[regionCode];
+    if (regionCode === '29') params.regionScope = 'gwangju';
     const departmentCode = Object.keys(DEPARTMENT_CODE_TO_ID).find((code) => DEPARTMENT_CODE_TO_ID[code] === departmentId);
     if (departmentCode) params.dgsbjtCd = departmentCode;
     if (name) params.yadmNm = name;
@@ -186,8 +189,10 @@ const HospitalAPI = (() => {
     const provenance = window.HOSPITAL_PROVENANCE?.[String(item.id || item.ykiho)] || {};
     const address = item.address || item.addr || '';
     const location = parseAddressLocation(address);
+    const upstreamRegion = GWANGJU_DISTRICTS.includes(String(item.sgguCd)) ? '광주'
+      : String(item.sidoCd) === '360000' && /^전남광주/.test(address) ? '전남' : '';
     const region = normalizeRegionName(
-      item.region || REGION_LABELS[String(item.regionCode || item.sidoCd || '')] || location.region || '',
+      upstreamRegion || item.region || REGION_LABELS[String(item.regionCode || item.sidoCd || '')] || location.region || '',
     );
     const departmentId = normalizeDepartmentId(
       item.departmentId || item.dgsbjtCd,
@@ -410,6 +415,7 @@ const HospitalAPI = (() => {
   async function fetchProxy(params = {}) {
     const query = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
+      if (key === 'regionScope') return;
       if (value == null || value === '') return;
       query.set(key, String(value));
     });
@@ -467,6 +473,20 @@ const HospitalAPI = (() => {
     }
 
     try {
+      if (params.regionScope === 'gwangju') {
+        const responses = await Promise.allSettled(GWANGJU_DISTRICTS.map((sgguCd) =>
+          fetchProxy({ ...params, sidoCd: '360000', sgguCd, numOfRows: 10 })));
+        const live = responses.filter((result) => result.status === 'fulfilled' && !result.value.fromMock).map((result) => result.value);
+        if (live.length) {
+          const hospitals = mergeHospitalLists(...live.map((result) => result.hospitals))
+            .filter((item) => item.regionCode === '29');
+          return { ...live[0], hospitals, totalCount: live.reduce((sum, result) => sum + result.totalCount, 0),
+            partial: live.length !== GWANGJU_DISTRICTS.length, districtCoverage: live.length, pageSize: hospitals.length };
+        }
+        const hospitals = localResult.hospitals.filter((item) => item.regionCode === '29');
+        return { ...localResult, hospitals, totalCount: hospitals.length,
+          fallback: true, fallbackReason: 'gwangju-district-lookup-unavailable' };
+      }
       const proxyResult = await fetchProxy(params);
       return proxyResult;
     } catch (error) {

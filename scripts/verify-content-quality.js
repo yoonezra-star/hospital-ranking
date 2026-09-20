@@ -48,6 +48,8 @@ const server = http.createServer((request, response) => {
 
       await page.goto(`${origin}/`);
       await page.locator('#ranking-list .hospital-card').first().waitFor();
+      const editorialIds = await page.locator('.quick-access-item, .review-card a, .timeline-card').evaluateAll((links) => links.map((link) => new URL(link.href).searchParams.get('id')));
+      assert(await page.evaluate((ids) => ids.every((id) => Boolean(window.HOSPITAL_PROVENANCE?.[id])), editorialIds), 'Unverified record promoted in automatic recommendations');
       assert(!await page.locator('body').innerText().then((text) => /평점\s*[1-5]\.\d|후기\s*\d+건|후기 수와 관심도/.test(text)), 'Unsupported rating on homepage');
       assert.equal(await page.locator('#sort-filter option[value="reviews"]').count(), 0);
       await page.locator('#hero-search').fill('김흥진치과의원');
@@ -135,6 +137,22 @@ const server = http.createServer((request, response) => {
       await page.locator('[data-expand-search]').click();
       await page.locator('#search-results-list .hospital-card').first().waitFor();
       assert((await page.locator('#search-result-count').innerText()).includes('추천 결과'));
+      await page.route(`${origin}/api/hospitals*`, async (route) => {
+        const params = new URL(route.request().url()).searchParams;
+        const code = params.get('sgguCd');
+        assert.equal(params.get('sidoCd'), '360000');
+        assert(['360801', '360802', '360803', '360804', '360805'].includes(code));
+        const item = { ykiho: `JD${code}`, yadmNm: `광주검증${code}병원`, sidoCd: 360000, sgguCd: code,
+          clCdNm: '종합병원', addr: '전남광주통합특별시 동구 제봉로 42' };
+        const payload = code === '360805' ? { fallback: true, hospitals: [] }
+          : { response: { body: { items: { item }, totalCount: 1 } } };
+        await route.fulfill({ json: payload });
+      });
+      await page.locator('#hero-search').fill('광주 내과');
+      await page.locator('#search-btn').click();
+      await page.locator('#search-results-list [role=status]').filter({ hasText: '일부 구의 조회에 실패' }).waitFor();
+      assert.equal(await page.locator('#search-results-list .hospital-card').count(), 4);
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), 'Gwangju result overflow');
       assert.deepEqual(errors, [], 'Browser runtime errors');
       await page.close();
       console.log(`PASS: ${width}px guide, detail, region codes, strict search, opt-in relaxation and response race`);

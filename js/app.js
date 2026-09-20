@@ -339,7 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const suggestions = [];
     const seenValues = new Set();
-    const rankedHospitals = [...state.hospitals].sort(compareByRankingQuality);
+    const rankedHospitals = state.hospitals.filter((item) => item.verificationStatus !== 'unverified').sort(compareByRankingQuality);
     const nameMatches = rankedHospitals
       .filter((item) => normalizeSearchText(item.name).includes(normalizedQuery))
       .slice(0, 6);
@@ -1180,7 +1180,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
       state.hospitals = mergeHospitalLists(state.hospitals, liveHospitals);
-      state.liveSearchMessage = `공공 API ${liveHospitals.length}건을 조회한 뒤 지역·진료과 조건으로 걸렀습니다. 전체 목록이 아닐 수 있으며 운영시간은 별도 확인이 필요합니다.`;
+      state.liveSearchMessage = `${response.partial ? '일부 구의 조회에 실패하여 확인된 구의 결과만 표시합니다. ' : ''}공공 API ${liveHospitals.length}건을 조회한 뒤 지역·진료과 조건으로 걸렀습니다. 전체 목록이 아닐 수 있으며 운영시간은 별도 확인이 필요합니다.`;
       if (ui.dataSourceBadge) ui.dataSourceBadge.textContent = '공공 API 검색 포함';
       state.filteredHospitals = buildFilteredHospitals();
       syncLocalityFilters();
@@ -1867,20 +1867,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function pickEditorialItems(items, limit, comparator = compareByRankingQuality) {
-    const sortedItems = [...items].sort(comparator);
-    const preferred = sortedItems.filter(isEditorialEligible);
-
-    if (preferred.length >= limit) {
-      return preferred.slice(0, limit);
-    }
-
-    const preferredIds = new Set(preferred.map((item) => String(item.id ?? '')));
-    const fallback = sortedItems.filter((item) => {
-      const id = String(item.id ?? '');
-      return !preferredIds.has(id) && !NON_EDITORIAL_HOSPITAL_IDS.has(id);
-    });
-
-    return [...preferred, ...fallback].slice(0, limit);
+    return items.filter(isEditorialEligible).sort(comparator).slice(0, limit);
   }
 
   function isEditorialEligible(hospital) {
@@ -1889,7 +1876,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return false;
     }
 
-    return Boolean(hospital?.address && hospital?.phone);
+    return Boolean(hospital?.verificationStatus && hospital.verificationStatus !== 'unverified'
+      && hospital?.address && hospital?.phone);
   }
 
   function compareByRankingQuality(a, b) {
@@ -2003,7 +1991,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     target.innerHTML = items.map((item) => `
-      <a href="detail.html?id=${encodeURIComponent(item.id)}" class="quick-access-item">
+      <a href="detail.html?id=${encodeURIComponent(item.id)}&amp;name=${encodeURIComponent(item.name)}" class="quick-access-item">
         <div class="quick-access-title-row">
           <strong>${escapeHtml(item.name)}</strong>
         </div>
@@ -2032,7 +2020,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <strong>${escapeHtml(item.name)}</strong>
         </div>
         <p style="line-height:1.8; color:var(--text-body); margin-bottom:16px;">${escapeHtml(buildReviewSummary(item))}</p>
-        <a href="detail.html?id=${encodeURIComponent(item.id)}">위치와 방문 전 확인 사항 보기</a>
+        <a href="detail.html?id=${encodeURIComponent(item.id)}&amp;name=${encodeURIComponent(item.name)}">위치와 방문 전 확인 사항 보기</a>
       </article>
     `).join('');
   }
@@ -2058,7 +2046,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ui.newHospitalsList.innerHTML = items.map((item) => `
       <article class="timeline-item">
         <div class="timeline-date">${escapeHtml(formatDate(item.openDate))}</div>
-        <a href="detail.html?id=${encodeURIComponent(item.id)}" class="timeline-card">
+        <a href="detail.html?id=${encodeURIComponent(item.id)}&amp;name=${encodeURIComponent(item.name)}" class="timeline-card">
           <div class="timeline-name">${escapeHtml(item.name)}</div>
           <div class="timeline-addr">${escapeHtml(item.address || '주소 정보 확인 중')}</div>
         </a>
