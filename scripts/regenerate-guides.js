@@ -1,7 +1,7 @@
 ﻿const fs = require('fs');
 
 const SITE = 'https://hospital-ranking.kr';
-const TODAY = '2026-09-19';
+const TODAY = '2026-09-20';
 const SEARCH_GUIDE = { slug: 'guide-hospital-search', title: '지역 병원 검색부터 전화 확인까지', category: '병원 이용 안내', summary: '검색 결과가 없을 때의 대처, 야간·휴일 접수 확인 질문과 인쇄 가능한 방문 체크리스트입니다.' };
 const ADSENSE = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1441018945572157" crossorigin="anonymous"></script>';
 
@@ -473,7 +473,7 @@ function renderIndex() {
     name: '병원찾기 건강가이드 모음',
     url: `${SITE}/guide`,
     description: '병원 방문 전에 확인하면 좋은 건강가이드와 진료과별 체크리스트를 모은 페이지입니다.',
-    dateModified: '2026-09-19',
+    dateModified: TODAY,
     hasPart: [SEARCH_GUIDE, ...guides].map((g) => ({ '@type': 'WebPage', name: g.title, url: cleanUrl(g.slug) }))
   };
   const cards = [SEARCH_GUIDE, ...guides].map((g) => `<a class="guide-card-link" href="${g.slug}.html">
@@ -495,7 +495,7 @@ ${commonHead({ title: '건강가이드 모음', description: '임플란트, 내�
       <h1 class="guide-title">병원 방문 전에 먼저 읽어보면 좋은 체크리스트</h1>
       <p class="guide-summary">진료과와 증상별로 방문 전 준비할 내용, 상담 때 물어볼 질문, 병원 비교 기준을 정리했습니다. 모든 정보는 참고용이며 실제 진단과 치료 결정은 의료진 상담이 우선입니다.</p>
       <div class="guide-badges">
-        <span>목록 수정일 2026-09-19</span>
+        <span>목록 수정일 ${TODAY}</span>
         <span>${guides.length + 1}개 가이드</span>
         <span>광고 공간 없음</span>
       </div>

@@ -16,7 +16,7 @@
     trustMeta.setAttribute('data-guide-trust-meta', 'true');
     trustMeta.className = 'guide-trust-meta';
     trustMeta.innerHTML = `
-      <strong>최종 점검일:</strong> 2026-07-01<br>
+      <strong>최종 점검일:</strong> 2026-09-20<br>
       <strong>정보 성격:</strong> 병원 방문 전 준비를 돕는 참고용 건강 정보입니다.<br>
       <strong>정정 요청:</strong> <a href="mailto:replyleaders@naver.com">replyleaders@naver.com</a>
     `;

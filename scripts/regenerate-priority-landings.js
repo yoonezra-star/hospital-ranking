@@ -1,7 +1,7 @@
 ﻿const fs = require('fs');
 
 const SITE = 'https://hospital-ranking.kr';
-const UPDATED = '2026-09-19';
+const UPDATED = '2026-09-20';
 const ADSENSE = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1441018945572157" crossorigin="anonymous"></script>';
 
 const pages = [
@@ -139,6 +139,15 @@ function relatedLinks(page) {
   return page.related.map((href) => `<a href="${esc(href)}">${esc(labelFor(href))}</a>`).join('\n');
 }
 
+function decisionSteps(page) {
+  return [
+    `검색어를 '${page.searchKeyword}'처럼 입력해 지역·진료 목적에 맞는 결과부터 확인합니다.`,
+    `목록에서는 주소와 진료과를 먼저 보고, ${page.sections[0].items[0].toLowerCase()}`,
+    `전화로 '${page.faq[0][0]}'에 대한 답을 확인하고 접수 마감·초진 가능 여부를 함께 기록합니다.`,
+    '방문 전 기관명과 주소를 건강보험심사평가원 건강지도에서 다시 대조하고, 변경된 정보는 문의로 알려주세요.'
+  ];
+}
+
 function labelFor(href) {
   const labels = {
     'guide-implant.html': '임플란트 가이드',
@@ -206,6 +215,9 @@ function render(page) {
   <meta name="robots" content="index,follow">
   <link rel="stylesheet" href="css/style.css?v=12">
   <style>
+    .intent-howto ol { margin:0; padding-left:22px; display:grid; gap:10px; }
+    .intent-howto li { color:var(--text-body); line-height:1.78; }
+    .intent-source-note { margin:18px 0 0; padding-top:15px; border-top:1px solid var(--border-light); color:var(--text-muted); line-height:1.75; }
     .intent-page { max-width: 1120px; padding-top: 56px; }
     .intent-hero { padding: 38px; border: 1px solid var(--border-default); border-radius: 28px; background: radial-gradient(circle at 88% 10%, rgba(166, 124, 82, .18), transparent 30%), linear-gradient(135deg, color-mix(in srgb, var(--bg-card) 88%, white 12%), color-mix(in srgb, var(--bg-body) 92%, white 8%)); box-shadow: var(--shadow-sm); }
     .intent-badge { display:inline-flex; padding:8px 14px; border-radius:999px; background:color-mix(in srgb, var(--primary-50) 72%, white 28%); color:var(--primary); font-weight:800; }
@@ -257,6 +269,12 @@ ${schemas}
         <h2>${esc(section.title)}</h2>
         <ul>${list(section.items)}</ul>
       </article>`).join('\n')}
+    </section>
+
+    <section class="intent-note intent-howto">
+      <h2>검색 결과를 방문 판단으로 바꾸는 순서</h2>
+      <ol>${decisionSteps(page).map((item) => `<li>${esc(item)}</li>`).join('\n')}</ol>
+      <p class="intent-source-note">이 페이지는 검색 결과를 대신해 특정 병원을 추천하거나 순위를 보증하지 않습니다. 결과의 운영 상태와 진료 가능 범위는 병원과 공식 기관에서 최종 확인해야 합니다.</p>
     </section>
 
     <section class="intent-note">

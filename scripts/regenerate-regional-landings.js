@@ -1,7 +1,7 @@
 ﻿const fs = require('fs');
 
 const SITE = 'https://hospital-ranking.kr';
-const UPDATED = '2026-09-19';
+const UPDATED = '2026-09-20';
 const ADSENSE = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1441018945572157" crossorigin="anonymous"></script>';
 
 const pages = [
@@ -137,6 +137,15 @@ function labelFor(href) {
   };
   return labels[href] || href.replace(/\.html$/, '').replace(/-/g, ' ');
 }
+
+function decisionSteps(page) {
+  return [
+    `검색어 '${page.keyword}'로 시작해 지역과 진료과가 맞는지 먼저 확인합니다.`,
+    `먼저 ${page.sections[0][1][0].toLowerCase()}`,
+    `전화로 '${page.faq[0][0]}'에 대한 답을 확인한 뒤 접수 마감과 예약 필요 여부를 기록합니다.`,
+    '방문 전 기관명과 주소를 건강보험심사평가원 건강지도에서 다시 대조하고, 정보가 다르면 문의로 알려주세요.'
+  ];
+}
 function schemas(page) {
   return [
     {'@context':'https://schema.org','@type':'CollectionPage',name:page.title,url:`${SITE}/${page.slug}`,description:page.description,dateModified:UPDATED,publisher:{'@type':'Organization',name:'병원찾기',url:SITE}},
@@ -156,6 +165,7 @@ function render(page) {
   <meta name="robots" content="index,follow">
   <link rel="stylesheet" href="css/style.css?v=12">
   <style>
+    .intent-howto ol{margin:0;padding-left:22px;display:grid;gap:10px}.intent-howto li{color:var(--text-body);line-height:1.78}.intent-source-note{margin:18px 0 0;padding-top:15px;border-top:1px solid var(--border-light);color:var(--text-muted);line-height:1.75}
     .intent-page{max-width:1120px;padding-top:56px}.intent-hero{padding:38px;border:1px solid var(--border-default);border-radius:28px;background:radial-gradient(circle at 88% 10%,rgba(166,124,82,.18),transparent 30%),linear-gradient(135deg,color-mix(in srgb,var(--bg-card) 88%,white 12%),color-mix(in srgb,var(--bg-body) 92%,white 8%));box-shadow:var(--shadow-sm)}.intent-badge{display:inline-flex;padding:8px 14px;border-radius:999px;background:color-mix(in srgb,var(--primary-50) 72%,white 28%);color:var(--primary);font-weight:800}.intent-hero h1{margin:16px 0 14px;font-size:clamp(2.1rem,4vw,3.3rem);letter-spacing:-.04em}.intent-hero p{max-width:820px;color:var(--text-body);line-height:1.85;font-size:1.06rem}.intent-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}.intent-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-top:26px}.intent-card,.intent-note,.intent-faq{border:1px solid var(--border-default);border-radius:22px;background:var(--bg-card);box-shadow:var(--shadow-xs);padding:24px}.intent-card h2,.intent-note h2,.intent-faq h2{margin:0 0 13px;font-size:1.24rem}.intent-card ul,.intent-note ul{list-style:disc;margin:0;padding-left:20px;display:grid;gap:9px}.intent-card li,.intent-note li,.intent-faq p{color:var(--text-body);line-height:1.78}.intent-note{margin-top:24px}.intent-chip-row,.intent-link-row{display:flex;flex-wrap:wrap;gap:10px}.intent-chip-row span,.intent-link-row a{display:inline-flex;align-items:center;min-height:40px;padding:8px 13px;border-radius:999px;border:1px solid var(--border-default);background:var(--bg-body);color:var(--text-heading);font-weight:700;text-decoration:none}.intent-faq details{border-top:1px solid var(--border-light);padding:14px 0}.intent-faq details:first-of-type{border-top:0}.intent-faq summary{cursor:pointer;color:var(--text-heading);font-weight:800;line-height:1.55}.intent-faq p{margin:10px 0 0}@media(max-width:768px){.intent-page{padding-top:40px}.intent-hero,.intent-card,.intent-note,.intent-faq{padding:22px 18px}}
   </style>
 ${schemas(page)}
@@ -166,6 +176,7 @@ ${schemas(page)}
   <main class="container intent-page">
     <section class="intent-hero"><span class="intent-badge">${esc(page.badge)}</span><h1>${esc(page.title)}</h1><p>${esc(page.hero)}</p><div class="intent-actions"><a href="index.html?keyword=${encodeURIComponent(page.keyword)}#search-results" class="btn btn-primary">${esc(page.keyword)} 검색</a><a href="${esc(page.guide[0])}" class="btn btn-outline">${esc(page.guide[1])}</a></div></section>
     <section class="intent-grid">${page.sections.map(([title,items])=>`<article class="intent-card"><h2>${esc(title)}</h2><ul>${list(items)}</ul></article>`).join('\n')}</section>
+    <section class="intent-note intent-howto"><h2>검색 결과를 방문 판단으로 바꾸는 순서</h2><ol>${decisionSteps(page).map(item=>`<li>${esc(item)}</li>`).join('\n')}</ol><p class="intent-source-note">이 페이지는 특정 병원을 추천하거나 순위를 보증하지 않습니다. 운영 상태와 실제 진료 가능 범위는 병원과 공식 기관에서 최종 확인해야 합니다.</p></section>
     <section class="intent-note"><h2>${esc(page.badge)} 검색 결과를 읽는 법</h2><ul><li>주소와 생활권을 먼저 확인하고, 반복 방문이 필요한 진료라면 이동 시간과 주차·대중교통을 함께 비교합니다.</li><li>목록의 진료과·기관종별 정보는 공개 데이터와 내부 정리 내용을 조합한 참고 정보이므로 실제 제공 범위는 병원에 확인합니다.</li><li>토요일·야간·일요일 표시가 있어도 접수 마감과 초진 가능 여부가 다를 수 있으므로 방문 전 전화 확인을 우선합니다.</li><li>검색 결과가 부족하면 지역명을 시·군·구 단위로 좁히거나 넓혀 다시 검색하고, 상세 조건은 건강보험심사평가원 공식 검색에서 대조합니다.</li></ul></section>
     <section class="intent-note"><h2>검색 예시</h2><div class="intent-chip-row">${page.chips.map(c=>`<span>${esc(c)}</span>`).join('\n')}</div></section>
     <section class="intent-faq intent-note"><h2>자주 묻는 질문</h2>${page.faq.map(([q,a],i)=>`<details${i===0?' open':''}><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('\n')}</section>
