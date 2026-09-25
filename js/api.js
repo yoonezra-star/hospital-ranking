@@ -440,11 +440,11 @@ const HospitalAPI = (() => {
       throw new Error('Public API returned an error');
     }
     const provenance = fromMock ? {} : {
-      sourceType: 'hira-live',
-      sourceName: '건강보험심사평가원 병원기본정보 API',
+      sourceType: payload.fromDatabase ? 'hira-snapshot' : 'hira-live',
+      sourceName: payload.sourceName || '건강보험심사평가원 병원기본정보 API',
       sourceUrl: 'https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000',
       verificationStatus: 'api-retrieved',
-      verifiedAt: new Date().toISOString().slice(0, 10),
+      verifiedAt: String(payload.sourceCheckedAt || new Date().toISOString()).slice(0, 10),
     };
 
     proxyReachable = true;

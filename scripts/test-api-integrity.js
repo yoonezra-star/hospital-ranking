@@ -9,6 +9,11 @@ const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
 const publicHospital = { ykiho: 'JDexample', yadmNm: '테스트의원', addr: '서울특별시 종로구 대학로 101', sidoCd: 110000 };
 const apiPayload = (item) => ({ response: { body: { items: { item }, totalCount: item ? 1 : 0 } } });
 
+async function loadHospitalStore() {
+  const source = read('functions/_lib/hospital-store.js');
+  return import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
+}
+
 function apiContext(responses, requests = []) {
   const context = vm.createContext({
     window: { HOSPITALS: [{ id: 1, name: '로컬의원' }] }, URLSearchParams, AbortSignal,
@@ -199,4 +204,58 @@ test('each stored HIRA code belongs to only one local record and survives export
   for (const [id, item] of Object.entries(provenance)) {
     assert.equal(exported.find((record) => String(record.id) === id).hiraId, item.hiraId);
   }
+});
+
+test('D1 snapshots require official identity fields and preserve source evidence', async () => {
+  const { normalizeHospitalSnapshot, snapshotRowToApiItem } = await loadHospitalStore();
+  assert.equal(normalizeHospitalSnapshot({ ykiho: 'JD1', yadmNm: '주소없는의원' }), null);
+
+  const snapshot = normalizeHospitalSnapshot({
+    ykiho: 'JD1', yadmNm: '테스트 의원', addr: '서울특별시 종로구 대학로 101',
+    sidoCd: 110000, sgguCd: 110016, dgsbjtCd: '01', XPos: 126.99, YPos: 37.58,
+  }, '2026-09-26T10:00:00.000Z');
+  assert.equal(snapshot.nameNormalized, '테스트의원');
+  assert.equal(snapshot.departmentCode, '01');
+
+  const item = snapshotRowToApiItem({
+    hira_id: snapshot.hiraId, name: snapshot.name, address: snapshot.address,
+    province_code: snapshot.provinceCode, district_code: snapshot.districtCode,
+    longitude: snapshot.longitude, latitude: snapshot.latitude,
+    source_checked_at: snapshot.checkedAt, verification_status: 'api-retrieved',
+    department_codes: '01,23',
+  });
+  assert.equal(item.ykiho, 'JD1');
+  assert.equal(item.sourceType, 'hira-snapshot');
+  assert.equal(item.verifiedAt, '2026-09-26');
+  assert.deepEqual(item.registeredDepartmentCodes, ['01', '23']);
+});
+
+test('D1 search uses bound filters and never interpolates visitor input', async () => {
+  const { searchHospitalSnapshots } = await loadHospitalStore();
+  const prepared = [];
+  const database = {
+    prepare(sql) {
+      const statement = { sql, values: [] };
+      prepared.push(statement);
+      return {
+        bind(...values) {
+          statement.values = values;
+          return {
+            first: async () => ({ total: 1 }),
+            all: async () => ({ results: [{
+              hira_id: 'JD1', name: '테스트의원', address: '서울특별시 종로구 대학로 101',
+              source_checked_at: '2026-09-26T10:00:00.000Z', department_codes: '01',
+            }] }),
+          };
+        },
+      };
+    },
+    batch: async () => [],
+  };
+  const params = new URLSearchParams({ yadmNm: "테스트%' OR 1=1 --", dgsbjtCd: '01' });
+  const result = await searchHospitalSnapshots({ env: { HOSPITAL_DB: database } }, params);
+
+  assert.equal(result.totalCount, 1);
+  assert(prepared.every((statement) => !statement.sql.includes("OR 1=1")));
+  assert(prepared.every((statement) => statement.values.some((value) => String(value).startsWith('%테스트'))));
 });

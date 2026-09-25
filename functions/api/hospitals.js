@@ -1,3 +1,5 @@
+import { searchHospitalSnapshots, storeHospitalSnapshots } from '../_lib/hospital-store.js';
+
 /**
  * Cloudflare Pages Function - hospital API proxy.
  *
@@ -14,10 +16,14 @@ export async function onRequestGet(context) {
   const wantsLive = params.get('live') === 'true' || params.get('live') === '1';
 
   if (!wantsLive) {
+    const storedResponse = await databaseFallback(context, params);
+    if (storedResponse) return storedResponse;
     return localFallback(context, params, 'local-default', 200);
   }
 
   if (!apiKey) {
+    const storedResponse = await databaseFallback(context, params);
+    if (storedResponse) return storedResponse;
     return localFallback(context, params, 'missing-api-key', 200);
   }
 
@@ -34,6 +40,8 @@ export async function onRequestGet(context) {
     if (!response.ok) {
       const cached = await cache.match(cacheKey);
       if (cached) return withDataSourceHeader(cached, 'stale-cache');
+      const storedResponse = await databaseFallback(context, params);
+      if (storedResponse) return storedResponse;
       return localFallback(context, params, `upstream-${response.status}`, 200);
     }
 
@@ -44,6 +52,8 @@ export async function onRequestGet(context) {
     } catch {
       const cached = await cache.match(cacheKey);
       if (cached) return withDataSourceHeader(cached, 'stale-cache');
+      const storedResponse = await databaseFallback(context, params);
+      if (storedResponse) return storedResponse;
       return localFallback(context, params, 'invalid-upstream-json', 200);
     }
 
@@ -51,6 +61,8 @@ export async function onRequestGet(context) {
     if (items.length === 0) {
       const cached = await cache.match(cacheKey);
       if (cached) return withDataSourceHeader(cached, 'stale-cache');
+      const storedResponse = await databaseFallback(context, params);
+      if (storedResponse) return storedResponse;
       return localFallback(context, params, 'empty-upstream', 200);
     }
 
@@ -61,7 +73,9 @@ export async function onRequestGet(context) {
       headers: liveHeaders,
     });
 
-    context.waitUntil(cache.put(cacheKey, liveResponse.clone()));
+    const backgroundTasks = [cache.put(cacheKey, liveResponse.clone())];
+    backgroundTasks.push(storeHospitalSnapshots(context, items, params.get('dgsbjtCd') || ''));
+    context.waitUntil(Promise.all(backgroundTasks));
 
     return liveResponse;
   } catch (error) {
@@ -70,11 +84,37 @@ export async function onRequestGet(context) {
     const cached = await cache.match(cacheKey);
     if (cached) return withDataSourceHeader(cached, 'stale-cache');
 
+    const storedResponse = await databaseFallback(context, params);
+    if (storedResponse) return storedResponse;
+
     const reason = error?.name === 'AbortError'
       ? 'upstream-timeout'
       : `upstream-error-${sanitizeHeaderValue(error?.message || 'unknown')}`;
     return localFallback(context, params, reason, 200);
   }
+}
+
+async function databaseFallback(context, params) {
+  const result = await searchHospitalSnapshots(context, params);
+  if (!result || result.items.length === 0) return null;
+
+  const payload = {
+    response: {
+      header: { resultCode: '00', resultMsg: 'NORMAL SERVICE' },
+      body: {
+        items: { item: result.items },
+        numOfRows: result.pageSize,
+        pageNo: result.page,
+        totalCount: result.totalCount,
+      },
+    },
+    fromDatabase: true,
+    sourceType: 'hira-snapshot',
+    sourceName: '건강보험심사평가원 병원기본정보 API 저장본',
+    sourceCheckedAt: result.sourceCheckedAt || null,
+  };
+
+  return jsonResponse(payload, 200, 'd1-snapshot', '', 'public, max-age=300, stale-while-revalidate=1800');
 }
 
 export async function onRequestOptions() {
