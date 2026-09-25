@@ -48,6 +48,8 @@ const server = http.createServer((request, response) => {
 
       await page.goto(`${origin}/`);
       await page.locator('#ranking-list .hospital-card').first().waitFor();
+      const homepageText = await page.locator('main').innerText();
+      assert(!/승인용|광고 승인|병원 상세 예시|대표 병원 보기/.test(homepageText), 'Review-oriented or sample copy remains on homepage');
       const editorialIds = await page.locator('.quick-access-item, .review-card a, .timeline-card').evaluateAll((links) => links.map((link) => new URL(link.href).searchParams.get('id')));
       assert(await page.evaluate((ids) => ids.every((id) => Boolean(window.HOSPITAL_PROVENANCE?.[id])), editorialIds), 'Unverified record promoted in automatic recommendations');
       assert(!await page.locator('body').innerText().then((text) => /평점\s*[1-5]\.\d|후기\s*\d+건|후기 수와 관심도/.test(text)), 'Unsupported rating on homepage');
@@ -136,7 +138,7 @@ const server = http.createServer((request, response) => {
       assert((await page.locator('#search-results-list').innerText()).includes('조회가 완료되지 않았습니다'));
       await page.locator('[data-expand-search]').click();
       await page.locator('#search-results-list .hospital-card').first().waitFor();
-      assert((await page.locator('#search-result-count').innerText()).includes('추천 결과'));
+      assert((await page.locator('#search-result-count').innerText()).includes('확장 결과'));
       await page.route(`${origin}/api/hospitals*`, async (route) => {
         const params = new URL(route.request().url()).searchParams;
         const code = params.get('sgguCd');

@@ -240,14 +240,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (quickButtons[2]) quickButtons[2].textContent = '☀️ 일요 진료';
     if (quickButtons[3]) quickButtons[3].textContent = '🆕 신규 개원';
 
-    setSectionCopy('quick-access', '빠른 찾기', '지금 바로 많이 찾는 운영 조건별 병원을 빠르게 살펴볼 수 있습니다.');
+    setSectionCopy('quick-access', '빠른 찾기', '등록된 운영시간과 개원 정보를 기준으로 살펴보고, 방문 전 실제 접수 여부를 확인하세요.');
     setSectionCopy('ranking', '병원 목록', '지역과 진료과, 등록된 운영 조건을 기준으로 탐색합니다. 목록 순서는 의료 수준 평가가 아닙니다.');
     setSectionCopy('reviews', '병원 정보 살펴보기', '등록된 위치와 진료 정보를 살펴보세요. 이용 후기나 인기 순위가 아닙니다.');
     setSectionCopy('new-hospitals', '최근 개원 병원', '최신 개원 병원을 날짜순으로 살펴볼 수 있습니다.');
     setSectionCopy('map-section', '지도에서 보기', '현재 목록의 병원을 지도에서 함께 확인할 수 있습니다.');
 
     const quickHeads = document.querySelectorAll('.quick-access-head h3');
-    if (quickHeads[0]) quickHeads[0].textContent = '현재 보기 좋은 병원';
+    if (quickHeads[0]) quickHeads[0].textContent = '현재 시간대 운영 병원';
     if (quickHeads[1]) quickHeads[1].textContent = '토요일 진료 병원';
     if (quickHeads[2]) quickHeads[2].textContent = '야간 진료 병원';
     if (quickHeads[3]) quickHeads[3].textContent = '신규 개원 병원';
@@ -1300,7 +1300,7 @@ document.addEventListener('DOMContentLoaded', () => {
         intent: relaxedIntents.regionDepartment,
       },
       {
-        label: '같은 진료과의 다른 지역 추천입니다.',
+        label: '같은 진료과의 다른 지역까지 범위를 넓힌 결과입니다.',
         filters: { ...clearOperationFilters(baseFilters), region: '', district: '', town: '', locality: '' },
         intent: relaxedIntents.departmentOnly,
       },
@@ -1616,7 +1616,7 @@ document.addEventListener('DOMContentLoaded', () => {
       searchQueryDisplay.textContent = state.keyword || buildSpecialFilterLabel(state.specialFilter) || '검색';
     }
     ui.searchIntentSummary.textContent = buildIntentSummary();
-    ui.searchResultCount.innerHTML = `${state.relaxedSearchLabel ? '추천 결과' : '검색 결과'} <strong>${formatNumber(state.filteredHospitals.length)}</strong>개`;
+    ui.searchResultCount.innerHTML = `${state.relaxedSearchLabel ? '확장 결과' : '검색 결과'} <strong>${formatNumber(state.filteredHospitals.length)}</strong>개`;
     const resultMarkup = state.filteredHospitals.length > 0
       ? state.filteredHospitals
         .slice(0, Math.min(state.visibleCount, 24))
@@ -1640,7 +1640,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <aside class="search-official-callout" aria-label="공식 병원 조건검색 안내">
         <div>
           <strong>지역과 진료과를 더 정확하게 확인하려면</strong>
-          <p>현재 결과는 내부 데이터와 공공 기본정보를 조합한 추천입니다. 운영 여부와 진료과 조건은 건강보험심사평가원 공식 조건검색에서 한 번 더 확인할 수 있습니다.</p>
+          <p>현재 결과는 내부 데이터와 공공 기본정보를 조합한 참고 목록입니다. 운영 여부와 진료과 조건은 건강보험심사평가원 공식 조건검색에서 한 번 더 확인할 수 있습니다.</p>
         </div>
         <a href="https://www.hira.or.kr/ra/dtlCndHospSrch/dtlCndHospSrch.do?pgmid=HIRAA050200000000" target="_blank" rel="noopener">공식 조건검색 열기</a>
       </aside>
@@ -1831,9 +1831,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (label.includes('운영조건')) return '운영조건 완화';
     if (label.includes('읍면동')) return '시군구로 확장';
     if (label.includes('생활권')) return '지역/진료과 확장';
-    if (label.includes('다른 지역')) return '다른 지역 추천';
+    if (label.includes('다른 지역')) return '다른 지역까지 확장';
     if (label.includes('같은 진료과')) return '진료과 우선';
-    return '추천 결과';
+    return '확장 결과';
   }
 
   function buildTrustBadges(item) {

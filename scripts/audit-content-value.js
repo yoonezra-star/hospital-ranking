@@ -21,6 +21,7 @@ for (const file of fs.readdirSync(root).filter((name) => name.endsWith('.html') 
   pages.push({ file, characters, externalReferences: externalLinks.length, noindex, inSitemap: sitemap.includes(url) });
   if (noindex && sitemap.includes(url)) errors.push(`${file}: noindex URL in sitemap`);
   if (!html.includes('<meta charset="UTF-8">')) errors.push(`${file}: missing UTF-8 declaration`);
+  if (/(?:href|src)=["']\s*["']/.test(html)) errors.push(`${file}: empty href or src attribute`);
   if (/"aggregateRating"|평점\s*[1-5]\.\d|리뷰\s*\d+개/.test(html)) errors.push(`${file}: unsupported ratings`);
   for (const match of html.matchAll(/(?:href|src)=["']([^"']+)["']/g)) {
     const href = match[1];
@@ -31,6 +32,10 @@ for (const file of fs.readdirSync(root).filter((name) => name.endsWith('.html') 
     }
   }
 }
+
+const homepage = read('index.html');
+if (/승인용|광고 승인/.test(strip(homepage))) errors.push('index.html: review-oriented copy is visible to visitors');
+if (/병원 상세 예시|대표 병원 보기/.test(strip(homepage))) errors.push('index.html: sample detail promotion remains');
 
 const context = { window: {} };
 vm.createContext(context);
