@@ -11,3 +11,9 @@ database_id = "2d73ed2c-b1d4-4384-9d03-e7db62cb85af"
 migrations_dir = "migrations"
 
 [env.production]
+
+[[env.production.d1_databases]]
+binding = "HOSPITAL_DB"
+database_name = "hospital-directory"
+database_id = "2d73ed2c-b1d4-4384-9d03-e7db62cb85af"
+migrations_dir = "migrations"
