@@ -245,7 +245,7 @@ function addExactFilter(filters, bindings, column, value) {
 function addLikeFilter(filters, bindings, column, value) {
   const cleanValue = cleanText(value);
   if (!cleanValue) return;
-  filters.push(`${column} LIKE ? ESCAPE '\\'`);
+  filters.push(`${column} LIKE ? ESCAPE '!'`);
   bindings.push(`%${escapeLike(cleanValue)}%`);
 }
 
@@ -254,7 +254,7 @@ function normalizeSearchText(value) {
 }
 
 function escapeLike(value) {
-  return String(value).replace(/[\\%_]/g, '\\$&');
+  return String(value).replace(/[!%_]/g, '!$&');
 }
 
 function cleanText(value) {
@@ -271,4 +271,3 @@ function clampNumber(value, min, max, fallback) {
   if (!Number.isFinite(number)) return fallback;
   return Math.min(max, Math.max(min, Math.floor(number)));
 }
-
