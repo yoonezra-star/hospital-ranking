@@ -1,0 +1,13 @@
+# Cloudflare Pages production configuration.
+# API keys remain encrypted Pages secrets and must not be committed here.
+name = "hospital-ranking"
+pages_build_output_dir = ""
+compatibility_date = "2026-06-16"
+
+[[d1_databases]]
+binding = "HOSPITAL_DB"
+database_name = "hospital-directory"
+database_id = "2d73ed2c-b1d4-4384-9d03-e7db62cb85af"
+migrations_dir = "migrations"
+
+[env.production]
