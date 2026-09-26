@@ -7,7 +7,7 @@
   <meta name="description" content="배뇨 불편, 빈뇨, 혈뇨, 요로결석 의심 증상으로 비뇨의학과를 찾기 전 확인할 내용입니다.">
   <link rel="canonical" href="https://hospital-ranking.kr/guide-urology">
   <meta name="robots" content="index,follow">
-  <link rel="stylesheet" href="css/style.css?v=12">
+  <link rel="stylesheet" href="css/style.css?v=13">
   <style>
     .guide-page-wrap { max-width: 1040px; padding-top: 48px; }
     .guide-hero-clean { padding: 34px; border: 1px solid var(--border-default); border-radius: 26px; background: radial-gradient(circle at 88% 8%, rgba(104, 134, 127, 0.18), transparent 28%), linear-gradient(135deg, color-mix(in srgb, var(--bg-card) 88%, white 12%), color-mix(in srgb, var(--bg-body) 90%, white 10%)); box-shadow: var(--shadow-sm); }
@@ -20,6 +20,10 @@
     .guide-card-clean { padding: 26px; border: 1px solid var(--border-default); border-radius: 22px; background: var(--bg-card); box-shadow: var(--shadow-xs); }
     .guide-card-clean h2 { margin: 0 0 14px; font-size: 1.35rem; color: var(--text-heading); }
     .guide-card-clean p { color: var(--text-body); line-height: 1.82; margin: 0; }
+    .guide-deep-dive > p { margin-bottom: 18px; }
+    .guide-deep-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .guide-deep-grid > div { padding: 18px; border: 1px solid var(--border-default); border-radius: 16px; background: var(--bg-body); }
+    .guide-deep-grid h3 { margin: 0 0 12px; font-size: 1.05rem; color: var(--text-heading); }
     .guide-plan-note { margin-top: 16px !important; padding-top: 14px; border-top: 1px solid var(--border-default); color: var(--text-muted) !important; }
     .guide-content ul, .guide-content ol { list-style: disc; padding-left: 20px; margin: 0; display: grid; gap: 9px; }
     .guide-content ol { list-style: decimal; }
@@ -36,9 +40,9 @@
     .guide-safety-note h2 { margin: 0 0 12px; font-size: 1.2rem; }
     .guide-link-row { display: flex; flex-wrap: wrap; gap: 10px; }
     .guide-link-row a { text-decoration: none; border-radius: 12px; }
-    @media (max-width: 768px) { .guide-page-wrap { padding-top: 34px; } .guide-hero-clean, .guide-card-clean { padding: 22px 18px; } .guide-title { font-size: 2rem; } }
+    @media (max-width: 768px) { .guide-page-wrap { padding-top: 34px; } .guide-hero-clean, .guide-card-clean { padding: 22px 18px; } .guide-title { font-size: 2rem; } .guide-deep-grid { grid-template-columns: 1fr; } }
   </style>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"MedicalWebPage","name":"비뇨의학과 방문 전 증상 정리 가이드","url":"https://hospital-ranking.kr/guide-urology","description":"배뇨 불편, 빈뇨, 혈뇨, 요로결석 의심 증상으로 비뇨의학과를 찾기 전 확인할 내용입니다.","dateModified":"2026-09-20","publisher":{"@type":"Organization","name":"병원찾기","url":"https://hospital-ranking.kr"},"about":[{"@type":"Thing","name":"비뇨의학과"},{"@type":"Thing","name":"배뇨 불편"},{"@type":"Thing","name":"혈뇨"},{"@type":"Thing","name":"요로결석"}],"citation":["https://health.kdca.go.kr/"]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"MedicalWebPage","name":"비뇨의학과 방문 전 증상 정리 가이드","url":"https://hospital-ranking.kr/guide-urology","description":"배뇨 불편, 빈뇨, 혈뇨, 요로결석 의심 증상으로 비뇨의학과를 찾기 전 확인할 내용입니다.","dateModified":"2026-09-26","publisher":{"@type":"Organization","name":"병원찾기","url":"https://hospital-ranking.kr"},"about":[{"@type":"Thing","name":"비뇨의학과"},{"@type":"Thing","name":"배뇨 불편"},{"@type":"Thing","name":"혈뇨"},{"@type":"Thing","name":"요로결석"}],"citation":["https://health.kdca.go.kr/","https://www.niddk.nih.gov/health-information/urologic-diseases/hematuria-blood-urine"]}</script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1441018945572157" crossorigin="anonymous"></script>
 </head>
 <body class="light-mode">
@@ -60,7 +64,7 @@
         <h1 class="guide-title">비뇨의학과 방문 전 증상 정리 가이드</h1>
         <p class="guide-summary">배뇨 불편, 빈뇨, 혈뇨, 요로결석 의심 증상으로 비뇨의학과를 찾기 전 확인할 내용입니다. 병원찾기의 건강가이드는 특정 병원을 홍보하기보다 방문 전 사용자가 스스로 질문을 정리할 수 있도록 돕는 참고 자료입니다.</p>
         <div class="guide-badges">
-          <span>최종 점검일 2026-09-20</span>
+          <span>최종 점검일 2026-09-26</span>
           <span>참고용 건강 정보</span>
           <span>정정 요청 replyleaders@naver.com</span>
         </div>
@@ -94,6 +98,26 @@
 <li>최근 복용약, 항생제 사용 여부, 이전 결석 이력을 정리하세요.</li></ul>
         </section>
 
+        <section class="guide-card-clean guide-deep-dive">
+          <h2>배뇨 증상을 구체적으로 설명하는 법</h2>
+          <p>빈뇨·통증·혈뇨·옆구리 통증은 확인 과정이 서로 다를 수 있습니다. 색이나 통증만으로 원인을 단정하지 말고 시간 순서와 동반 증상을 기록하세요.</p>
+          <div class="guide-deep-grid">
+            <div>
+              <h3>진료 전에 적어갈 내용</h3>
+              <ul><li>증상이 시작된 날짜와 갑자기 시작했는지 서서히 변했는지</li>
+<li>배뇨 횟수, 야간뇨, 잔뇨감, 소변 줄기 변화</li>
+<li>소변 색 변화가 보인 시각과 반복 여부, 가능한 경우 복용약 정보</li>
+<li>옆구리·아랫배·사타구니 통증의 위치와 발열·오한 동반 여부</li></ul>
+            </div>
+            <div>
+              <h3>검사 안내를 받을 때</h3>
+              <ul><li>소변검사, 혈액검사, 초음파·CT 등 안내받은 검사의 목적을 구분합니다.</li>
+<li>검사 전 금식이나 소변 참기 같은 준비가 필요한지 확인합니다.</li>
+<li>결과 확인일과 통증 또는 배뇨 곤란이 심해질 때의 연락 방법을 기록합니다.</li></ul>
+            </div>
+          </div>
+        </section>
+
         <section class="guide-card-clean">
           <h2>상담 때 물어볼 질문</h2>
           <ol><li>소변검사 외에 추가 검사가 필요한가요?</li>
@@ -125,7 +149,7 @@
           <h2>공식 참고 자료</h2>
           <p class="guide-source-intro">아래 링크는 이 글의 내용을 대신해 진단하거나 치료를 결정하는 자료가 아닙니다. 최신 내용과 개인에게 적용되는 범위는 의료진 또는 해당 기관에 직접 확인하세요.</p>
           <ul class="guide-source-list">
-            <li><a href="https://health.kdca.go.kr/" rel="external noopener" target="_blank">질병관리청 국가건강정보포털</a><span>배뇨·요로 관련 건강정보 확인</span></li>
+            <li><a href="https://health.kdca.go.kr/" rel="external noopener" target="_blank">질병관리청 국가건강정보포털</a><span>배뇨·요로 관련 건강정보 확인</span></li><li><a href="https://www.niddk.nih.gov/health-information/urologic-diseases/hematuria-blood-urine" rel="external noopener" target="_blank">미국 국립당뇨·소화기·신장질환연구소 혈뇨 안내</a><span>혈뇨 확인 과정과 소변검사·영상검사 개요</span></li>
           </ul>
         </section>
 
@@ -170,6 +194,6 @@
       </div>
     </div>
   </footer>
-  <script src="js/guide-page.js?v=5"></script>
+  <script src="js/guide-page.js?v=6"></script>
 </body>
 </html>

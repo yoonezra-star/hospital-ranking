@@ -1,7 +1,7 @@
 ﻿const fs = require('fs');
 
 const SITE = 'https://hospital-ranking.kr';
-const TODAY = '2026-09-20';
+const TODAY = '2026-09-26';
 const SEARCH_GUIDE = { slug: 'guide-hospital-search', title: '지역 병원 검색부터 전화 확인까지', category: '병원 이용 안내', summary: '검색 결과가 없을 때의 대처, 야간·휴일 접수 확인 질문과 인쇄 가능한 방문 체크리스트입니다.' };
 const ADSENSE = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1441018945572157" crossorigin="anonymous"></script>';
 
@@ -217,15 +217,17 @@ const OFFICIAL_SOURCES = {
   ],
   'guide-rhinitis': [
     { title: '질병관리청 국가건강정보포털', href: 'https://health.kdca.go.kr/', note: '증상과 질환 정보를 공식 포털에서 검색' },
+    { title: '영국 국민보건서비스 알레르기 비염 안내', href: 'https://www.nhs.uk/conditions/allergic-rhinitis/', note: '코막힘·재채기 등 주요 증상과 진료 상담 기준 확인' },
   ],
   'guide-urology': [
     { title: '질병관리청 국가건강정보포털', href: 'https://health.kdca.go.kr/', note: '배뇨·요로 관련 건강정보 확인' },
+    { title: '미국 국립당뇨·소화기·신장질환연구소 혈뇨 안내', href: 'https://www.niddk.nih.gov/health-information/urologic-diseases/hematuria-blood-urine', note: '혈뇨 확인 과정과 소변검사·영상검사 개요' },
   ],
   'guide-lasik': [
     { title: '미국 국립안연구소 시력교정술 안내', href: 'https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/refractive-errors/surgery-refractive-errors', note: 'LASIK과 굴절교정술의 적응·위험 설명' },
   ],
   'guide-cataract': [
-    { title: '미국 국립안연구소 백내장 수술 안내', href: 'https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/cataracts/cataract-surgery', note: '백내장 수술 전후 확인사항' },
+    { title: '미국 국립안연구소 백내장 안내', href: 'https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/cataracts', note: '백내장 증상, 검사, 치료 선택지 확인' },
   ],
   'guide-ortho': [
     { title: '질병관리청 국가건강정보포털', href: 'https://health.kdca.go.kr/', note: '근골격계 증상과 건강정보 확인' },
@@ -244,13 +246,131 @@ const OFFICIAL_SOURCES = {
   ],
   'guide-incontinence': [
     { title: '질병관리청 국가건강정보포털', href: 'https://health.kdca.go.kr/', note: '배뇨 관련 건강정보 확인' },
+    { title: '미국 국립당뇨·소화기·신장질환연구소 요실금 안내', href: 'https://www.niddk.nih.gov/health-information/urologic-diseases/bladder-control-problems/treatment', note: '배뇨일지와 방광훈련 등 상담 항목 확인' },
   ],
   'guide-pediatric-dental': [
     { title: '건강보험심사평가원 건강지도', href: 'https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000', note: '소아 진료기관 검색 경로' },
+    { title: '미국 국립치과두개안면연구소 충치 예방 안내', href: 'https://www.nidcr.nih.gov/health-info/tooth-decay/more-info/tooth-decay-process', note: '어린이 충치 진행과 예방 관리 확인' },
+    { title: '미국 국립치과두개안면연구소 치아 실란트 안내', href: 'https://www.nidcr.nih.gov/health-info/dental-sealants', note: '어금니 실란트의 목적과 시기 확인' },
   ],
   'guide-chuna': [
     { title: '건강보험심사평가원 건강지도', href: 'https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000', note: '한방·재활 관련 의료기관 검색 경로' },
   ],
+};
+
+const GUIDE_DEEP_DIVES = {
+  'guide-implant': {
+    title: '치아별 상담 내용을 한 장에 정리하기',
+    intro: '임플란트 상담은 수술 가능 여부뿐 아니라 발치, 뼈 상태, 보철, 유지관리까지 단계가 나뉩니다. 병원별 설명을 같은 기준으로 기록해야 비용과 기간을 오해하지 않습니다.',
+    records: ['치아 위치와 발치 여부, 통증·염증이 있었던 시점', '파노라마·CT 촬영일과 이전 치과 치료 기록 보유 여부', '당뇨·고혈압·골다공증 치료와 현재 복용약', '씹기 불편, 심미성, 치료 기간 중 가장 우선하는 목표'],
+    resultTitle: '견적과 치료계획을 비교할 때',
+    results: ['수술, 뼈이식, 임시치아, 보철 비용이 각각 포함됐는지 확인합니다.', '예상 내원 횟수와 수술·보철 완료 시점을 구분해 기록합니다.', '정기검진과 보철물 관리, 문제가 생겼을 때의 보증 범위를 묻습니다.'],
+  },
+  'guide-endoscopy': {
+    title: '검사 예약 전에 정리할 건강정보',
+    intro: '내시경 종류와 수면 여부에 따라 금식, 약 조절, 귀가 방법이 달라질 수 있습니다. 병원의 개별 안내를 우선하고 아래 정보를 예약 단계에서 정확히 전달하세요.',
+    records: ['위내시경·대장내시경 중 필요한 검사와 검진 또는 증상 평가 목적', '항응고제·당뇨약·혈압약을 포함한 복용약 이름과 복용 시간', '이전 내시경 날짜, 용종 제거·조직검사 여부, 결과지 보유 여부', '수면내시경 경험, 약물 알레르기, 보호자 동행과 귀가 수단'],
+    resultTitle: '검사 결과를 받을 때',
+    results: ['관찰 결과와 조직검사 시행 여부를 구분해 확인합니다.', '식사·운전·운동 재개 시점과 당일 주의사항을 안내받습니다.', '조직검사 결과 확인일과 다음 검사 권고 시점을 기록합니다.'],
+  },
+  'guide-depression': {
+    title: '초진에서 설명할 변화를 시간순으로 적기',
+    intro: '우울감이나 불안 정도만 말하기 어려울 때는 수면, 식사, 집중력, 일상 기능이 언제부터 어떻게 달라졌는지를 시간순으로 정리하면 도움이 됩니다.',
+    records: ['증상이 시작된 시점과 악화·완화되는 시간 또는 상황', '잠드는 시간, 중간에 깨는 횟수, 기상 시간의 변화', '식욕·체중·집중력과 업무·학업·대인관계의 변화', '이전 상담·약물 경험, 현재 복용약, 카페인과 음주 패턴'],
+    resultTitle: '첫 상담 뒤 확인할 계획',
+    results: ['평가, 상담, 약물, 심리검사 중 다음 단계와 목적을 구분합니다.', '약을 처방받았다면 복용법과 관찰할 변화, 문의 방법을 확인합니다.', '다음 예약일과 증상이 급격히 악화될 때 이용할 연락 경로를 기록합니다.'],
+  },
+  'guide-diabetes': {
+    title: '수치와 생활 변화를 함께 기록하기',
+    intro: '한 번의 혈압·혈당 수치만으로 경과를 설명하기 어렵습니다. 측정 시간과 식사·복약 상황을 함께 기록하고 최근 검사 결과 원본을 준비하세요.',
+    records: ['혈압·혈당을 측정한 날짜와 시간, 식전·식후 여부', '약 이름, 복용 시간, 최근 복용량이 바뀐 시점', '식사·운동 패턴과 어지러움·부종 등 새로 느낀 변화', '최근 건강검진의 혈당·당화혈색소·지질·신장 관련 결과지'],
+    resultTitle: '진료 후 관리표 만들기',
+    results: ['유지·변경된 약과 복용 시간을 새 목록으로 정리합니다.', '집에서 기록할 수치와 측정 빈도, 목표 범위를 확인합니다.', '다음 혈액·소변검사 항목과 예약 시점을 달력에 표시합니다.'],
+  },
+  'guide-lasik': {
+    title: '정밀검사 전에 생활 조건 정리하기',
+    intro: '시력교정술은 검사 결과뿐 아니라 직업, 운전, 화면 사용, 회복에 쓸 수 있는 기간을 함께 고려합니다. 특정 수술법을 미리 정하기보다 생활 조건을 먼저 전달하세요.',
+    records: ['안경·소프트렌즈·하드렌즈 종류와 렌즈를 중단한 날짜', '안구건조·알레르기·야간 눈부심과 이전 안과 치료 이력', '운전, 야간근무, 화면 작업, 운동처럼 중요한 일상 활동', '회복을 위해 확보할 수 있는 휴가와 수술 후 이동 방법'],
+    resultTitle: '검사 결과 설명을 들을 때',
+    results: ['각막·건조증 등 검사 결과와 수술 가능 판단의 근거를 묻습니다.', '가능한 방법별 기대 범위, 제한, 회복 차이를 같은 기준으로 기록합니다.', '수술 후 안약, 보호장비, 정기검진과 응급 연락 방법을 확인합니다.'],
+  },
+  'guide-ortho': {
+    title: '통증 위치와 기능 제한을 구분해 기록하기',
+    intro: '통증 점수만 적기보다 어떤 동작을 할 수 없게 됐는지, 저림이나 힘 빠짐이 동반되는지를 함께 기록하면 검사와 치료 상담에 도움이 됩니다.',
+    records: ['통증이 시작된 날짜와 다친 계기 또는 반복 동작 여부', '목·허리·어깨·무릎 등 정확한 위치와 퍼지는 방향', '걷기, 계단, 앉기, 수면 중 제한되는 활동과 지속 시간', '저림·감각 변화·근력 저하와 기존 X-ray·MRI 검사일'],
+    resultTitle: '검사와 치료 설명을 정리할 때',
+    results: ['검사가 필요한 이유와 결과가 치료계획에 미치는 영향을 묻습니다.', '약·주사·물리치료·재활의 목표와 평가 시점을 구분합니다.', '피해야 할 동작과 가능한 운동, 다시 진료받을 변화 기준을 확인합니다.'],
+  },
+  'guide-acne': {
+    title: '피부 변화와 사용 제품 기록하기',
+    intro: '여드름·피부염·색소 상담에서는 증상 기간과 사용한 제품, 이전 치료 반응이 중요합니다. 사진을 남길 때는 같은 조명과 비슷한 각도를 사용하면 변화를 설명하기 쉽습니다.',
+    records: ['처음 시작한 시점과 얼굴·몸에서 심한 부위', '생리주기, 마스크, 면도, 화장품 변경과 악화 시점의 관계', '사용 중인 세안제·화장품·연고·복용약 이름과 사용 기간', '이전 압출·레이저·약물치료와 좋아지거나 불편했던 점'],
+    resultTitle: '치료계획을 받은 뒤',
+    results: ['먹는 약, 바르는 약, 시술의 목적과 사용 순서를 구분합니다.', '건조·자극 등 관찰할 반응과 제품 중단 여부를 확인합니다.', '사진으로 경과를 비교할 시점과 다음 진료 전에 지킬 관리법을 기록합니다.'],
+  },
+  'guide-womens-checkup': {
+    title: '상담 전에 날짜와 변화를 기록하는 법',
+    intro: '여성검진은 정기검진인지 증상 상담인지에 따라 확인할 항목이 달라집니다. 기억에 의존하기보다 아래 내용을 날짜와 함께 적어 가면 상담 목적을 전달하기 쉽습니다.',
+    records: ['마지막 생리 시작일, 평소 주기, 최근 주기 변화', '출혈이 평소와 달랐던 날짜와 지속 기간, 양의 변화', '골반통이나 불편감의 위치, 시작 시점, 반복되는 상황', '이전 자궁경부세포검사·초음파의 검사일과 결과지를 받은 기관'],
+    resultTitle: '검사 뒤 확인할 항목',
+    results: ['받은 검사의 정확한 이름과 검사 목적을 기록합니다.', '결과를 확인하는 날짜와 방식, 재방문 필요 여부를 묻습니다.', '추적검사가 필요하다면 다음 검사 시점과 그 전에 관찰할 변화를 적습니다.'],
+  },
+  'guide-breast-ultrasound': {
+    title: '멍울과 통증 위치를 설명하는 기록법',
+    intro: '유방 증상은 좌우 위치와 처음 발견한 시점, 이전 검사와의 비교가 중요합니다. 진단을 추정하기보다 의료진에게 전달할 관찰 내용을 구체적으로 정리하세요.',
+    records: ['왼쪽·오른쪽 중 어느 쪽인지와 유두를 기준으로 한 대략적인 위치', '처음 발견한 날짜와 크기·통증이 달라졌다고 느낀 시점', '피부나 유두의 변화, 분비물 여부와 관찰한 날짜', '이전 유방촬영·초음파 검사일, 검사 기관, 결과지 보유 여부'],
+    resultTitle: '결과 설명을 들을 때',
+    results: ['이번 검사가 유방촬영인지 초음파인지 정확한 검사명을 확인합니다.', '이전 영상과 비교했는지, 추가검사 또는 추적관찰이 필요한지 묻습니다.', '결과지와 영상 사본을 받을 수 있는 방법을 확인해 다음 방문에 활용합니다.'],
+  },
+  'guide-pediatric-dental': {
+    title: '아이 치아 상태와 생활습관 기록',
+    intro: '아이의 치통 표현은 일정하지 않을 수 있으므로 보호자가 관찰한 식사·수면·양치 변화를 함께 전달하는 것이 좋습니다.',
+    records: ['아이가 가리키는 치아 위치와 아프다고 말한 날짜·시간대', '찬 음식, 단 음식, 씹을 때처럼 불편을 보인 상황', '밤중 통증, 잇몸 부기, 치아 외상 여부와 발생 시점', '하루 양치 횟수, 불소치약 사용 여부, 간식과 음료 섭취 습관'],
+    resultTitle: '치료계획을 받은 뒤',
+    results: ['치아별로 치료·관찰·예방관리 항목을 나누어 기록합니다.', '불소도포나 실란트가 권해졌다면 목적과 다음 확인 시점을 묻습니다.', '아이에게 설명할 표현과 다음 방문 전에 연습할 행동을 의료진과 상의합니다.'],
+  },
+  'guide-incontinence': {
+    title: '2~3일 배뇨일지에 적을 내용',
+    intro: '배뇨일지는 소변을 본 시간과 누출 상황을 객관적으로 전달하는 도구입니다. 평소 생활을 과도하게 바꾸지 말고 기록 가능한 범위에서 작성하세요.',
+    records: ['소변을 본 시각과 야간에 깬 횟수', '갑자기 마려웠는지, 기침·운동 중 샜는지 등 당시 상황', '누출 정도와 패드 또는 속옷 교체 여부', '마신 음료의 종류와 대략적인 시간, 복용약 변경 여부'],
+    resultTitle: '상담 후 계획 구분하기',
+    results: ['생활조정, 운동, 약물, 검사 중 먼저 시행할 항목을 구분합니다.', '효과를 다시 평가할 기간과 같은 방식으로 기록할 항목을 확인합니다.', '증상이 달라지거나 새로 생겼을 때 예약을 앞당길 기준을 묻습니다.'],
+  },
+  'guide-urology': {
+    title: '배뇨 증상을 구체적으로 설명하는 법',
+    intro: '빈뇨·통증·혈뇨·옆구리 통증은 확인 과정이 서로 다를 수 있습니다. 색이나 통증만으로 원인을 단정하지 말고 시간 순서와 동반 증상을 기록하세요.',
+    records: ['증상이 시작된 날짜와 갑자기 시작했는지 서서히 변했는지', '배뇨 횟수, 야간뇨, 잔뇨감, 소변 줄기 변화', '소변 색 변화가 보인 시각과 반복 여부, 가능한 경우 복용약 정보', '옆구리·아랫배·사타구니 통증의 위치와 발열·오한 동반 여부'],
+    resultTitle: '검사 안내를 받을 때',
+    results: ['소변검사, 혈액검사, 초음파·CT 등 안내받은 검사의 목적을 구분합니다.', '검사 전 금식이나 소변 참기 같은 준비가 필요한지 확인합니다.', '결과 확인일과 통증 또는 배뇨 곤란이 심해질 때의 연락 방법을 기록합니다.'],
+  },
+  'guide-cataract': {
+    title: '시력 변화가 생활에 미치는 영향 기록',
+    intro: '백내장 상담에서는 검사 수치와 함께 실제 생활에서 무엇이 불편한지 설명하는 것이 도움이 됩니다. 양쪽 눈의 차이와 상황별 불편을 구분해 적어보세요.',
+    records: ['낮과 밤 중 언제 흐림이나 눈부심이 심한지', '운전, 독서, 계단 이용, 화면 보기 중 불편한 활동', '안경 도수를 최근 자주 바꿨는지와 마지막 검사 시점', '사용 중인 안약, 당뇨 등 기존 질환, 이전 안과 수술 이력'],
+    resultTitle: '수술 상담 결과 정리',
+    results: ['즉시 치료가 필요한지 추적관찰이 가능한지 의료진 설명을 기록합니다.', '인공수정체 선택 시 기대 범위와 제한, 비용 항목을 구분해 확인합니다.', '수술 전후 안약, 내원 일정, 운전과 일상 복귀 안내를 문서로 받습니다.'],
+  },
+  'guide-rhinitis': {
+    title: '코 증상과 환경을 함께 기록하기',
+    intro: '비염 증상은 계절, 장소, 수면환경, 동물 접촉 등과 함께 달라질 수 있습니다. 감기라고 단정하기보다 반복 양상을 기록해 진료 때 보여주세요.',
+    records: ['코막힘·재채기·콧물·눈 가려움이 심한 시간대', '집, 직장, 야외 등 증상이 심해지는 장소와 계절', '발열, 목 통증, 얼굴 통증, 귀 불편처럼 함께 나타난 증상', '사용한 비강 스프레이·항히스타민제 이름과 사용 기간'],
+    resultTitle: '관리계획을 받을 때',
+    results: ['처방약과 비강 스프레이의 사용 순서와 기간을 확인합니다.', '피해야 할 환경 요인과 현실적으로 조정할 생활 항목을 구분합니다.', '증상이 조절되지 않을 때 재진 시점과 추가검사 필요 여부를 묻습니다.'],
+  },
+  'guide-manual-therapy': {
+    title: '치료 목표를 측정 가능한 말로 바꾸기',
+    intro: '통증이 줄었으면 좋겠다는 표현만으로는 경과를 비교하기 어렵습니다. 일상에서 제한된 동작과 치료 후 다시 확인할 기준을 구체적으로 정리하세요.',
+    records: ['앉기, 걷기, 계단, 수면처럼 통증 때문에 제한된 활동', '통증 위치와 저림·근력저하 여부, 악화되는 자세', '기존 영상검사와 주사·약·물리치료 경험 및 반응', '치료 전후 비교할 동작과 현실적으로 가능한 방문 빈도'],
+    resultTitle: '치료계획을 비교할 때',
+    results: ['의사 진단, 도수치료, 운동교육의 역할을 각각 확인합니다.', '예상 횟수보다 먼저 중간 평가 시점과 중단·변경 기준을 묻습니다.', '회당 비용과 추가 치료 항목, 집에서 수행할 운동 안내를 구분해 기록합니다.'],
+  },
+  'guide-chuna': {
+    title: '한방 통증 상담에 가져갈 기록',
+    intro: '추나·침·약침 등 명칭만으로 치료를 선택하지 말고 현재 상태 평가, 기존 진료, 복용약과 치료 목표를 먼저 전달하세요.',
+    records: ['통증이 시작된 계기와 위치, 움직일 때 달라지는 양상', 'MRI·X-ray 결과와 정형외과·재활의학과 진료 이력', '항응고제, 골다공증 치료제 등 현재 복용약과 수술 이력', '추나·침 등 이전 한방치료 경험과 치료 뒤 나타난 변화'],
+    resultTitle: '횟수와 비용을 확인할 때',
+    results: ['권한 치료별 목적과 현재 상태에 적용하는 이유를 묻습니다.', '건강보험 적용 여부, 연간 인정 횟수, 본인부담 항목을 확인합니다.', '통증 악화나 새로운 저림·근력 변화가 생길 때 재평가 기준을 기록합니다.'],
+  },
 };
 
 function esc(value) {
@@ -265,12 +385,31 @@ function li(items) {
   return items.map((item) => `<li>${esc(item)}</li>`).join('\n');
 }
 
+function deepDiveSection(guide) {
+  const detail = GUIDE_DEEP_DIVES[guide.slug];
+  if (!detail) return '';
+  return `<section class="guide-card-clean guide-deep-dive">
+          <h2>${esc(detail.title)}</h2>
+          <p>${esc(detail.intro)}</p>
+          <div class="guide-deep-grid">
+            <div>
+              <h3>진료 전에 적어갈 내용</h3>
+              <ul>${li(detail.records)}</ul>
+            </div>
+            <div>
+              <h3>${esc(detail.resultTitle)}</h3>
+              <ul>${li(detail.results)}</ul>
+            </div>
+          </div>
+        </section>`;
+}
+
 function relatedLinks(guide) {
   return guide.related.map((href) => {
     const found = guides.find((item) => `${item.slug}.html` === href || item.slug === href.replace(/\.html$/, ''));
     const pageTitle = fs.existsSync(href) ? fs.readFileSync(href, 'utf8').match(/<title>([^<]+)<\/title>/i)?.[1] : '';
     const label = found ? found.title : (pageTitle || '관련 병원 안내').replace(/\s*-\s*병원찾기$/, '');
-    return `<a href="${esc(href)}">${esc(label)}</a>`;
+    return `<a href="/${esc(href.replace(/^\//, '').replace(/\.html$/, ''))}">${esc(label)}</a>`;
   }).join('\n');
 }
 
@@ -282,7 +421,7 @@ function commonHead({ title, description, canonical, schema }) {
   <meta name="description" content="${esc(description)}">
   <link rel="canonical" href="${canonical}">
   <meta name="robots" content="index,follow">
-  <link rel="stylesheet" href="css/style.css?v=12">
+  <link rel="stylesheet" href="css/style.css?v=13">
   <style>
     .guide-page-wrap { max-width: 1040px; padding-top: 48px; }
     .guide-hero-clean { padding: 34px; border: 1px solid var(--border-default); border-radius: 26px; background: radial-gradient(circle at 88% 8%, rgba(104, 134, 127, 0.18), transparent 28%), linear-gradient(135deg, color-mix(in srgb, var(--bg-card) 88%, white 12%), color-mix(in srgb, var(--bg-body) 90%, white 10%)); box-shadow: var(--shadow-sm); }
@@ -295,6 +434,10 @@ function commonHead({ title, description, canonical, schema }) {
     .guide-card-clean { padding: 26px; border: 1px solid var(--border-default); border-radius: 22px; background: var(--bg-card); box-shadow: var(--shadow-xs); }
     .guide-card-clean h2 { margin: 0 0 14px; font-size: 1.35rem; color: var(--text-heading); }
     .guide-card-clean p { color: var(--text-body); line-height: 1.82; margin: 0; }
+    .guide-deep-dive > p { margin-bottom: 18px; }
+    .guide-deep-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .guide-deep-grid > div { padding: 18px; border: 1px solid var(--border-default); border-radius: 16px; background: var(--bg-body); }
+    .guide-deep-grid h3 { margin: 0 0 12px; font-size: 1.05rem; color: var(--text-heading); }
     .guide-plan-note { margin-top: 16px !important; padding-top: 14px; border-top: 1px solid var(--border-default); color: var(--text-muted) !important; }
     .guide-content ul, .guide-content ol { list-style: disc; padding-left: 20px; margin: 0; display: grid; gap: 9px; }
     .guide-content ol { list-style: decimal; }
@@ -311,7 +454,7 @@ function commonHead({ title, description, canonical, schema }) {
     .guide-safety-note h2 { margin: 0 0 12px; font-size: 1.2rem; }
     .guide-link-row { display: flex; flex-wrap: wrap; gap: 10px; }
     .guide-link-row a { text-decoration: none; border-radius: 12px; }
-    @media (max-width: 768px) { .guide-page-wrap { padding-top: 34px; } .guide-hero-clean, .guide-card-clean { padding: 22px 18px; } .guide-title { font-size: 2rem; } }
+    @media (max-width: 768px) { .guide-page-wrap { padding-top: 34px; } .guide-hero-clean, .guide-card-clean { padding: 22px 18px; } .guide-title { font-size: 2rem; } .guide-deep-grid { grid-template-columns: 1fr; } }
   </style>
   <script type="application/ld+json">${JSON.stringify(schema)}</script>
   ${ADSENSE}
@@ -415,6 +558,8 @@ ${commonHead({ title: guide.title, description: guide.summary, canonical: cleanU
           <ul>${li(guide.prepare)}</ul>
         </section>
 
+        ${deepDiveSection(guide)}
+
         <section class="guide-card-clean">
           <h2>상담 때 물어볼 질문</h2>
           <ol>${li(guide.questions)}</ol>
@@ -460,10 +605,10 @@ ${commonHead({ title: guide.title, description: guide.summary, canonical: cleanU
     </article>
   </main>
   ${footer()}
-  <script src="js/guide-page.js?v=5"></script>
+  <script src="js/guide-page.js?v=6"></script>
 </body>
 </html>`;
-  fs.writeFileSync(`${guide.slug}.html`, html, 'utf8');
+  fs.writeFileSync(`${guide.slug}.html`, html.replace(/[ \t]+$/gm, ''), 'utf8');
 }
 
 function renderIndex() {
@@ -518,10 +663,10 @@ ${commonHead({ title: '건강가이드 모음', description: '임플란트, 내�
     </section>
   </main>
   ${footer()}
-  <script src="js/guide-page.js?v=5"></script>
+  <script src="js/guide-page.js?v=6"></script>
 </body>
 </html>`;
-  fs.writeFileSync('guide.html', html, 'utf8');
+  fs.writeFileSync('guide.html', html.replace(/[ \t]+$/gm, ''), 'utf8');
 }
 
 guides.forEach(renderGuide);

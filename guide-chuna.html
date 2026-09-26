@@ -7,7 +7,7 @@
   <meta name="description" content="추나, 침, 한방 통증 진료를 상담하기 전 통증 위치, 기존 검사, 복용약, 치료 목표를 정리합니다.">
   <link rel="canonical" href="https://hospital-ranking.kr/guide-chuna">
   <meta name="robots" content="index,follow">
-  <link rel="stylesheet" href="css/style.css?v=12">
+  <link rel="stylesheet" href="css/style.css?v=13">
   <style>
     .guide-page-wrap { max-width: 1040px; padding-top: 48px; }
     .guide-hero-clean { padding: 34px; border: 1px solid var(--border-default); border-radius: 26px; background: radial-gradient(circle at 88% 8%, rgba(104, 134, 127, 0.18), transparent 28%), linear-gradient(135deg, color-mix(in srgb, var(--bg-card) 88%, white 12%), color-mix(in srgb, var(--bg-body) 90%, white 10%)); box-shadow: var(--shadow-sm); }
@@ -20,6 +20,10 @@
     .guide-card-clean { padding: 26px; border: 1px solid var(--border-default); border-radius: 22px; background: var(--bg-card); box-shadow: var(--shadow-xs); }
     .guide-card-clean h2 { margin: 0 0 14px; font-size: 1.35rem; color: var(--text-heading); }
     .guide-card-clean p { color: var(--text-body); line-height: 1.82; margin: 0; }
+    .guide-deep-dive > p { margin-bottom: 18px; }
+    .guide-deep-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .guide-deep-grid > div { padding: 18px; border: 1px solid var(--border-default); border-radius: 16px; background: var(--bg-body); }
+    .guide-deep-grid h3 { margin: 0 0 12px; font-size: 1.05rem; color: var(--text-heading); }
     .guide-plan-note { margin-top: 16px !important; padding-top: 14px; border-top: 1px solid var(--border-default); color: var(--text-muted) !important; }
     .guide-content ul, .guide-content ol { list-style: disc; padding-left: 20px; margin: 0; display: grid; gap: 9px; }
     .guide-content ol { list-style: decimal; }
@@ -36,9 +40,9 @@
     .guide-safety-note h2 { margin: 0 0 12px; font-size: 1.2rem; }
     .guide-link-row { display: flex; flex-wrap: wrap; gap: 10px; }
     .guide-link-row a { text-decoration: none; border-radius: 12px; }
-    @media (max-width: 768px) { .guide-page-wrap { padding-top: 34px; } .guide-hero-clean, .guide-card-clean { padding: 22px 18px; } .guide-title { font-size: 2rem; } }
+    @media (max-width: 768px) { .guide-page-wrap { padding-top: 34px; } .guide-hero-clean, .guide-card-clean { padding: 22px 18px; } .guide-title { font-size: 2rem; } .guide-deep-grid { grid-template-columns: 1fr; } }
   </style>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"MedicalWebPage","name":"추나·한방 통증 진료 전 체크 가이드","url":"https://hospital-ranking.kr/guide-chuna","description":"추나, 침, 한방 통증 진료를 상담하기 전 통증 위치, 기존 검사, 복용약, 치료 목표를 정리합니다.","dateModified":"2026-09-20","publisher":{"@type":"Organization","name":"병원찾기","url":"https://hospital-ranking.kr"},"about":[{"@type":"Thing","name":"추나"},{"@type":"Thing","name":"한의원"},{"@type":"Thing","name":"한방병원"},{"@type":"Thing","name":"통증"}],"citation":["https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000"]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"MedicalWebPage","name":"추나·한방 통증 진료 전 체크 가이드","url":"https://hospital-ranking.kr/guide-chuna","description":"추나, 침, 한방 통증 진료를 상담하기 전 통증 위치, 기존 검사, 복용약, 치료 목표를 정리합니다.","dateModified":"2026-09-26","publisher":{"@type":"Organization","name":"병원찾기","url":"https://hospital-ranking.kr"},"about":[{"@type":"Thing","name":"추나"},{"@type":"Thing","name":"한의원"},{"@type":"Thing","name":"한방병원"},{"@type":"Thing","name":"통증"}],"citation":["https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000"]}</script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1441018945572157" crossorigin="anonymous"></script>
 </head>
 <body class="light-mode">
@@ -60,7 +64,7 @@
         <h1 class="guide-title">추나·한방 통증 진료 전 체크 가이드</h1>
         <p class="guide-summary">추나, 침, 한방 통증 진료를 상담하기 전 통증 위치, 기존 검사, 복용약, 치료 목표를 정리합니다. 병원찾기의 건강가이드는 특정 병원을 홍보하기보다 방문 전 사용자가 스스로 질문을 정리할 수 있도록 돕는 참고 자료입니다.</p>
         <div class="guide-badges">
-          <span>최종 점검일 2026-09-20</span>
+          <span>최종 점검일 2026-09-26</span>
           <span>참고용 건강 정보</span>
           <span>정정 요청 replyleaders@naver.com</span>
         </div>
@@ -92,6 +96,26 @@
           <ul><li>통증 위치와 악화되는 동작을 적어두세요.</li>
 <li>MRI, X-ray 등 기존 검사 자료가 있으면 가져가세요.</li>
 <li>항응고제, 골다공증, 수술 이력 등 안전 관련 정보를 알려주세요.</li></ul>
+        </section>
+
+        <section class="guide-card-clean guide-deep-dive">
+          <h2>한방 통증 상담에 가져갈 기록</h2>
+          <p>추나·침·약침 등 명칭만으로 치료를 선택하지 말고 현재 상태 평가, 기존 진료, 복용약과 치료 목표를 먼저 전달하세요.</p>
+          <div class="guide-deep-grid">
+            <div>
+              <h3>진료 전에 적어갈 내용</h3>
+              <ul><li>통증이 시작된 계기와 위치, 움직일 때 달라지는 양상</li>
+<li>MRI·X-ray 결과와 정형외과·재활의학과 진료 이력</li>
+<li>항응고제, 골다공증 치료제 등 현재 복용약과 수술 이력</li>
+<li>추나·침 등 이전 한방치료 경험과 치료 뒤 나타난 변화</li></ul>
+            </div>
+            <div>
+              <h3>횟수와 비용을 확인할 때</h3>
+              <ul><li>권한 치료별 목적과 현재 상태에 적용하는 이유를 묻습니다.</li>
+<li>건강보험 적용 여부, 연간 인정 횟수, 본인부담 항목을 확인합니다.</li>
+<li>통증 악화나 새로운 저림·근력 변화가 생길 때 재평가 기준을 기록합니다.</li></ul>
+            </div>
+          </div>
         </section>
 
         <section class="guide-card-clean">
@@ -170,6 +194,6 @@
       </div>
     </div>
   </footer>
-  <script src="js/guide-page.js?v=5"></script>
+  <script src="js/guide-page.js?v=6"></script>
 </body>
 </html>

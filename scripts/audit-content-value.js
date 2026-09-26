@@ -35,7 +35,11 @@ for (const file of fs.readdirSync(root).filter((name) => name.endsWith('.html') 
   const url = `https://hospital-ranking.kr/${file === 'index.html' ? '' : file.replace(/\.html$/, '')}`;
   const externalLinks = [...main.matchAll(/href=["'](https?:\/\/[^"']+)["']/g)].map((match) => match[1]).filter((href) => !href.startsWith('https://hospital-ranking.kr'));
   const characters = strip(main).length;
-  pages.push({ file, characters, externalReferences: externalLinks.length, noindex, inSitemap: sitemap.includes(url) });
+  const hasDeepDive = /<section\b[^>]*class=["'][^"']*\bguide-deep-dive\b/.test(html);
+  pages.push({ file, characters, externalReferences: externalLinks.length, noindex, inSitemap: sitemap.includes(url), hasDeepDive });
+  if (/^guide-(?!hospital-search).*\.html$/.test(file) && (!hasDeepDive || characters < 1650)) {
+    errors.push(`${file}: guide-specific practical content is too thin`);
+  }
   if (noindex && sitemap.includes(url)) errors.push(`${file}: noindex URL in sitemap`);
   if (!html.includes('<meta charset="UTF-8">')) errors.push(`${file}: missing UTF-8 declaration`);
   if (/(?:href|src)=["']\s*["']/.test(html)) errors.push(`${file}: empty href or src attribute`);
@@ -99,6 +103,7 @@ const report = {
   hospitalsWithApiProvenance: exported.filter((hospital) => hospital.verificationStatus === 'api-retrieved' && hospital.sourceUrl && hospital.verifiedAt).length,
   hospitalsMissingProvenance: exported.filter((hospital) => !hospital.sourceUrl || !hospital.verifiedAt).length,
   hospitalsExplicitlyMarkedUnverified: exported.filter((hospital) => !hospital.verificationStatus || hospital.verificationStatus === 'unverified').length,
+  guidesWithDeepDive: pages.filter((page) => page.hasDeepDive).length,
   guidesWithoutExternalReferences: guideReview.map((page) => page.file),
   shortestContentPages: pages.filter((page) => !page.noindex && !['privacy.html', 'terms.html', 'contact.html', 'about.html', 'ad-policy.html', 'editorial-policy.html'].includes(page.file)).sort((a, b) => a.characters - b.characters).slice(0, 10),
   errors: [...new Set(errors)],

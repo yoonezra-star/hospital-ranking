@@ -46,6 +46,15 @@ const server = http.createServer((request, response) => {
       await page.screenshot({ path: screenshot });
       console.log(`Guide ${width}px screenshot: ${screenshot}`);
 
+      await page.goto(`${origin}/guide-urology`);
+      await page.locator('.guide-deep-dive').waitFor({ state: 'visible' });
+      assert((await page.locator('.guide-deep-dive').innerText()).includes('배뇨 증상을 구체적으로 설명하는 법'));
+      assert.equal(await page.locator('.guide-source-list a[href*="niddk.nih.gov"]').count(), 1);
+      assert.equal(await page.locator('.guide-link-row a[href$=".html"]').count(), 0);
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), 'Deep guide overflows viewport');
+      await page.locator('.guide-deep-dive').scrollIntoViewIfNeeded();
+      await page.screenshot({ path: path.join(os.tmpdir(), `hospital-deep-guide-${width}.png`), fullPage: true });
+
       await page.goto(`${origin}/night-dermatology`);
       await page.locator('.landing-note').filter({ hasText: '관련 페이지' }).waitFor({ state: 'visible' });
       assert((await page.locator('main').innerText()).includes('자주 묻는 질문'));

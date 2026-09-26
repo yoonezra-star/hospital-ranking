@@ -7,7 +7,7 @@
   <meta name="description" content="유방초음파 전 멍울, 통증, 검진 이력, 가족력, 추가검사 질문을 정리하는 방법입니다.">
   <link rel="canonical" href="https://hospital-ranking.kr/guide-breast-ultrasound">
   <meta name="robots" content="index,follow">
-  <link rel="stylesheet" href="css/style.css?v=12">
+  <link rel="stylesheet" href="css/style.css?v=13">
   <style>
     .guide-page-wrap { max-width: 1040px; padding-top: 48px; }
     .guide-hero-clean { padding: 34px; border: 1px solid var(--border-default); border-radius: 26px; background: radial-gradient(circle at 88% 8%, rgba(104, 134, 127, 0.18), transparent 28%), linear-gradient(135deg, color-mix(in srgb, var(--bg-card) 88%, white 12%), color-mix(in srgb, var(--bg-body) 90%, white 10%)); box-shadow: var(--shadow-sm); }
@@ -20,6 +20,10 @@
     .guide-card-clean { padding: 26px; border: 1px solid var(--border-default); border-radius: 22px; background: var(--bg-card); box-shadow: var(--shadow-xs); }
     .guide-card-clean h2 { margin: 0 0 14px; font-size: 1.35rem; color: var(--text-heading); }
     .guide-card-clean p { color: var(--text-body); line-height: 1.82; margin: 0; }
+    .guide-deep-dive > p { margin-bottom: 18px; }
+    .guide-deep-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .guide-deep-grid > div { padding: 18px; border: 1px solid var(--border-default); border-radius: 16px; background: var(--bg-body); }
+    .guide-deep-grid h3 { margin: 0 0 12px; font-size: 1.05rem; color: var(--text-heading); }
     .guide-plan-note { margin-top: 16px !important; padding-top: 14px; border-top: 1px solid var(--border-default); color: var(--text-muted) !important; }
     .guide-content ul, .guide-content ol { list-style: disc; padding-left: 20px; margin: 0; display: grid; gap: 9px; }
     .guide-content ol { list-style: decimal; }
@@ -36,9 +40,9 @@
     .guide-safety-note h2 { margin: 0 0 12px; font-size: 1.2rem; }
     .guide-link-row { display: flex; flex-wrap: wrap; gap: 10px; }
     .guide-link-row a { text-decoration: none; border-radius: 12px; }
-    @media (max-width: 768px) { .guide-page-wrap { padding-top: 34px; } .guide-hero-clean, .guide-card-clean { padding: 22px 18px; } .guide-title { font-size: 2rem; } }
+    @media (max-width: 768px) { .guide-page-wrap { padding-top: 34px; } .guide-hero-clean, .guide-card-clean { padding: 22px 18px; } .guide-title { font-size: 2rem; } .guide-deep-grid { grid-template-columns: 1fr; } }
   </style>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"MedicalWebPage","name":"유방초음파 상담 전 체크 가이드","url":"https://hospital-ranking.kr/guide-breast-ultrasound","description":"유방초음파 전 멍울, 통증, 검진 이력, 가족력, 추가검사 질문을 정리하는 방법입니다.","dateModified":"2026-09-20","publisher":{"@type":"Organization","name":"병원찾기","url":"https://hospital-ranking.kr"},"about":[{"@type":"Thing","name":"유방초음파"},{"@type":"Thing","name":"유방검진"},{"@type":"Thing","name":"멍울"},{"@type":"Thing","name":"여성검진"}],"citation":["https://edu.cancer.go.kr/lay1/S1T553C555/contents.do"]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"MedicalWebPage","name":"유방초음파 상담 전 체크 가이드","url":"https://hospital-ranking.kr/guide-breast-ultrasound","description":"유방초음파 전 멍울, 통증, 검진 이력, 가족력, 추가검사 질문을 정리하는 방법입니다.","dateModified":"2026-09-26","publisher":{"@type":"Organization","name":"병원찾기","url":"https://hospital-ranking.kr"},"about":[{"@type":"Thing","name":"유방초음파"},{"@type":"Thing","name":"유방검진"},{"@type":"Thing","name":"멍울"},{"@type":"Thing","name":"여성검진"}],"citation":["https://edu.cancer.go.kr/lay1/S1T553C555/contents.do"]}</script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1441018945572157" crossorigin="anonymous"></script>
 </head>
 <body class="light-mode">
@@ -60,7 +64,7 @@
         <h1 class="guide-title">유방초음파 상담 전 체크 가이드</h1>
         <p class="guide-summary">유방초음파 전 멍울, 통증, 검진 이력, 가족력, 추가검사 질문을 정리하는 방법입니다. 병원찾기의 건강가이드는 특정 병원을 홍보하기보다 방문 전 사용자가 스스로 질문을 정리할 수 있도록 돕는 참고 자료입니다.</p>
         <div class="guide-badges">
-          <span>최종 점검일 2026-09-20</span>
+          <span>최종 점검일 2026-09-26</span>
           <span>참고용 건강 정보</span>
           <span>정정 요청 replyleaders@naver.com</span>
         </div>
@@ -92,6 +96,26 @@
           <ul><li>멍울 위치, 발견 시점, 통증 여부를 적어두세요.</li>
 <li>이전 유방검진 결과와 가족력을 정리하세요.</li>
 <li>생리주기와 증상 변화가 관련 있는지 메모하세요.</li></ul>
+        </section>
+
+        <section class="guide-card-clean guide-deep-dive">
+          <h2>멍울과 통증 위치를 설명하는 기록법</h2>
+          <p>유방 증상은 좌우 위치와 처음 발견한 시점, 이전 검사와의 비교가 중요합니다. 진단을 추정하기보다 의료진에게 전달할 관찰 내용을 구체적으로 정리하세요.</p>
+          <div class="guide-deep-grid">
+            <div>
+              <h3>진료 전에 적어갈 내용</h3>
+              <ul><li>왼쪽·오른쪽 중 어느 쪽인지와 유두를 기준으로 한 대략적인 위치</li>
+<li>처음 발견한 날짜와 크기·통증이 달라졌다고 느낀 시점</li>
+<li>피부나 유두의 변화, 분비물 여부와 관찰한 날짜</li>
+<li>이전 유방촬영·초음파 검사일, 검사 기관, 결과지 보유 여부</li></ul>
+            </div>
+            <div>
+              <h3>결과 설명을 들을 때</h3>
+              <ul><li>이번 검사가 유방촬영인지 초음파인지 정확한 검사명을 확인합니다.</li>
+<li>이전 영상과 비교했는지, 추가검사 또는 추적관찰이 필요한지 묻습니다.</li>
+<li>결과지와 영상 사본을 받을 수 있는 방법을 확인해 다음 방문에 활용합니다.</li></ul>
+            </div>
+          </div>
         </section>
 
         <section class="guide-card-clean">
@@ -170,6 +194,6 @@
       </div>
     </div>
   </footer>
-  <script src="js/guide-page.js?v=5"></script>
+  <script src="js/guide-page.js?v=6"></script>
 </body>
 </html>
