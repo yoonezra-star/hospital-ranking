@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-09-26T03:38:37.945Z",
+  "generatedAt": "2026-09-26T04:03:02.802Z",
   "sourceType": "hira-api-snapshot",
   "sourceName": "건강보험심사평가원 병원기본정보 API",
   "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
-  "queryCount": 29,
-  "totalCount": 605,
+  "queryCount": 31,
+  "totalCount": 699,
   "hospitals": [
     {
       "id": "JDQ4MTg4MSM1MSMkMSMkMCMkOTkkMzgxMzUxIzQxIyQxIyQ3IyQwMyQ0NjEwMDIjNTEjJDEjJDIjJDgz",
@@ -469,6 +469,33 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxNzAyIzIxIyQxIyQxIyQ4OSQzNjEwMDIjNTEjJDEjJDYjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxNzAyIzIxIyQxIyQxIyQ4OSQzNjEwMDIjNTEjJDEjJDYjJDgz",
+      "name": "365열린가정의학과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 도곡로 405, 삼환 아르누보2 204호 (대치동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "대치동",
+      "phone": "02-565-7119",
+      "openDate": "2018-01-25",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTYyMiM2MSMkMiMkMiMkMDAkMzgxNzAyIzIxIyQxIyQ1IyQ5MiQyNjE0ODEjNTEjJDEjJDYjJDgz",
       "hiraId": "JDQ4MTYyMiM2MSMkMiMkMiMkMDAkMzgxNzAyIzIxIyQxIyQ1IyQ5MiQyNjE0ODEjNTEjJDEjJDYjJDgz",
       "name": "365열린연합의원",
@@ -651,6 +678,33 @@
       "town": "가락동",
       "phone": "403-9102",
       "openDate": "2000-06-02",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxMzUxIzMxIyQxIyQ3IyQ3OSQ0NjEwMDIjODEjJDEjJDIjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxMzUxIzMxIyQxIyQ3IyQ3OSQ0NjEwMDIjODEjJDEjJDIjJDgz",
+      "name": "가락한솔의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 양재대로 932, 관리업무동 5층 505호 (가락동, 가락동 농수산물도매시장)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "가락동",
+      "phone": "02-6978-3456",
+      "openDate": "2015-12-14",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -1511,12 +1565,93 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxOTYxIzIxIyQxIyQ5IyQ3OSQzNjEyMjIjODEjJDEjJDIjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxOTYxIzIxIyQxIyQ5IyQ3OSQzNjEyMjIjODEjJDEjJDIjJDgz",
+      "name": "강남도쿄안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 강남대로 442, 5층 (역삼동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "역삼동",
+      "phone": "02-6956-8882",
+      "openDate": "2025-05-08",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMzUxIzExIyQxIyQzIyQ4MiQ0NjEwMDIjNjEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMzUxIzExIyQxIyQzIyQ4MiQ0NjEwMDIjNjEjJDEjJDQjJDgz",
+      "name": "강남바른내과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 선릉로 324, SH타워 4층 (대치동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "대치동",
+      "phone": "02-6232-7500",
+      "openDate": "2021-08-05",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxMzUxIzExIyQxIyQzIyQ3MiQyNjE4MzIjODEjJDEjJDYjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxMzUxIzExIyQxIyQzIyQ3MiQyNjE4MzIjODEjJDEjJDYjJDgz",
+      "name": "강남밝은미소안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 강남대로 408, YBM강남센터 3층 (역삼동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "역삼동",
+      "phone": "1544-2271",
+      "openDate": "2019-09-19",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQ3IyQ2MiQyNjE0ODEjNzEjJDEjJDgjJDgz",
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQ3IyQ2MiQyNjE0ODEjNzEjJDEjJDgjJDgz",
       "name": "강남베드로병원",
       "type": "종합병원",
-      "department": "산부인과",
-      "departmentId": "obgyn",
+      "department": "내과",
+      "departmentId": "internal",
       "registeredDepartmentIds": [
         "internal",
         "obgyn",
@@ -1541,6 +1676,33 @@
       "town": "도곡동",
       "phone": "1544-7522",
       "openDate": "2003-12-19",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxMzUxIzQxIyQxIyQ3IyQ5OSQyNjEyMjIjNDEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxMzUxIzQxIyQxIyQ3IyQ5OSQyNjEyMjIjNDEjJDEjJDQjJDgz",
+      "name": "강남베스트성모안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 논현로 503, 14층 1호 (역삼동, 송촌빌딩)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "역삼동",
+      "phone": "02-6271-1000",
+      "openDate": "2014-10-08",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -1602,6 +1764,114 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxNzAyIzMxIyQxIyQzIyQ3MiQyNjE0ODEjODEjJDEjJDYjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxNzAyIzMxIyQxIyQzIyQ3MiQyNjE0ODEjODEjJDEjJDYjJDgz",
+      "name": "강남서울밝은안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 강남대로 390, 18층 (역삼동, 미진프라자)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "역삼동",
+      "phone": "02-1588-3882",
+      "openDate": "2010-12-31",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMTkxIzExIyQxIyQzIyQwMyQzNjE0ODEjNDEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMTkxIzExIyQxIyQzIyQwMyQzNjE0ODEjNDEjJDEjJDQjJDgz",
+      "name": "강남성모안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 강남대로 240, 양재SK허브프리모 2층 209호 (도곡동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "도곡동",
+      "phone": "02-3481-9977",
+      "openDate": "2025-03-31",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxMTkxIzExIyQxIyQ3IyQ3OSQ0NjE0ODEjODEjJDEjJDYjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxMTkxIzExIyQxIyQ3IyQ3OSQ0NjE0ODEjODEjJDEjJDYjJDgz",
+      "name": "강남성모이비인후과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 강남대로 334, (역삼동, 6층일부)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "역삼동",
+      "phone": "02-552-5400",
+      "openDate": "2009-03-19",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxOTYxIzUxIyQxIyQ1IyQ4OSQyNjEyMjIjNjEjJDEjJDAjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxOTYxIzUxIyQxIyQ1IyQ4OSQyNjEyMjIjNjEjJDEjJDAjJDgz",
+      "name": "강남센트럴안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 테헤란로 333, 신도벤처타워 9층 (역삼동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "역삼동",
+      "phone": "02-555-1369",
+      "openDate": "2021-04-12",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTYyMiM4MSMkMiMkMCMkMDAkNDgxOTYxIzExIyQxIyQ3IyQxMyQzNjEwMDIjODEjJDEjJDIjJDgz",
       "hiraId": "JDQ4MTYyMiM4MSMkMiMkMCMkMDAkNDgxOTYxIzExIyQxIyQ3IyQxMyQzNjEwMDIjODEjJDEjJDIjJDgz",
       "name": "강남수의원",
@@ -1622,6 +1892,195 @@
       "town": "대현동",
       "phone": "053-944-0124",
       "openDate": "2016-03-08",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxOTYxIzUxIyQxIyQxIyQxMyQyNjEyMjIjNjEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxOTYxIzUxIyQxIyQxIyQxMyQyNjEyMjIjNjEjJDEjJDgjJDgz",
+      "name": "강남신세계안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 강남대로 476, urbanhive 14층 (논현동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "논현동",
+      "phone": "0507-1416-4248",
+      "openDate": "2021-03-26",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkNTgxMzUxIzUxIyQxIyQxIyQ5OSQyNjEyMjIjNjEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkNTgxMzUxIzUxIyQxIyQxIyQ5OSQyNjEyMjIjNjEjJDEjJDgjJDgz",
+      "name": "강남아이메디안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 강남대로 402, 3층 (역삼동, 시계탑빌딩)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "역삼동",
+      "phone": "02-561-8885",
+      "openDate": "2008-06-30",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMzUxIzExIyQxIyQ3IyQ5OSQyNjEwMDIjNzEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMzUxIzExIyQxIyQ3IyQ5OSQyNjEwMDIjNzEjJDEjJDgjJDgz",
+      "name": "강남에이스안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 테헤란로 151, 역삼하이츠빌딩 2층,지하1층 2호 (역삼동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "역삼동",
+      "phone": "02-564-1004",
+      "openDate": "2021-08-30",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMzUxIzIxIyQxIyQxIyQ5MiQ0NjE0ODEjNzEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMzUxIzIxIyQxIyQxIyQ5MiQ0NjE0ODEjNzEjJDEjJDgjJDgz",
+      "name": "강남연세안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 테헤란로 339, 선릉빌딩 4층 (역삼동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "역삼동",
+      "phone": "02-553-3588",
+      "openDate": "2021-12-31",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxOTYxIzIxIyQxIyQ5IyQ3OSQyNjEyMjIjNTEjJDEjJDYjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxOTYxIzIxIyQxIyQ5IyQ3OSQyNjEyMjIjNTEjJDEjJDYjJDgz",
+      "name": "강남의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 마천로51길 2, 2층 (마천동, 수정빌딩)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "마천동",
+      "phone": "02-408-7999",
+      "openDate": "2011-08-03",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxMTkxIzIxIyQxIyQ1IyQ4OSQ0NjEwMDIjNzEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxMTkxIzIxIyQxIyQ1IyQ4OSQ0NjEwMDIjNzEjJDEjJDgjJDgz",
+      "name": "강남이룸안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 강남대로 358, 강남358타워B1층 (역삼동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "역삼동",
+      "phone": "02-6952-0975",
+      "openDate": "2019-11-25",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxNzAyIzIxIyQxIyQxIyQ5OSQzNjEwMDIjODEjJDEjJDYjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxNzAyIzIxIyQxIyQxIyQ5OSQzNjEwMDIjODEjJDEjJDYjJDgz",
+      "name": "강남조은눈안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 테헤란로 107, 비전타워 7층,9층 (역삼동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "역삼동",
+      "phone": "02-535-8001",
+      "openDate": "2009-10-16",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -1656,12 +2115,93 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxOTYxIzIxIyQyIyQ1IyQwMCQ0NjEwMDIjNjEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxOTYxIzIxIyQyIyQ1IyQwMCQ0NjEwMDIjNjEjJDEjJDgjJDgz",
+      "name": "강남코모키이비인후과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 강남대로 378, (역삼동, 준빌딩 4층)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "역삼동",
+      "phone": "02-508-0075",
+      "openDate": "2011-06-03",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxOTYxIzUxIyQxIyQxIyQ4OSQyNjEwMDIjNDEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxOTYxIzUxIyQxIyQxIyQ4OSQyNjEwMDIjNDEjJDEjJDQjJDgz",
+      "name": "강남큐브안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 선릉로 703, HS TOWER 6층 (논현동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "논현동",
+      "phone": "02-555-2080",
+      "openDate": "2024-09-25",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxOTYxIzIxIyQxIyQ5IyQwMyQyNjEyMjIjNTEjJDEjJDYjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxOTYxIzIxIyQxIyQ5IyQwMyQyNjEyMjIjNTEjJDEjJDYjJDgz",
+      "name": "강남현안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 강남대로 246, 다림빌딩 3층 (도곡동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "도곡동",
+      "phone": "02-3462-8800",
+      "openDate": "1992-10-13",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQ3IyQ5OSQzNjE4MzIjNDEjJDEjJDQjJDgz",
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQ3IyQ5OSQzNjE4MzIjNDEjJDEjJDQjJDgz",
       "name": "강동경희대학교병원",
       "type": "종합병원",
-      "department": "안과",
-      "departmentId": "ophthalmology",
+      "department": "치과",
+      "departmentId": "dental",
       "registeredDepartmentIds": [
         "dental",
         "dermatology",
@@ -2434,6 +2974,60 @@
       "town": "금촌동",
       "phone": "031-820-3402",
       "openDate": "2013-02-14",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxOTYxIzIxIyQxIyQ1IyQ4OSQ0NjEwMDIjNTEjJDEjJDYjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxOTYxIzIxIyQxIyQ1IyQ4OSQ0NjEwMDIjNTEjJDEjJDYjJDgz",
+      "name": "개포삼성안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 선릉로 34, 지하1층 (개포동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "개포동",
+      "phone": "02-6958-7500",
+      "openDate": "2024-01-25",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMzUxIzUxIyQxIyQ1IyQwMyQ0NjE0ODEjODEjJDEjJDYjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMzUxIzUxIyQxIyQ1IyQwMyQ0NjE0ODEjODEjJDEjJDYjJDgz",
+      "name": "갤러리아피부과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 선릉로 34, 3층, 지하2층 (개포동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "개포동",
+      "phone": "02-573-9839",
+      "openDate": "2023-04-28",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -3355,8 +3949,8 @@
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQ4OSQzNjE4MzIjNjEjJDEjJDgjJDgz",
       "name": "경찰병원",
       "type": "종합병원",
-      "department": "안과",
-      "departmentId": "ophthalmology",
+      "department": "산부인과",
+      "departmentId": "obgyn",
       "registeredDepartmentIds": [
         "dermatology",
         "ent",
@@ -3883,6 +4477,33 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxOTYxIzIxIyQxIyQ1IyQ5MiQyNjE4MzIjNjEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxOTYxIzIxIyQxIyQ1IyQ5MiQyNjE4MzIjNjEjJDEjJDgjJDgz",
+      "name": "고은빛산부인과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 오금로 95, 국제빌딩 지하1층, 2~8층 (방이동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "방이동",
+      "phone": "02-421-3030",
+      "openDate": "2011-07-01",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTYyMiM2MSMkMiMkMiMkMDAkMzgxNzAyIzUxIyQxIyQxIyQ3OSQyNjE0ODEjNjEjJDEjJDAjJDgz",
       "hiraId": "JDQ4MTYyMiM2MSMkMiMkMiMkMDAkMzgxNzAyIzUxIyQxIyQxIyQ3OSQyNjE0ODEjNjEjJDEjJDAjJDgz",
       "name": "고은소아청소년과의원",
@@ -4238,8 +4859,8 @@
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQyIyQ3IyQwMCQ0NjE0ODEjNjEjJDEjJDQjJDgz",
       "name": "구로성심병원",
       "type": "종합병원",
-      "department": "산부인과",
-      "departmentId": "obgyn",
+      "department": "내과",
+      "departmentId": "internal",
       "registeredDepartmentIds": [
         "internal",
         "obgyn",
@@ -4262,6 +4883,33 @@
       "town": "고척동",
       "phone": "02-2067-1500",
       "openDate": "2000-02-09",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxMzUxIzExIyQxIyQ3IyQ3MiQ0NjEwMDIjNjEjJDEjJDAjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxMzUxIzExIyQxIyQ3IyQ3MiQ0NjEwMDIjNjEjJDEjJDAjJDgz",
+      "name": "구름의자의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 논현로 841, (신사동, 제이비 미소빌딩, 206호 일부)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "신사동",
+      "phone": "02-1544-6378",
+      "openDate": "2017-08-10",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -5130,6 +5778,60 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxNzAyIzUxIyQyIyQxIyQwMCQyNjE4MzIjNDEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxNzAyIzUxIyQyIyQxIyQwMCQyNjE4MzIjNDEjJDEjJDQjJDgz",
+      "name": "그리다성형외과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 강남대로 408, YBM강남센터 1201호 (역삼동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "역삼동",
+      "phone": "02-558-0090",
+      "openDate": "2016-11-17",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxNzAyIzIxIyQxIyQ5IyQ4OSQyNjEyMjIjNDEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxNzAyIzIxIyQxIyQ5IyQ4OSQyNjEyMjIjNDEjJDEjJDQjJDgz",
+      "name": "그린소아청소년과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 영동대로137길 3, 2층 일부 (청담동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "청담동",
+      "phone": "02-543-0577",
+      "openDate": "2018-07-05",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTYyMiM4MSMkMSMkMCMkOTkkMzgxMzUxIzIxIyQxIyQ1IyQ4MiQyNjE4MzIjNDEjJDEjJDgjJDgz",
       "hiraId": "JDQ4MTYyMiM4MSMkMSMkMCMkOTkkMzgxMzUxIzIxIyQxIyQ1IyQ4MiQyNjE4MzIjNDEjJDEjJDgjJDgz",
       "name": "근로복지공단 대구병원",
@@ -5460,8 +6162,8 @@
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQ3IyQ2MiQyNjEyMjIjNTEjJDEjJDYjJDgz",
       "name": "기쁨병원",
       "type": "종합병원",
-      "department": "산부인과",
-      "departmentId": "obgyn",
+      "department": "내과",
+      "departmentId": "internal",
       "registeredDepartmentIds": [
         "dermatology",
         "ent",
@@ -5679,6 +6381,33 @@
       "town": "법원읍",
       "phone": "031-958-2875",
       "openDate": "1988-04-27",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxMzUxIzIxIyQxIyQ1IyQxMyQzNjE0ODEjNjEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxMzUxIzIxIyQxIyQ1IyQxMyQzNjE0ODEjNjEjJDEjJDQjJDgz",
+      "name": "김미경산부인과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 송파대로 111, 205동 313호 (문정동, 파크하비오)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "문정동",
+      "phone": "02-401-2256",
+      "openDate": "2018-02-06",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -5976,6 +6705,33 @@
       "town": "율전동",
       "phone": "031-207-3988",
       "openDate": "1992-06-04",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxMTkxIzIxIyQxIyQ5IyQ5MiQyNjEwMDIjNDEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxMTkxIzIxIyQxIyQ5IyQ5MiQyNjEwMDIjNDEjJDEjJDQjJDgz",
+      "name": "김성희마리안산부인과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 올림픽로35가길 9, 2층 (신천동, 잠실푸르지오월드마크 )",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "신천동",
+      "phone": "02-419-2009",
+      "openDate": "2013-10-07",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -6334,6 +7090,33 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkNTgxOTYxIzQxIyQyIyQ3IyQwMCQyNjE0ODEjNjEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkNTgxOTYxIzQxIyQyIyQ3IyQwMCQyNjE0ODEjNjEjJDEjJDgjJDgz",
+      "name": "김윤숙산부인과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 올림픽로 108, (잠실동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "잠실동",
+      "phone": "02-422-7779",
+      "openDate": "2001-08-28",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTAxMiM1MSMkMSMkMCMkNzIkMzgxMzUxIzUxIyQxIyQ1IyQ5OSQzNjEyMjIjNTEjJDEjJDYjJDgz",
       "hiraId": "JDQ4MTAxMiM1MSMkMSMkMCMkNzIkMzgxMzUxIzUxIyQxIyQ1IyQ5OSQzNjEyMjIjNTEjJDEjJDYjJDgz",
       "name": "김은경치과의원",
@@ -6415,6 +7198,33 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkNDgxOTYxIzMxIyQyIyQzIyQwMCQzNjE4MzIjODEjJDEjJDYjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkNDgxOTYxIzMxIyQyIyQzIyQwMCQzNjE4MzIjODEjJDEjJDYjJDgz",
+      "name": "김인섭의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 논현로 64, 삼우빌딩 3층 (개포동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "개포동",
+      "phone": "02-529-4318",
+      "openDate": "2021-07-09",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTg4MSM1MSMkMSMkMCMkNzIkMzgxMTkxIzUxIyQxIyQxIyQ2MiQyNjEwMDIjODEjJDEjJDYjJDgz",
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkNzIkMzgxMTkxIzUxIyQxIyQxIyQ2MiQyNjEwMDIjODEjJDEjJDYjJDgz",
       "name": "김인치과의원",
@@ -6489,6 +7299,33 @@
       "town": "고덕동",
       "phone": "02-427-8302",
       "openDate": "1992-10-29",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkMzgxNzAyIzMxIyQxIyQ3IyQxMyQyNjE0ODEjNDEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkMzgxNzAyIzMxIyQxIyQ3IyQxMyQyNjE0ODEjNDEjJDEjJDgjJDgz",
+      "name": "김정자산부인과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 석촌호수로 234, (석촌동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "석촌동",
+      "phone": "02-415-7718",
+      "openDate": "1985-12-14",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -6624,6 +7461,33 @@
       "town": "만수동",
       "phone": "032-463-5606",
       "openDate": "1989-02-23",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxMzUxIzExIyQxIyQzIyQ3OSQzNjE4MzIjNDEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxMzUxIzExIyQxIyQzIyQ3OSQzNjE4MzIjNDEjJDEjJDgjJDgz",
+      "name": "김철우내과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 양산로 42, (거여동, 2층)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "거여동",
+      "phone": "02-407-4202",
+      "openDate": "2002-01-21",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -6928,6 +7792,60 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkMzgxNzAyIzQxIyQyIyQ3IyQwMCQ0NjE0ODEjODEjJDEjJDYjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkMzgxNzAyIzQxIyQyIyQ3IyQwMCQ0NjE0ODEjODEjJDEjJDYjJDgz",
+      "name": "김혜숙산부인과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 마천로41길 22, (마천동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "마천동",
+      "phone": "02-403-7300",
+      "openDate": "1985-02-11",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkNTgxMzUxIzUxIyQxIyQ1IyQ4OSQzNjE4MzIjNjEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkNTgxMzUxIzUxIyQxIyQ1IyQ4OSQzNjE4MzIjNjEjJDEjJDgjJDgz",
+      "name": "김호중이비인후과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 삼성로 38, 개포빌딩 3층 302호 (개포동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "개포동",
+      "phone": "02-3412-0107",
+      "openDate": "2000-04-24",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTg4MSM1MSMkMSMkMCMkNzIkMzgxNzAyIzMxIyQxIyQzIyQ5MiQyNjE0ODEjODEjJDEjJDYjJDgz",
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkNzIkMzgxNzAyIzMxIyQxIyQzIyQ5MiQyNjE0ODEjODEjJDEjJDYjJDgz",
       "name": "김홍욱치과의원",
@@ -7002,6 +7920,33 @@
       "town": "안양동",
       "phone": "031-444-8928",
       "openDate": "2014-06-02",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkNDgxNzAyIzIxIyQxIyQ5IyQ3MiQ0NjEwMDIjNjEjJDEjJDAjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkNDgxNzAyIzIxIyQxIyQ5IyQ3MiQ0NjEwMDIjNjEjJDEjJDAjJDgz",
+      "name": "나도균의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 학동로 338, (논현동, S105호 일부)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "논현동",
+      "phone": "02-3446-7510",
+      "openDate": "2009-01-06",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -7492,8 +8437,8 @@
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQ3IyQ5OSQzNjEwMDIjNTEjJDEjJDYjJDgz",
       "name": "녹색병원",
       "type": "종합병원",
-      "department": "산부인과",
-      "departmentId": "obgyn",
+      "department": "내과",
+      "departmentId": "internal",
       "registeredDepartmentIds": [
         "ent",
         "internal",
@@ -7639,6 +8584,33 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxOTYxIzIxIyQyIyQxIyQwMCQzNjEyMjIjNzEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxOTYxIzIxIyQyIyQxIyQwMCQzNjEyMjIjNzEjJDEjJDgjJDgz",
+      "name": "누의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 도산대로45길 10-7, 신사동  K빌딩 2,3층 (신사동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "신사동",
+      "phone": "02-6951-0304",
+      "openDate": "2023-11-23",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDU4MTI3MSM1MSMkMiMkMCMkMDAkNDgxNzAyIzMxIyQxIyQzIyQ3OSQzNjEyMjIjODEjJDEjJDIjJDgz",
       "hiraId": "JDU4MTI3MSM1MSMkMiMkMCMkMDAkNDgxNzAyIzMxIyQxIyQzIyQ3OSQzNjEyMjIjODEjJDEjJDIjJDgz",
       "name": "눈애안과의원",
@@ -7713,6 +8685,33 @@
       "town": "서창동",
       "phone": "1660-1667",
       "openDate": "2023-08-21",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxMzUxIzQxIyQxIyQ3IyQ4OSQzNjEyMjIjNjEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxMzUxIzQxIyQxIyQ3IyQ4OSQzNjEyMjIjNjEjJDEjJDQjJDgz",
+      "name": "눈에미소안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 강남대로 364, 미왕빌딩 7, 8층 (역삼동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "역삼동",
+      "phone": "02-501-7725",
+      "openDate": "2007-06-07",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -8154,6 +9153,33 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxNzAyIzUxIyQxIyQ1IyQ5MiQzNjEyMjIjNDEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxNzAyIzUxIyQxIyQ1IyQ5MiQzNjEyMjIjNDEjJDEjJDQjJDgz",
+      "name": "다온헬스케어의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 송파대로 111, (문정동, 파크하비오 하비오타워 법조대로 205동 401~419호)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "문정동",
+      "phone": "02-6941-0101",
+      "openDate": "2017-03-15",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTYyMiM1MSMkMSMkMCMkNzIkNDgxMTkxIzMxIyQxIyQzIyQ4OSQyNjEwMDIjNjEjJDEjJDQjJDgz",
       "hiraId": "JDQ4MTYyMiM1MSMkMSMkMCMkNzIkNDgxMTkxIzMxIyQxIyQzIyQ4OSQyNjEwMDIjNjEjJDEjJDQjJDgz",
       "name": "다올치과의원",
@@ -8336,6 +9362,87 @@
       "town": "가락동",
       "phone": "02-431-2875",
       "openDate": "2009-08-12",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxOTYxIzExIyQxIyQ3IyQ5MiQzNjE4MzIjODEjJDEjJDIjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxOTYxIzExIyQxIyQ3IyQ5MiQzNjE4MzIjODEjJDEjJDIjJDgz",
+      "name": "닥터아이씨엘안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 강남대로 390, 미진프라자 20층 (역삼동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "역삼동",
+      "phone": "02-566-1215",
+      "openDate": "2023-09-18",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxOTYxIzIxIyQxIyQ1IyQ5OSQzNjEyMjIjNjEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxOTYxIzIxIyQxIyQ1IyQ5OSQzNjEyMjIjNjEjJDEjJDgjJDgz",
+      "name": "닥터예스팀산부인과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 마천로 29, 6층 (방이동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "방이동",
+      "phone": "02-423-6614",
+      "openDate": "2020-02-26",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMzUxIzExIyQxIyQzIyQ4MiQzNjE4MzIjODEjJDEjJDYjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMzUxIzExIyQxIyQzIyQ4MiQzNjE4MzIjODEjJDEjJDYjJDgz",
+      "name": "닥터오즈여성의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 올림픽로35길 112, 장미상가 B동 224,225,232,233호 (신천동) (신천동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "신천동",
+      "phone": "02-420-5350",
+      "openDate": "2021-08-04",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -8670,8 +9777,8 @@
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQ4MiQ0NjEwMDIjODEjJDEjJDYjJDgz",
       "name": "대림성모병원",
       "type": "종합병원",
-      "department": "산부인과",
-      "departmentId": "obgyn",
+      "department": "내과",
+      "departmentId": "internal",
       "registeredDepartmentIds": [
         "ent",
         "internal",
@@ -9226,6 +10333,60 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMTkxIzUxIyQxIyQxIyQ4OSQzNjE4MzIjNjEjJDEjJDAjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMTkxIzUxIyQxIyQxIyQ4OSQzNjE4MzIjNjEjJDEjJDAjJDgz",
+      "name": "대치보라안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 남부순환로 2941, 대치탑프라자 201호 (대치동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "대치동",
+      "phone": "02-2039-6115",
+      "openDate": "2026-06-11",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkNDgxOTYxIzIxIyQxIyQ1IyQ3MiQyNjEwMDIjNDEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkNDgxOTYxIzIxIyQxIyQ1IyQ3MiQyNjEwMDIjNDEjJDEjJDgjJDgz",
+      "name": "대치연세안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 도곡로 408, 디마크 빌딩 5층 501호,502호,503호,504호호 (대치동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "대치동",
+      "phone": "02-558-0088",
+      "openDate": "2010-06-25",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTYyMiM1MSMkMSMkMCMkNzIkMzgxOTYxIzExIyQxIyQ3IyQxMyQzNjEwMDIjNTEjJDEjJDYjJDgz",
       "hiraId": "JDQ4MTYyMiM1MSMkMSMkMCMkNzIkMzgxOTYxIzExIyQxIyQ3IyQxMyQzNjEwMDIjNTEjJDEjJDYjJDgz",
       "name": "대한치과의원",
@@ -9307,6 +10468,33 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxMzUxIzIxIyQxIyQ1IyQ2MiQyNjEyMjIjNDEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxMzUxIzIxIyQxIyQ1IyQ2MiQyNjEyMjIjNDEjJDEjJDgjJDgz",
+      "name": "더밸런스강남의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 강남대로94길 18, 2,3층 (역삼동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "역삼동",
+      "phone": "02-511-9565",
+      "openDate": "2024-04-24",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTg4MSM1MSMkMSMkMCMkNzIkNDgxMzUxIzQxIyQyIyQ3IyQwMCQyNjEyMjIjNjEjJDEjJDAjJDgz",
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkNzIkNDgxMzUxIzQxIyQyIyQ3IyQwMCQyNjEyMjIjNjEjJDEjJDAjJDgz",
       "name": "더봄치과의원",
@@ -9327,6 +10515,60 @@
       "town": "봉천동",
       "phone": "02-876-2826",
       "openDate": "1991-05-16",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxMzUxIzIxIyQxIyQxIyQ4MiQzNjEyMjIjNDEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxMzUxIzIxIyQxIyQxIyQ4MiQzNjEyMjIjNDEjJDEjJDgjJDgz",
+      "name": "더블유산부인과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 올림픽로 119, 2층 B1,B2호 (잠실동, 잠실파인애플상가)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "잠실동",
+      "phone": "02-421-0430",
+      "openDate": "2009-04-13",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQ1IyQ4OSQyNjE0ODEjNjEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQ1IyQ4OSQyNjE0ODEjNjEjJDEjJDgjJDgz",
+      "name": "더사랑요양병원",
+      "type": "요양병원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 마천로 227, 보은빌딩 (마천동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "마천동",
+      "phone": "02-6959-5522",
+      "openDate": "2014-04-15",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -9388,6 +10630,87 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxOTYxIzUxIyQxIyQxIyQ3OSQ0NjEwMDIjODEjJDEjJDIjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxOTYxIzUxIyQxIyQxIyQ3OSQ0NjEwMDIjODEjJDEjJDIjJDgz",
+      "name": "더연세안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 남부순환로 2912, 우성아파트상가 3층 302,302-1호 (대치동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "대치동",
+      "phone": "02-539-7658",
+      "openDate": "2021-01-22",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxOTYxIzMxIyQxIyQzIyQ2MiQ0NjEwMDIjODEjJDEjJDIjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxOTYxIzMxIyQxIyQzIyQ2MiQ0NjEwMDIjODEjJDEjJDIjJDgz",
+      "name": "더원서울안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 강남대로 652, 8,9층 (신사동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "신사동",
+      "phone": "02-585-0202",
+      "openDate": "2020-07-20",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxNzAyIzUxIyQxIyQ1IyQ2MiQyNjE0ODEjNzEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxNzAyIzUxIyQxIyQ1IyQ2MiQyNjE0ODEjNzEjJDEjJDgjJDgz",
+      "name": "더클래식의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 학동로 206, 동화빌딩 5층 (논현동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "논현동",
+      "phone": "02-542-4335",
+      "openDate": "2011-12-16",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDU4MTI3MSM1MSMkMiMkMCMkMDAkNTgxMzUxIzIxIyQxIyQ5IyQ2MiQzNjE4MzIjNjEjJDEjJDAjJDgz",
       "hiraId": "JDU4MTI3MSM1MSMkMiMkMCMkMDAkNTgxMzUxIzIxIyQxIyQ5IyQ2MiQzNjE4MzIjNjEjJDEjJDAjJDgz",
       "name": "더편한장사랑내과의원",
@@ -9408,6 +10731,33 @@
       "town": "간석동",
       "phone": "032-721-7585",
       "openDate": "2022-06-15",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxMzUxIzIxIyQxIyQ1IyQ4MiQzNjEwMDIjNDEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxMzUxIzIxIyQxIyQ1IyQ4MiQzNjEwMDIjNDEjJDEjJDgjJDgz",
+      "name": "더한별이비인후과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 송파대로 365, 2층,3층 (석촌동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "석촌동",
+      "phone": "02-415-3650",
+      "openDate": "2018-01-18",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -9437,6 +10787,60 @@
       "town": "가락동",
       "phone": "1555-1627",
       "openDate": "2024-09-02",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMzUxIzExIyQxIyQzIyQ4MiQyNjEwMDIjNDEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMzUxIzExIyQxIyQzIyQ4MiQyNjEwMDIjNDEjJDEjJDQjJDgz",
+      "name": "데이웰가정의학과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 삼성로 155, 대치퍼스트빌딩 417,418호 (대치동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "대치동",
+      "phone": "02-2039-7588",
+      "openDate": "2021-08-02",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxOTYxIzExIyQxIyQ3IyQxMyQ0NjEwMDIjNzEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxOTYxIzExIyQxIyQ3IyQxMyQ0NjEwMDIjNzEjJDEjJDgjJDgz",
+      "name": "도곡타워안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 언주로30길 39, 린스퀘어 4층 (도곡동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "도곡동",
+      "phone": "02-6925-0121",
+      "openDate": "2025-05-27",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -9591,6 +10995,33 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxMzUxIzIxIyQxIyQxIyQ3OSQzNjEyMjIjNDEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxMzUxIzIxIyQxIyQxIyQ3OSQzNjEyMjIjNDEjJDEjJDQjJDgz",
+      "name": "동안중심의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 압구정로48길 26, 지하1층, 지상1,2층 (신사동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "신사동",
+      "phone": "02-542-7586",
+      "openDate": "2018-07-17",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTYyMiM1MSMkMiMkMCMkMDAkMzgxMTkxIzMxIyQxIyQzIyQ4MiQzNjEyMjIjNDEjJDEjJDgjJDgz",
       "hiraId": "JDQ4MTYyMiM1MSMkMiMkMCMkMDAkMzgxMTkxIzMxIyQxIyQzIyQ4MiQzNjEyMjIjNDEjJDEjJDgjJDgz",
       "name": "동암연세이비인후과의원",
@@ -9611,6 +11042,33 @@
       "town": "십정동",
       "phone": "032-426-3826",
       "openDate": "2002-08-27",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxMzUxIzUxIyQxIyQ1IyQ5MiQ0NjE0ODEjODEjJDEjJDIjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxMzUxIzUxIyQxIyQ1IyQ5MiQ0NjE0ODEjODEjJDEjJDIjJDgz",
+      "name": "두얼의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 마천로 35, 2층 (방이동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "방이동",
+      "phone": "02-421-2284",
+      "openDate": "2003-04-09",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -9645,6 +11103,33 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkNDgxMTkxIzMxIyQxIyQ3IyQxMyQyNjE0ODEjNzEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkNDgxMTkxIzMxIyQxIyQ3IyQxMyQyNjE0ODEjNzEjJDEjJDgjJDgz",
+      "name": "드림성모안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 강남대로 390, 14층 (역삼동, 미진프라자)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "역삼동",
+      "phone": "02-554-8400",
+      "openDate": "2002-10-31",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTAxMiM1MSMkMSMkMCMkNzIkMzgxOTYxIzIxIyQxIyQ5IyQ3MiQyNjE4MzIjNjEjJDEjJDAjJDgz",
       "hiraId": "JDQ4MTAxMiM1MSMkMSMkMCMkNzIkMzgxOTYxIzIxIyQxIyQ5IyQ3MiQyNjE4MzIjNjEjJDEjJDAjJDgz",
       "name": "디에르치과의원",
@@ -9665,6 +11150,60 @@
       "town": "부전동",
       "phone": "051-809-4994",
       "openDate": "2006-03-02",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMTkxIzMxIyQxIyQzIyQ3MiQyNjE4MzIjNDEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMTkxIzMxIyQxIyQzIyQ3MiQyNjE4MzIjNDEjJDEjJDgjJDgz",
+      "name": "라움스마일안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 테헤란로4길 5, 해암빌딩 3층,5층 일부호 (역삼동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "역삼동",
+      "phone": "02-6949-3222",
+      "openDate": "2026-01-27",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxMzUxIzIxIyQxIyQ1IyQ3OSQ0NjEwMDIjNzEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxMzUxIzIxIyQxIyQ1IyQ3OSQ0NjEwMDIjNzEjJDEjJDgjJDgz",
+      "name": "라파셀의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 압구정로28길 24, 2층 (신사동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "신사동",
+      "phone": "02-542-5577",
+      "openDate": "2024-10-10",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -9890,6 +11429,33 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMTkxIzMxIyQxIyQ3IyQ3MiQzNjE4MzIjNDEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMTkxIzMxIyQxIyQ3IyQ3MiQzNjE4MzIjNDEjJDEjJDgjJDgz",
+      "name": "메디엘산부인과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 올림픽로 289, 잠실시그마타워 4층 일부호 (신천동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "신천동",
+      "phone": "02-2039-3322",
+      "openDate": "2026-03-20",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTYyMiM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQ3IyQ2MiQzNjEwMDIjNTEjJDEjJDYjJDgz",
       "hiraId": "JDQ4MTYyMiM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQ3IyQ2MiQzNjEwMDIjNTEjJDEjJDYjJDgz",
       "name": "메디인병원",
@@ -10004,8 +11570,8 @@
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQwMyQ0NjEwMDIjNTEjJDEjJDYjJDgz",
       "name": "명지성모병원",
       "type": "종합병원",
-      "department": "산부인과",
-      "departmentId": "obgyn",
+      "department": "내과",
+      "departmentId": "internal",
       "registeredDepartmentIds": [
         "internal",
         "obgyn",
@@ -10028,6 +11594,33 @@
       "town": "대림동",
       "phone": "02-1899-1475",
       "openDate": "1984-08-07",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxNzAyIzQxIyQxIyQ3IyQ3MiQzNjEwMDIjNTEjJDEjJDIjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxNzAyIzQxIyQxIyQ3IyQ3MiQzNjEwMDIjNTEjJDEjJDIjJDgz",
+      "name": "모즈의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 압구정로80길 33, 2,4층 (청담동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "청담동",
+      "phone": "02-545-1618",
+      "openDate": "2020-04-20",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -10089,6 +11682,87 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMzUxIzQxIyQxIyQ3IyQ3MiQ0NjE0ODEjNjEjJDEjJDAjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMzUxIzQxIyQxIyQ3IyQ3MiQ0NjE0ODEjNjEjJDEjJDAjJDgz",
+      "name": "무드온성형외과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 강남대로 584, 성일빌딩 4층 (논현동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "논현동",
+      "phone": "02-511-0009",
+      "openDate": "2022-11-07",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxMTkxIzIxIyQyIyQ5IyQwMCQzNjEwMDIjNTEjJDEjJDYjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxMTkxIzIxIyQyIyQ5IyQwMCQzNjEwMDIjNTEjJDEjJDYjJDgz",
+      "name": "무지개의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 논현로 409, 2층 (역삼동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "역삼동",
+      "phone": "",
+      "openDate": "2005-12-21",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxNzAyIzUxIyQxIyQxIyQ5MiQzNjEyMjIjNTEjJDEjJDYjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxNzAyIzUxIyQxIyQxIyQ5MiQzNjEyMjIjNTEjJDEjJDYjJDgz",
+      "name": "미래연여성의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 올림픽로35다길 42, 2층 202호 (신천동, 한국루터회관)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "신천동",
+      "phone": "02-6012-2220",
+      "openDate": "2016-12-20",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTAxMiM1MSMkMSMkMCMkNzIkMzgxOTYxIzExIyQxIyQzIyQxMyQzNjEwMDIjNjEjJDEjJDAjJDgz",
       "hiraId": "JDQ4MTAxMiM1MSMkMSMkMCMkNzIkMzgxOTYxIzExIyQxIyQzIyQxMyQzNjEwMDIjNjEjJDEjJDAjJDgz",
       "name": "미소고운선치과의원",
@@ -10143,12 +11817,39 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxMzUxIzMxIyQxIyQzIyQ4OSQ0NjE0ODEjNDEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxMzUxIzMxIyQxIyQzIyQ4OSQ0NjE0ODEjNDEjJDEjJDgjJDgz",
+      "name": "미소와산부인과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 법원로 114, 엠스테이트 C동 204호 (문정동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "문정동",
+      "phone": "02-2135-7585",
+      "openDate": "2017-12-28",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQ3IyQ4OSQ0NjE0ODEjNDEjJDEjJDgjJDgz",
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQ3IyQ4OSQ0NjE0ODEjNDEjJDEjJDgjJDgz",
       "name": "미즈메디병원",
       "type": "종합병원",
-      "department": "산부인과",
-      "departmentId": "obgyn",
+      "department": "내과",
+      "departmentId": "internal",
       "registeredDepartmentIds": [
         "internal",
         "obgyn",
@@ -10254,6 +11955,87 @@
       "town": "금사동",
       "phone": "051-524-2511",
       "openDate": "2000-11-24",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkNDgxNzAyIzUxIyQyIyQ1IyQwMCQ0NjE0ODEjNTEjJDEjJDYjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkNDgxNzAyIzUxIyQyIyQ1IyQwMCQ0NjE0ODEjNTEjJDEjJDYjJDgz",
+      "name": "민지영산부인과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 송파대로 398, (송파동, 3층)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "송파동",
+      "phone": "02-423-6544",
+      "openDate": "1998-03-24",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMSMkMCMkOTkkMzgxMzUxIzUxIyQxIyQxIyQ4OSQzNjEwMDIjNjEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkOTkkMzgxMzUxIzUxIyQxIyQxIyQ4OSQzNjEwMDIjNjEjJDEjJDQjJDgz",
+      "name": "민트병원",
+      "type": "병원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 정의로8길 7, 한스빌딩 1~4층 (문정동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "문정동",
+      "phone": "02-2088-3000",
+      "openDate": "2017-01-31",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxNzAyIzUxIyQxIyQ1IyQ2MiQ0NjE0ODEjNjEjJDEjJDAjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxNzAyIzUxIyQxIyQ1IyQ2MiQ0NjE0ODEjNjEjJDEjJDAjJDgz",
+      "name": "바디프랜드부속의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 양재천로 163, 바디프랜드 도곡타워 5층 (도곡동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "도곡동",
+      "phone": "02-3448-8980",
+      "openDate": "2017-03-06",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -10450,6 +12232,33 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkNTgxOTYxIzUxIyQxIyQxIyQxMyQyNjE4MzIjNDEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkNTgxOTYxIzUxIyQxIyQxIyQxMyQyNjE4MzIjNDEjJDEjJDgjJDgz",
+      "name": "방이아산가정의학과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 백제고분로48길 27, 302호 (방이동, 성우빌딩)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "방이동",
+      "phone": "02-424-1005",
+      "openDate": "2016-12-26",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTYyMiM2MSMkMSMkMiMkOTkkNTgxMzUxIzIxIyQxIyQxIyQ5MiQzNjE4MzIjNzEjJDEjJDgjJDgz",
       "hiraId": "JDQ4MTYyMiM2MSMkMSMkMiMkOTkkNTgxMzUxIzIxIyQxIyQxIyQ5MiQzNjE4MzIjNzEjJDEjJDgjJDgz",
       "name": "백년요양병원",
@@ -10470,6 +12279,33 @@
       "town": "하소동",
       "phone": "042-323-1100",
       "openDate": "2025-05-08",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMzUxIzMxIyQxIyQzIyQ3MiQyNjE0ODEjNjEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMzUxIzMxIyQxIyQzIyQ3MiQyNjE0ODEjNjEjJDEjJDgjJDgz",
+      "name": "백상기백광현내과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 토성로 65, 202-4호 (풍납동, 태양상가)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "풍납동",
+      "phone": "02-484-4377",
+      "openDate": "1984-02-18",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -10591,8 +12427,8 @@
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQyIyQ3IyQwMCQyNjE4MzIjNjEjJDEjJDAjJDgz",
       "name": "부민병원",
       "type": "종합병원",
-      "department": "산부인과",
-      "departmentId": "obgyn",
+      "department": "내과",
+      "departmentId": "internal",
       "registeredDepartmentIds": [
         "internal",
         "obgyn",
@@ -10895,6 +12731,33 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxMzUxIzMxIyQyIyQzIyQwMCQyNjEwMDIjNDEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxMzUxIzMxIyQyIyQzIyQwMCQyNjEwMDIjNDEjJDEjJDQjJDgz",
+      "name": "비너스산부인과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 송파대로 284, 소석빌딩 4층 (가락동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "가락동",
+      "phone": "02-2138-3675",
+      "openDate": "2018-05-25",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTYyMiM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQyIyQ3IyQwMCQyNjE4MzIjNDEjJDEjJDQjJDgz",
       "hiraId": "JDQ4MTYyMiM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQyIyQ3IyQwMCQyNjE4MzIjNDEjJDEjJDQjJDgz",
       "name": "비에스종합병원",
@@ -10971,6 +12834,33 @@
       "town": "논현동",
       "phone": "431-7979",
       "openDate": "2012-06-11",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxMTkxIzQxIyQxIyQ3IyQ4MiQzNjE0ODEjODEjJDEjJDIjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxMTkxIzQxIyQxIyQ3IyQ4MiQzNjE0ODEjODEjJDEjJDIjJDgz",
+      "name": "사랑아이여성의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 백제고분로 69, 2,3층 (잠실동, 애플타워)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "잠실동",
+      "phone": "02-419-7501",
+      "openDate": "2014-09-16",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -11094,6 +12984,87 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMTkxIzQxIyQxIyQ3IyQwMyQzNjE4MzIjODEjJDEjJDYjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMTkxIzQxIyQxIyQ3IyQwMyQzNjE4MzIjODEjJDEjJDYjJDgz",
+      "name": "산비오의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 올림픽로 92, 잠실두성빌딩 4층 (잠실동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "잠실동",
+      "phone": "02-6326-7988",
+      "openDate": "2026-05-26",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxMzUxIzUxIyQxIyQ1IyQ3MiQ0NjE0ODEjNzEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxMzUxIzUxIyQxIyQ1IyQ3MiQ0NjE0ODEjNzEjJDEjJDgjJDgz",
+      "name": "삼성강내과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 양재대로 1222, 올림픽프라자 2층 70,3호 (방이동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "방이동",
+      "phone": "02-407-7950",
+      "openDate": "2019-04-29",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxOTYxIzUxIyQxIyQxIyQ5OSQzNjEwMDIjNDEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxOTYxIzUxIyQxIyQxIyQ5OSQzNjEwMDIjNDEjJDEjJDQjJDgz",
+      "name": "삼성맑은내과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 거마로 14, 청송빌딩 2층 (거여동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "거여동",
+      "phone": "02-400-8877",
+      "openDate": "2020-09-10",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTg4MSM1MSMkMSMkMCMkOTkkMzgxMzUxIzMxIyQxIyQ3IyQ3OSQ0NjE0ODEjNDEjJDEjJDQjJDgz",
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkOTkkMzgxMzUxIzMxIyQxIyQ3IyQ3OSQ0NjE0ODEjNDEjJDEjJDQjJDgz",
       "name": "삼성미래여성병원",
@@ -11114,6 +13085,33 @@
       "town": "오류동",
       "phone": "02-2682-2100",
       "openDate": "2012-07-09",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkNTgxOTYxIzMxIyQxIyQ3IyQ4MiQ0NjEwMDIjNjEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkNTgxOTYxIzMxIyQxIyQ3IyQ4MiQ0NjEwMDIjNjEjJDEjJDQjJDgz",
+      "name": "삼성산부인과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 법원로11길 11, A동 2층 203호 (문정동, 문정현대지지식산업센터1-1)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "문정동",
+      "phone": "02-449-7582",
+      "openDate": "2001-07-25",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -11161,6 +13159,33 @@
       "town": "일원동",
       "phone": "02-3410-2114",
       "openDate": "1994-06-13",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxMzUxIzIxIyQxIyQxIyQwMyQyNjE0ODEjODEjJDEjJDYjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxMzUxIzIxIyQxIyQxIyQwMyQyNjE0ODEjODEjJDEjJDYjJDgz",
+      "name": "삼성어울림의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 송파대로 562, 9층 일부 호 (신천동, 한빛프라자,삼성웰리스아파트)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "신천동",
+      "phone": "02-2038-0179",
+      "openDate": "2017-11-13",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -11379,6 +13404,33 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMTkxIzExIyQxIyQ3IyQ5OSQ0NjE0ODEjNjEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMTkxIzExIyQxIyQ3IyQ5OSQ0NjE0ODEjNjEjJDEjJDQjJDgz",
+      "name": "새봄여성의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 석촌호수로 160, 수연빌딩 4층 (삼전동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "삼전동",
+      "phone": "02-6677-7576",
+      "openDate": "2025-04-21",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTYyMiM2MSMkMSMkMiMkOTkkMzgxMzUxIzExIyQxIyQ3IyQxMyQ0NjEwMDIjODEjJDEjJDIjJDgz",
       "hiraId": "JDQ4MTYyMiM2MSMkMSMkMiMkOTkkMzgxMzUxIzExIyQxIyQ3IyQxMyQ0NjEwMDIjODEjJDEjJDIjJDgz",
       "name": "새손병원",
@@ -11561,6 +13613,33 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMTkxIzIxIyQxIyQ1IyQ4OSQyNjEwMDIjNTEjJDEjJDYjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMTkxIzIxIyQxIyQ1IyQ4OSQyNjEwMDIjNTEjJDEjJDYjJDgz",
+      "name": "서울리센츠내과 영상의학과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 올림픽로 145, 리센츠 4층 4씨 03호 (잠실동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "잠실동",
+      "phone": "02-6426-3388",
+      "openDate": "2025-08-11",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTg4MSM1MSMkMSMkMCMkOTkkMzgxMzUxIzQxIyQxIyQ3IyQ5MiQzNjE0ODEjNjEjJDEjJDAjJDgz",
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkOTkkMzgxMzUxIzQxIyQxIyQ3IyQ5MiQzNjE0ODEjNjEjJDEjJDAjJDgz",
       "name": "서울바른병원",
@@ -11615,12 +13694,93 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMSMkMCMkOTkkMzgxMzUxIzMxIyQxIyQzIyQ4MiQzNjE4MzIjODEjJDEjJDYjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkOTkkMzgxMzUxIzMxIyQxIyQzIyQ4MiQzNjE4MzIjODEjJDEjJDYjJDgz",
+      "name": "서울병원",
+      "type": "병원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 오금로 290, (가락동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "가락동",
+      "phone": "02-405-8500",
+      "openDate": "1998-06-05",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxOTYxIzUxIyQxIyQxIyQxMyQzNjE4MzIjNjEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxOTYxIzUxIyQxIyQxIyQxMyQzNjE4MzIjNjEjJDEjJDQjJDgz",
+      "name": "서울삼성여성의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 석촌호수로 61, 트리지움 413호 (잠실동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "잠실동",
+      "phone": "02-2202-0230",
+      "openDate": "2012-09-07",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMSMkMCMkOTkkMzgxMzUxIzMxIyQxIyQ3IyQ4MiQ0NjE0ODEjNTEjJDEjJDYjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkOTkkMzgxMzUxIzMxIyQxIyQ3IyQ4MiQ0NjE0ODEjNTEjJDEjJDYjJDgz",
+      "name": "서울석병원",
+      "type": "병원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 송이로 148, (가락동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "가락동",
+      "phone": "02-403-7585",
+      "openDate": "2015-01-21",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQxMyQyNjE0ODEjNzEjJDEjJDgjJDgz",
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQxMyQyNjE0ODEjNzEjJDEjJDgjJDgz",
       "name": "서울성심병원",
       "type": "종합병원",
-      "department": "산부인과",
-      "departmentId": "obgyn",
+      "department": "내과",
+      "departmentId": "internal",
       "registeredDepartmentIds": [
         "ent",
         "internal",
@@ -11934,8 +14094,8 @@
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQyIyQ3IyQwMCQzNjE4MzIjNzEjJDEjJDgjJDgz",
       "name": "서울특별시서남병원",
       "type": "종합병원",
-      "department": "산부인과",
-      "departmentId": "obgyn",
+      "department": "내과",
+      "departmentId": "internal",
       "registeredDepartmentIds": [
         "ent",
         "internal",
@@ -12078,8 +14238,8 @@
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQ3IyQ2MiQyNjE4MzIjNDEjJDEjJDgjJDgz",
       "name": "서울현대병원",
       "type": "종합병원",
-      "department": "산부인과",
-      "departmentId": "obgyn",
+      "department": "내과",
+      "departmentId": "internal",
       "registeredDepartmentIds": [
         "internal",
         "obgyn",
@@ -12100,6 +14260,33 @@
       "town": "번동",
       "phone": "1588-6853",
       "openDate": "2010-03-24",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQxIyQ5MiQzNjEyMjIjNTEjJDEjJDIjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQxIyQ5MiQzNjEyMjIjNTEjJDEjJDIjJDgz",
+      "name": "서울힐링요양병원",
+      "type": "요양병원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 중대로 191, 서울힐링요양병원 (가락동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "가락동",
+      "phone": "02-1833-7037",
+      "openDate": "2019-02-11",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -12593,6 +14780,33 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxOTYxIzIxIyQxIyQ1IyQ5OSQzNjEwMDIjODEjJDEjJDIjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxOTYxIzIxIyQxIyQ1IyQ5OSQzNjEwMDIjODEjJDEjJDIjJDgz",
+      "name": "송파서울산부인과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 법원로 114, 엠스테이트 c동 2층 213호 (문정동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "문정동",
+      "phone": "02-2088-4880",
+      "openDate": "2024-01-26",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTYyMiM1MSMkMSMkMCMkOTkkMzgxMzUxIzMxIyQxIyQ3IyQ5MiQyNjEyMjIjNzEjJDEjJDgjJDgz",
       "hiraId": "JDQ4MTYyMiM1MSMkMSMkMCMkOTkkMzgxMzUxIzMxIyQxIyQ3IyQ5MiQyNjEyMjIjNzEjJDEjJDgjJDgz",
       "name": "수여성병원",
@@ -12820,8 +15034,8 @@
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQ3IyQ5OSQzNjE0ODEjNjEjJDEjJDQjJDgz",
       "name": "씨엠병원",
       "type": "종합병원",
-      "department": "산부인과",
-      "departmentId": "obgyn",
+      "department": "내과",
+      "departmentId": "internal",
       "registeredDepartmentIds": [
         "internal",
         "obgyn",
@@ -12869,6 +15083,87 @@
       "town": "남산동",
       "phone": "051-508-7676",
       "openDate": "1999-11-27",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxMzUxIzIxIyQxIyQ1IyQ5MiQyNjEwMDIjNjEjJDEjJDAjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxMzUxIzIxIyQxIyQ1IyQ5MiQyNjEwMDIjNjEjJDEjJDAjJDgz",
+      "name": "아미산부인과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 백제고분로 204, (삼전동, 4층)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "삼전동",
+      "phone": "02-3432-7373",
+      "openDate": "2011-12-14",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxMTkxIzExIyQxIyQzIyQxMyQyNjE4MzIjNzEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNDgxMTkxIzExIyQxIyQzIyQxMyQyNjE4MzIjNzEjJDEjJDgjJDgz",
+      "name": "아산유외과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 올림픽로 509, J빌딩 201호 (풍납동, J 빌딩)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "풍납동",
+      "phone": "02-489-2114",
+      "openDate": "2013-03-11",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMTkxIzQxIyQxIyQ3IyQ4OSQzNjEyMjIjNDEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMTkxIzQxIyQxIyQ3IyQ4OSQzNjEyMjIjNDEjJDEjJDQjJDgz",
+      "name": "아산하트내과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 올림픽로 102, 서일빌딩 8층 1호 (잠실동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "잠실동",
+      "phone": "02-422-2000",
+      "openDate": "2026-04-22",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -13025,6 +15320,33 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMTkxIzIxIyQxIyQxIyQ3OSQyNjEyMjIjODEjJDEjJDIjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMTkxIzIxIyQxIyQxIyQ3OSQyNjEyMjIjODEjJDEjJDIjJDgz",
+      "name": "애플산부인과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 올림픽로 114, 8층 (잠실동, 서경빌딩)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "잠실동",
+      "phone": "02-417-4004",
+      "openDate": "2017-07-13",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTYyMiM4MSMkMSMkNCMkODkkMzgxMzUxIzExIyQxIyQzIyQ3MiQyNjE0ODEjODEjJDEjJDYjJDgz",
       "hiraId": "JDQ4MTYyMiM4MSMkMSMkNCMkODkkMzgxMzUxIzExIyQxIyQzIyQ3MiQyNjE0ODEjODEjJDEjJDYjJDgz",
       "name": "양산부산대학교병원",
@@ -13174,6 +15496,60 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxMTkxIzIxIyQxIyQxIyQ2MiQyNjE0ODEjNzEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxMTkxIzIxIyQxIyQxIyQ2MiQyNjE0ODEjNzEjJDEjJDgjJDgz",
+      "name": "엘피스의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 오금로 404, (가락동, 원일빌딩 4층)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "가락동",
+      "phone": "02-3401-2828",
+      "openDate": "2002-05-17",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxOTYxIzUxIyQyIyQxIyQwMCQzNjEwMDIjNTEjJDEjJDYjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxOTYxIzUxIyQyIyQxIyQwMCQzNjEwMDIjNTEjJDEjJDYjJDgz",
+      "name": "엠버여성의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 송파대로 374, 3층 301호 (송파동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "송파동",
+      "phone": "02-422-0333",
+      "openDate": "2004-11-03",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTYyMiM1MSMkMSMkMCMkOTkkMzgxMzUxIzIxIyQxIyQ5IyQ4OSQzNjEwMDIjNjEjJDEjJDQjJDgz",
       "hiraId": "JDQ4MTYyMiM1MSMkMSMkMCMkOTkkMzgxMzUxIzIxIyQxIyQ5IyQ4OSQzNjEwMDIjNjEjJDEjJDQjJDgz",
       "name": "엠앤비여성병원",
@@ -13221,6 +15597,87 @@
       "town": "관평동",
       "phone": "042-936-7588",
       "openDate": "2026-08-31",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkNDgxOTYxIzMxIyQxIyQzIyQ5MiQyNjE4MzIjNjEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkMCMkMDAkNDgxOTYxIzMxIyQxIyQzIyQ5MiQyNjE4MzIjNjEjJDEjJDQjJDgz",
+      "name": "연세가정의학과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 새말로 134, 2층 (문정동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "문정동",
+      "phone": "02-400-7450",
+      "openDate": "1991-01-26",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMzUxIzUxIyQxIyQxIyQxMyQyNjEyMjIjNDEjJDEjJDgjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMzUxIzUxIyQxIyQxIyQxMyQyNjEyMjIjNDEjJDEjJDgjJDgz",
+      "name": "연세고은의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 백제고분로 275, 2층 일부(오른쪽끝)호 (석촌동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "석촌동",
+      "phone": "02-425-7277",
+      "openDate": "2023-01-18",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxMzUxIzUxIyQxIyQxIyQ4MiQzNjE0ODEjNjEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkNTgxMzUxIzUxIyQxIyQxIyQ4MiQzNjE0ODEjNjEjJDEjJDQjJDgz",
+      "name": "연세국민건강내과소아청소년과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 중대로 105, 가락 ID TOWER 201~203, 301, 303호 (가락동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "가락동",
+      "phone": "02-6954-7525",
+      "openDate": "2019-02-28",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -13381,6 +15838,33 @@
       "town": "신촌동",
       "phone": "02-2228-0114",
       "openDate": "1974-03-25",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMzUxIzUxIyQxIyQ1IyQ3OSQyNjE4MzIjNDEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkOCMkMDAkMzgxMzUxIzUxIyQxIyQ1IyQ3OSQyNjE4MzIjNDEjJDEjJDQjJDgz",
+      "name": "연세리센츠산부인과의원",
+      "type": "의원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 올림픽로 145, 리센츠 4층 4B17일부, 4B18호 (잠실동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "잠실동",
+      "phone": "02-412-7788",
+      "openDate": "2023-02-21",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
@@ -13595,8 +16079,8 @@
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQyIyQ3IyQwMCQzNjE0ODEjNTEjJDEjJDIjJDgz",
       "name": "우리들병원",
       "type": "종합병원",
-      "department": "산부인과",
-      "departmentId": "obgyn",
+      "department": "내과",
+      "departmentId": "internal",
       "registeredDepartmentIds": [
         "internal",
         "obgyn",
@@ -14696,8 +17180,8 @@
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQxMyQ0NjE0ODEjNTEjJDEjJDIjJDgz",
       "name": "의료법인동신의료재단 동신병원",
       "type": "종합병원",
-      "department": "산부인과",
-      "departmentId": "obgyn",
+      "department": "내과",
+      "departmentId": "internal",
       "registeredDepartmentIds": [
         "internal",
         "obgyn",
@@ -14756,6 +17240,33 @@
       "verifiedAt": "2026-09-26"
     },
     {
+      "id": "JDQ4MTg4MSM1MSMkMSMkMCMkOTkkMzgxMzUxIzMxIyQxIyQzIyQ3OSQzNjE4MzIjNjEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkOTkkMzgxMzUxIzMxIyQxIyQzIyQ3OSQzNjE4MzIjNjEjJDEjJDQjJDgz",
+      "name": "의료법인마리아의료재단마리아병원",
+      "type": "병원",
+      "department": "산부인과",
+      "departmentId": "obgyn",
+      "registeredDepartmentIds": [
+        "obgyn"
+      ],
+      "registeredDepartmentCodes": [
+        "10"
+      ],
+      "address": "서울특별시 송파구 송이로 152, 마리아 의료재단 새병원 (가락동)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "송파구",
+      "districtCode": "110018",
+      "town": "가락동",
+      "phone": "02-2152-6555",
+      "openDate": "2008-06-23",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
       "id": "JDQ4MTYyMiM2MSMkMSMkMiMkOTkkMzgxMzUxIzExIyQxIyQ3IyQwMyQ0NjEwMDIjNDEjJDEjJDgjJDgz",
       "hiraId": "JDQ4MTYyMiM2MSMkMSMkMiMkOTkkMzgxMzUxIzExIyQxIyQ3IyQwMyQ0NjEwMDIjNDEjJDEjJDgjJDgz",
       "name": "의료법인삼영의료재단 둔산병원",
@@ -14789,8 +17300,8 @@
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQyIyQ3IyQwMCQ0NjEwMDIjNTEjJDEjJDYjJDgz",
       "name": "의료법인서울효천의료재단 에이치플러스양지병원",
       "type": "종합병원",
-      "department": "산부인과",
-      "departmentId": "obgyn",
+      "department": "내과",
+      "departmentId": "internal",
       "registeredDepartmentIds": [
         "ent",
         "internal",
@@ -14832,8 +17343,8 @@
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQ3IyQ4OSQzNjEwMDIjNjEjJDEjJDgjJDgz",
       "name": "의료법인성화의료재단  대한병원",
       "type": "종합병원",
-      "department": "산부인과",
-      "departmentId": "obgyn",
+      "department": "내과",
+      "departmentId": "internal",
       "registeredDepartmentIds": [
         "internal",
         "obgyn",
@@ -14894,8 +17405,8 @@
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQxMyQyNjE4MzIjNDEjJDEjJDgjJDgz",
       "name": "의료법인풍산의료재단동부제일병원",
       "type": "종합병원",
-      "department": "산부인과",
-      "departmentId": "obgyn",
+      "department": "내과",
+      "departmentId": "internal",
       "registeredDepartmentIds": [
         "internal",
         "obgyn",
@@ -15550,8 +18061,8 @@
       "hiraId": "JDQ4MTg4MSM1MSMkMSMkMCMkODkkMzgxMzUxIzExIyQxIyQzIyQwMyQyNjE0ODEjNDEjJDEjJDQjJDgz",
       "name": "재단법인아산사회복지재단 서울아산병원",
       "type": "상급종합",
-      "department": "안과",
-      "departmentId": "ophthalmology",
+      "department": "산부인과",
+      "departmentId": "obgyn",
       "registeredDepartmentIds": [
         "dermatology",
         "ent",
@@ -17745,6 +20256,33 @@
       "town": "주안동",
       "phone": "032-451-0000",
       "openDate": "2012-11-01",
+      "sourceType": "hira-api",
+      "sourceName": "건강보험심사평가원 병원기본정보 API",
+      "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",
+      "verificationStatus": "api-retrieved",
+      "verifiedAt": "2026-09-26"
+    },
+    {
+      "id": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxMTkxIzUxIyQxIyQ1IyQ3MiQzNjEwMDIjNDEjJDEjJDQjJDgz",
+      "hiraId": "JDQ4MTg4MSM1MSMkMiMkNCMkMDAkMzgxMTkxIzUxIyQxIyQ1IyQ3MiQzNjEwMDIjNDEjJDEjJDQjJDgz",
+      "name": "YK(와이케이)안과의원",
+      "type": "의원",
+      "department": "안과",
+      "departmentId": "ophthalmology",
+      "registeredDepartmentIds": [
+        "ophthalmology"
+      ],
+      "registeredDepartmentCodes": [
+        "12"
+      ],
+      "address": "서울특별시 강남구 삼성로 651, 5층 502,503,504호 (삼성동, 래미안 라클래시)",
+      "region": "서울",
+      "regionCode": "110000",
+      "district": "강남구",
+      "districtCode": "110001",
+      "town": "삼성동",
+      "phone": "512-5975",
+      "openDate": "2011-12-14",
       "sourceType": "hira-api",
       "sourceName": "건강보험심사평가원 병원기본정보 API",
       "sourceUrl": "https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000",

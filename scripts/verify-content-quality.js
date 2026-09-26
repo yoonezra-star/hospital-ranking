@@ -57,6 +57,15 @@ const server = http.createServer((request, response) => {
       await page.locator('.hospital-spotlight-grid').scrollIntoViewIfNeeded();
       await page.screenshot({ path: path.join(os.tmpdir(), `hospital-verified-landing-${width}.png`), fullPage: true });
 
+      await page.goto(`${origin}/seoul-internal`);
+      await page.locator('.hospital-spotlight-section').waitFor({ state: 'visible' });
+      assert.equal(await page.locator('.hospital-spotlight-card').count(), 3);
+      assert(await page.locator('.hospital-spotlight-card').evaluateAll((cards) => cards.every((card) => card.innerText.includes('서울특별시'))));
+      assert(await page.locator('.hospital-spotlight-section').evaluate((section) => getComputedStyle(section).backgroundColor !== 'rgba(0, 0, 0, 0)'));
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), 'Regional landing page overflows viewport');
+      await page.locator('.hospital-spotlight-grid').scrollIntoViewIfNeeded();
+      await page.screenshot({ path: path.join(os.tmpdir(), `hospital-regional-landing-${width}.png`), fullPage: true });
+
       await page.goto(`${origin}/`);
       await page.locator('#ranking-list .hospital-card').first().waitFor();
       const homepageText = await page.locator('main').innerText();

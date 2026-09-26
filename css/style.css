@@ -2663,6 +2663,26 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
 }
 
 /* ===== Verified hospital cards on guide landing pages ===== */
+.hospital-spotlight-section {
+  padding: 24px;
+  border: 1px solid var(--border-default);
+  border-radius: 22px;
+  background: var(--bg-card);
+  box-shadow: var(--shadow-xs);
+}
+
+.hospital-spotlight-section h2 {
+  margin: 0 0 10px;
+  color: var(--text-heading);
+  font-size: var(--fs-xl);
+}
+
+.hospital-spotlight-section > p {
+  margin: 0;
+  color: var(--text-body);
+  line-height: 1.75;
+}
+
 .hospital-spotlight-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2694,6 +2714,17 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   font-size: var(--fs-lg);
   line-height: 1.45;
   overflow-wrap: anywhere;
+}
+
+.hospital-spotlight-card .landing-badge {
+  display: inline-flex;
+  width: fit-content;
+  padding: 7px 11px;
+  border-radius: var(--r-full);
+  background: var(--primary-50);
+  color: var(--primary-dark);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
 }
 
 .hospital-spotlight-meta {
@@ -2731,6 +2762,10 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
 
 @media (max-width: 900px) {
   .hospital-spotlight-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .hospital-spotlight-section { padding: 20px 18px; }
 }
 
 /* ===== AdSense Slots ===== */

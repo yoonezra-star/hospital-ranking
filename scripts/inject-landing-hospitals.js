@@ -10,7 +10,24 @@ const EXCLUDED_HIRA_IDS = new Set([
 ]);
 const START_MARKER = '<!-- HOSPITAL_EXAMPLES_START -->';
 const END_MARKER = '<!-- HOSPITAL_EXAMPLES_END -->';
-const COMPARE_HEADING = '<h3>\uBE44\uAD50 \uAE30\uC900 \uC815\uB9AC</h3>';
+const INSERT_BEFORE_HEADINGS = [
+  '<h3>\uBE44\uAD50 \uAE30\uC900 \uC815\uB9AC</h3>',
+  '<h2>\uC790\uC8FC \uBB3B\uB294 \uC9C8\uBB38</h2>',
+];
+const DEPARTMENT_LABELS = {
+  dental: '치과',
+  ophthalmology: '안과',
+  internal: '내과',
+  ent: '이비인후과',
+  orthopedic: '정형외과',
+  pain: '마취통증의학과',
+  pediatric: '소아청소년과',
+  obgyn: '산부인과',
+  urology: '비뇨의학과',
+  psychiatry: '정신건강의학과',
+  rehab: '재활의학과',
+  dermatology: '피부과',
+};
 
 function loadArrayFromHead(file, constName) {
   const source = execFileSync('git', ['show', `HEAD:${file}`], {
@@ -233,20 +250,20 @@ function chooseExamples(page, hospitals) {
     push(exactFallback);
   }
 
-  if (picked.size < 3) {
+  if (picked.size < 3 && !profile.district) {
     push(specialty);
   }
 
-  if (!picked.size) {
+  if (!picked.size && !profile.district) {
     push(regional);
     title = `${profile.region || '\uC804\uAD6D'} \uB300\uD45C \uC758\uB8CC\uAE30\uAD00 \uC608\uC2DC`;
     note = '\uD604\uC7AC \uB370\uC774\uD130\uC14B\uC5D0 \uAC19\uC740 \uC870\uAC74\uC758 \uC9C1\uC811 \uC77C\uCE58 \uD56D\uBAA9\uC774 \uC801\uC5B4, \uAC19\uC740 \uC9C0\uC5ED \uB610\uB294 \uBE44\uC2B7\uD55C \uC9C4\uB8CC \uD750\uB984\uC758 \uBCD1\uC6D0\uC744 \uD568\uAED8 \uD45C\uAE30\uD588\uC2B5\uB2C8\uB2E4.';
   }
 
-  if (picked.size < 3) {
+  if (picked.size < 3 && !profile.district) {
     push(regional);
   }
-  if (picked.size < 3) {
+  if (picked.size < 3 && !profile.district) {
     push(exactFallback);
   }
   const result = Array.from(picked.values()).slice(0, 3);
@@ -263,11 +280,11 @@ function chooseExamples(page, hospitals) {
     note = '\uAC1C\uC6D0\uC77C \uC815\uBCF4\uAC00 \uC788\uB294 \uBCD1\uC6D0\uC744 \uAE30\uC900\uC73C\uB85C \uCD5C\uADFC \uAC1C\uC6D0 \uC21C\uC11C\uC640 \uB300\uD45C \uBCD1\uC6D0\uC744 \uD568\uAED8 \uC815\uB9AC\uD588\uC2B5\uB2C8\uB2E4.';
   }
 
-  return { title, note, items: result };
+  return { title, note, items: result, departmentId: profile.departmentId };
 }
 
-function buildTags(hospital) {
-  return [hospital.department || hospital.type, hospital.region, '공공데이터 확인'].filter(Boolean);
+function buildTags(hospital, departmentId) {
+  return [DEPARTMENT_LABELS[departmentId] || hospital.department || hospital.type, hospital.region, '공공데이터 확인'].filter(Boolean);
 }
 
 function buildSection(examples) {
@@ -277,8 +294,8 @@ function buildSection(examples) {
 
   return `
     ${START_MARKER}
-    <section class="landing-note" style="margin-top:28px;">
-      <h3>${escapeHtml(examples.title)}</h3>
+    <section class="hospital-spotlight-section landing-note intent-note" style="margin-top:28px;">
+      <h2>${escapeHtml(examples.title)}</h2>
       <p>${escapeHtml(examples.note)}</p>
       <div class="hospital-spotlight-grid" style="margin-top:16px;">
         ${examples.items.map((hospital) => `
@@ -288,28 +305,38 @@ function buildSection(examples) {
             <span class="hospital-spotlight-meta">${escapeHtml(hospital.address)}</span>
             <span class="hospital-spotlight-meta">${escapeHtml(hospital.sourceName)} · ${escapeHtml(hospital.verifiedAt)} 확인</span>
             <div class="hospital-spotlight-tags">
-              ${buildTags(hospital).map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}
+              ${buildTags(hospital, examples.departmentId).map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}
             </div>
           </a>
         `).join('')}
       </div>
     </section>
     ${END_MARKER}
-  `;
+  `.replace(/[ \t]+$/gm, '');
 }
 
 function injectSection(html, section) {
+  if (!section && !html.includes(START_MARKER)) {
+    return html;
+  }
   const blockPattern = new RegExp(`\\n?\\s*${START_MARKER}[\\s\\S]*?${END_MARKER}\\n?`, 'g');
-  const cleaned = html.replace(blockPattern, '\n');
-  const markerIndex = cleaned.indexOf(COMPARE_HEADING);
+  const cleaned = html.replace(blockPattern, '\n').replace(/^[ \t]+$/gm, '');
+  if (!section) {
+    return cleaned;
+  }
+  const markerIndex = INSERT_BEFORE_HEADINGS
+    .map((heading) => cleaned.indexOf(heading))
+    .filter((index) => index >= 0)
+    .sort((left, right) => left - right)[0] ?? -1;
   if (markerIndex === -1) {
     return cleaned;
   }
-  const sectionStart = cleaned.lastIndexOf('    <section class="landing-note"', markerIndex);
+  const sectionStart = cleaned.lastIndexOf('<section', markerIndex);
   if (sectionStart === -1) {
     return cleaned;
   }
-  return `${cleaned.slice(0, sectionStart)}${section}\n${cleaned.slice(sectionStart)}`;
+  const lineStart = cleaned.lastIndexOf('\n', sectionStart) + 1;
+  return `${cleaned.slice(0, lineStart)}${section}\n${cleaned.slice(lineStart)}`;
 }
 
 function main() {

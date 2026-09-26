@@ -218,6 +218,7 @@ test('landing recommendations only link to hospitals with official API provenanc
   assert(snapshot.hospitals.length >= 30);
 
   const officialIds = new Set();
+  const officialById = new Map();
   for (const hospital of snapshot.hospitals) {
     assert(hospital.hiraId && hospital.name && hospital.address);
     assert.equal(hospital.verificationStatus, 'api-retrieved');
@@ -226,9 +227,12 @@ test('landing recommendations only link to hospitals with official API provenanc
     assert(hospital.registeredDepartmentIds.length > 0);
     assert(!officialIds.has(hospital.hiraId), `Duplicate HIRA identifier: ${hospital.hiraId}`);
     officialIds.add(hospital.hiraId);
+    officialById.set(hospital.hiraId, hospital);
   }
 
   let cardCount = 0;
+  const cardsByFile = new Map();
+  const cardIdsByFile = new Map();
   for (const file of fs.readdirSync(root).filter((name) => name.endsWith('.html'))) {
     const html = read(file);
     assert.doesNotMatch(html, /병원 예시|운영조건에 맞는 병원 예시/);
@@ -238,12 +242,47 @@ test('landing recommendations only link to hospitals with official API provenanc
       assert(id && !/^\d+$/.test(id), `${file} has a non-HIRA spotlight link`);
       assert(officialIds.has(id), `${file} links to a hospital outside the verified snapshot`);
       cardCount += 1;
+      cardsByFile.set(file, (cardsByFile.get(file) || 0) + 1);
+      cardIdsByFile.set(file, [...(cardIdsByFile.get(file) || []), id]);
     }
   }
-  assert(cardCount >= 30, 'Too few verified landing hospital cards');
-  assert.doesNotMatch(read('sunday-clinic.html'), /hospital-spotlight-card/);
+  const landingSource = read('js/landing-pages.js');
+  const landingPages = Function(`return [${landingSource.match(/const LANDING_PAGES = \[(.*?)\];/s)[1]}];`)();
+  const operationOnly = new Set(['/new-openings', '/saturday-clinic', '/night-clinic', '/sunday-clinic']);
+  for (const page of landingPages) {
+    const file = `${page.href.replace(/^\//, '')}.html`;
+    assert.equal(cardsByFile.get(file) || 0, operationOnly.has(page.href) ? 0 : 3, `${file} has the wrong verified-card count`);
+    for (const id of cardIdsByFile.get(file) || []) {
+      const hospital = officialById.get(id);
+      const departmentId = landingDepartmentId(page.href);
+      assert(hospital.registeredDepartmentIds.includes(departmentId), `${file} contains a hospital outside ${departmentId}`);
+      if (page.region === '강남') assert.match(hospital.address, /서울특별시 강남구/);
+      else if (page.region === '송파') assert.match(hospital.address, /서울특별시 송파구/);
+      else if (page.region !== '전국') assert.equal(hospital.region, page.region, `${file} contains a hospital outside ${page.region}`);
+    }
+  }
+  assert.equal(cardCount, 105);
+  const seoulInternalCards = read('seoul-internal.html').match(/<!-- HOSPITAL_EXAMPLES_START -->([\s\S]*?)<!-- HOSPITAL_EXAMPLES_END -->/)[1];
+  assert.equal((seoulInternalCards.match(/<span>내과<\/span>/g) || []).length, 3);
+  assert.doesNotMatch(seoulInternalCards, /<span>안과<\/span>/);
   assert.match(read('night-dermatology.html'), /운영 여부는 실시간 정보가 아니므로 방문 전 병원에 직접 확인/);
 });
+
+function landingDepartmentId(href) {
+  if (/dental|implant/.test(href)) return 'dental';
+  if (/ophthalmology|lasik|cataract/.test(href)) return 'ophthalmology';
+  if (/internal|endoscopy/.test(href)) return 'internal';
+  if (href.includes('ent')) return 'ent';
+  if (href.includes('orthopedic')) return 'orthopedic';
+  if (href.includes('pain')) return 'pain';
+  if (/pediatric|vaccination/.test(href)) return 'pediatric';
+  if (/obgyn|womens-checkup/.test(href)) return 'obgyn';
+  if (/urology|urinary-stone/.test(href)) return 'urology';
+  if (href.includes('psychiatry')) return 'psychiatry';
+  if (/rehab|manual-therapy/.test(href)) return 'rehab';
+  if (href.includes('dermatology')) return 'dermatology';
+  return '';
+}
 
 test('D1 snapshots require official identity fields and preserve source evidence', async () => {
   const { normalizeHospitalSnapshot, snapshotRowToApiItem } = await loadHospitalStore();

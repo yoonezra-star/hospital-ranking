@@ -11,6 +11,7 @@ const REGION_CODES = {
   서울: '110000', 부산: '210000', 인천: '220000', 대구: '230000',
   대전: '250000', 경기: '310000',
 };
+const DISTRICT_CODES = { 강남구: '110001', 송파구: '110018' };
 
 const DEPARTMENTS = {
   dental: { code: '49', name: '치과' },
@@ -36,8 +37,9 @@ async function main() {
     if (!profile.departmentId) continue;
     const department = DEPARTMENTS[profile.departmentId];
     const regionCode = REGION_CODES[profile.region] || '';
-    const key = `${regionCode}|${department.code}`;
-    queries.set(key, { regionCode, departmentId: profile.departmentId, department });
+    const districtCode = DISTRICT_CODES[profile.district] || '';
+    const key = `${regionCode}|${districtCode}|${department.code}`;
+    queries.set(key, { regionCode, districtCode, departmentId: profile.departmentId, department });
   }
 
   const records = new Map();
@@ -80,6 +82,7 @@ async function fetchVerifiedHospitals(query) {
   url.searchParams.set('dgsbjtCd', query.department.code);
   url.searchParams.set('numOfRows', '50');
   if (query.regionCode) url.searchParams.set('sidoCd', query.regionCode);
+  if (query.districtCode) url.searchParams.set('sgguCd', query.districtCode);
 
   const response = await fetch(url, { headers: { Accept: 'application/json' } });
   if (!response.ok) throw new Error(`${url} returned ${response.status}`);
@@ -138,7 +141,14 @@ function mergeRecord(records, incoming) {
 
 function resolveProfile(page) {
   let region = page.region;
-  if (region === '강남' || region === '송파') region = '서울';
+  let district = '';
+  if (region === '강남') {
+    region = '서울';
+    district = '강남구';
+  } else if (region === '송파') {
+    region = '서울';
+    district = '송파구';
+  }
   if (region === '전국') region = '';
   const href = page.href;
   let departmentId = '';
@@ -154,7 +164,7 @@ function resolveProfile(page) {
   else if (href.includes('psychiatry')) departmentId = 'psychiatry';
   else if (/rehab|manual-therapy/.test(href)) departmentId = 'rehab';
   else if (href.includes('dermatology')) departmentId = 'dermatology';
-  return { region, departmentId };
+  return { region, district, departmentId };
 }
 
 function loadArray(file, constName) {
