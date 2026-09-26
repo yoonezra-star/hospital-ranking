@@ -10,8 +10,23 @@ const sitemapFile = fs.existsSync(path.join(root, 'sitemap-pages.xml')) ? 'sitem
 const sitemap = [...read(sitemapFile).matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
 const errors = [];
 const pages = [];
+const spotlightHospitalIds = [];
 const ignored = new Set(['test_map.html']);
 const strip = (html) => html.replace(/<(script|style|nav|header|footer)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+
+const verifiedLandingData = JSON.parse(read('data/verified-landing-hospitals.json'));
+const verifiedLandingHospitals = verifiedLandingData.hospitals || [];
+if (verifiedLandingData.sourceType !== 'hira-api-snapshot') errors.push('Landing hospital dataset must come from a HIRA API snapshot');
+if (verifiedLandingData.totalCount !== verifiedLandingHospitals.length) errors.push('Landing hospital dataset totalCount is inconsistent');
+if (new Set(verifiedLandingHospitals.map((hospital) => hospital.hiraId)).size !== verifiedLandingHospitals.length) {
+  errors.push('Landing hospital dataset contains duplicate HIRA identifiers');
+}
+for (const hospital of verifiedLandingHospitals) {
+  if (!hospital.hiraId || !hospital.name || !hospital.address || hospital.verificationStatus !== 'api-retrieved'
+    || !hospital.sourceUrl || !hospital.verifiedAt || !hospital.registeredDepartmentIds?.length) {
+    errors.push(`Landing hospital ${hospital.hiraId || hospital.name || 'unknown'}: incomplete official provenance`);
+  }
+}
 
 for (const file of fs.readdirSync(root).filter((name) => name.endsWith('.html') && !ignored.has(name)).sort()) {
   const html = read(file);
@@ -25,6 +40,13 @@ for (const file of fs.readdirSync(root).filter((name) => name.endsWith('.html') 
   if (!html.includes('<meta charset="UTF-8">')) errors.push(`${file}: missing UTF-8 declaration`);
   if (/(?:href|src)=["']\s*["']/.test(html)) errors.push(`${file}: empty href or src attribute`);
   if (/"aggregateRating"|평점\s*[1-5]\.\d|리뷰\s*\d+개/.test(html)) errors.push(`${file}: unsupported ratings`);
+  if (/병원 예시|운영조건에 맞는 병원 예시/.test(html)) errors.push(`${file}: unverified example wording remains`);
+  for (const anchor of html.matchAll(/<a\b[^>]*\bclass=["'][^"']*\bhospital-spotlight-card\b[^"']*["'][^>]*>/gi)) {
+    const href = anchor[0].match(/\bhref=["']([^"']+)["']/i)?.[1] || '';
+    const id = decodeURIComponent(href.match(/^\/hospital\/([^/?#]+)/)?.[1] || '');
+    if (!id || /^\d+$/.test(id)) errors.push(`${file}: spotlight card must use an official HIRA identifier`);
+    else spotlightHospitalIds.push({ file, id });
+  }
   for (const match of html.matchAll(/(?:href|src)=["']([^"']+)["']/g)) {
     const href = match[1];
     if (/^(?:[a-z][a-z0-9+.-]*:|\/\/|#)/i.test(href)) continue;
@@ -47,6 +69,14 @@ vm.runInContext(read('js/data.js'), context);
 const hospitals = [...context.window.HOSPITALS, ...context.window.NEW_HOSPITALS];
 const exportedData = JSON.parse(read('data/hospitals.json'));
 const exported = exportedData.hospitals;
+const officialHospitalIds = new Set([
+  ...verifiedLandingHospitals.map((hospital) => String(hospital.hiraId)),
+  ...exported.filter((hospital) => ['api-retrieved', 'verified'].includes(hospital.verificationStatus))
+    .map((hospital) => String(hospital.hiraId || '')),
+]);
+for (const item of spotlightHospitalIds) {
+  if (!officialHospitalIds.has(item.id)) errors.push(`${item.file}: spotlight hospital ${item.id} is not in a verified dataset`);
+}
 if (exportedData.sourceType !== 'local-curated') errors.push('Hospital dataset sourceType must remain local-curated');
 for (const hospital of [...hospitals, ...exported]) {
   if (hospital.score || hospital.reviewCount) errors.push(`Hospital ${hospital.id}: unsupported rating remains`);
@@ -64,6 +94,8 @@ const report = {
   sitemapIndexEntries: sitemapIndex.length,
   sitemapUrls: sitemap.length,
   localHospitals: hospitals.length,
+  verifiedLandingHospitals: verifiedLandingHospitals.length,
+  verifiedLandingCards: spotlightHospitalIds.length,
   hospitalsWithApiProvenance: exported.filter((hospital) => hospital.verificationStatus === 'api-retrieved' && hospital.sourceUrl && hospital.verifiedAt).length,
   hospitalsMissingProvenance: exported.filter((hospital) => !hospital.sourceUrl || !hospital.verifiedAt).length,
   hospitalsExplicitlyMarkedUnverified: exported.filter((hospital) => !hospital.verificationStatus || hospital.verificationStatus === 'unverified').length,

@@ -2662,6 +2662,77 @@ h1, h2, h3, h4, h5, h6 { color: var(--text-heading); line-height: var(--lh-tight
   color: #dbe8e3;
 }
 
+/* ===== Verified hospital cards on guide landing pages ===== */
+.hospital-spotlight-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.hospital-spotlight-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  border: 1px solid var(--border-default);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--bg-body) 74%, var(--bg-card) 26%);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color var(--t-base), box-shadow var(--t-base), transform var(--t-base);
+}
+
+.hospital-spotlight-card:hover {
+  border-color: var(--primary-light);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.hospital-spotlight-card strong {
+  color: var(--text-heading);
+  font-size: var(--fs-lg);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.hospital-spotlight-meta {
+  color: var(--text-body);
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.hospital-spotlight-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.hospital-spotlight-tags span {
+  padding: 5px 9px;
+  border-radius: var(--r-full);
+  background: var(--primary-50);
+  color: var(--primary-dark);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+}
+
+[data-theme="dark"] .hospital-spotlight-card {
+  background: rgba(255,255,255,0.04);
+}
+
+[data-theme="dark"] .hospital-spotlight-tags span {
+  background: rgba(104,134,127,0.18);
+  color: #dbe8e3;
+}
+
+@media (max-width: 900px) {
+  .hospital-spotlight-grid { grid-template-columns: 1fr; }
+}
+
 /* ===== AdSense Slots ===== */
 /* ===== Detail Page Specific ===== */
 .detail-page .main-content {

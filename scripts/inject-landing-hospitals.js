@@ -5,6 +5,9 @@ const { execFileSync } = require('child_process');
 
 const ROOT = process.cwd();
 const EXCLUDED_IDS = new Set([101]);
+const EXCLUDED_HIRA_IDS = new Set([
+  'JDQ4MTYyMiM2MSMkMSMkMiMkNzIkMzgxOTYxIzExIyQyIyQ3IyQwMCQyNjE0ODEjNDEjJDEjJDQjJDgz',
+]);
 const START_MARKER = '<!-- HOSPITAL_EXAMPLES_START -->';
 const END_MARKER = '<!-- HOSPITAL_EXAMPLES_END -->';
 const COMPARE_HEADING = '<h3>\uBE44\uAD50 \uAE30\uC900 \uC815\uB9AC</h3>';
@@ -26,7 +29,15 @@ function loadHospitals() {
   const context = { window: {} };
   vm.createContext(context);
   vm.runInContext(`${source}\nthis.__HOSPITALS = HOSPITALS; this.__NEW_HOSPITALS = NEW_HOSPITALS;`, context);
-  return [...(context.__HOSPITALS || []), ...(context.__NEW_HOSPITALS || [])].map(normalizeHospital);
+  const local = [...(context.__HOSPITALS || []), ...(context.__NEW_HOSPITALS || [])];
+  const snapshotPath = path.join(ROOT, 'data/verified-landing-hospitals.json');
+  const snapshot = fs.existsSync(snapshotPath)
+    ? JSON.parse(fs.readFileSync(snapshotPath, 'utf8')).hospitals || []
+    : [];
+  const verified = [...local, ...snapshot]
+    .map(normalizeHospital)
+    .filter(isVerifiedHospital);
+  return Array.from(new Map(verified.map((hospital) => [hospital.hiraId, hospital])).values());
 }
 
 function normalizeHospital(hospital) {
@@ -38,6 +49,11 @@ function normalizeHospital(hospital) {
     region,
     district,
   };
+}
+
+function isVerifiedHospital(hospital) {
+  return ['api-retrieved', 'verified'].includes(hospital.verificationStatus)
+    && Boolean(hospital.hiraId && hospital.name && hospital.address && hospital.sourceUrl && hospital.verifiedAt);
 }
 
 function escapeHtml(value) {
@@ -111,7 +127,7 @@ function departmentMatch(hospital, departmentId) {
   if (!departmentId) {
     return true;
   }
-  if (hospital.departmentId === departmentId) {
+  if (hospital.departmentId === departmentId || hospital.registeredDepartmentIds?.includes(departmentId)) {
     return true;
   }
   if (departmentId === 'internal' && hospital.departmentId === 'general') {
@@ -158,7 +174,9 @@ function scoreHospital(hospital, profile) {
 
 function chooseExamples(page, hospitals) {
   const profile = resolveProfile(page);
-  const items = hospitals.filter((hospital) => !EXCLUDED_IDS.has(hospital.id));
+  if (!profile.departmentId) return null;
+  const items = hospitals.filter((hospital) => !EXCLUDED_IDS.has(hospital.id)
+    && !EXCLUDED_HIRA_IDS.has(hospital.hiraId));
   const exactSpecialty = items.filter((hospital) => {
     if (profile.region && hospital.region !== profile.region) {
       return false;
@@ -166,13 +184,7 @@ function chooseExamples(page, hospitals) {
     if (profile.district && !hospital.address.includes(profile.district)) {
       return false;
     }
-    if (profile.operation && profile.operation !== 'newOpenings' && !hospital[profile.operation]) {
-      return false;
-    }
-    if (!profile.departmentId) {
-      return true;
-    }
-    return hospital.departmentId === profile.departmentId;
+    return departmentMatch(hospital, profile.departmentId);
   });
 
   const exactFallback = items.filter((hospital) => {
@@ -180,9 +192,6 @@ function chooseExamples(page, hospitals) {
       return false;
     }
     if (profile.district && !hospital.address.includes(profile.district)) {
-      return false;
-    }
-    if (profile.operation && profile.operation !== 'newOpenings' && !hospital[profile.operation]) {
       return false;
     }
     return departmentMatch(hospital, profile.departmentId);
@@ -202,15 +211,8 @@ function chooseExamples(page, hospitals) {
     if (!profile.departmentId) {
       return false;
     }
-    return hospital.departmentId === profile.departmentId;
+    return departmentMatch(hospital, profile.departmentId);
   });
-  const operationOnly = items.filter((hospital) => {
-    if (!profile.operation || profile.operation === 'newOpenings') {
-      return false;
-    }
-    return Boolean(hospital[profile.operation]);
-  });
-
   const picked = new Map();
   const push = (list) => {
     for (const hospital of list.sort((a, b) => scoreHospital(b, profile) - scoreHospital(a, profile))) {
@@ -223,8 +225,8 @@ function chooseExamples(page, hospitals) {
     }
   };
 
-  let title = '\uC5F0\uACB0 \uBCD1\uC6D0 \uC608\uC2DC';
-  let note = '\uD604\uC7AC \uB370\uC774\uD130\uC14B\uC5D0\uC11C \uC9C0\uC5ED\uACFC \uC9C4\uB8CC\uACFC\uAC00 \uC9C1\uC811 \uB9DE\uB294 \uBCD1\uC6D0\uC744 \uC6B0\uC120 \uC5F0\uACB0\uD588\uC2B5\uB2C8\uB2E4.';
+  let title = '공공데이터로 확인한 관련 병원';
+  let note = '건강보험심사평가원 병원기본정보에서 지역과 진료과가 확인된 의료기관을 연결했습니다.';
   push(exactSpecialty);
 
   if (!picked.size) {
@@ -247,18 +249,14 @@ function chooseExamples(page, hospitals) {
   if (picked.size < 3) {
     push(exactFallback);
   }
-  if (picked.size < 3) {
-    push(operationOnly);
-  }
-
   const result = Array.from(picked.values()).slice(0, 3);
   if (!result.length) {
     return null;
   }
 
   if (profile.operation && profile.operation !== 'newOpenings') {
-    title = '\uC6B4\uC601\uC870\uAC74\uC5D0 \uB9DE\uB294 \uBCD1\uC6D0 \uC608\uC2DC';
-    note = '\uD1A0\uC694\uC77C, \uC57C\uAC04, \uC77C\uC694\uC77C \uAC19\uC740 \uC6B4\uC601 \uC870\uAC74\uC774 \uB370\uC774\uD130\uC5D0 \uD45C\uC2DC\uB41C \uBCD1\uC6D0\uC744 \uC6B0\uC120 \uC5F0\uACB0\uD588\uC2B5\uB2C8\uB2E4.';
+    title = '공공데이터로 확인한 진료과 병원';
+    note = '아래 기관은 진료과를 기준으로 확인했습니다. 토요일, 야간, 일요일 운영 여부는 실시간 정보가 아니므로 방문 전 병원에 직접 확인해 주세요.';
   }
   if (profile.operation === 'newOpenings') {
     title = '\uCD5C\uADFC \uAC1C\uC6D0 \uD750\uB984 \uCC38\uACE0 \uBCD1\uC6D0';
@@ -269,17 +267,7 @@ function chooseExamples(page, hospitals) {
 }
 
 function buildTags(hospital) {
-  const tags = [hospital.department || hospital.type];
-  if (hospital.saturdayOpen) {
-    tags.push('\uD1A0\uC694\uC77C');
-  }
-  if (hospital.nightOpen) {
-    tags.push('\uC57C\uAC04');
-  }
-  if (hospital.sundayOpen) {
-    tags.push('\uC77C\uC694\uC77C');
-  }
-  return tags;
+  return [hospital.department || hospital.type, hospital.region, '공공데이터 확인'].filter(Boolean);
 }
 
 function buildSection(examples) {
@@ -295,10 +283,10 @@ function buildSection(examples) {
       <div class="hospital-spotlight-grid" style="margin-top:16px;">
         ${examples.items.map((hospital) => `
           <a href="/hospital/${encodeURIComponent(hospital.hiraId || hospital.id)}" class="hospital-spotlight-card">
-            <span class="landing-badge">\uBCD1\uC6D0 \uC608\uC2DC</span>
+            <span class="landing-badge">공공데이터 확인</span>
             <strong>${escapeHtml(hospital.name)}</strong>
             <span class="hospital-spotlight-meta">${escapeHtml(hospital.address)}</span>
-            <span class="hospital-spotlight-meta">등록 정보는 방문 전 병원에 직접 확인해 주세요.</span>
+            <span class="hospital-spotlight-meta">${escapeHtml(hospital.sourceName)} · ${escapeHtml(hospital.verifiedAt)} 확인</span>
             <div class="hospital-spotlight-tags">
               ${buildTags(hospital).map((tag) => `<span>${escapeHtml(tag)}</span>`).join('')}
             </div>
@@ -329,7 +317,7 @@ function main() {
   const hospitals = loadHospitals();
 
   for (const page of pages) {
-    const filePath = path.join(ROOT, page.href);
+    const filePath = path.join(ROOT, routeToFile(page.href));
     const html = fs.readFileSync(filePath, 'utf8');
     const examples = chooseExamples(page, hospitals);
     const updated = injectSection(html, buildSection(examples));
@@ -337,6 +325,10 @@ function main() {
   }
 
   console.log(`Injected hospital examples into ${pages.length} landing pages.`);
+}
+
+function routeToFile(href) {
+  return `${String(href).replace(/^\//, '').replace(/\.html$/, '')}.html`;
 }
 
 main();

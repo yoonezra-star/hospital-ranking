@@ -211,6 +211,40 @@ test('each stored HIRA code belongs to only one local record and survives export
   }
 });
 
+test('landing recommendations only link to hospitals with official API provenance', () => {
+  const snapshot = JSON.parse(read('data/verified-landing-hospitals.json'));
+  assert.equal(snapshot.sourceType, 'hira-api-snapshot');
+  assert.equal(snapshot.totalCount, snapshot.hospitals.length);
+  assert(snapshot.hospitals.length >= 30);
+
+  const officialIds = new Set();
+  for (const hospital of snapshot.hospitals) {
+    assert(hospital.hiraId && hospital.name && hospital.address);
+    assert.equal(hospital.verificationStatus, 'api-retrieved');
+    assert.match(hospital.verifiedAt, /^\d{4}-\d{2}-\d{2}$/);
+    assert.match(hospital.sourceUrl, /^https:\/\//);
+    assert(hospital.registeredDepartmentIds.length > 0);
+    assert(!officialIds.has(hospital.hiraId), `Duplicate HIRA identifier: ${hospital.hiraId}`);
+    officialIds.add(hospital.hiraId);
+  }
+
+  let cardCount = 0;
+  for (const file of fs.readdirSync(root).filter((name) => name.endsWith('.html'))) {
+    const html = read(file);
+    assert.doesNotMatch(html, /병원 예시|운영조건에 맞는 병원 예시/);
+    for (const anchor of html.matchAll(/<a\b[^>]*\bclass=["'][^"']*\bhospital-spotlight-card\b[^"']*["'][^>]*>/gi)) {
+      const href = anchor[0].match(/\bhref=["']([^"']+)["']/i)?.[1] || '';
+      const id = decodeURIComponent(href.match(/^\/hospital\/([^/?#]+)/)?.[1] || '');
+      assert(id && !/^\d+$/.test(id), `${file} has a non-HIRA spotlight link`);
+      assert(officialIds.has(id), `${file} links to a hospital outside the verified snapshot`);
+      cardCount += 1;
+    }
+  }
+  assert(cardCount >= 30, 'Too few verified landing hospital cards');
+  assert.doesNotMatch(read('sunday-clinic.html'), /hospital-spotlight-card/);
+  assert.match(read('night-dermatology.html'), /운영 여부는 실시간 정보가 아니므로 방문 전 병원에 직접 확인/);
+});
+
 test('D1 snapshots require official identity fields and preserve source evidence', async () => {
   const { normalizeHospitalSnapshot, snapshotRowToApiItem } = await loadHospitalStore();
   assert.equal(normalizeHospitalSnapshot({ ykiho: 'JD1', yadmNm: '주소없는의원' }), null);

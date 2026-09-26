@@ -148,7 +148,7 @@ function buildHtml(page, meta, pages) {
   const conditionKeyword = buildConditionKeyword(page);
   const relatedPages = pickRelatedPages(page, pages);
   const faqItems = buildFaq(page, meta, guide);
-  const canonical = `${SITE_URL}/${page.href.replace(/\.html$/, '')}`;
+  const canonical = `${SITE_URL}${page.href.startsWith('/') ? page.href : `/${page.href.replace(/\.html$/, '')}`}`;
   const badge = page.region === '전국' ? page.department : `${page.region} ${page.department}`;
   const schemaCollection = {
     '@context': 'https://schema.org',
@@ -323,10 +323,14 @@ function main() {
     }
 
     const html = buildHtml(page, meta, pages);
-    fs.writeFileSync(path.join(ROOT, page.href), html, 'utf8');
+    fs.writeFileSync(path.join(ROOT, routeToFile(page.href)), html, 'utf8');
   }
 
   console.log(`Regenerated ${pages.length} landing pages.`);
+}
+
+function routeToFile(href) {
+  return `${String(href).replace(/^\//, '').replace(/\.html$/, '')}.html`;
 }
 
 main();

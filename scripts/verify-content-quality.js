@@ -46,6 +46,17 @@ const server = http.createServer((request, response) => {
       await page.screenshot({ path: screenshot });
       console.log(`Guide ${width}px screenshot: ${screenshot}`);
 
+      await page.goto(`${origin}/night-dermatology`);
+      await page.locator('.landing-note').filter({ hasText: '관련 페이지' }).waitFor({ state: 'visible' });
+      assert((await page.locator('main').innerText()).includes('자주 묻는 질문'));
+      assert.equal(await page.locator('.hospital-spotlight-card').count(), 3);
+      assert((await page.locator('.hospital-spotlight-card').first().getAttribute('href')).startsWith('/hospital/JD'));
+      assert((await page.locator('main').innerText()).includes('운영 여부는 실시간 정보가 아니므로'));
+      assert.equal(await page.locator('.landing-note').filter({ hasText: '관련 페이지' }).locator('a[href$=".html"]').count(), 0);
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), 'Landing page overflows viewport');
+      await page.locator('.hospital-spotlight-grid').scrollIntoViewIfNeeded();
+      await page.screenshot({ path: path.join(os.tmpdir(), `hospital-verified-landing-${width}.png`), fullPage: true });
+
       await page.goto(`${origin}/`);
       await page.locator('#ranking-list .hospital-card').first().waitFor();
       const homepageText = await page.locator('main').innerText();
