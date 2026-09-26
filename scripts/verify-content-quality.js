@@ -9,7 +9,7 @@ const root = path.resolve(__dirname, '..');
 const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8' };
 const server = http.createServer((request, response) => {
   const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
-  let file = path.resolve(root, `.${pathname === '/' ? '/index.html' : pathname}`);
+  let file = path.resolve(root, `.${pathname === '/' ? '/index.html' : pathname.startsWith('/hospital/') ? '/detail.html' : pathname}`);
   if (!file.startsWith(`${root}${path.sep}`)) return response.writeHead(403).end();
   if (!path.extname(file)) file += '.html';
   if (!mime[path.extname(file)] || !fs.existsSync(file)) return response.writeHead(404).end();
@@ -50,8 +50,8 @@ const server = http.createServer((request, response) => {
       await page.locator('#ranking-list .hospital-card').first().waitFor();
       const homepageText = await page.locator('main').innerText();
       assert(!/승인용|광고 승인|병원 상세 예시|대표 병원 보기/.test(homepageText), 'Review-oriented or sample copy remains on homepage');
-      const editorialIds = await page.locator('.quick-access-item, .review-card a, .timeline-card').evaluateAll((links) => links.map((link) => new URL(link.href).searchParams.get('id')));
-      assert(await page.evaluate((ids) => ids.every((id) => Boolean(window.HOSPITAL_PROVENANCE?.[id])), editorialIds), 'Unverified record promoted in automatic recommendations');
+      const editorialIds = await page.locator('.quick-access-item, .review-card a, .timeline-card').evaluateAll((links) => links.map((link) => decodeURIComponent(new URL(link.href).pathname.split('/').filter(Boolean).pop() || '')));
+      assert(await page.evaluate((ids) => ids.every((id) => Object.values(window.HOSPITAL_PROVENANCE || {}).some((item) => String(item.hiraId) === String(id))), editorialIds), 'Unverified record promoted in automatic recommendations');
       assert(!await page.locator('body').innerText().then((text) => /평점\s*[1-5]\.\d|후기\s*\d+건|후기 수와 관심도/.test(text)), 'Unsupported rating on homepage');
       assert.equal(await page.locator('#sort-filter option[value="reviews"]').count(), 0);
       await page.locator('#hero-search').fill('김흥진치과의원');

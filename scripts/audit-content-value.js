@@ -5,7 +5,9 @@ const vm = require('node:vm');
 const root = path.resolve(__dirname, '..');
 const decoder = new TextDecoder('utf-8', { fatal: true });
 const read = (file) => decoder.decode(fs.readFileSync(path.join(root, file)));
-const sitemap = [...read('sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+const sitemapIndex = [...read('sitemap.xml').matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+const sitemapFile = fs.existsSync(path.join(root, 'sitemap-pages.xml')) ? 'sitemap-pages.xml' : 'sitemap.xml';
+const sitemap = [...read(sitemapFile).matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
 const errors = [];
 const pages = [];
 const ignored = new Set(['test_map.html']);
@@ -27,6 +29,7 @@ for (const file of fs.readdirSync(root).filter((name) => name.endsWith('.html') 
     const href = match[1];
     if (/^(?:[a-z][a-z0-9+.-]*:|\/\/|#)/i.test(href)) continue;
     const pathname = decodeURIComponent(href.split(/[?#]/)[0]).replace(/^\//, '') || 'index.html';
+    if (pathname.startsWith('hospital/')) continue;
     if (!fs.existsSync(path.join(root, pathname)) && !fs.existsSync(path.join(root, `${pathname}.html`))) {
       errors.push(`${file}: missing local target ${pathname}`);
     }
@@ -57,6 +60,7 @@ if (/estimateScore|estimateReviewCount|aggregateRating/.test(read('js/detail.js'
 const guideReview = pages.filter((page) => page.file.startsWith('guide-') && page.externalReferences === 0);
 const report = {
   htmlPages: pages.length,
+  sitemapIndexEntries: sitemapIndex.length,
   sitemapUrls: sitemap.length,
   localHospitals: hospitals.length,
   hospitalsWithApiProvenance: exported.filter((hospital) => hospital.verificationStatus === 'api-retrieved' && hospital.sourceUrl && hospital.verifiedAt).length,

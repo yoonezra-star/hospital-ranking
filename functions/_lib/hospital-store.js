@@ -69,6 +69,79 @@ export async function searchHospitalSnapshots(context, params) {
   }
 }
 
+export async function getHospitalSnapshot(context, hiraId) {
+  const id = cleanText(hiraId);
+  if (!hasHospitalDatabase(context) || !id) return null;
+
+  try {
+    const row = await context.env.HOSPITAL_DB.prepare(`
+      SELECT h.*,
+        (SELECT GROUP_CONCAT(hd.department_code)
+         FROM hospital_departments hd WHERE hd.hira_id = h.hira_id) AS department_codes
+      FROM hospitals h
+      WHERE h.hira_id = ?
+        AND h.verification_status IN ('api-retrieved', 'verified')
+      LIMIT 1
+    `).bind(id).first();
+    return row ? snapshotRowToApiItem(row) : null;
+  } catch (error) {
+    console.warn('[hospital-store] snapshot lookup unavailable:', error?.message || error);
+    return null;
+  }
+}
+
+export async function listHospitalSitemapEntries(context, limit = 10000) {
+  if (!hasHospitalDatabase(context)) return [];
+  const safeLimit = clampNumber(limit, 1, 45000, 10000);
+
+  try {
+    const result = await context.env.HOSPITAL_DB.prepare(`
+      SELECT hira_id, source_checked_at
+      FROM hospitals
+      WHERE verification_status IN ('api-retrieved', 'verified')
+      ORDER BY hira_id ASC
+      LIMIT ?
+    `).bind(safeLimit).all();
+    return (Array.isArray(result?.results) ? result.results : [])
+      .filter((row) => cleanText(row.hira_id))
+      .map((row) => ({
+        id: cleanText(row.hira_id),
+        lastModified: cleanText(row.source_checked_at).slice(0, 10),
+      }));
+  } catch (error) {
+    console.warn('[hospital-store] sitemap lookup unavailable:', error?.message || error);
+    return [];
+  }
+}
+
+export async function getRelatedHospitalSnapshots(context, hospital, limit = 6) {
+  if (!hasHospitalDatabase(context) || !hospital?.ykiho) return [];
+  const safeLimit = clampNumber(limit, 1, 12, 6);
+  const districtCode = cleanText(hospital.sgguCd);
+  const provinceCode = cleanText(hospital.sidoCd);
+  if (!districtCode && !provinceCode) return [];
+
+  const locationColumn = districtCode ? 'h.district_code' : 'h.province_code';
+  const locationValue = districtCode || provinceCode;
+  try {
+    const result = await context.env.HOSPITAL_DB.prepare(`
+      SELECT h.*,
+        (SELECT GROUP_CONCAT(hd.department_code)
+         FROM hospital_departments hd WHERE hd.hira_id = h.hira_id) AS department_codes
+      FROM hospitals h
+      WHERE ${locationColumn} = ?
+        AND h.hira_id != ?
+        AND h.verification_status IN ('api-retrieved', 'verified')
+      ORDER BY CASE WHEN h.type_code = ? THEN 0 ELSE 1 END, h.name_normalized ASC
+      LIMIT ?
+    `).bind(locationValue, hospital.ykiho, cleanText(hospital.clCd), safeLimit).all();
+    return (Array.isArray(result?.results) ? result.results : []).map((row) => snapshotRowToApiItem(row));
+  } catch (error) {
+    console.warn('[hospital-store] related snapshot lookup unavailable:', error?.message || error);
+    return [];
+  }
+}
+
 export async function storeHospitalSnapshots(context, items, departmentCode = '') {
   if (!hasHospitalDatabase(context) || !Array.isArray(items) || items.length === 0) return 0;
 

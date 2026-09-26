@@ -294,7 +294,7 @@ function buildSection(examples) {
       <p>${escapeHtml(examples.note)}</p>
       <div class="hospital-spotlight-grid" style="margin-top:16px;">
         ${examples.items.map((hospital) => `
-          <a href="detail.html?id=${hospital.id}" class="hospital-spotlight-card">
+          <a href="/hospital/${encodeURIComponent(hospital.hiraId || hospital.id)}" class="hospital-spotlight-card">
             <span class="landing-badge">\uBCD1\uC6D0 \uC608\uC2DC</span>
             <strong>${escapeHtml(hospital.name)}</strong>
             <span class="hospital-spotlight-meta">${escapeHtml(hospital.address)}</span>

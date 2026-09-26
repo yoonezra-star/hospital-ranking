@@ -14,6 +14,11 @@ async function loadHospitalStore() {
   return import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
 }
 
+async function loadHospitalRenderer() {
+  const source = read('functions/_lib/render-hospital-page.js');
+  return import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
+}
+
 function apiContext(responses, requests = []) {
   const context = vm.createContext({
     window: { HOSPITALS: [{ id: 1, name: '로컬의원' }] }, URLSearchParams, AbortSignal,
@@ -258,4 +263,51 @@ test('D1 search uses bound filters and never interpolates visitor input', async 
   assert.equal(result.totalCount, 1);
   assert(prepared.every((statement) => !statement.sql.includes("OR 1=1")));
   assert(prepared.every((statement) => statement.values.some((value) => String(value).startsWith('%테스트'))));
+});
+
+test('server-rendered detail exposes verified hospital content before JavaScript runs', async () => {
+  const { renderHospitalPage } = await loadHospitalRenderer();
+  const html = renderHospitalPage(read('detail.html'), {
+    ykiho: 'JDverified',
+    yadmNm: '서울테스트내과의원',
+    clCdNm: '의원',
+    addr: '서울특별시 종로구 대학로 101',
+    sidoCdNm: '서울특별시',
+    sgguCdNm: '종로구',
+    telno: '02-1234-5678',
+    estbDd: '20200102',
+    registeredDepartmentCodes: ['01', '23'],
+    sourceName: '건강보험심사평가원 병원기본정보 API',
+    sourceUrl: 'https://www.hira.or.kr/',
+    verificationStatus: 'api-retrieved',
+    verifiedAt: '2026-09-26',
+  }, {
+    indexable: true,
+    relatedHospitals: [{
+      ykiho: 'JDnearby', yadmNm: '종로가정의원', clCdNm: '의원',
+      addr: '서울특별시 종로구 종로 1', verificationStatus: 'api-retrieved',
+    }],
+  });
+
+  assert.match(html, /<title>서울테스트내과의원 정보 - 병원찾기<\/title>/);
+  assert.match(html, /<meta name="robots" content="index,follow,max-image-preview:large">/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/hospital-ranking\.kr\/hospital\/JDverified">/);
+  assert.match(html, /<h1[^>]+id="detail-name">서울테스트내과의원<\/h1>/);
+  assert.match(html, /내과, 가정의학과/);
+  assert.match(html, /href="https:\/\/www\.hira\.or\.kr\/"/);
+  assert.match(html, /href="\/hospital\/JDnearby"/);
+  assert.match(html, /window\.SERVER_HOSPITAL=/);
+  const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || '';
+  assert.doesNotMatch(main, /로딩 중|데이터를 불러오는 중|정보 확인 중/);
+});
+
+test('unverified local detail remains noindex', async () => {
+  const { renderHospitalPage } = await loadHospitalRenderer();
+  const html = renderHospitalPage(read('detail.html'), {
+    id: 1001,
+    name: '미확인의원',
+    address: '서울특별시 중구 세종대로 1',
+    verificationStatus: 'unverified',
+  }, { indexable: false });
+  assert.match(html, /<meta name="robots" content="noindex,follow">/);
 });

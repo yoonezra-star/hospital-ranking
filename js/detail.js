@@ -46,7 +46,9 @@
 
   async function initDetailPage() {
     const params = new URLSearchParams(window.location.search);
-    const hospitalId = params.get('id') || params.get('postid');
+    const pathMatch = window.location.pathname.match(/^\/hospital\/([^/]+)\/?$/);
+    const hospitalId = params.get('id') || params.get('postid')
+      || (pathMatch ? decodeURIComponent(pathMatch[1]) : '');
 
     if (!hospitalId) {
       setText('detail-name', '병원 정보를 찾을 수 없습니다.');
@@ -77,15 +79,17 @@
   }
 
   function normalizeDetailUrl(hospitalId) {
-    const name = new URLSearchParams(window.location.search).get('name');
-    const expected = `detail.html?id=${encodeURIComponent(hospitalId)}${name ? `&name=${encodeURIComponent(name)}` : ''}`;
-    const current = `${window.location.pathname.split('/').pop() || 'detail.html'}${window.location.search || ''}`;
-    if (current !== expected) {
-      window.history.replaceState({}, '', expected);
-    }
+    if (/^\/hospital\/[^/]+\/?$/.test(window.location.pathname)) return;
+    window.history.replaceState({}, '', `/hospital/${encodeURIComponent(hospitalId)}`);
   }
 
   async function resolveHospital(id) {
+    if (window.SERVER_HOSPITAL
+      && (String(window.SERVER_HOSPITAL.id) === String(id)
+        || String(window.SERVER_HOSPITAL.hiraId || '') === String(id))) {
+      return window.SERVER_HOSPITAL;
+    }
+
     const hospitalList = getHospitalList();
     if (Array.isArray(hospitalList)) {
       const localMatch = hospitalList.find((item) => String(item.id) === String(id)
@@ -692,7 +696,7 @@
     }
 
     container.innerHTML = items.map((item) => (
-      `<a href="detail.html?id=${encodeURIComponent(item.id)}" style="display:flex; flex-direction:column; gap:8px; padding:16px; border:1px solid var(--border-default); border-radius:12px; text-decoration:none; background:var(--bg-body); color:inherit;">
+      `<a href="/hospital/${encodeURIComponent(item.hiraId || item.id)}?name=${encodeURIComponent(item.name || '')}" style="display:flex; flex-direction:column; gap:8px; padding:16px; border:1px solid var(--border-default); border-radius:12px; text-decoration:none; background:var(--bg-body); color:inherit;">
         <strong style="font-size:1rem;">${escapeHtml(item.name || '병원 정보')}</strong>
         <span style="color:var(--text-body);">${escapeHtml(item.type || '의료기관')}</span>
         <span style="color:var(--text-body); line-height:1.6;">${escapeHtml(item.address || '주소 정보 확인 중')}</span>
@@ -821,7 +825,7 @@
   }
 
   function buildCanonicalDetailUrl(id) {
-    return `${SITE_ORIGIN}/detail?id=${encodeURIComponent(id)}`;
+    return `${SITE_ORIGIN}/hospital/${encodeURIComponent(id)}`;
   }
 
   function updateSourceSummary(items) {

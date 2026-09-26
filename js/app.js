@@ -1740,7 +1740,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const doctors = item.specialistCount > 0 ? `전문의 ${item.specialistCount}명` : '의료진 정보 확인 중';
 
     return `
-      <a href="detail.html?id=${encodeURIComponent(item.id)}&amp;name=${encodeURIComponent(item.name)}" class="hospital-card fade-up visible">
+      <a href="/hospital/${encodeURIComponent(item.hiraId || item.id)}?name=${encodeURIComponent(item.name)}" class="hospital-card fade-up visible">
         <div class="rank-badge ${rank <= 3 ? `rank-${rank}` : 'rank-default'}">${rank}</div>
         <div class="hospital-info">
           <div class="hospital-name">
@@ -1991,7 +1991,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     target.innerHTML = items.map((item) => `
-      <a href="detail.html?id=${encodeURIComponent(item.id)}&amp;name=${encodeURIComponent(item.name)}" class="quick-access-item">
+      <a href="/hospital/${encodeURIComponent(item.hiraId || item.id)}?name=${encodeURIComponent(item.name)}" class="quick-access-item">
         <div class="quick-access-title-row">
           <strong>${escapeHtml(item.name)}</strong>
         </div>
@@ -2020,7 +2020,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <strong>${escapeHtml(item.name)}</strong>
         </div>
         <p style="line-height:1.8; color:var(--text-body); margin-bottom:16px;">${escapeHtml(buildReviewSummary(item))}</p>
-        <a href="detail.html?id=${encodeURIComponent(item.id)}&amp;name=${encodeURIComponent(item.name)}">위치와 방문 전 확인 사항 보기</a>
+        <a href="/hospital/${encodeURIComponent(item.hiraId || item.id)}?name=${encodeURIComponent(item.name)}">위치와 방문 전 확인 사항 보기</a>
       </article>
     `).join('');
   }
@@ -2046,7 +2046,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ui.newHospitalsList.innerHTML = items.map((item) => `
       <article class="timeline-item">
         <div class="timeline-date">${escapeHtml(formatDate(item.openDate))}</div>
-        <a href="detail.html?id=${encodeURIComponent(item.id)}&amp;name=${encodeURIComponent(item.name)}" class="timeline-card">
+        <a href="/hospital/${encodeURIComponent(item.hiraId || item.id)}?name=${encodeURIComponent(item.name)}" class="timeline-card">
           <div class="timeline-name">${escapeHtml(item.name)}</div>
           <div class="timeline-addr">${escapeHtml(item.address || '주소 정보 확인 중')}</div>
         </a>

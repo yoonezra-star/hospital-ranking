@@ -81,7 +81,7 @@ function renderUrl({ loc, freq = 'monthly', priority = '0.7' }) {
   ].join('\n');
 }
 
-function buildSitemap() {
+function buildPageSitemap() {
   const urls = [];
   for (const file of getHtmlPages()) {
     urls.push({
@@ -101,4 +101,20 @@ function buildSitemap() {
   ].join('\n');
 }
 
-fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), buildSitemap(), 'utf8');
+function buildSitemapIndex() {
+  return [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    '  <sitemap>',
+    `    <loc>${SITE_URL}/sitemap-pages.xml</loc>`,
+    '  </sitemap>',
+    '  <sitemap>',
+    `    <loc>${SITE_URL}/sitemap-hospitals.xml</loc>`,
+    '  </sitemap>',
+    '</sitemapindex>',
+    '',
+  ].join('\n');
+}
+
+fs.writeFileSync(path.join(ROOT, 'sitemap-pages.xml'), buildPageSitemap(), 'utf8');
+fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), buildSitemapIndex(), 'utf8');
