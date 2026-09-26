@@ -13,7 +13,7 @@ const pages = [
     badge: '서울 치과',
     hero: '서울 치과는 거주지와 직장 동선, 반복 방문 가능성, 치료 목적을 함께 봐야 선택이 쉬워집니다. 임플란트나 교정처럼 기간이 긴 진료는 비용만 보지 말고 촬영, 상담, 사후관리 흐름까지 확인하는 편이 안전합니다.',
     searchKeyword: '서울 치과',
-    primaryGuide: { href: 'guide-implant.html', label: '임플란트 상담 가이드' },
+    primaryGuide: { href: '/guide-implant', label: '임플란트 상담 가이드' },
     sections: [
       { title: '서울 치과를 고를 때 먼저 나눌 기준', items: ['정기검진과 스케일링처럼 가까운 생활권이 중요한 진료인지 확인합니다.', '임플란트, 보철, 교정처럼 여러 번 방문하는 치료는 직장·집·대중교통 동선을 함께 봅니다.', '야간이나 토요일 진료가 필요한 경우 접수 마감 시간이 실제로 맞는지 전화로 확인합니다.'] },
       { title: '상담 전에 준비하면 좋은 것', items: ['최근 촬영한 파노라마, CT, 이전 치료기록이 있으면 가져갑니다.', '복용 중인 약, 당뇨·고혈압·골다공증 치료 여부를 미리 정리합니다.', '예상 치료 기간, 내원 횟수, 임시치아 가능 여부를 질문 목록에 적어둡니다.'] },
@@ -36,7 +36,7 @@ const pages = [
     badge: '야간 진료',
     hero: '야간 진료는 “운영 중” 표시보다 마지막 접수 시간과 실제 가능한 진료 범위가 더 중요합니다. 단순 외래인지, 검사나 처치까지 가능한지, 응급실을 가야 하는 상황인지를 먼저 구분해야 시간을 줄일 수 있습니다.',
     searchKeyword: '야간 진료',
-    primaryGuide: { href: 'guide.html', label: '건강가이드 모음' },
+    primaryGuide: { href: '/guide', label: '건강가이드 모음' },
     sections: [
       { title: '야간 병원 검색 전 판단할 것', items: ['증상이 급한지, 다음날 외래로 봐도 되는지 먼저 구분합니다.', '통증, 발열, 호흡곤란, 출혈처럼 악화 가능성이 있으면 응급 안내를 우선 확인합니다.', '검사나 처치가 필요한 경우 야간에 해당 장비와 인력이 운영되는지 확인합니다.'] },
       { title: '전화로 꼭 확인할 항목', items: ['마지막 접수 시간이 진료 종료 시간보다 얼마나 빠른지 확인합니다.', '초진 접수가 가능한지, 예약 환자만 받는지 확인합니다.', '소아, 치과, 피부과, 정형외과처럼 원하는 진료과가 실제 야간에 열려 있는지 확인합니다.'] },
@@ -59,7 +59,7 @@ const pages = [
     badge: '토요일 진료',
     hero: '토요일 진료는 평일보다 접수 시간이 짧고 대기자가 몰리기 쉽습니다. 특히 소아과, 이비인후과, 치과, 정형외과는 오전 접수 마감이 빠를 수 있어 방문 목적과 시간 확인이 중요합니다.',
     searchKeyword: '토요일 진료',
-    primaryGuide: { href: 'guide.html', label: '진료 준비 가이드' },
+    primaryGuide: { href: '/guide', label: '진료 준비 가이드' },
     sections: [
       { title: '토요일에 많이 찾는 상황', items: ['평일에 시간을 내기 어려워 정기 진료나 검진을 몰아서 보려는 경우', '아이 발열, 기침, 비염처럼 주말 전에 확인하고 싶은 증상이 있는 경우', '치과 통증, 허리·무릎 통증처럼 월요일까지 기다리기 어려운 경우'] },
       { title: '방문 전 확인할 항목', items: ['토요일은 오전만 진료하는 병원이 많아 접수 마감 시간을 먼저 확인합니다.', '초진 접수와 검사 가능 여부가 평일과 같은지 확인합니다.', '건강검진, 예방접종, 물리치료처럼 별도 예약이 필요한 항목인지 확인합니다.'] },
@@ -82,7 +82,7 @@ const pages = [
     badge: '신규 개원',
     hero: '신규 개원 병원은 시설과 접근성이 장점일 수 있지만 후기와 운영 정보가 충분하지 않을 수 있습니다. 그래서 개원 시점보다 진료과 적합성, 의료진 설명, 검사 가능 범위, 예약 흐름을 함께 보는 것이 좋습니다.',
     searchKeyword: '신규 개원 병원',
-    primaryGuide: { href: 'guide.html', label: '건강가이드 모음' },
+    primaryGuide: { href: '/guide', label: '건강가이드 모음' },
     sections: [
       { title: '신규 개원 병원을 볼 때 장점', items: ['새 장비와 쾌적한 대기 공간을 기대할 수 있습니다.', '예약 흐름이 비교적 빠르게 잡히는 경우가 있습니다.', '생활권에 새로 생긴 병원이라 반복 방문 동선이 편할 수 있습니다.'] },
       { title: '후기가 적을 때 확인할 기준', items: ['의료진의 진료과, 주요 진료 항목, 검사 가능 범위를 확인합니다.', '초진 상담에서 진단과 치료 계획을 충분히 설명하는지 봅니다.', '비급여 항목과 추가 비용 설명이 명확한지 확인합니다.'] },
@@ -105,7 +105,7 @@ const pages = [
     badge: '도수치료 병원',
     hero: '도수치료는 단순히 “마사지처럼 받는 치료”가 아니라, 의사 진단과 기능 평가를 바탕으로 치료 목표를 정해야 합니다. 통증 위치, 악화 동작, 영상검사 이력, 반복 방문 가능성을 함께 정리하면 상담이 훨씬 구체적입니다.',
     searchKeyword: '도수치료 병원',
-    primaryGuide: { href: 'guide-manual-therapy.html', label: '도수치료 상담 가이드' },
+    primaryGuide: { href: '/guide-manual-therapy', label: '도수치료 상담 가이드' },
     sections: [
       { title: '도수치료 상담 전 구분할 것', items: ['목·허리·어깨·무릎 중 어느 부위가 문제인지 명확히 정리합니다.', '가만히 있을 때 아픈지, 특정 동작에서 아픈지 구분합니다.', '저림, 감각저하, 근력저하가 있으면 반드시 함께 알립니다.'] },
       { title: '병원 비교 기준', items: ['의사 진단 후 치료 계획이 세워지는지 확인합니다.', '도수치료 횟수, 예상 기간, 중간 평가 기준을 설명하는지 봅니다.', '운동교육, 자세 교정, 생활관리 안내가 함께 제공되는지 확인합니다.'] },
@@ -132,7 +132,7 @@ function list(items) {
 
 function actionLinks(page) {
   const keyword = encodeURIComponent(page.searchKeyword);
-  return `<a href="index.html?keyword=${keyword}#search-results" class="btn btn-primary">${esc(page.searchKeyword)} 검색</a>\n        <a href="${esc(page.primaryGuide.href)}" class="btn btn-outline">${esc(page.primaryGuide.label)}</a>`;
+  return `<a href="/?keyword=${keyword}#search-results" class="btn btn-primary">${esc(page.searchKeyword)} 검색</a>\n        <a href="${esc(page.primaryGuide.href)}" class="btn btn-outline">${esc(page.primaryGuide.label)}</a>`;
 }
 
 function relatedLinks(page) {
@@ -244,12 +244,12 @@ ${schemas}
 <body class="light-mode">
   <header class="header" id="header" style="position:static; border-bottom:1px solid var(--border-default);">
     <div class="header-inner">
-      <a href="index.html" class="logo"><span class="logo-icon">H</span><span class="gradient-text">병원찾기</span></a>
+      <a href="/" class="logo"><span class="logo-icon">H</span><span class="gradient-text">병원찾기</span></a>
       <nav class="nav-links">
-        <a href="index.html#search-results">병원목록</a>
-        <a href="guide.html">건강가이드</a>
-        <a href="about.html">사이트 소개</a>
-        <a href="contact.html">문의</a>
+        <a href="/#search-results">병원목록</a>
+        <a href="/guide">건강가이드</a>
+        <a href="/about">사이트 소개</a>
+        <a href="/contact">문의</a>
       </nav>
     </div>
   </header>
@@ -296,7 +296,7 @@ ${schemas}
       <h2>함께 보면 좋은 페이지</h2>
       <div class="intent-link-row">
         ${relatedLinks(page)}
-        <a href="index.html#search-results">병원 검색하기</a>
+        <a href="/#search-results">병원 검색하기</a>
       </div>
     </section>
 
@@ -325,16 +325,16 @@ ${schemas}
         </div>
         <div class="footer-links-group">
           <h4>바로가기</h4>
-          <a href="index.html">홈</a>
-          <a href="guide.html">건강가이드</a>
-          <a href="about.html">사이트 소개</a>
+          <a href="/">홈</a>
+          <a href="/guide">건강가이드</a>
+          <a href="/about">사이트 소개</a>
         </div>
         <div class="footer-links-group">
           <h4>정책</h4>
-          <a href="editorial-policy.html">콘텐츠 편집 원칙</a>
-          <a href="data-policy.html">병원 데이터 출처 안내</a>
-          <a href="ad-policy.html">광고 및 제휴 안내</a>
-          <a href="privacy.html">개인정보처리방침</a>
+          <a href="/editorial-policy">콘텐츠 편집 원칙</a>
+          <a href="/data-policy">병원 데이터 출처 안내</a>
+          <a href="/ad-policy">광고 및 제휴 안내</a>
+          <a href="/privacy">개인정보처리방침</a>
         </div>
       </div>
       <div class="footer-bottom">

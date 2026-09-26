@@ -28,6 +28,7 @@ for (const file of fs.readdirSync(root).filter((name) => name.endsWith('.html') 
   for (const match of html.matchAll(/(?:href|src)=["']([^"']+)["']/g)) {
     const href = match[1];
     if (/^(?:[a-z][a-z0-9+.-]*:|\/\/|#)/i.test(href)) continue;
+    if (/\.html(?:[?#]|$)/i.test(href)) errors.push(`${file}: legacy .html internal link ${href}`);
     const pathname = decodeURIComponent(href.split(/[?#]/)[0]).replace(/^\//, '') || 'index.html';
     if (pathname.startsWith('hospital/')) continue;
     if (!fs.existsSync(path.join(root, pathname)) && !fs.existsSync(path.join(root, `${pathname}.html`))) {

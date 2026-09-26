@@ -5,36 +5,36 @@
 
   const GUIDE_LINKS = {
     dental: [
-      { href: 'guide-implant.html', title: '임플란트 가이드', description: '치과 선택 전에 확인할 항목을 정리했습니다.' },
-      { href: 'parking-dental.html', title: '주차 가능한 치과', description: '차량 방문이 편한 치과 탐색 페이지입니다.' },
+      { href: '/guide-implant', title: '임플란트 가이드', description: '치과 선택 전에 확인할 항목을 정리했습니다.' },
+      { href: '/parking-dental', title: '주차 가능한 치과', description: '차량 방문이 편한 치과 탐색 페이지입니다.' },
     ],
     internal: [
-      { href: 'guide-endoscopy.html', title: '내시경 가이드', description: '검사 전 준비사항과 병원 선택 기준입니다.' },
-      { href: 'vaccination-clinic.html', title: '예방접종 병원', description: '생활권 기준으로 찾기 쉬운 페이지입니다.' },
+      { href: '/guide-endoscopy', title: '내시경 가이드', description: '검사 전 준비사항과 병원 선택 기준입니다.' },
+      { href: '/vaccination-clinic', title: '예방접종 병원', description: '생활권 기준으로 찾기 쉬운 페이지입니다.' },
     ],
     pediatric: [
-      { href: 'sunday-pediatric.html', title: '일요일 소아과', description: '주말 진료가 필요한 상황을 대비한 안내입니다.' },
-      { href: 'guide-rhinitis.html', title: '소아 비염 가이드', description: '호흡기 증상 관련 기본 체크리스트입니다.' },
+      { href: '/sunday-pediatric', title: '일요일 소아과', description: '주말 진료가 필요한 상황을 대비한 안내입니다.' },
+      { href: '/guide-rhinitis', title: '소아 비염 가이드', description: '호흡기 증상 관련 기본 체크리스트입니다.' },
     ],
     ophthalmology: [
-      { href: 'lasik-clinic.html', title: '라식/라섹 안내', description: '시력교정 병원 비교에 필요한 기준을 정리했습니다.' },
-      { href: 'cataract-clinic.html', title: '백내장 병원', description: '진료 정보와 방문 포인트를 함께 볼 수 있습니다.' },
+      { href: '/lasik-clinic', title: '라식/라섹 안내', description: '시력교정 병원 비교에 필요한 기준을 정리했습니다.' },
+      { href: '/cataract-clinic', title: '백내장 병원', description: '진료 정보와 방문 포인트를 함께 볼 수 있습니다.' },
     ],
     orthopedic: [
-      { href: 'guide-ortho.html', title: '정형외과 가이드', description: '통증, 영상검사, 치료 흐름을 먼저 확인하세요.' },
-      { href: 'manual-therapy-clinic.html', title: '도수치료 병원', description: '도수치료 관련 병원 탐색 페이지입니다.' },
+      { href: '/guide-ortho', title: '정형외과 가이드', description: '통증, 영상검사, 치료 흐름을 먼저 확인하세요.' },
+      { href: '/manual-therapy-clinic', title: '도수치료 병원', description: '도수치료 관련 병원 탐색 페이지입니다.' },
     ],
     ent: [
-      { href: 'guide-rhinitis.html', title: '비염 가이드', description: '이비인후과 방문 전에 확인할 내용을 정리했습니다.' },
-      { href: 'night-clinic.html', title: '야간 진료 병원', description: '퇴근 후 방문 가능한 병원을 찾을 수 있습니다.' },
+      { href: '/guide-rhinitis', title: '비염 가이드', description: '이비인후과 방문 전에 확인할 내용을 정리했습니다.' },
+      { href: '/night-clinic', title: '야간 진료 병원', description: '퇴근 후 방문 가능한 병원을 찾을 수 있습니다.' },
     ],
     dermatology: [
-      { href: 'night-dermatology.html', title: '야간 피부과', description: '야간 운영 피부과를 모아본 안내입니다.' },
-      { href: 'guide-acne.html', title: '피부과 가이드', description: '증상별로 비교할 포인트를 확인하세요.' },
+      { href: '/night-dermatology', title: '야간 피부과', description: '야간 운영 피부과를 모아본 안내입니다.' },
+      { href: '/guide-acne', title: '피부과 가이드', description: '증상별로 비교할 포인트를 확인하세요.' },
     ],
     obgyn: [
-      { href: 'womens-checkup-clinic.html', title: '여성검진 병원', description: '검진 중심으로 병원을 살펴볼 수 있습니다.' },
-      { href: 'new-openings.html', title: '신규 개원 병원', description: '최근 개원 병원을 따로 볼 수 있습니다.' },
+      { href: '/womens-checkup-clinic', title: '여성검진 병원', description: '검진 중심으로 병원을 살펴볼 수 있습니다.' },
+      { href: '/new-openings', title: '신규 개원 병원', description: '최근 개원 병원을 따로 볼 수 있습니다.' },
     ],
   };
 
@@ -610,8 +610,8 @@
     if (!container) return;
 
     const items = GUIDE_LINKS[hospital.departmentId] || GUIDE_LINKS[hospital.type?.toLowerCase?.()] || [
-      { href: 'guide.html', title: '건강 가이드', description: '관련 건강 가이드를 모아볼 수 있습니다.' },
-      { href: 'new-openings.html', title: '신규 개원 병원', description: '최근 개원 병원을 따로 볼 수 있습니다.' },
+      { href: '/guide', title: '건강 가이드', description: '관련 건강 가이드를 모아볼 수 있습니다.' },
+      { href: '/new-openings', title: '신규 개원 병원', description: '최근 개원 병원을 따로 볼 수 있습니다.' },
     ];
 
     container.innerHTML = items.map((item) => (
@@ -635,7 +635,7 @@
     ].filter(Boolean);
 
     container.innerHTML = queries.map((query) => (
-      `<a href="index.html?keyword=${encodeURIComponent(query)}#search-results" style="display:flex; flex-direction:column; gap:8px; padding:18px; border:1px solid var(--border-default); border-radius:14px; text-decoration:none; color:inherit; background:var(--bg-body);">
+      `<a href="/?keyword=${encodeURIComponent(query)}#search-results" style="display:flex; flex-direction:column; gap:8px; padding:18px; border:1px solid var(--border-default); border-radius:14px; text-decoration:none; color:inherit; background:var(--bg-body);">
         <strong style="font-size:1rem;">${escapeHtml(query)}</strong>
         <span style="color:var(--text-body); line-height:1.6;">이 조건으로 목록 검색하기</span>
       </a>`

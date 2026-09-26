@@ -164,21 +164,21 @@ ${schemas(page)}
 <body class="light-mode">
   <header class="header" id="header" style="position:static; border-bottom:1px solid var(--border-default);">
     <div class="header-inner">
-      <a href="index.html" class="logo"><span class="logo-icon">H</span><span class="gradient-text">병원찾기</span></a>
-      <nav class="nav-links"><a href="index.html#search-results">병원목록</a><a href="guide.html">건강가이드</a><a href="about.html">사이트 소개</a><a href="contact.html">문의</a></nav>
+      <a href="/" class="logo"><span class="logo-icon">H</span><span class="gradient-text">병원찾기</span></a>
+      <nav class="nav-links"><a href="/#search-results">병원목록</a><a href="/guide">건강가이드</a><a href="/about">사이트 소개</a><a href="/contact">문의</a></nav>
     </div>
   </header>
   <main class="container intent-page">
-    <section class="intent-hero"><span class="intent-badge">${esc(page.badge)}</span><h1>${esc(page.title)}</h1><p>${esc(page.hero)}</p><div class="intent-actions"><a href="index.html?keyword=${encodeURIComponent(page.keyword)}#search-results" class="btn btn-primary">${esc(page.keyword)} 검색</a><a href="${esc(page.guide[0])}" class="btn btn-outline">${esc(page.guide[1])}</a></div></section>
+    <section class="intent-hero"><span class="intent-badge">${esc(page.badge)}</span><h1>${esc(page.title)}</h1><p>${esc(page.hero)}</p><div class="intent-actions"><a href="/?keyword=${encodeURIComponent(page.keyword)}#search-results" class="btn btn-primary">${esc(page.keyword)} 검색</a><a href="${esc(page.guide[0])}" class="btn btn-outline">${esc(page.guide[1])}</a></div></section>
     <section class="intent-grid">${page.sections.map(([title,items])=>`<article class="intent-card"><h2>${esc(title)}</h2><ul>${list(items)}</ul></article>`).join('\n')}</section>
     <section class="intent-note intent-howto"><h2>검색 결과를 방문 판단으로 바꾸는 순서</h2><ol>${decisionSteps(page).map(item=>`<li>${esc(item)}</li>`).join('\n')}</ol><p class="intent-source-note">이 페이지는 특정 병원을 추천하거나 순위를 보증하지 않습니다. 운영 상태와 실제 진료 가능 범위는 병원과 공식 기관에서 최종 확인해야 합니다.</p></section>
     <section class="intent-note"><h2>검색 예시</h2><div class="intent-chip-row">${page.chips.map(c=>`<span>${esc(c)}</span>`).join('\n')}</div></section>
     <section class="intent-note"><h2>${esc(page.badge)} 검색 결과를 읽는 법</h2><p>${esc(page.keyword)} 검색 결과는 병원 선택을 위한 출발점입니다. 진료 목적, 운영시간, 준비물을 차례로 확인하세요. ${esc(page.sections[0][1][0])} ${esc(page.sections[1][1][0])} ${esc(page.sections[2][1][0])} 이 세 항목을 전화로 다시 확인한 뒤 목록을 좁혀 보세요.</p><ul><li>병원명과 주소가 생활권에 맞는지 먼저 확인합니다.</li><li>토요일·야간·일요일 표시는 참고 조건이므로 접수 마감과 당일 진료 가능 여부를 전화로 확인합니다.</li><li>검사, 장비, 예약, 주차처럼 방문 목적과 직접 관련된 항목을 질문 목록으로 만들어 둡니다.</li></ul></section>
     <section class="intent-faq intent-note"><h2>자주 묻는 질문</h2>${page.faq.map(([q,a],i)=>`<details${i===0?' open':''}><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('\n')}</section>
-    <section class="intent-note"><h2>함께 보면 좋은 페이지</h2><div class="intent-link-row">${page.related.map(href=>`<a href="${esc(href)}">${esc(labelFor(href))}</a>`).join('\n')}<a href="index.html#search-results">병원 검색하기</a></div></section>
+    <section class="intent-note"><h2>함께 보면 좋은 페이지</h2><div class="intent-link-row">${page.related.map(href=>`<a href="${esc(href)}">${esc(labelFor(href))}</a>`).join('\n')}<a href="/#search-results">병원 검색하기</a></div></section>
     <section class="intent-note"><h2>공식 확인 경로</h2><p>이 페이지는 병원 선택 기준을 정리한 참고 자료입니다. 최신 운영 여부와 진료 가능 범위는 방문 전 병원에 확인하고, 기관 정보는 <a href="https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000" rel="external noopener" target="_blank">건강보험심사평가원 건강지도</a>에서도 대조해 주세요.</p></section>
   </main>
-  <footer class="footer"><div class="footer-inner"><div class="footer-top"><div class="footer-brand"><div class="logo"><span class="logo-icon">H</span><span class="gradient-text">병원찾기</span></div><p>공공 데이터와 공개 가능한 정보를 바탕으로 병원 탐색에 필요한 참고 정보를 정리합니다.</p></div><div class="footer-links-group"><h4>바로가기</h4><a href="index.html">홈</a><a href="guide.html">건강가이드</a><a href="about.html">사이트 소개</a></div><div class="footer-links-group"><h4>정책</h4><a href="editorial-policy.html">콘텐츠 편집 원칙</a><a href="data-policy.html">병원 데이터 출처 안내</a><a href="ad-policy.html">광고 및 제휴 안내</a><a href="privacy.html">개인정보처리방침</a></div></div><div class="footer-bottom"><p>&copy; 2026 병원찾기. 모든 권리 보유.</p><p>본 사이트의 정보는 참고용이며, 실제 진단과 치료 결정은 반드시 해당 병원 또는 의료진과 직접 상담해 주세요.</p></div></div></footer>
+  <footer class="footer"><div class="footer-inner"><div class="footer-top"><div class="footer-brand"><div class="logo"><span class="logo-icon">H</span><span class="gradient-text">병원찾기</span></div><p>공공 데이터와 공개 가능한 정보를 바탕으로 병원 탐색에 필요한 참고 정보를 정리합니다.</p></div><div class="footer-links-group"><h4>바로가기</h4><a href="/">홈</a><a href="/guide">건강가이드</a><a href="/about">사이트 소개</a></div><div class="footer-links-group"><h4>정책</h4><a href="/editorial-policy">콘텐츠 편집 원칙</a><a href="/data-policy">병원 데이터 출처 안내</a><a href="/ad-policy">광고 및 제휴 안내</a><a href="/privacy">개인정보처리방침</a></div></div><div class="footer-bottom"><p>&copy; 2026 병원찾기. 모든 권리 보유.</p><p>본 사이트의 정보는 참고용이며, 실제 진단과 치료 결정은 반드시 해당 병원 또는 의료진과 직접 상담해 주세요.</p></div></div></footer>
 </body>
 </html>`;
 }

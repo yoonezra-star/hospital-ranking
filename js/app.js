@@ -39,21 +39,21 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   const GUIDE_SPOTLIGHTS = [
-    { href: 'saturday-clinic.html', title: '토요일 진료 병원 찾기', description: '토요일 운영 여부와 접수 마감 시간을 함께 보세요.', badge: '운영조건' },
-    { href: 'night-clinic.html', title: '야간 진료 병원 찾기', description: '퇴근 후 방문 가능한 병원을 빠르게 좁힐 수 있습니다.', badge: '운영조건' },
-    { href: 'sunday-clinic.html', title: '일요일 진료 병원 찾기', description: '휴일 외래 수요가 많은 과를 중심으로 정리했습니다.', badge: '운영조건' },
-    { href: 'new-openings.html', title: '신규 개원 병원', description: '최근 개원 병원을 따로 살펴볼 수 있습니다.', badge: '개원정보' },
-    { href: 'guide-implant.html', title: '임플란트 가이드', description: '치과 방문 전에 체크할 기준을 정리했습니다.', badge: '건강가이드' },
-    { href: 'guide-endoscopy.html', title: '내시경 가이드', description: '검사 전 준비와 상담 포인트를 먼저 확인하세요.', badge: '건강가이드' },
+    { href: '/saturday-clinic', title: '토요일 진료 병원 찾기', description: '토요일 운영 여부와 접수 마감 시간을 함께 보세요.', badge: '운영조건' },
+    { href: '/night-clinic', title: '야간 진료 병원 찾기', description: '퇴근 후 방문 가능한 병원을 빠르게 좁힐 수 있습니다.', badge: '운영조건' },
+    { href: '/sunday-clinic', title: '일요일 진료 병원 찾기', description: '휴일 외래 수요가 많은 과를 중심으로 정리했습니다.', badge: '운영조건' },
+    { href: '/new-openings', title: '신규 개원 병원', description: '최근 개원 병원을 따로 살펴볼 수 있습니다.', badge: '개원정보' },
+    { href: '/guide-implant', title: '임플란트 가이드', description: '치과 방문 전에 체크할 기준을 정리했습니다.', badge: '건강가이드' },
+    { href: '/guide-endoscopy', title: '내시경 가이드', description: '검사 전 준비와 상담 포인트를 먼저 확인하세요.', badge: '건강가이드' },
   ];
 
   const REGION_SPOTLIGHTS = [
-    { href: 'seoul-dental.html', title: '서울 치과 병원찾기', description: '서울권 치과를 생활권 기준으로 탐색할 수 있습니다.', badge: '지역탐색' },
-    { href: 'seoul-ophthalmology.html', title: '서울 안과 병원찾기', description: '시력교정과 백내장 상담 흐름까지 함께 보기 좋습니다.', badge: '지역탐색' },
-    { href: 'seoul-pediatric.html', title: '서울 소아과 병원찾기', description: '보호자 수요가 많은 소아과를 빠르게 비교할 수 있습니다.', badge: '지역탐색' },
-    { href: 'gyeonggi-dental.html', title: '경기 치과 병원찾기', description: '경기권 치과를 생활권 중심으로 찾을 수 있습니다.', badge: '지역탐색' },
-    { href: 'busan-ophthalmology.html', title: '부산 안과 병원찾기', description: '부산 지역 안과 비교용 랜딩 페이지입니다.', badge: '지역탐색' },
-    { href: 'daejeon-internal.html', title: '대전 내과 병원찾기', description: '대전권 내과를 진료 목적 기준으로 확인할 수 있습니다.', badge: '지역탐색' },
+    { href: '/seoul-dental', title: '서울 치과 병원찾기', description: '서울권 치과를 생활권 기준으로 탐색할 수 있습니다.', badge: '지역탐색' },
+    { href: '/seoul-ophthalmology', title: '서울 안과 병원찾기', description: '시력교정과 백내장 상담 흐름까지 함께 보기 좋습니다.', badge: '지역탐색' },
+    { href: '/seoul-pediatric', title: '서울 소아과 병원찾기', description: '보호자 수요가 많은 소아과를 빠르게 비교할 수 있습니다.', badge: '지역탐색' },
+    { href: '/gyeonggi-dental', title: '경기 치과 병원찾기', description: '경기권 치과를 생활권 중심으로 찾을 수 있습니다.', badge: '지역탐색' },
+    { href: '/busan-ophthalmology', title: '부산 안과 병원찾기', description: '부산 지역 안과 비교용 랜딩 페이지입니다.', badge: '지역탐색' },
+    { href: '/daejeon-internal', title: '대전 내과 병원찾기', description: '대전권 내과를 진료 목적 기준으로 확인할 수 있습니다.', badge: '지역탐색' },
   ];
 
   const SEARCH_TOKEN_ALIASES = {

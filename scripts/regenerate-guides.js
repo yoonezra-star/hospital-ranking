@@ -321,12 +321,12 @@ function commonHead({ title, description, canonical, schema }) {
 function header(active = 'guide') {
   return `<header class="header" id="header" style="position:static; border-bottom:1px solid var(--border-default);">
     <div class="header-inner">
-      <a href="index.html" class="logo"><span class="logo-icon">H</span><span class="gradient-text">병원찾기</span></a>
+      <a href="/" class="logo"><span class="logo-icon">H</span><span class="gradient-text">병원찾기</span></a>
       <nav class="nav-links">
-        <a href="index.html#search-results">병원목록</a>
-        <a href="guide.html"${active === 'guide' ? ' class="active"' : ''}>건강가이드</a>
-        <a href="about.html">사이트 소개</a>
-        <a href="contact.html">문의</a>
+        <a href="/#search-results">병원목록</a>
+        <a href="/guide"${active === 'guide' ? ' class="active"' : ''}>건강가이드</a>
+        <a href="/about">사이트 소개</a>
+        <a href="/contact">문의</a>
       </nav>
     </div>
   </header>`;
@@ -342,16 +342,16 @@ function footer() {
         </div>
         <div class="footer-links-group">
           <h4>바로가기</h4>
-          <a href="index.html">홈</a>
-          <a href="guide.html">건강가이드</a>
-          <a href="about.html">사이트 소개</a>
+          <a href="/">홈</a>
+          <a href="/guide">건강가이드</a>
+          <a href="/about">사이트 소개</a>
         </div>
         <div class="footer-links-group">
           <h4>정책</h4>
-          <a href="editorial-policy.html">콘텐츠 편집 원칙</a>
-          <a href="data-policy.html">병원 데이터 출처 안내</a>
-          <a href="ad-policy.html">광고 및 제휴 안내</a>
-          <a href="privacy.html">개인정보처리방침</a>
+          <a href="/editorial-policy">콘텐츠 편집 원칙</a>
+          <a href="/data-policy">병원 데이터 출처 안내</a>
+          <a href="/ad-policy">광고 및 제휴 안내</a>
+          <a href="/privacy">개인정보처리방침</a>
         </div>
       </div>
       <div class="footer-bottom">
@@ -452,8 +452,8 @@ ${commonHead({ title: guide.title, description: guide.summary, canonical: cleanU
           <h2>관련해서 함께 볼 페이지</h2>
           <div class="guide-link-row">
             ${relatedLinks(guide)}
-            <a href="guide.html">전체 가이드 보기</a>
-            <a href="index.html#search-results">병원 검색하기</a>
+            <a href="/guide">전체 가이드 보기</a>
+            <a href="/#search-results">병원 검색하기</a>
           </div>
         </section>
       </div>
@@ -476,7 +476,7 @@ function renderIndex() {
     dateModified: TODAY,
     hasPart: [SEARCH_GUIDE, ...guides].map((g) => ({ '@type': 'WebPage', name: g.title, url: cleanUrl(g.slug) }))
   };
-  const cards = [SEARCH_GUIDE, ...guides].map((g) => `<a class="guide-card-link" href="${g.slug}.html">
+  const cards = [SEARCH_GUIDE, ...guides].map((g) => `<a class="guide-card-link" href="/${g.slug}">
       <div class="guide-card-body">
         <span class="guide-category">${esc(g.category)}</span>
         <h2>${esc(g.title)}</h2>

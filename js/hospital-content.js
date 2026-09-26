@@ -130,7 +130,7 @@
 
   const REGIONAL_LANDING_LINKS = [
     {
-      href: 'seoul-dental.html',
+      href: '/seoul-dental',
       title: '서울 치과 찾기',
       description: '서울 지역 치과 비교와 준비 정보를 한 번에 확인합니다.',
       regionKeywords: ['서울'],
@@ -139,7 +139,7 @@
       badge: '서울 · 치과',
     },
     {
-      href: 'seoul-ophthalmology.html',
+      href: '/seoul-ophthalmology',
       title: '서울 안과 찾기',
       description: '서울 안과 진료 비교와 검사 준비 정보를 함께 확인합니다.',
       regionKeywords: ['서울'],
@@ -148,7 +148,7 @@
       badge: '서울 · 안과',
     },
     {
-      href: 'seoul-orthopedic.html',
+      href: '/seoul-orthopedic',
       title: '서울 정형외과 찾기',
       description: '서울 정형외과를 허리, 무릎, 어깨 통증과 도수치료 상담 기준으로 비교합니다.',
       regionKeywords: ['서울'],
@@ -157,7 +157,7 @@
       badge: '서울 · 정형외과',
     },
     {
-      href: 'seoul-pain.html',
+      href: '/seoul-pain',
       title: '서울 통증의학과 찾기',
       description: '서울 통증의학과를 허리, 목, 어깨 통증과 주사치료 기준으로 비교합니다.',
       regionKeywords: ['서울'],
@@ -166,7 +166,7 @@
       badge: '서울 · 통증의학과',
     },
     {
-      href: 'seoul-rehab.html',
+      href: '/seoul-rehab',
       title: '서울 재활의학과 찾기',
       description: '서울 재활의학과를 도수치료, 운동치료, 회복 외래 중심으로 비교합니다.',
       regionKeywords: ['서울'],
@@ -175,7 +175,7 @@
       badge: '서울 · 재활의학과',
     },
     {
-      href: 'gyeonggi-orthopedic.html',
+      href: '/gyeonggi-orthopedic',
       title: '경기 정형외과 찾기',
       description: '경기권 정형외과를 통증 부위와 진료 흐름 중심으로 비교합니다.',
       regionKeywords: ['경기', '경기도'],
@@ -184,7 +184,7 @@
       badge: '경기 · 정형외과',
     },
     {
-      href: 'busan-ophthalmology.html',
+      href: '/busan-ophthalmology',
       title: '부산 안과 찾기',
       description: '부산 지역 안과를 시력검사와 수술 상담 관점에서 정리했습니다.',
       regionKeywords: ['부산'],
@@ -193,7 +193,7 @@
       badge: '부산 · 안과',
     },
     {
-      href: 'busan-dental.html',
+      href: '/busan-dental',
       title: '부산 치과 찾기',
       description: '부산권 치과를 임플란트, 보철, 일반 진료 기준으로 살펴봅니다.',
       regionKeywords: ['부산'],
@@ -202,7 +202,7 @@
       badge: '부산 · 치과',
     },
     {
-      href: 'daejeon-internal.html',
+      href: '/daejeon-internal',
       title: '대전 내과 찾기',
       description: '대전 내과 방문 전 확인할 검사, 만성질환, 진료 흐름 정보를 모았습니다.',
       regionKeywords: ['대전'],
@@ -211,7 +211,7 @@
       badge: '대전 · 내과',
     },
     {
-      href: 'incheon-pediatric.html',
+      href: '/incheon-pediatric',
       title: '인천 소아과 찾기',
       description: '인천 소아과 진료와 예방접종, 발열 대응 정보를 함께 안내합니다.',
       regionKeywords: ['인천'],
@@ -220,7 +220,7 @@
       badge: '인천 · 소아과',
     },
     {
-      href: 'daegu-ent.html',
+      href: '/daegu-ent',
       title: '대구 이비인후과 찾기',
       description: '대구 이비인후과를 비염, 목 통증, 귀 증상 중심으로 비교합니다.',
       regionKeywords: ['대구'],
@@ -229,7 +229,7 @@
       badge: '대구 · 이비인후과',
     },
     {
-      href: 'seoul-psychiatry.html',
+      href: '/seoul-psychiatry',
       title: '서울 정신건강의학과 찾기',
       description: '서울 정신건강의학과 비교와 우울, 불안, 수면 상담 준비 정보를 함께 확인합니다.',
       regionKeywords: ['서울'],
@@ -238,7 +238,7 @@
       badge: '서울 · 정신건강의학과',
     },
     {
-      href: 'seoul-urology.html',
+      href: '/seoul-urology',
       title: '서울 비뇨의학과 찾기',
       description: '서울 비뇨의학과 비교와 요로결석, 배뇨장애, 전립선 상담 준비 정보를 함께 확인합니다.',
       regionKeywords: ['서울'],
@@ -247,7 +247,7 @@
       badge: '서울 · 비뇨의학과',
     },
     {
-      href: 'seoul-dermatology.html',
+      href: '/seoul-dermatology',
       title: '서울 피부과 찾기',
       description: '서울 피부과 비교와 여드름, 흉터, 색소, 피부염 상담 준비 정보를 함께 확인합니다.',
       regionKeywords: ['서울'],
@@ -256,7 +256,7 @@
       badge: '서울 · 피부과',
     },
     {
-      href: 'seoul-pediatric.html',
+      href: '/seoul-pediatric',
       title: '서울 소아청소년과 찾기',
       description: '서울 소아청소년과 비교와 발열, 기침, 비염, 예방접종 준비 정보를 함께 확인합니다.',
       regionKeywords: ['서울'],
@@ -265,7 +265,7 @@
       badge: '서울 · 소아청소년과',
     },
     {
-      href: 'seoul-ent.html',
+      href: '/seoul-ent',
       title: '서울 이비인후과 찾기',
       description: '서울 이비인후과 비교와 비염, 기침, 목 통증, 귀 증상 준비 정보를 함께 확인합니다.',
       regionKeywords: ['서울'],
@@ -274,7 +274,7 @@
       badge: '서울 · 이비인후과',
     },
     {
-      href: 'seoul-internal.html',
+      href: '/seoul-internal',
       title: '서울 내과 찾기',
       description: '서울 내과 비교와 건강검진, 만성질환, 소화기 상담 준비 정보를 확인합니다.',
       regionKeywords: ['서울'],
@@ -283,7 +283,7 @@
       badge: '서울 · 내과',
     },
     {
-      href: 'seoul-obgyn.html',
+      href: '/seoul-obgyn',
       title: '서울 산부인과 찾기',
       description: '서울 산부인과 비교와 여성검진, 초음파 상담, 부정출혈 체크 정보를 함께 확인합니다.',
       regionKeywords: ['서울'],
@@ -292,7 +292,7 @@
       badge: '서울 · 산부인과',
     },
     {
-      href: 'gyeonggi-dental.html',
+      href: '/gyeonggi-dental',
       title: '경기 치과 찾기',
       description: '경기 지역 치과를 임플란트, 교정, 보철 기준으로 비교합니다.',
       regionKeywords: ['경기', '경기도'],
@@ -301,7 +301,7 @@
       badge: '경기 · 치과',
     },
     {
-      href: 'incheon-ophthalmology.html',
+      href: '/incheon-ophthalmology',
       title: '인천 안과 찾기',
       description: '인천 안과 진료 비교와 시력검사, 백내장 상담 준비 정보를 함께 확인합니다.',
       regionKeywords: ['인천'],
@@ -310,7 +310,7 @@
       badge: '인천 · 안과',
     },
     {
-      href: 'daejeon-ent.html',
+      href: '/daejeon-ent',
       title: '대전 이비인후과 찾기',
       description: '대전 이비인후과를 비염, 목 통증, 귀 증상 중심으로 비교합니다.',
       regionKeywords: ['대전'],
@@ -322,73 +322,73 @@
 
   const GUIDE_SPOTLIGHTS = [
     { title: '토요일 진료 병원 모아보기', href: '#quick-access', description: '주말 진료, 야간 진료, 최근 개원 병원을 빠르게 체크할 수 있습니다.', badge: '상황별 탐색' },
-    { title: '임플란트 치과 가이드', href: 'guide-implant.html', description: '상담 전 체크포인트, 비용, 촬영 준비를 먼저 정리해 둡니다.', badge: '치과 가이드' },
-    { title: '수면내시경 병원 찾기', href: 'guide-endoscopy.html', description: '검사 전 준비, 주의사항, 회복 동선을 정리한 가이드로 연결합니다.', badge: '검사 가이드' },
-    { title: '우울·불안 상담 병원 찾기', href: 'guide-depression.html', description: '정신건강의학과 상담 전 준비사항과 초기 질문 포인트를 정리합니다.', badge: '상담 가이드' },
-    { title: '백내장 검사 가이드', href: 'guide-cataract.html', description: '시야 흐림, 눈부심, 인공수정체 선택과 수술 상담 질문을 한 번에 정리합니다.', badge: '안과 가이드' },
-    { title: '여성검진 준비 가이드', href: 'guide-womens-checkup.html', description: '자궁경부검사, 초음파 상담, 부정출혈 체크 포인트를 방문 전에 정리합니다.', badge: '산부인과 가이드' },
+    { title: '임플란트 치과 가이드', href: '/guide-implant', description: '상담 전 체크포인트, 비용, 촬영 준비를 먼저 정리해 둡니다.', badge: '치과 가이드' },
+    { title: '수면내시경 병원 찾기', href: '/guide-endoscopy', description: '검사 전 준비, 주의사항, 회복 동선을 정리한 가이드로 연결합니다.', badge: '검사 가이드' },
+    { title: '우울·불안 상담 병원 찾기', href: '/guide-depression', description: '정신건강의학과 상담 전 준비사항과 초기 질문 포인트를 정리합니다.', badge: '상담 가이드' },
+    { title: '백내장 검사 가이드', href: '/guide-cataract', description: '시야 흐림, 눈부심, 인공수정체 선택과 수술 상담 질문을 한 번에 정리합니다.', badge: '안과 가이드' },
+    { title: '여성검진 준비 가이드', href: '/guide-womens-checkup', description: '자궁경부검사, 초음파 상담, 부정출혈 체크 포인트를 방문 전에 정리합니다.', badge: '산부인과 가이드' },
   ];
 
   const GUIDE_RECOMMENDATIONS = {
     general: [
-      { title: '수면내시경 준비 가이드', href: 'guide-endoscopy.html', description: '검사 전 금식, 귀가 동선, 회복 포인트를 먼저 확인합니다.' },
-      { title: '당뇨 관리 가이드', href: 'guide-diabetes.html', description: '만성질환 추적 진료 전에 체크할 항목을 정리합니다.' },
+      { title: '수면내시경 준비 가이드', href: '/guide-endoscopy', description: '검사 전 금식, 귀가 동선, 회복 포인트를 먼저 확인합니다.' },
+      { title: '당뇨 관리 가이드', href: '/guide-diabetes', description: '만성질환 추적 진료 전에 체크할 항목을 정리합니다.' },
     ],
     dental: [
-      { title: '임플란트 치과 가이드', href: 'guide-implant.html', description: '상담 전 촬영, 비용, 보철 계획을 확인할 수 있습니다.' },
-      { title: '교정 치과 가이드', href: 'guide-ortho.html', description: '교정 상담 전에 기간과 검사 포인트를 정리합니다.' },
+      { title: '임플란트 치과 가이드', href: '/guide-implant', description: '상담 전 촬영, 비용, 보철 계획을 확인할 수 있습니다.' },
+      { title: '교정 치과 가이드', href: '/guide-ortho', description: '교정 상담 전에 기간과 검사 포인트를 정리합니다.' },
     ],
     orthopedic: [
-      { title: '정형외과 진료 준비 가이드', href: 'guide-ortho.html', description: '허리, 어깨, 무릎 통증 진료 전에 확인할 내용을 모았습니다.' },
-      { title: '비염 아닌 목·통증 외래와 구분하기', href: 'guide-rhinitis.html', description: '호흡기 증상과 근골격계 증상을 구분해 외래를 찾을 때 참고합니다.' },
+      { title: '정형외과 진료 준비 가이드', href: '/guide-ortho', description: '허리, 어깨, 무릎 통증 진료 전에 확인할 내용을 모았습니다.' },
+      { title: '비염 아닌 목·통증 외래와 구분하기', href: '/guide-rhinitis', description: '호흡기 증상과 근골격계 증상을 구분해 외래를 찾을 때 참고합니다.' },
     ],
     ophthalmology: [
-      { title: '라식·라섹 가이드', href: 'guide-lasik.html', description: '시력교정술 전 검사와 회복 포인트를 확인합니다.' },
-      { title: '백내장·안과 검사 전 체크', href: 'guide-cataract.html', description: '시야 흐림, 눈부심, 렌즈 선택, 수술 상담 질문을 참고용으로 정리했습니다.' },
+      { title: '라식·라섹 가이드', href: '/guide-lasik', description: '시력교정술 전 검사와 회복 포인트를 확인합니다.' },
+      { title: '백내장·안과 검사 전 체크', href: '/guide-cataract', description: '시야 흐림, 눈부심, 렌즈 선택, 수술 상담 질문을 참고용으로 정리했습니다.' },
     ],
     dermatology: [
-      { title: '여드름 피부과 가이드', href: 'guide-acne.html', description: '약 처방과 시술 상담 전에 체크할 기준을 정리합니다.' },
-      { title: '피부과 방문 전 체크', href: 'guide-rhinitis.html', description: '증상 기록과 복용약 정리를 위한 참고 가이드입니다.' },
+      { title: '여드름 피부과 가이드', href: '/guide-acne', description: '약 처방과 시술 상담 전에 체크할 기준을 정리합니다.' },
+      { title: '피부과 방문 전 체크', href: '/guide-rhinitis', description: '증상 기록과 복용약 정리를 위한 참고 가이드입니다.' },
     ],
     ent: [
-      { title: '비염·이비인후과 가이드', href: 'guide-rhinitis.html', description: '코막힘, 알레르기, 반복 감기 진료 전에 확인할 포인트를 모았습니다.' },
-      { title: '수면내시경 검사 가이드', href: 'guide-endoscopy.html', description: '목·위장 관련 검사 전 준비 흐름을 참고용으로 확인할 수 있습니다.' },
+      { title: '비염·이비인후과 가이드', href: '/guide-rhinitis', description: '코막힘, 알레르기, 반복 감기 진료 전에 확인할 포인트를 모았습니다.' },
+      { title: '수면내시경 검사 가이드', href: '/guide-endoscopy', description: '목·위장 관련 검사 전 준비 흐름을 참고용으로 확인할 수 있습니다.' },
     ],
     pediatric: [
-      { title: '소아과 방문 전 체크', href: 'guide-rhinitis.html', description: '발열, 기침, 비염 증상 정리에 도움이 되는 참고 가이드입니다.' },
-      { title: '정신건강 상담 준비 가이드', href: 'guide-depression.html', description: '청소년 상담이 필요한 경우 초기 질문 포인트를 참고할 수 있습니다.' },
+      { title: '소아과 방문 전 체크', href: '/guide-rhinitis', description: '발열, 기침, 비염 증상 정리에 도움이 되는 참고 가이드입니다.' },
+      { title: '정신건강 상담 준비 가이드', href: '/guide-depression', description: '청소년 상담이 필요한 경우 초기 질문 포인트를 참고할 수 있습니다.' },
     ],
     obgyn: [
-      { title: '여성 건강 검진 전 체크', href: 'guide-womens-checkup.html', description: '자궁경부검사, 초음파 상담, 부정출혈 질문 포인트를 미리 정리할 수 있습니다.' },
-      { title: '우울·불안 상담 가이드', href: 'guide-depression.html', description: '산전·산후 정서 상담을 준비할 때 참고할 수 있습니다.' },
+      { title: '여성 건강 검진 전 체크', href: '/guide-womens-checkup', description: '자궁경부검사, 초음파 상담, 부정출혈 질문 포인트를 미리 정리할 수 있습니다.' },
+      { title: '우울·불안 상담 가이드', href: '/guide-depression', description: '산전·산후 정서 상담을 준비할 때 참고할 수 있습니다.' },
     ],
     urology: [
-      { title: '비뇨의학과 방문 가이드', href: 'guide-urology.html', description: '배뇨 불편, 결석, 전립선 진료 전에 체크할 내용을 정리했습니다.' },
-      { title: '수면내시경 검사 가이드', href: 'guide-endoscopy.html', description: '검사 동선과 준비 절차를 참고용으로 확인할 수 있습니다.' },
+      { title: '비뇨의학과 방문 가이드', href: '/guide-urology', description: '배뇨 불편, 결석, 전립선 진료 전에 체크할 내용을 정리했습니다.' },
+      { title: '수면내시경 검사 가이드', href: '/guide-endoscopy', description: '검사 동선과 준비 절차를 참고용으로 확인할 수 있습니다.' },
     ],
     psychiatry: [
-      { title: '우울·불안 상담 가이드', href: 'guide-depression.html', description: '초진 상담 전에 증상 정리와 질문 포인트를 먼저 확인합니다.' },
-      { title: '수면 문제 상담 전 체크', href: 'guide-depression.html', description: '수면장애와 불안 증상 기록에 참고할 수 있습니다.' },
+      { title: '우울·불안 상담 가이드', href: '/guide-depression', description: '초진 상담 전에 증상 정리와 질문 포인트를 먼저 확인합니다.' },
+      { title: '수면 문제 상담 전 체크', href: '/guide-depression', description: '수면장애와 불안 증상 기록에 참고할 수 있습니다.' },
     ],
     plastic: [
-      { title: '피부과·성형 상담 전 체크', href: 'guide-acne.html', description: '시술 전 준비사항과 피부 상태 기록에 참고할 수 있습니다.' },
-      { title: '라식·안과 수술 회복 가이드', href: 'guide-lasik.html', description: '수술 전후 생활 관리 흐름을 참고용으로 볼 수 있습니다.' },
+      { title: '피부과·성형 상담 전 체크', href: '/guide-acne', description: '시술 전 준비사항과 피부 상태 기록에 참고할 수 있습니다.' },
+      { title: '라식·안과 수술 회복 가이드', href: '/guide-lasik', description: '수술 전후 생활 관리 흐름을 참고용으로 볼 수 있습니다.' },
     ],
     familymed: [
-      { title: '당뇨 관리 가이드', href: 'guide-diabetes.html', description: '검진 결과 상담과 만성질환 추적 전 체크할 내용을 정리했습니다.' },
-      { title: '비염·감기 외래 가이드', href: 'guide-rhinitis.html', description: '생활 증상 외래를 찾을 때 참고할 수 있는 기본 가이드입니다.' },
+      { title: '당뇨 관리 가이드', href: '/guide-diabetes', description: '검진 결과 상담과 만성질환 추적 전 체크할 내용을 정리했습니다.' },
+      { title: '비염·감기 외래 가이드', href: '/guide-rhinitis', description: '생활 증상 외래를 찾을 때 참고할 수 있는 기본 가이드입니다.' },
     ],
     pain: [
-      { title: '정형외과·통증 외래 가이드', href: 'guide-ortho.html', description: '통증 진료 전 촬영 기록과 증상 정리에 참고할 수 있습니다.' },
-      { title: '비뇨·통증 증상 구분 가이드', href: 'guide-urology.html', description: '통증 위치에 따라 필요한 외래를 구분할 때 참고용으로 확인합니다.' },
+      { title: '정형외과·통증 외래 가이드', href: '/guide-ortho', description: '통증 진료 전 촬영 기록과 증상 정리에 참고할 수 있습니다.' },
+      { title: '비뇨·통증 증상 구분 가이드', href: '/guide-urology', description: '통증 위치에 따라 필요한 외래를 구분할 때 참고용으로 확인합니다.' },
     ],
     korean: [
-      { title: '비염 한방 진료 전 체크', href: 'guide-rhinitis.html', description: '한방 외래와 이비인후과 방문 전 참고할 포인트를 정리했습니다.' },
-      { title: '통증 외래 준비 가이드', href: 'guide-ortho.html', description: '추나·침 상담 전 증상 정리에 도움이 되는 참고 가이드입니다.' },
+      { title: '비염 한방 진료 전 체크', href: '/guide-rhinitis', description: '한방 외래와 이비인후과 방문 전 참고할 포인트를 정리했습니다.' },
+      { title: '통증 외래 준비 가이드', href: '/guide-ortho', description: '추나·침 상담 전 증상 정리에 도움이 되는 참고 가이드입니다.' },
     ],
     rehab: [
-      { title: '재활 전 정형외과 가이드', href: 'guide-ortho.html', description: '수술 후 재활, 도수치료 상담 전 체크할 항목을 정리했습니다.' },
-      { title: '만성질환 회복 관리 가이드', href: 'guide-diabetes.html', description: '회복기 생활관리와 추적 외래에 참고할 수 있습니다.' },
+      { title: '재활 전 정형외과 가이드', href: '/guide-ortho', description: '수술 후 재활, 도수치료 상담 전 체크할 항목을 정리했습니다.' },
+      { title: '만성질환 회복 관리 가이드', href: '/guide-diabetes', description: '회복기 생활관리와 추적 외래에 참고할 수 있습니다.' },
     ],
   };
 

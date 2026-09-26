@@ -40,40 +40,40 @@ function buildRegionPhrase(page) {
 
 function buildGuide(page, meta) {
   const labelMap = {
-    '강남 라식 안과 가이드': { href: 'guide-lasik.html', label: '시력교정 가이드' },
-    '검사 준비 가이드': { href: 'guide-endoscopy.html', label: '검사 준비 가이드' },
-    '내시경 병원 가이드': { href: 'guide-endoscopy.html', label: '내시경 가이드' },
-    '도수치료 병원 가이드': { href: 'guide-manual-therapy.html', label: '도수치료 가이드' },
-    '라식 라섹 안과 가이드': { href: 'guide-lasik.html', label: '라식 라섹 가이드' },
-    '만성질환 가이드': { href: 'guide-diabetes.html', label: '내과 가이드' },
-    '백내장 병원 가이드': { href: 'guide-cataract.html', label: '백내장 가이드' },
-    '비뇨의학과 가이드': { href: 'guide-urology.html', label: '비뇨의학과 가이드' },
-    '비염 가이드': { href: 'guide-rhinitis.html', label: '비염 가이드' },
-    '송파 여성검진 가이드': { href: 'guide-womens-checkup.html', label: '여성검진 가이드' },
-    '시력교정 가이드': { href: 'guide-lasik.html', label: '시력교정 가이드' },
-    '신규 개원 병원 가이드': { href: 'guide.html', label: '건강 가이드 모음' },
-    '야간 진료 가이드': { href: 'guide.html', label: '야간 진료 팁' },
-    '야간 피부과 가이드': { href: 'guide-acne.html', label: '피부과 가이드' },
-    '여드름 가이드': { href: 'guide-acne.html', label: '피부과 가이드' },
-    '여성검진 가이드': { href: 'guide-womens-checkup.html', label: '여성검진 가이드' },
-    '여성검진 병원 가이드': { href: 'guide-womens-checkup.html', label: '여성검진 가이드' },
-    '예방접종 병원 가이드': { href: 'guide.html', label: '예방접종 안내' },
-    '요로결석 병원 가이드': { href: 'guide-urology.html', label: '비뇨의학과 가이드' },
-    '우울·불안 가이드': { href: 'guide-depression.html', label: '우울·불안 가이드' },
-    '일요일 소아과 가이드': { href: 'guide.html', label: '휴일 진료 안내' },
-    '일요일 진료 가이드': { href: 'guide.html', label: '휴일 진료 안내' },
-    '임플란트 가이드': { href: 'guide-implant.html', label: '임플란트 가이드' },
-    '임플란트 치과 가이드': { href: 'guide-implant.html', label: '임플란트 가이드' },
-    '재활 준비 가이드': { href: 'guide-manual-therapy.html', label: '재활 준비 가이드' },
-    '정형외과 가이드': { href: 'guide-ortho.html', label: '정형외과 가이드' },
-    '증상 체크 가이드': { href: 'guide.html', label: '증상별 가이드' },
-    '치과 방문 준비 가이드': { href: 'guide-implant.html', label: '치과 가이드' },
-    '토요일 임플란트 가이드': { href: 'guide-implant.html', label: '임플란트 가이드' },
-    '토요일 진료 가이드': { href: 'guide.html', label: '토요일 진료 팁' },
-    '통증 외래 가이드': { href: 'guide-ortho.html', label: '통증·재활 가이드' },
+    '강남 라식 안과 가이드': { href: '/guide-lasik', label: '시력교정 가이드' },
+    '검사 준비 가이드': { href: '/guide-endoscopy', label: '검사 준비 가이드' },
+    '내시경 병원 가이드': { href: '/guide-endoscopy', label: '내시경 가이드' },
+    '도수치료 병원 가이드': { href: '/guide-manual-therapy', label: '도수치료 가이드' },
+    '라식 라섹 안과 가이드': { href: '/guide-lasik', label: '라식 라섹 가이드' },
+    '만성질환 가이드': { href: '/guide-diabetes', label: '내과 가이드' },
+    '백내장 병원 가이드': { href: '/guide-cataract', label: '백내장 가이드' },
+    '비뇨의학과 가이드': { href: '/guide-urology', label: '비뇨의학과 가이드' },
+    '비염 가이드': { href: '/guide-rhinitis', label: '비염 가이드' },
+    '송파 여성검진 가이드': { href: '/guide-womens-checkup', label: '여성검진 가이드' },
+    '시력교정 가이드': { href: '/guide-lasik', label: '시력교정 가이드' },
+    '신규 개원 병원 가이드': { href: '/guide', label: '건강 가이드 모음' },
+    '야간 진료 가이드': { href: '/guide', label: '야간 진료 팁' },
+    '야간 피부과 가이드': { href: '/guide-acne', label: '피부과 가이드' },
+    '여드름 가이드': { href: '/guide-acne', label: '피부과 가이드' },
+    '여성검진 가이드': { href: '/guide-womens-checkup', label: '여성검진 가이드' },
+    '여성검진 병원 가이드': { href: '/guide-womens-checkup', label: '여성검진 가이드' },
+    '예방접종 병원 가이드': { href: '/guide', label: '예방접종 안내' },
+    '요로결석 병원 가이드': { href: '/guide-urology', label: '비뇨의학과 가이드' },
+    '우울·불안 가이드': { href: '/guide-depression', label: '우울·불안 가이드' },
+    '일요일 소아과 가이드': { href: '/guide', label: '휴일 진료 안내' },
+    '일요일 진료 가이드': { href: '/guide', label: '휴일 진료 안내' },
+    '임플란트 가이드': { href: '/guide-implant', label: '임플란트 가이드' },
+    '임플란트 치과 가이드': { href: '/guide-implant', label: '임플란트 가이드' },
+    '재활 준비 가이드': { href: '/guide-manual-therapy', label: '재활 준비 가이드' },
+    '정형외과 가이드': { href: '/guide-ortho', label: '정형외과 가이드' },
+    '증상 체크 가이드': { href: '/guide', label: '증상별 가이드' },
+    '치과 방문 준비 가이드': { href: '/guide-implant', label: '치과 가이드' },
+    '토요일 임플란트 가이드': { href: '/guide-implant', label: '임플란트 가이드' },
+    '토요일 진료 가이드': { href: '/guide', label: '토요일 진료 팁' },
+    '통증 외래 가이드': { href: '/guide-ortho', label: '통증·재활 가이드' },
   };
 
-  return labelMap[meta.guideLabel] || { href: 'guide.html', label: '건강 가이드 모음' };
+  return labelMap[meta.guideLabel] || { href: '/guide', label: '건강 가이드 모음' };
 }
 
 function buildSecondaryKeyword(page, focusParts) {
@@ -213,11 +213,11 @@ function buildHtml(page, meta, pages) {
 <body class="light-mode">
   <header class="header">
     <div class="header-inner">
-      <a href="index.html" class="logo"><span class="logo-icon">🏥</span><span class="gradient-text">병원찾기</span></a>
+      <a href="/" class="logo"><span class="logo-icon">🏥</span><span class="gradient-text">병원찾기</span></a>
       <nav class="nav-links">
-        <a href="index.html#ranking">병원목록</a>
-        <a href="guide.html">건강 가이드</a>
-        <a href="about.html">사이트 소개</a>
+        <a href="/#ranking">병원목록</a>
+        <a href="/guide">건강 가이드</a>
+        <a href="/about">사이트 소개</a>
       </nav>
     </div>
   </header>
@@ -227,7 +227,7 @@ function buildHtml(page, meta, pages) {
       <h1 style="margin-top:14px;">${escapeHtml(page.title)}</h1>
       <p class="section-desc" style="margin-top:12px;">${escapeHtml(page.description)}</p>
       <div class="hero-actions">
-        <a href="index.html?keyword=${encodeURIComponent(keyword)}#search-results" class="btn btn-primary">${escapeHtml(keyword)} 검색</a>
+        <a href="/?keyword=${encodeURIComponent(keyword)}#search-results" class="btn btn-primary">${escapeHtml(keyword)} 검색</a>
         <a href="${guide.href}" class="btn btn-outline">${escapeHtml(guide.label)}</a>
       </div>
     </section>
@@ -258,12 +258,12 @@ function buildHtml(page, meta, pages) {
       </article>
     </section>
     <section class="landing-link-grid">
-      <a href="index.html?keyword=${encodeURIComponent(keyword)}#search-results" class="landing-link">
+      <a href="/?keyword=${encodeURIComponent(keyword)}#search-results" class="landing-link">
         <span class="landing-badge">기본 검색</span>
         <strong>${escapeHtml(keyword)} 검색 결과 보기</strong>
         <span>${escapeHtml(page.description)}</span>
       </a>
-      <a href="index.html?keyword=${encodeURIComponent(conditionKeyword)}#search-results" class="landing-link">
+      <a href="/?keyword=${encodeURIComponent(conditionKeyword)}#search-results" class="landing-link">
         <span class="landing-badge">운영조건 검색</span>
         <strong>${escapeHtml(conditionKeyword)} 바로 찾기</strong>
         <span>지역, 진료과, 운영조건을 함께 넣어 실제 방문 가능한 병원을 빠르게 좁히는 데 도움이 됩니다.</span>
@@ -302,7 +302,7 @@ function buildHtml(page, meta, pages) {
       <div class="footer-bottom">
         <p>&copy; 2026 병원찾기. 병원 검색과 진료 정보 탐색을 위한 안내 서비스입니다.</p>
         <p>운영시간, 접수마감, 진료 가능 여부는 변동될 수 있으므로 방문 전 병원에 직접 확인하는 것을 권장합니다.</p>
-        <p><a href="about.html">사이트 소개</a> · <a href="data-policy.html">병원 데이터 출처 안내</a> · <a href="contact.html">문의하기</a></p>
+        <p><a href="/about">사이트 소개</a> · <a href="/data-policy">병원 데이터 출처 안내</a> · <a href="/contact">문의하기</a></p>
       </div>
     </div>
   </footer>
