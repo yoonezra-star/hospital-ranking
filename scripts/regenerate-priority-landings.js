@@ -1,7 +1,7 @@
 ﻿const fs = require('fs');
 
 const SITE = 'https://hospital-ranking.kr';
-const UPDATED = '2026-09-20';
+const UPDATED = '2026-09-26';
 const ADSENSE = '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1441018945572157" crossorigin="anonymous"></script>';
 
 const pages = [
@@ -49,6 +49,18 @@ const pages = [
       ['지도에 영업 중이면 바로 방문해도 되나요?', '의료기관은 접수 마감이 따로 있을 수 있어 영업 중 표시만 믿지 말고 전화 확인을 권장합니다.'],
       ['야간에 검사가 가능한지도 알 수 있나요?', '검사 가능 여부는 병원별로 달라서 전화로 해당 검사명과 가능 시간을 직접 확인해야 합니다.']
     ],
+    verification: {
+      title: '오늘 밤 방문 전 3분 확인',
+      lead: '야간 운영시간은 진료 종료 시각과 접수 마감 시각이 다를 수 있습니다. 아래 항목을 한 번에 물으면 헛걸음을 줄일 수 있습니다.',
+      checks: [
+        ['날짜와 도착 시각', '“오늘(방문 날짜) 오후 8시쯤 도착합니다”처럼 날짜와 예상 도착 시각을 함께 말합니다.'],
+        ['초진과 접수 마감', '초진 접수가 가능한지, 마지막 접수가 몇 시인지 확인합니다.'],
+        ['검사와 처치 범위', '필요한 검사·촬영·수액·처치가 야간에도 가능한지 구체적으로 묻습니다.'],
+        ['야간 출입 동선', '야간 출입구, 주차장 운영, 원내 약국 또는 인근 약국 이용 가능 여부를 확인합니다.']
+      ],
+      callScript: '안녕하세요. 오늘 오후 8시쯤 초진으로 방문하려고 합니다. 현재 증상은 ○○이고, 마지막 접수 시각과 ○○ 검사 또는 처치 가능 여부를 확인하고 싶습니다.',
+      caution: '야간 외래 정보는 응급실 수용 가능 여부와 다릅니다. 심한 흉통, 호흡곤란, 의식 변화, 멈추지 않는 출혈처럼 긴급한 증상은 119 또는 응급의료 안내를 우선 이용하세요.'
+    },
     related: ['night-dermatology.html', 'saturday-clinic.html', 'sunday-clinic.html', 'guide-ortho.html']
   },
   {
@@ -72,7 +84,54 @@ const pages = [
       ['토요일에도 검진이나 예방접종이 가능한가요?', '가능한 병원도 있지만 예약제인 경우가 많아 검사명이나 접종명을 말하고 확인하는 것이 좋습니다.'],
       ['토요일에 대기 시간이 긴 이유는 무엇인가요?', '평일 방문이 어려운 이용자가 몰리고 운영 시간이 짧아 대기가 길어질 수 있습니다.']
     ],
+    verification: {
+      title: '이번 토요일 방문 전 확인 순서',
+      lead: '토요일은 오전 진료만 하거나 검사·예방접종·물리치료 접수를 더 일찍 마치는 곳이 있습니다. 방문 목적을 먼저 말하고 항목별로 확인하세요.',
+      checks: [
+        ['정확한 날짜', '이번 주 토요일의 날짜를 말해 임시 휴진이나 일정 변경이 없는지 확인합니다.'],
+        ['초진·재진 구분', '처음 방문인지 재진인지 말하고 각각의 접수 마감 시각을 묻습니다.'],
+        ['방문 목적', '일반 진료인지, 예방접종·검진·촬영·물리치료인지 말해 해당 업무가 가능한지 확인합니다.'],
+        ['아이 또는 보호자 동행', '소아 진료는 아이의 나이와 증상을, 보호자 동행이 필요한 검사는 귀가 방법까지 함께 확인합니다.']
+      ],
+      callScript: '안녕하세요. 이번 토요일에 초진으로 방문하려고 합니다. ○○ 진료(또는 검사·예방접종)가 가능한지, 마지막 접수 시각과 예약 필요 여부를 알려주세요.',
+      caution: '공공 데이터에 토요일 시간이 표시되어도 임시 휴진, 의료진 일정, 접수 조기 마감은 즉시 반영되지 않을 수 있습니다. 당일 출발 전에 다시 확인하는 것이 안전합니다.'
+    },
     related: ['sunday-clinic.html', 'saturday-implant.html', 'sunday-pediatric.html', 'vaccination-clinic.html']
+  },
+  {
+    file: 'sunday-clinic.html',
+    slug: 'sunday-clinic',
+    title: '일요일 진료 병원 찾기 가이드',
+    description: '일요일 병원 방문 전 당일 운영 여부, 접수 마감, 진료과와 검사 가능 범위를 확인하는 실용 기준을 정리했습니다.',
+    badge: '일요일 진료',
+    hero: '일요일 진료 표시는 해당 날짜의 실제 외래 운영을 보증하지 않습니다. 주말 당직, 공휴일 일정, 의료진 배치에 따라 시간이 달라질 수 있으므로 후보를 찾은 뒤 당일 전화 확인까지 해야 검색이 완료됩니다.',
+    searchKeyword: '일요일 진료',
+    primaryGuide: { href: '/guide', label: '휴일 진료 준비 가이드' },
+    sections: [
+      { title: '일요일 검색에서 먼저 구분할 것', items: ['찾는 날짜가 일반 일요일인지 연휴·공휴일과 겹치는지 확인합니다.', '소아과·내과·이비인후과 등 필요한 진료과가 그날 실제 운영되는지 확인합니다.', '가벼운 외래 증상인지 응급 평가가 필요한 상황인지 먼저 구분합니다.'] },
+      { title: '방문 전 확인할 항목', items: ['당일 초진 접수 가능 여부와 마지막 접수 시각을 확인합니다.', '검사, 처치, 예방접종, 처방전 발급이 가능한지 방문 목적을 말하고 묻습니다.', '주말 가산 비용, 주차장과 출입구, 주변 약국 운영 여부를 확인합니다.'] },
+      { title: '후보가 없을 때 대처', items: ['검색 지역을 인접 시·군·구까지 넓혀 다시 찾습니다.', '병원 공식 안내와 응급의료포털 등 공식 경로를 함께 대조합니다.', '증상이 악화되거나 긴급하면 일반 외래 검색을 중단하고 119 또는 응급실 안내를 따릅니다.'] }
+    ],
+    checklistTitle: '일요일 진료 검색 예시',
+    checklist: ['일요일 소아과', '일요일 내과', '일요일 이비인후과', '일요일 치과'],
+    faq: [
+      ['일요일 진료 표시가 있으면 바로 방문해도 되나요?', '아닙니다. 해당 날짜의 의료진 일정과 접수 마감이 달라질 수 있어 출발 전 전화 확인이 필요합니다.'],
+      ['일요일과 공휴일 운영은 같은가요?', '병원마다 다릅니다. 일요일 운영 병원도 법정공휴일이나 연휴에는 휴진할 수 있으므로 정확한 날짜로 확인해야 합니다.'],
+      ['일요일에도 검사와 처방이 가능한가요?', '진료는 가능해도 검사실이나 장비 운영이 제한될 수 있습니다. 필요한 검사명과 처방 가능 여부를 전화로 확인하세요.']
+    ],
+    verification: {
+      title: '일요일 당일 전화 확인 순서',
+      lead: '주말 운영은 같은 병원이라도 날짜마다 달라질 수 있습니다. “일요일에 하나요?”보다 방문 날짜와 목적을 구체적으로 말해야 정확한 답을 받을 수 있습니다.',
+      checks: [
+        ['날짜 확인', '방문하려는 연·월·일을 말하고 정상 진료인지 당직 진료인지 확인합니다.'],
+        ['환자 정보', '성인·소아 여부, 아이의 나이, 초진·재진 여부를 먼저 알립니다.'],
+        ['진료 범위', '증상과 필요한 진료과를 말하고 검사·처치·처방이 가능한지 묻습니다.'],
+        ['대체 기관', '접수가 끝났다면 같은 지역의 이용 가능한 기관이나 공식 안내 경로가 있는지 확인합니다.']
+      ],
+      callScript: '안녕하세요. 오늘(날짜) 일요일에 ○○ 증상으로 초진 방문하려고 합니다. 해당 진료과가 운영되는지, 마지막 접수 시각과 검사·처방 가능 여부를 확인하고 싶습니다.',
+      caution: '검색 결과에 병원이 보이는 것과 오늘 실제 진료를 받을 수 있는 것은 다릅니다. 전화 연결이 되지 않으면 운영을 추정하지 말고 다른 공식 안내 경로와 인근 기관을 확인하세요.'
+    },
+    related: ['saturday-clinic.html', 'sunday-pediatric.html', 'night-clinic.html', 'guide.html']
   },
   {
     file: 'new-openings.html',
@@ -95,6 +154,18 @@ const pages = [
       ['개원일 정보는 항상 정확한가요?', '공공 데이터나 등록 정보 반영 시점에 차이가 있을 수 있어 실제 운영 여부는 병원에 직접 확인해야 합니다.'],
       ['신규 병원은 비용이 더 저렴한가요?', '병원별 정책과 진료 항목에 따라 다르므로 비용 우위를 단정할 수 없습니다. 상담 시 항목별 비용을 확인하세요.']
     ],
+    verification: {
+      title: '개원일보다 먼저 확인할 네 가지',
+      lead: '공공 데이터의 개설일은 행정상 신고 정보이며 현재 운영 상태, 의료 품질, 시설 완비를 뜻하지 않습니다. 새 병원이라는 이유만으로 추천하거나 우선순위를 높이지 않습니다.',
+      checks: [
+        ['현재 운영 여부', '기관명과 주소를 대조하고 실제 진료를 시작했는지 확인합니다.'],
+        ['진료과와 의료진', '필요한 진료과가 등록되어 있는지와 방문일 담당 의료진 일정을 확인합니다.'],
+        ['검사·장비 준비', '원하는 검사나 처치가 현재 가능한지, 외부 의뢰가 필요한지 묻습니다.'],
+        ['예약과 비용 안내', '초진 예약 방식, 예상 대기, 비급여 항목과 추가 비용 안내 방식을 확인합니다.']
+      ],
+      callScript: '안녕하세요. ○○ 진료로 처음 방문하려고 합니다. 현재 정상 진료 중인지, ○○ 검사 또는 처치가 가능한지, 초진 예약과 비용 안내 방법을 확인하고 싶습니다.',
+      caution: '개설일은 병원 선택의 품질 점수나 추천 순위가 아닙니다. 후기 수가 적다는 이유만으로 좋고 나쁨을 판단하지 말고 진료 적합성과 설명 내용을 직접 확인하세요.'
+    },
     related: ['seoul-dental.html', 'night-clinic.html', 'saturday-clinic.html', 'about.html']
   },
   {
@@ -136,7 +207,23 @@ function actionLinks(page) {
 }
 
 function relatedLinks(page) {
-  return page.related.map((href) => `<a href="${esc(href)}">${esc(labelFor(href))}</a>`).join('\n');
+  return page.related.map((href) => `<a href="/${esc(href.replace(/\.html$/, ''))}">${esc(labelFor(href))}</a>`).join('\n');
+}
+
+function verificationSection(page) {
+  if (!page.verification) return '';
+  const checks = page.verification.checks.map(([label, description]) => `<li><strong>${esc(label)}</strong><span>${esc(description)}</span></li>`).join('\n');
+  return `<section class="intent-note operation-verification">
+      <span class="intent-kicker">방문 전 확인 도구</span>
+      <h2>${esc(page.verification.title)}</h2>
+      <p class="intent-verification-lead">${esc(page.verification.lead)}</p>
+      <ol class="intent-verification-list">${checks}</ol>
+      <div class="intent-call-script">
+        <strong>전화할 때 그대로 읽어보세요</strong>
+        <p>${esc(page.verification.callScript)}</p>
+      </div>
+      <p class="intent-caution"><strong>주의:</strong> ${esc(page.verification.caution)}</p>
+    </section>`;
 }
 
 function decisionSteps(page) {
@@ -213,11 +300,21 @@ function render(page) {
   <meta name="description" content="${esc(page.description)}">
   <link rel="canonical" href="${SITE}/${page.slug}">
   <meta name="robots" content="index,follow">
-  <link rel="stylesheet" href="css/style.css?v=12">
+  <link rel="stylesheet" href="css/style.css?v=13">
   <style>
     .intent-howto ol { margin:0; padding-left:22px; display:grid; gap:10px; }
     .intent-howto li { color:var(--text-body); line-height:1.78; }
     .intent-source-note { margin:18px 0 0; padding-top:15px; border-top:1px solid var(--border-light); color:var(--text-muted); line-height:1.75; }
+    .intent-kicker { display:block; margin-bottom:8px; color:var(--primary); font-size:.82rem; font-weight:900; letter-spacing:.08em; }
+    .intent-verification-lead { margin:0 0 18px; color:var(--text-body); line-height:1.8; }
+    .intent-verification-list { list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:12px; counter-reset:verify; }
+    .intent-verification-list li { counter-increment:verify; display:grid; grid-template-columns:34px 1fr; column-gap:11px; align-items:start; padding:15px; border:1px solid var(--border-light); border-radius:15px; background:var(--bg-body); }
+    .intent-verification-list li::before { content:counter(verify); display:grid; place-items:center; width:30px; height:30px; border-radius:50%; background:var(--primary); color:white; font-weight:900; }
+    .intent-verification-list strong, .intent-verification-list span { grid-column:2; }
+    .intent-verification-list span { margin-top:4px; color:var(--text-body); line-height:1.68; }
+    .intent-call-script { margin-top:18px; padding:18px; border-radius:16px; background:color-mix(in srgb, var(--primary-50) 72%, var(--bg-card)); border:1px solid var(--border-default); }
+    .intent-call-script p { margin:8px 0 0; color:var(--text-body); line-height:1.78; }
+    .intent-caution { margin:16px 0 0; color:var(--text-muted); line-height:1.75; }
     .intent-page { max-width: 1120px; padding-top: 56px; }
     .intent-hero { padding: 38px; border: 1px solid var(--border-default); border-radius: 28px; background: radial-gradient(circle at 88% 10%, rgba(166, 124, 82, .18), transparent 30%), linear-gradient(135deg, color-mix(in srgb, var(--bg-card) 88%, white 12%), color-mix(in srgb, var(--bg-body) 92%, white 8%)); box-shadow: var(--shadow-sm); }
     .intent-badge { display:inline-flex; padding:8px 14px; border-radius:999px; background:color-mix(in srgb, var(--primary-50) 72%, white 28%); color:var(--primary); font-weight:800; }
@@ -236,7 +333,7 @@ function render(page) {
     .intent-faq details:first-of-type { border-top:0; }
     .intent-faq summary { cursor:pointer; color:var(--text-heading); font-weight:800; line-height:1.55; }
     .intent-faq p { margin:10px 0 0; }
-    @media (max-width: 768px) { .intent-page { padding-top:40px; } .intent-hero, .intent-card, .intent-note, .intent-faq { padding:22px 18px; } }
+    @media (max-width: 768px) { .intent-page { padding-top:40px; } .intent-hero, .intent-card, .intent-note, .intent-faq { padding:22px 18px; } .intent-verification-list { grid-template-columns:1fr; } }
   </style>
 ${schemas}
   ${ADSENSE}
@@ -276,6 +373,8 @@ ${schemas}
       <ol>${decisionSteps(page).map((item) => `<li>${esc(item)}</li>`).join('\n')}</ol>
       <p class="intent-source-note">이 페이지는 검색 결과를 대신해 특정 병원을 추천하거나 순위를 보증하지 않습니다. 결과의 운영 상태와 진료 가능 범위는 병원과 공식 기관에서 최종 확인해야 합니다.</p>
     </section>
+
+    ${verificationSection(page)}
 
     <section class="intent-note">
       <h2>${esc(page.checklistTitle)}</h2>

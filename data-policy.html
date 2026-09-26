@@ -6,7 +6,9 @@
   <title>병원 데이터 기준과 출처 안내 - 병원찾기</title>
   <meta name="description" content="병원찾기가 병원 정보를 수집하고 표시하는 기준, 공공 API 출처, 미확인 정보 표시, 정정 요청 방법을 안내합니다.">
   <link rel="canonical" href="https://hospital-ranking.kr/data-policy">
-  <link rel="stylesheet" href="css/style.css?v=20260919">
+  <meta name="robots" content="index,follow">
+  <link rel="stylesheet" href="css/style.css?v=13">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"병원 데이터 기준과 출처 안내","url":"https://hospital-ranking.kr/data-policy","description":"병원찾기가 병원 정보를 수집하고 표시하는 기준, 공공 API 출처, 미확인 정보 표시, 정정 요청 방법을 안내합니다.","dateModified":"2026-09-26","publisher":{"@type":"Organization","name":"병원찾기","url":"https://hospital-ranking.kr"}}</script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1441018945572157" crossorigin="anonymous"></script>
   <style>
     .data-policy-page { max-width: 980px; margin: 0 auto; padding: 58px 20px 80px; }
@@ -23,6 +25,16 @@
     .data-status strong, .data-status span { display: block; }
     .data-status span { margin-top: 6px; color: var(--text-muted); line-height: 1.6; }
     .data-policy-note { margin-top: 18px; padding: 16px 18px; border-left: 4px solid var(--primary); background: color-mix(in srgb, var(--primary-50) 65%, var(--bg-card)); border-radius: 10px; }
+    .data-policy-kicker { display: inline-flex; margin-bottom: 12px; color: var(--primary); font-size: .82rem; font-weight: 900; letter-spacing: .08em; }
+    .data-table-wrap { overflow-x: auto; margin-top: 16px; border: 1px solid var(--border-default); border-radius: 14px; }
+    .data-source-table { width: 100%; min-width: 720px; border-collapse: collapse; }
+    .data-source-table th, .data-source-table td { padding: 15px 16px; border-bottom: 1px solid var(--border-light); text-align: left; vertical-align: top; line-height: 1.7; }
+    .data-source-table th { background: var(--bg-body); color: var(--text-heading); font-size: .92rem; }
+    .data-source-table td { color: var(--text-body); }
+    .data-source-table tr:last-child td { border-bottom: 0; }
+    .data-flow { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; counter-reset: data-flow; }
+    .data-flow li { counter-increment: data-flow; display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: start; padding: 15px; border: 1px solid var(--border-light); border-radius: 14px; background: var(--bg-body); }
+    .data-flow li::before { content: counter(data-flow); display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--primary); color: #fff; font-weight: 900; }
     @media (max-width: 720px) { .data-policy-page { padding: 34px 16px 60px; } .data-policy-hero, .data-policy-section { padding: 22px 18px; } .data-status-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -35,30 +47,55 @@
   </header>
   <main class="data-policy-page">
     <section class="data-policy-hero">
-      <span class="intent-badge">DATA TRANSPARENCY</span>
+      <span class="data-policy-kicker">DATA TRANSPARENCY</span>
       <h1>병원 데이터 기준과 출처 안내</h1>
       <p>병원찾기는 병원 선택 전에 확인할 기본 정보를 모아 보여주는 참고 서비스입니다. 병원 정보는 변동될 수 있으므로, 페이지에 표시된 값만으로 운영 여부나 진료 가능 여부를 확정하지 않습니다.</p>
-      <div class="data-policy-note"><strong>현재 상태:</strong> 기본 목록은 사이트 내부에 정리한 일부 병원 데이터입니다. 현재 17건은 병원명과 주소가 건강보험심사평가원 API 결과와 일치해 조회일을 표시하고, 나머지는 “개별 공식 출처 확인 필요”로 표시합니다.</div>
+      <div class="data-policy-note"><strong>2026년 9월 26일 기준:</strong> 검색·지역·진료과 안내에 사용하는 별도 스냅샷에는 건강보험심사평가원 병원기본정보 API에서 조회한 699개 기관이 들어 있습니다. 기존 로컬 보조자료 56건 중 17건은 공식 API 대조 이력이 있고, 39건은 미확인으로 명시해 자동 추천·대표 병원 영역에서 제외합니다.</div>
     </section>
 
     <section class="data-policy-section">
       <h2>정보 상태를 어떻게 구분하나요?</h2>
       <div class="data-status-grid">
-        <div class="data-status"><strong>내부 정리 데이터</strong><span>주소, 전화번호, 진료과 등 사이트에 저장된 기본값입니다. 2026년 9월 19일 기준 데이터 묶음으로 관리하며 실시간성을 보장하지 않습니다.</span></div>
-        <div class="data-status"><strong>공공 API 조회</strong><span>건강보험심사평가원 병원기본정보 API 응답으로 확인된 시점의 자료입니다. 운영시간과 접수 마감은 병원에 다시 문의해야 합니다.</span></div>
-        <div class="data-status"><strong>상세 페이지 추가 조회</strong><span>상세 페이지에서는 건강보험심사평가원 상세·장비·시설 API와 응급의료기관 운영정보 API를 추가 조회합니다. 병원명·주소 매칭이 확인된 값만 반영하고, 일치하지 않거나 응답이 없으면 내부 값과 확인 필요 안내를 유지합니다.</span></div>
-        <div class="data-status"><strong>개별 공식 출처 확인</strong><span>병원 공식 홈페이지, 공식 안내 또는 공공기관 원문을 확인한 레코드에만 별도 출처와 확인일을 붙이는 기준입니다.</span></div>
+        <div class="data-status"><strong>API 조회 완료</strong><span>암호화된 요양기호, 기관명, 주소 등 핵심 식별값이 건강보험심사평가원 응답과 연결된 상태입니다. 조회일과 출처를 함께 표시합니다.</span></div>
+        <div class="data-status"><strong>추가 정보 조회</strong><span>상세·시설·장비·운영시간 API가 값을 반환한 경우에만 추가합니다. 값이 없으면 임의로 채우거나 주변 병원의 값으로 대체하지 않습니다.</span></div>
+        <div class="data-status"><strong>확인 필요</strong><span>공식 식별값이 없거나 최신성을 확인하지 못한 로컬 자료입니다. 상세 페이지는 검색엔진 색인에서 제외하고 자동 추천·대표 목록에 사용하지 않습니다.</span></div>
       </div>
+    </section>
+
+    <section class="data-policy-section">
+      <h2>출처별로 무엇을 표시하나요?</h2>
+      <p>서로 다른 기관의 데이터를 하나의 사실처럼 합치지 않습니다. 출처와 식별값이 맞는 경우에만 보완하며, 충돌하거나 비어 있는 항목은 확인 필요 상태로 남깁니다.</p>
+      <div class="data-table-wrap">
+        <table class="data-source-table">
+          <thead><tr><th>출처</th><th>사이트에서 쓰는 항목</th><th>한계와 확인 기준</th></tr></thead>
+          <tbody>
+            <tr><td><a href="https://www.data.go.kr/data/15001698/openapi.do" target="_blank" rel="noopener">건강보험심사평가원 병원정보서비스</a></td><td>암호화된 요양기호, 기관명, 주소, 전화번호, 기관 종별, 개설일, 등록 진료과</td><td>요양기관이 신고한 현황을 기반으로 하며 당일 접수 가능 여부나 치료 성과를 뜻하지 않습니다.</td></tr>
+            <tr><td>건강보험심사평가원 의료기관별 상세정보서비스</td><td>조회 응답에 포함된 운영시간, 주차, 병상·시설, 의료장비</td><td>상세 페이지에서 암호화된 요양기호로 추가 조회합니다. 응답이 없거나 출처끼리 시간이 다르면 확정값 대신 전화 확인 안내를 표시합니다.</td></tr>
+            <tr><td><a href="https://www.data.go.kr/data/15000736/openapi.do" target="_blank" rel="noopener">국립중앙의료원 전국 병·의원 찾기 서비스</a></td><td>기관명·주소가 일치하는 경우의 요일별 진료시간과 대표전화</td><td>공개 운영정보이며 실시간 대기, 당일 의료진, 접수 종료, 검사 가능 여부를 보증하지 않습니다.</td></tr>
+            <tr><td>사이트 로컬 보조자료</td><td>공식 API 장애 시 보여줄 수 있는 최소 기본정보</td><td>공식 출처를 확인하지 못한 값은 확인 필요로 표시하고 색인·자동 추천 대상에서 제외합니다.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="data-policy-section">
+      <h2>조회 결과가 다르거나 비어 있을 때</h2>
+      <ol class="data-flow">
+        <li>먼저 암호화된 요양기호를 기준으로 건강보험심사평가원 기본정보와 상세정보를 연결합니다.</li>
+        <li>다른 기관의 운영시간은 병원명과 주소가 같은 경우에만 후보 값으로 사용합니다.</li>
+        <li>두 출처의 시간이 다르거나 응답이 실패하면 어느 한쪽을 임의로 선택하지 않고 “전화 확인 필요”로 표시합니다.</li>
+        <li>토요일·야간·일요일 진료, 접수 마감, 임시 휴진, 당일 검사 가능 여부는 방문 날짜를 말하고 병원에 직접 확인하도록 안내합니다.</li>
+      </ol>
+      <div class="data-policy-note"><strong>중요:</strong> “API 조회 완료”는 기관 정보의 출처가 확인됐다는 뜻이며, 의료 품질 인증이나 추천 등급이 아닙니다.</div>
     </section>
 
     <section class="data-policy-section">
       <h2>공식 확인 경로</h2>
       <ul>
         <li><a href="https://www.hira.or.kr/ra/hosp/getHealthMap.do?pgmid=HIRAA030501000000" target="_blank" rel="noopener">건강보험심사평가원 건강지도</a>에서 기관명, 주소, 진료과를 대조할 수 있습니다.</li>
-        <li><a href="https://www.data.go.kr" target="_blank" rel="noopener">공공데이터포털</a>의 보건의료 API는 기관 기본정보 확인에 활용할 수 있습니다.</li>
-        <li>상세 페이지의 운영시간·접수·응급·장비 정보는 조회 시점의 API 응답을 추가 표시한 것이며, 병원 공식 안내를 대신하지 않습니다.</li>
-        <li>운영시간, 접수 마감, 당일 진료 가능 여부, 주차 조건은 병원 공식 안내와 전화 문의를 최종 기준으로 삼아야 합니다.</li>
-        <li>응급 증상이나 급격한 상태 악화는 검색 결과보다 119, 응급실, 의료진 안내가 우선입니다.</li>
+        <li><a href="https://www.data.go.kr/data/15001698/openapi.do" target="_blank" rel="noopener">공공데이터포털의 병원정보서비스 명세</a>에서 제공기관, 갱신 정보, 이용 조건을 확인할 수 있습니다.</li>
+        <li><a href="https://www.data.go.kr/data/15000736/openapi.do" target="_blank" rel="noopener">전국 병·의원 찾기 서비스 명세</a>에서 진료요일·기관명 등 조회 항목을 확인할 수 있습니다.</li>
+        <li>응급 증상이나 급격한 상태 악화는 사이트 검색보다 119, 응급실, 의료진 안내가 우선입니다.</li>
       </ul>
     </section>
 
@@ -69,6 +106,7 @@
         <li>근거가 확인된 정보부터 순차적으로 수정합니다.</li>
         <li>수정 전까지는 기존 값과 함께 방문 전 확인 안내를 유지합니다.</li>
         <li>제보만으로 의료기관의 진료 품질이나 만족도를 평가하지 않습니다.</li>
+        <li>병원 폐업·이전·전화번호 변경처럼 이용에 직접 영향을 주는 항목을 우선 검토합니다.</li>
       </ul>
     </section>
 
@@ -76,6 +114,7 @@
       <h2>표시하지 않는 정보</h2>
       <p>수집 근거가 없는 평점, 후기 수, 치료 성공률, 환자 만족도 순위는 표시하거나 추정하지 않습니다. 병원 목록의 정렬은 검색 조건과 정보 충실도를 기준으로 한 탐색 보조일 뿐, 의료 수준이나 치료 결과의 순위가 아닙니다.</p>
       <p>콘텐츠 작성 기준은 <a href="/editorial-policy">콘텐츠 편집 원칙</a>에서, 서비스 운영 주체와 면책 내용은 <a href="/about">사이트 소개</a>에서 확인할 수 있습니다.</p>
+      <p><strong>최종 점검일:</strong> 2026년 9월 26일</p>
     </section>
   </main>
   <footer class="footer" style="margin-top:0;">

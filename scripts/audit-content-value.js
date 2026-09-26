@@ -12,6 +12,7 @@ const errors = [];
 const pages = [];
 const spotlightHospitalIds = [];
 const ignored = new Set(['test_map.html']);
+const operationGuideFiles = ['new-openings.html', 'night-clinic.html', 'saturday-clinic.html', 'sunday-clinic.html'];
 const strip = (html) => html.replace(/<(script|style|nav|header|footer)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 
 const verifiedLandingData = JSON.parse(read('data/verified-landing-hospitals.json'));
@@ -66,6 +67,27 @@ for (const file of fs.readdirSync(root).filter((name) => name.endsWith('.html') 
 const homepage = read('index.html');
 if (/승인용|광고 승인/.test(strip(homepage))) errors.push('index.html: review-oriented copy is visible to visitors');
 if (/병원 상세 예시|대표 병원 보기/.test(strip(homepage))) errors.push('index.html: sample detail promotion remains');
+
+for (const file of operationGuideFiles) {
+  const html = read(file);
+  const characters = strip(html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || '');
+  if (!html.includes('operation-verification') || !html.includes('intent-call-script')) {
+    errors.push(`${file}: practical operating-hours verification workflow is missing`);
+  }
+  if (!/전화할 때 그대로 읽어보세요/.test(html)) errors.push(`${file}: call script is missing`);
+  if (/hospital-spotlight-card/.test(html)) errors.push(`${file}: operating-hours guide must not imply verified live opening status`);
+  if (characters.length < 2000) errors.push(`${file}: operating-hours guide is too thin`);
+}
+
+const dataPolicy = read('data-policy.html');
+const dataPolicyText = strip(dataPolicy.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || '');
+if (dataPolicyText.length < 2200) errors.push('data-policy.html: data provenance explanation is too thin');
+if (!dataPolicy.includes('data-source-table') || !dataPolicy.includes('data/15001698/openapi.do') || !dataPolicy.includes('data/15000736/openapi.do')) {
+  errors.push('data-policy.html: official source matrix is incomplete');
+}
+if (!/699개 기관/.test(dataPolicyText) || !/39건은 미확인/.test(dataPolicyText)) {
+  errors.push('data-policy.html: current verified and unverified dataset states are missing');
+}
 
 const context = { window: {} };
 vm.createContext(context);

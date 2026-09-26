@@ -7,11 +7,21 @@
   <meta name="description" content="새로 개원한 병원을 찾을 때 진료과, 장비, 운영시간, 후기 부족 상황에서 확인할 기준을 정리했습니다.">
   <link rel="canonical" href="https://hospital-ranking.kr/new-openings">
   <meta name="robots" content="index,follow">
-  <link rel="stylesheet" href="css/style.css?v=12">
+  <link rel="stylesheet" href="css/style.css?v=13">
   <style>
     .intent-howto ol { margin:0; padding-left:22px; display:grid; gap:10px; }
     .intent-howto li { color:var(--text-body); line-height:1.78; }
     .intent-source-note { margin:18px 0 0; padding-top:15px; border-top:1px solid var(--border-light); color:var(--text-muted); line-height:1.75; }
+    .intent-kicker { display:block; margin-bottom:8px; color:var(--primary); font-size:.82rem; font-weight:900; letter-spacing:.08em; }
+    .intent-verification-lead { margin:0 0 18px; color:var(--text-body); line-height:1.8; }
+    .intent-verification-list { list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:12px; counter-reset:verify; }
+    .intent-verification-list li { counter-increment:verify; display:grid; grid-template-columns:34px 1fr; column-gap:11px; align-items:start; padding:15px; border:1px solid var(--border-light); border-radius:15px; background:var(--bg-body); }
+    .intent-verification-list li::before { content:counter(verify); display:grid; place-items:center; width:30px; height:30px; border-radius:50%; background:var(--primary); color:white; font-weight:900; }
+    .intent-verification-list strong, .intent-verification-list span { grid-column:2; }
+    .intent-verification-list span { margin-top:4px; color:var(--text-body); line-height:1.68; }
+    .intent-call-script { margin-top:18px; padding:18px; border-radius:16px; background:color-mix(in srgb, var(--primary-50) 72%, var(--bg-card)); border:1px solid var(--border-default); }
+    .intent-call-script p { margin:8px 0 0; color:var(--text-body); line-height:1.78; }
+    .intent-caution { margin:16px 0 0; color:var(--text-muted); line-height:1.75; }
     .intent-page { max-width: 1120px; padding-top: 56px; }
     .intent-hero { padding: 38px; border: 1px solid var(--border-default); border-radius: 28px; background: radial-gradient(circle at 88% 10%, rgba(166, 124, 82, .18), transparent 30%), linear-gradient(135deg, color-mix(in srgb, var(--bg-card) 88%, white 12%), color-mix(in srgb, var(--bg-body) 92%, white 8%)); box-shadow: var(--shadow-sm); }
     .intent-badge { display:inline-flex; padding:8px 14px; border-radius:999px; background:color-mix(in srgb, var(--primary-50) 72%, white 28%); color:var(--primary); font-weight:800; }
@@ -30,9 +40,9 @@
     .intent-faq details:first-of-type { border-top:0; }
     .intent-faq summary { cursor:pointer; color:var(--text-heading); font-weight:800; line-height:1.55; }
     .intent-faq p { margin:10px 0 0; }
-    @media (max-width: 768px) { .intent-page { padding-top:40px; } .intent-hero, .intent-card, .intent-note, .intent-faq { padding:22px 18px; } }
+    @media (max-width: 768px) { .intent-page { padding-top:40px; } .intent-hero, .intent-card, .intent-note, .intent-faq { padding:22px 18px; } .intent-verification-list { grid-template-columns:1fr; } }
   </style>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"신규 개원 병원 찾기 가이드","url":"https://hospital-ranking.kr/new-openings","description":"새로 개원한 병원을 찾을 때 진료과, 장비, 운영시간, 후기 부족 상황에서 확인할 기준을 정리했습니다.","dateModified":"2026-09-20","publisher":{"@type":"Organization","name":"병원찾기","url":"https://hospital-ranking.kr"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"신규 개원 병원 찾기 가이드","url":"https://hospital-ranking.kr/new-openings","description":"새로 개원한 병원을 찾을 때 진료과, 장비, 운영시간, 후기 부족 상황에서 확인할 기준을 정리했습니다.","dateModified":"2026-09-26","publisher":{"@type":"Organization","name":"병원찾기","url":"https://hospital-ranking.kr"}}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"병원찾기","item":"https://hospital-ranking.kr/"},{"@type":"ListItem","position":2,"name":"신규 개원 병원 찾기 가이드","item":"https://hospital-ranking.kr/new-openings"}]}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"신규 개원 병원은 후기가 적어도 방문해도 되나요?","acceptedAnswer":{"@type":"Answer","text":"후기 수만으로 판단하기보다 진료과 적합성, 설명 방식, 비용 안내, 검사 가능 범위를 직접 확인하는 것이 좋습니다."}},{"@type":"Question","name":"개원일 정보는 항상 정확한가요?","acceptedAnswer":{"@type":"Answer","text":"공공 데이터나 등록 정보 반영 시점에 차이가 있을 수 있어 실제 운영 여부는 병원에 직접 확인해야 합니다."}},{"@type":"Question","name":"신규 병원은 비용이 더 저렴한가요?","acceptedAnswer":{"@type":"Answer","text":"병원별 정책과 진료 항목에 따라 다르므로 비용 우위를 단정할 수 없습니다. 상담 시 항목별 비용을 확인하세요."}}]}</script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1441018945572157" crossorigin="anonymous"></script>
@@ -91,6 +101,21 @@
       <p class="intent-source-note">이 페이지는 검색 결과를 대신해 특정 병원을 추천하거나 순위를 보증하지 않습니다. 결과의 운영 상태와 진료 가능 범위는 병원과 공식 기관에서 최종 확인해야 합니다.</p>
     </section>
 
+    <section class="intent-note operation-verification">
+      <span class="intent-kicker">방문 전 확인 도구</span>
+      <h2>개원일보다 먼저 확인할 네 가지</h2>
+      <p class="intent-verification-lead">공공 데이터의 개설일은 행정상 신고 정보이며 현재 운영 상태, 의료 품질, 시설 완비를 뜻하지 않습니다. 새 병원이라는 이유만으로 추천하거나 우선순위를 높이지 않습니다.</p>
+      <ol class="intent-verification-list"><li><strong>현재 운영 여부</strong><span>기관명과 주소를 대조하고 실제 진료를 시작했는지 확인합니다.</span></li>
+<li><strong>진료과와 의료진</strong><span>필요한 진료과가 등록되어 있는지와 방문일 담당 의료진 일정을 확인합니다.</span></li>
+<li><strong>검사·장비 준비</strong><span>원하는 검사나 처치가 현재 가능한지, 외부 의뢰가 필요한지 묻습니다.</span></li>
+<li><strong>예약과 비용 안내</strong><span>초진 예약 방식, 예상 대기, 비급여 항목과 추가 비용 안내 방식을 확인합니다.</span></li></ol>
+      <div class="intent-call-script">
+        <strong>전화할 때 그대로 읽어보세요</strong>
+        <p>안녕하세요. ○○ 진료로 처음 방문하려고 합니다. 현재 정상 진료 중인지, ○○ 검사 또는 처치가 가능한지, 초진 예약과 비용 안내 방법을 확인하고 싶습니다.</p>
+      </div>
+      <p class="intent-caution"><strong>주의:</strong> 개설일은 병원 선택의 품질 점수나 추천 순위가 아닙니다. 후기 수가 적다는 이유만으로 좋고 나쁨을 판단하지 말고 진료 적합성과 설명 내용을 직접 확인하세요.</p>
+    </section>
+
     <section class="intent-note">
       <h2>신규 개원 검색 예시</h2>
       <div class="intent-chip-row">
@@ -134,7 +159,7 @@
         <li>이 페이지는 병원 선택 전 비교 기준을 정리한 참고용 정보입니다.</li>
         <li>진료 가능 여부, 접수 마감, 비용, 검사 가능 범위는 병원 사정에 따라 달라질 수 있으므로 방문 전 직접 확인해 주세요.</li>
         <li>응급 증상이나 급격한 증상 악화는 온라인 검색보다 119, 응급실, 해당 병원의 직접 안내가 우선입니다.</li>
-        <li>정보 정정 요청은 replyleaders@naver.com 으로 접수합니다. 최종 점검일: 2026-09-20</li>
+        <li>정보 정정 요청은 replyleaders@naver.com 으로 접수합니다. 최종 점검일: 2026-09-26</li>
       </ul>
     </section>
 

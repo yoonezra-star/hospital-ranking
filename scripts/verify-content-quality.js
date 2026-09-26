@@ -75,6 +75,24 @@ const server = http.createServer((request, response) => {
       await page.locator('.hospital-spotlight-grid').scrollIntoViewIfNeeded();
       await page.screenshot({ path: path.join(os.tmpdir(), `hospital-regional-landing-${width}.png`), fullPage: true });
 
+      await page.goto(`${origin}/saturday-clinic`);
+      await page.locator('.operation-verification').waitFor({ state: 'visible' });
+      assert((await page.locator('.operation-verification').innerText()).includes('이번 토요일 방문 전 확인 순서'));
+      assert((await page.locator('.intent-call-script').innerText()).includes('마지막 접수 시각'));
+      assert.equal(await page.locator('.hospital-spotlight-card').count(), 0, 'Operating-hours guide must not imply live opening status');
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), 'Operating-hours guide overflows viewport');
+      await page.locator('.operation-verification').scrollIntoViewIfNeeded();
+      await page.screenshot({ path: path.join(os.tmpdir(), `hospital-operation-guide-${width}.png`), fullPage: true });
+
+      await page.goto(`${origin}/data-policy`);
+      await page.locator('.data-source-table').waitFor({ state: 'visible' });
+      const policyText = await page.locator('main').innerText();
+      assert(policyText.includes('699개 기관') && policyText.includes('39건은 미확인'), 'Dataset state is not explicit');
+      assert.equal(await page.locator('a[href*="data.go.kr/data/15001698/openapi.do"]').count(), 2);
+      assert.equal(await page.locator('a[href*="data.go.kr/data/15000736/openapi.do"]').count(), 2);
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), 'Data policy overflows viewport');
+      await page.screenshot({ path: path.join(os.tmpdir(), `hospital-data-policy-${width}.png`), fullPage: true });
+
       await page.goto(`${origin}/`);
       await page.locator('#ranking-list .hospital-card').first().waitFor();
       const homepageText = await page.locator('main').innerText();
